@@ -10,5 +10,6 @@ SourceLocation(
 Target(
 	name = 'sby',
 	sources = [ 'sby' ],
+	resources = [ 'python3' ],
 	license_file = 'sby/COPYING',
 )

@@ -10,5 +10,6 @@ SourceLocation(
 Target(
 	name = 'gtkwave',
 	sources = [ 'gtkwave' ],
+	resources = [ 'gtk-resources', 'tcltk-resources' ],
 	license_file = 'gtkwave/COPYING',
 )

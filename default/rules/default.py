@@ -2,6 +2,7 @@ from rules.base import Target
 
 Target(
 	name = 'default',
+    package = True,
     dependencies = [
         'yosys',
         'nextpnr-generic',
@@ -15,11 +16,9 @@ Target(
         'avy',
         'boolector',
         'yices',
-        'python2',
         'suprove',
         'pono',
         'z3',
-        'python3',
         'mcy',
         'sby',
         'sby-gui',
@@ -27,10 +26,5 @@ Target(
         'gtkwave',
         'verilator',
         'iverilog',
-
-        'tcltk-resources',
-        'gtk-resources',
-        'qt5-resources',
-        'font-resources',
     ],
 )

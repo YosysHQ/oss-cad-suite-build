@@ -8,11 +8,13 @@ Target(
 Target(
 	name = 'gtk-resources',
 	sources = [ ],
+	resources = [ 'font-resources' ],
 )
 
 Target(
 	name = 'qt5-resources',
 	sources = [ ],
+	resources = [ 'font-resources' ],
 )
 
 Target(

@@ -34,15 +34,17 @@ class SourceLocation:
 		sources[name] = self
 
 class Target:
-	def __init__(self, name, sources = [], dependencies = [], patches = [], arch = [], license_url = None, license_file = None):
+	def __init__(self, name, sources = [], dependencies = [], resources = [], patches = [], arch = [], license_url = None, license_file = None, package = False):
 		self.name = name
 		self.sources = sources
 		self.dependencies = dependencies
+		self.resources = resources
 		self.patches = patches
 		self.license_url = license_url
 		self.license_file = license_file
 		self.hash = None
 		self.built = False
+		self.package = package
 		global current_rule_group
 		self.group = current_rule_group
 		self.arch = arch
@@ -118,6 +120,15 @@ def validateRules():
 				click.secho("==> ERROR : ", fg="red", nl=False, bold=True)
 				click.secho("Target {} dependent on itself.".format(t.name), fg="white")
 				sys.exit(-1)
+		for d in t.resources:
+			if d not in targets.keys():
+				click.secho("==> ERROR : ", fg="red", nl=False, bold=True)
+				click.secho("Unknown resources {} in {} target.".format(d,t.name), fg="white")
+				sys.exit(-1)
+			if d == t.name:
+				click.secho("==> ERROR : ", fg="red", nl=False, bold=True)
+				click.secho("Target {} use resource of itself.".format(t.name), fg="white")
+				sys.exit(-1)
 		for p in t.patches:
 			if not os.path.exists(os.path.join(t.group, PATCHES_ROOT, p)):
 				click.secho("==> ERROR : ", fg="red", nl=False, bold=True)
@@ -152,6 +163,16 @@ def dependencyResolver(target, resolved, unresolved, arch, display):
 def createBuildOrder(target, arch, display):
 	resolved = []
 	dependencyResolver(target, resolved, [], arch, display)
+	if targets[target].package:
+		while True:
+			found = False
+			for t in resolved:
+				for r in targets[t].resources:
+					if r not in resolved:
+						found = True
+						resolved.insert(0, r)
+			if not found:
+				break
 	return resolved
 
 def createNeededSourceList(target, arch):
@@ -365,7 +386,12 @@ def buildCode(target, arch, nproc, no_clean, force, prefix):
 				click.secho("{}".format(s), fg="green", nl=False, bold=True)
 				click.secho("' source to build dir...", fg="white", bold=True)
 				run(['rsync','-a', src_dir, build_dir])
-			for d in target.dependencies:
+			deps = target.dependencies
+			if t == target.name and target.package:
+				deps = build_order
+				deps.pop()
+
+			for d in deps:
 				dep = targets[d]
 				needed = True
 				if dep.arch and arch not in dep.arch:
