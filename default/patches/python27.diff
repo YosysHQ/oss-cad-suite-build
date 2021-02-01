@@ -1,0 +1,26 @@
+diff --git a/Modules/main.c b/Modules/main.c
+index a6edf822d0..b193e7f835 100644
+--- a/Modules/main.c
++++ b/Modules/main.c
+@@ -531,7 +531,7 @@ Py_Main(int argc, char **argv)
+     }
+ #endif /* __VMS */
+ 
+-#ifdef __APPLE__
++//#ifdef __APPLE__
+     /* On MacOS X, when the Python interpreter is embedded in an
+        application bundle, it gets executed by a bootstrapping script
+        that does os.execve() with an argv[0] that's different from the
+@@ -545,9 +545,9 @@ Py_Main(int argc, char **argv)
+         Py_SetProgramName(p);
+     else
+         Py_SetProgramName(argv[0]);
+-#else
+-    Py_SetProgramName(argv[0]);
+-#endif
++//#else
++//    Py_SetProgramName(argv[0]);
++//#endif
+     Py_Initialize();
+ 
+     if (Py_VerboseFlag ||

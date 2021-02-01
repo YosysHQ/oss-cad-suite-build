@@ -1,0 +1,265 @@
+diff --git a/avy/include/avy/Util/Stats.h b/avy/include/avy/Util/Stats.h
+index aa1e2ff..f5f5e4e 100644
+--- a/avy/include/avy/Util/Stats.h
++++ b/avy/include/avy/Util/Stats.h
+@@ -4,8 +4,11 @@
+ #include <map>
+ 
+ #include <sys/time.h>
++#if defined(_MSC_VER) || defined(__MINGW32__)
++#include <time.h>
++#else
+ #include <sys/resource.h>
+-
++#endif
+ #include <boost/foreach.hpp>
+ #define foreach BOOST_FOREACH
+ 
+@@ -20,6 +23,9 @@ namespace avy
+     long finished;
+     long timeElapsed;
+     
++#if defined(_MSC_VER) || defined(__MINGW32__)
++    long systemTime () const { return clock(); }
++#else
+     long systemTime () const
+     {
+       struct rusage ru;
+@@ -28,7 +34,7 @@ namespace avy
+       return r;
+       
+     }
+-    
++#endif
+   public:
+     Stopwatch () { start (); }
+
+diff --git a/avy/src/ItpGlucose.h b/avy/src/ItpGlucose.h
+index 657253d..67ec17c 100644
+--- a/avy/src/ItpGlucose.h
++++ b/avy/src/ItpGlucose.h
+@@ -126,7 +126,7 @@ namespace avy
+     ::Glucose::Solver* get () { return m_pSat; }
+     
+     /// true if the context is decided 
+-    bool isSolved () { return m_Trivial || m_State || !m_State; }
++    bool isSolved () { return m_Trivial || static_cast<bool>(m_State) || !static_cast<bool>(m_State); }
+ 
+     int core (int **out)
+     {
+@@ -182,7 +182,7 @@ namespace avy
+     bool getVarVal(int v)
+     {
+         ::Glucose::Var x = v;
+-        return tobool (m_pSat->modelValue(x));
++        return static_cast<bool>(tobool(m_pSat->modelValue(x)));
+     }
+   };
+   
+diff --git a/avy/src/ItpMinisat.h b/avy/src/ItpMinisat.h
+index d145d7c..609a70d 100644
+--- a/avy/src/ItpMinisat.h
++++ b/avy/src/ItpMinisat.h
+@@ -124,7 +124,7 @@ namespace avy
+     ::Minisat::Solver* get () { return m_pSat.get (); }
+     
+     /// true if the context is decided 
+-    bool isSolved () { return m_Trivial || m_State || !m_State; }
++    bool isSolved () { return m_Trivial || static_cast<bool>(m_State) || !static_cast<bool>(m_State); }
+ 
+     int core (int **out)
+     {
+diff --git a/glucose/core/Main.ccb/glucose/core/Main.cc
+index c96aadd..7b3c6bb 100644
+--- a/glucose/core/Main.cc
++++b/glucose/core/Main.cc
+@@ -95,7 +95,7 @@ int main(int argc, char** argv)
+         setUsageHelp("c USAGE: %s [options] <input-file> <result-output-file>\n\n  where input may be either in plain or gzipped DIMACS.\n");
+         // printf("This is MiniSat 2.0 beta\n");
+         
+-#if defined(__linux__)
++#if defined(__linux__) && defined(__x86_64__)
+         fpu_control_t oldcw, newcw;
+         _FPU_GETCW(oldcw); newcw = (oldcw & ~_FPU_EXTENDED) | _FPU_DOUBLE; _FPU_SETCW(newcw);
+         printf("c WARNING: for repeatability, setting FPU to use double precision\n");
+@@ -123,7 +123,7 @@ int main(int argc, char** argv)
+         // interrupts:
+ 	//        signal(SIGINT, SIGINT_exit);
+         //signal(SIGXCPU,SIGINT_exit);
+-
++#if defined(__linux__)
+         // Set limit on CPU-time:
+         if (cpu_lim != INT32_MAX){
+             rlimit rl;
+@@ -144,7 +144,7 @@ int main(int argc, char** argv)
+                 if (setrlimit(RLIMIT_AS, &rl) == -1)
+                     printf("c WARNING! Could not set resource limit: Virtual memory.\n");
+             } }
+-        
++#endif
+         if (argc == 1)
+             printf("c Reading from standard input... Use '--help' for help.\n");
+         
+diff --git a/glucose/simp/Main.ccb/glucose/simp/Main.cc
+index 4f4772d..5332e21 100644
+--- a/glucose/simp/Main.cc
++++b/glucose/simp/Main.cc
+@@ -31,8 +31,9 @@ OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWA
+ 
+ #include <signal.h>
+ #include <zlib.h>
++#if defined(__linux__)
+ #include <sys/resource.h>
+-
++#endif
+ #include "glucose/utils/System.h"
+ #include "glucose/utils/ParseUtils.h"
+ #include "glucose/utils/Options.h"
+@@ -96,7 +97,7 @@ int main(int argc, char** argv)
+       setUsageHelp("c USAGE: %s [options] <input-file> <result-output-file>\n\n  where input may be either in plain or gzipped DIMACS.\n");
+         
+         
+-#if defined(__linux__)
++#if defined(__linux__) && defined(__x86_64__)
+         fpu_control_t oldcw, newcw;
+         _FPU_GETCW(oldcw); newcw = (oldcw & ~_FPU_EXTENDED) | _FPU_DOUBLE; _FPU_SETCW(newcw);
+         printf("WARNING: for repeatability, setting FPU to use double precision\n");
+@@ -126,6 +127,7 @@ int main(int argc, char** argv)
+         // Use signal handlers that forcibly quit until the solver will be able to respond to
+         // interrupts:
+         signal(SIGINT, SIGINT_exit);
++#if defined(__linux__)
+         signal(SIGXCPU,SIGINT_exit);
+ 
+         // Set limit on CPU-time:
+@@ -148,7 +150,7 @@ int main(int argc, char** argv)
+                 if (setrlimit(RLIMIT_AS, &rl) == -1)
+                     printf("WARNING! Could not set resource limit: Virtual memory.\n");
+             } }
+-        
++#endif
+         if (argc == 1)
+             printf("Reading from standard input... Use '--help' for help.\n");
+ 
+@@ -176,8 +178,9 @@ int main(int argc, char** argv)
+         // Change to signal-handlers that will only notify the solver and allow it to terminate
+         // voluntarily:
+         signal(SIGINT, SIGINT_interrupt);
++#if defined(__linux__)
+         signal(SIGXCPU,SIGINT_interrupt);
+-
++#endif
+         S.parsing = 0;
+         S.eliminate(true);
+         double simplified_time = cpuTime();
+diff --git a/minisat/core/Main.cc b/minisat/core/Main.cc
+index 2b0d97b..fd1e03c 100644
+--- a/minisat/core/Main.cc
++++ b/minisat/core/Main.cc
+@@ -38,7 +38,7 @@ void printStats(Solver& solver)
+ {
+     double cpu_time = cpuTime();
+     double mem_used = 0.0;
+-#if defined(__linux__)
++#if defined(__linux__) && defined(__x86_64__)
+     mem_used = memUsedPeak();
+ #endif
+     printf("restarts              : %"PRIu64"\n", solver.starts);
+@@ -77,7 +77,7 @@ int main(int argc, char** argv)
+         setUsageHelp("USAGE: %s [options] <input-file> <result-output-file>\n\n  where input may be either in plain or gzipped DIMACS.\n");
+         // printf("This is MiniSat 2.0 beta\n");
+         
+-#if defined(__linux__)
++#if defined(__linux__) && defined(__x86_64__)
+         fpu_control_t oldcw, newcw;
+         _FPU_GETCW(oldcw); newcw = (oldcw & ~_FPU_EXTENDED) | _FPU_DOUBLE; _FPU_SETCW(newcw);
+         printf("WARNING: for repeatability, setting FPU to use double precision\n");
+@@ -101,6 +101,7 @@ int main(int argc, char** argv)
+         // Use signal handlers that forcibly quit until the solver will be able to respond to
+         // interrupts:
+         signal(SIGINT, SIGINT_exit);
++#if defined(__linux__)
+         signal(SIGXCPU,SIGINT_exit);
+ 
+         // Set limit on CPU-time:
+@@ -123,7 +124,7 @@ int main(int argc, char** argv)
+                 if (setrlimit(RLIMIT_AS, &rl) == -1)
+                     printf("WARNING! Could not set resource limit: Virtual memory.\n");
+             } }
+-        
++#endif
+         if (argc == 1)
+             printf("Reading from standard input... Use '--help' for help.\n");
+         
+@@ -151,8 +152,9 @@ int main(int argc, char** argv)
+         // Change to signal-handlers that will only notify the solver and allow it to terminate
+         // voluntarily:
+         signal(SIGINT, SIGINT_interrupt);
++#if defined(__linux__)
+         signal(SIGXCPU,SIGINT_interrupt);
+-       
++#endif       
+         if (!S.simplify()){
+             if (res != NULL) fprintf(res, "UNSAT\n"), fclose(res);
+             if (S.verbosity > 0){
+diff --git a/minisat/simp/Main.cc b/minisat/simp/Main.cc
+index 2804d7f..972e799 100644
+--- a/minisat/simp/Main.cc
++++ b/minisat/simp/Main.cc
+@@ -22,8 +22,9 @@ OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWA
+ 
+ #include <signal.h>
+ #include <zlib.h>
++#if defined(__linux__)
+ #include <sys/resource.h>
+-
++#endif
+ #include "utils/System.h"
+ #include "utils/ParseUtils.h"
+ #include "utils/Options.h"
+@@ -40,7 +41,7 @@ void printStats(Solver& solver)
+ {
+     double cpu_time = cpuTime();
+     double mem_used = 0.0;
+-#if defined(__linux__)
++#if defined(__linux__) && defined(__x86_64__)
+     mem_used = memUsedPeak();
+ #endif
+     printf("restarts              : %"PRIu64"\n", solver.starts);
+@@ -78,7 +79,7 @@ int main(int argc, char** argv)
+         setUsageHelp("USAGE: %s [options] <input-file> <result-output-file>\n\n  where input may be either in plain or gzipped DIMACS.\n");
+         // printf("This is MiniSat 2.0 beta\n");
+         
+-#if defined(__linux__)
++#if defined(__linux__) && defined(__x86_64__)
+         fpu_control_t oldcw, newcw;
+         _FPU_GETCW(oldcw); newcw = (oldcw & ~_FPU_EXTENDED) | _FPU_DOUBLE; _FPU_SETCW(newcw);
+         printf("WARNING: for repeatability, setting FPU to use double precision\n");
+@@ -104,6 +105,7 @@ int main(int argc, char** argv)
+         // Use signal handlers that forcibly quit until the solver will be able to respond to
+         // interrupts:
+         signal(SIGINT, SIGINT_exit);
++#if defined(__linux__)
+         signal(SIGXCPU,SIGINT_exit);
+ 
+         // Set limit on CPU-time:
+@@ -126,7 +128,7 @@ int main(int argc, char** argv)
+                 if (setrlimit(RLIMIT_AS, &rl) == -1)
+                     printf("WARNING! Could not set resource limit: Virtual memory.\n");
+             } }
+-        
++#endif
+         if (argc == 1)
+             printf("Reading from standard input... Use '--help' for help.\n");
+ 
+@@ -153,8 +155,9 @@ int main(int argc, char** argv)
+         // Change to signal-handlers that will only notify the solver and allow it to terminate
+         // voluntarily:
+         signal(SIGINT, SIGINT_interrupt);
++#if defined(__linux__)
+         signal(SIGXCPU,SIGINT_interrupt);
+-
++#endif
+         S.eliminate(true);
+         double simplified_time = cpuTime();
+         if (S.verbosity > 0){

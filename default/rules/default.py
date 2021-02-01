@@ -1,0 +1,36 @@
+from rules.base import Target
+
+Target(
+	name = 'default',
+    dependencies = [
+        'yosys',
+        'nextpnr-generic',
+        'icestorm',
+        'nextpnr-ice40',
+        'prjtrellis',
+        'nextpnr-ecp5',
+        'dfu-util',
+        'ecpprog',
+        'openfpgaloader',
+        'avy',
+        'boolector',
+        'yices',
+        'python2',
+        'suprove',
+        'pono',
+        'z3',
+        'python3',
+        'mcy',
+        'sby',
+        'sby-gui',
+        'ghdl',
+        'gtkwave',
+        'verilator',
+        'iverilog',
+
+        'tcltk-resources',
+        'gtk-resources',
+        'qt5-resources',
+        'font-resources',
+    ],
+)

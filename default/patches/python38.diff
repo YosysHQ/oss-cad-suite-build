@@ -1,0 +1,22 @@
+diff --git a/Python/initconfig.c b/Python/initconfig.c
+index 69711d8eab..f75cc3a6ca 100644
+--- a/Python/initconfig.c
++++ b/Python/initconfig.c
+@@ -1111,7 +1111,7 @@ config_init_program_name(PyConfig *config)
+         return _PyStatus_OK();
+     }
+ 
+-#ifdef __APPLE__
++//#ifdef __APPLE__
+     /* On MacOS X, when the Python interpreter is embedded in an
+        application bundle, it gets executed by a bootstrapping script
+        that does os.execve() with an argv[0] that's different from the
+@@ -1159,7 +1159,7 @@ config_init_program_name(PyConfig *config)
+         }
+     }
+ #endif   /* WITH_NEXT_FRAMEWORK */
+-#endif   /* __APPLE__ */
++//#endif   /* __APPLE__ */
+ 
+     /* Use argv[0] if available and non-empty */
+     const PyWideStringList *argv = &config->argv;

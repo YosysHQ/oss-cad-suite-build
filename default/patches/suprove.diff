@@ -1,0 +1,26 @@
+diff --git a/abc-zz/ZZ/Bip/Main_bip.cc b/abc-zz/ZZ/Bip/Main_bip.cc
+index 9b2c350..f6ddc84 100644
+--- a/abc-zz/ZZ/Bip/Main_bip.cc
++++ b/abc-zz/ZZ/Bip/Main_bip.cc
+@@ -1097,7 +1097,7 @@ int main(int argc, char** argv)
+     bool   old_sif    = cli.get("old-sif").bool_val;
+ 
+     if (!cli.get("fpu").bool_val){
+-      #if defined(__linux__)
++      #if defined(__linux__) &&  defined(__x86_64__)
+         fpu_control_t oldcw, newcw;
+         _FPU_GETCW(oldcw); newcw = (oldcw & ~_FPU_EXTENDED) | _FPU_DOUBLE; _FPU_SETCW(newcw);
+       #endif
+diff --git a/abc-zz/ZZ/Prelude/Profile.ihh b/abc-zz/ZZ/Prelude/Profile.ihh
+index 3b173e8..4f1876f 100644
+--- a/abc-zz/ZZ/Prelude/Profile.ihh
++++ b/abc-zz/ZZ/Prelude/Profile.ihh
+@@ -65,7 +65,7 @@ extern bool suppress_profile_output;        // -- defaults to TRUE
+ // Inline assembler for getting cycle counter:
+ 
+ 
+-#if defined(__linux__)
++#if defined(__linux__) && defined(__x86_64__)
+     #if !defined(ZZ_LP64)
+         extern __inline__ uint64 rdtsc(void) {
+             uint64 x;
