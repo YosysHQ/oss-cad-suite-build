@@ -119,6 +119,4 @@ for libdir in lib; do
     done
 done
 
-ln -s ../bin/yosys-abc lib/
-mv bin/iceboxdb.py libexec/.
 chmod -R u=rwX,go=rX *

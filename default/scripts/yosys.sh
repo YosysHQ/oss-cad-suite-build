@@ -7,3 +7,7 @@ else
 	sed -i -re "s,LD = gcc,LD = ${CC},g" Makefile
 fi
 make PREFIX=${INSTALL_PREFIX} DESTDIR=${OUTPUT_DIR} install -j${NPROC}
+pushd ${OUTPUT_DIR}${INSTALL_PREFIX} 
+mkdir -p lib
+ln -s ../bin/yosys-abc lib/
+popd
