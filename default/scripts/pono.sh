@@ -13,3 +13,7 @@ cp pono ${OUTPUT_DIR}${INSTALL_PREFIX}/bin/.
 if [ ${ARCH_BASE} == 'linux' ]; then
     cp libpono.so ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/.
 fi
+if [ ${ARCH_BASE} == 'darwin' ]; then
+    cp libpono.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/.
+    install_name_tool -add_rpath ${OUTPUT_DIR}${INSTALL_PREFIX}/lib ${OUTPUT_DIR}${INSTALL_PREFIX}/bin/pono
+fi

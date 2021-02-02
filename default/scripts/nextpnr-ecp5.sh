@@ -1,11 +1,5 @@
 cd nextpnr
-if [ ${ARCH_BASE} == 'darwin' ]; then
-      install_name_tool -change ${INSTALL_PREFIX}/lib/libpython3.8.dylib ${BUILD_DIR}/python3${INSTALL_PREFIX}/lib/libpython3.8.dylib ${BUILD_DIR}/prjtrellis${INSTALL_PREFIX}/lib/trellis/pytrellis.so
-      install_name_tool -change ${INSTALL_PREFIX}/lib/libpython3.8.dylib ${BUILD_DIR}/python3${INSTALL_PREFIX}/lib/libpython3.8.dylib ${BUILD_DIR}/prjtrellis${INSTALL_PREFIX}/lib/trellis/libtrellis.dylib
-      install_name_tool -change ${INSTALL_PREFIX}/lib/libpython3.8.dylib ${BUILD_DIR}/python3${INSTALL_PREFIX}/lib/libpython3.8.dylib ${BUILD_DIR}/python3${INSTALL_PREFIX}/py3bin/python3.8
-else
-      export LD_LIBRARY_PATH=${BUILD_DIR}/python3${INSTALL_PREFIX}/lib
-fi
+export LD_LIBRARY_PATH=${BUILD_DIR}/python3${INSTALL_PREFIX}/lib
 build_gui="ON"
 if [ ${ARCH} == 'linux-arm' ]; then
       build_gui="OFF"

@@ -7,3 +7,7 @@ fi
 ./configure --prefix=${INSTALL_PREFIX} --enable-optimizations --enable-shared --with-system-ffi
 make DESTDIR=${OUTPUT_DIR} -j${NPROC} install
 mv ${OUTPUT_DIR}${INSTALL_PREFIX}/bin ${OUTPUT_DIR}${INSTALL_PREFIX}/py3bin
+if [ ${ARCH_BASE} == 'darwin' ]; then
+    install_name_tool -id ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libpython3.8.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libpython3.8.dylib
+    install_name_tool -change ${INSTALL_PREFIX}/lib/libpython3.8.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libpython3.8.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/py3bin/python3.8
+fi
