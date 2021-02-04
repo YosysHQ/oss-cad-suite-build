@@ -42,6 +42,19 @@ def clean(arch, full):
 	"""Clean build"""
 	cleanBuild(arch, full)
 
+@cli.command()
+@click.option('--target', default='default', show_default=True, help='Target project to build.')
+@click.option('--arch', default=getArchitecture(), show_default=True, help='Build architecture.')
+@click.option('--rules', default='default', show_default=True, help='Comma separated list of rules to use.')
+def source(target, arch, rules):
+	"""Update sources"""
+	for rule in rules.split(","):
+		loadRules(rule)
+	validateRules()
+	validateTarget(target)
+	validateArch(arch)
+	pullCode(target, arch, False)
+
 if __name__ == '__main__':
 	if os.name == "posix":
 		signal.signal(signal.SIGHUP, force_shutdown)
