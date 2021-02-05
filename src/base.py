@@ -293,7 +293,67 @@ def calculateHash(target, prefix):
 	data.append(hashlib.sha256(open(os.path.join(target.group, SCRIPTS_ROOT, target.name + ".sh"), 'r').read().encode()).hexdigest())
 	data.append(prefix)
 	return hashlib.sha256('\n'.join(data).encode()).hexdigest()
-		
+
+def executeBuild(target, arch, prefix, build_dir, output_dir, native, nproc):
+	cwd = os.getcwd()
+
+	env = OrderedDict()
+	env['BUILD_OS'] = getBuildOS()
+	env['WORK_DIR'] = cwd
+	env['BUILD_DIR'] = os.path.abspath(build_dir)
+	env['OUTPUT_DIR'] = os.path.abspath(output_dir)
+	env['SRC_DIR'] = os.path.abspath(SOURCES_ROOT)
+	env['PATCHES_DIR'] = os.path.abspath(os.path.join(target.group, PATCHES_ROOT))
+	env['ARCH'] = arch
+	env['ARCH_BASE'] = arch.split('-')[0]
+	env['NPROC'] = str(nproc)
+	env['SHARED_EXT'] = '.so'
+	if (native):
+		env['STRIP'] = 'strip'
+		if (getBuildOS()=='darwin'):
+			env['PATH'] =  '/usr/local/opt/gnu-sed/libexec/gnubin:'
+			env['PATH'] += '/usr/local/opt/coreutils/libexec/gnubin:'
+			env['PATH'] += '/usr/local/opt/qt/bin:'
+			env['PATH'] += '/usr/local/opt/bison/bin:'
+			env['PATH'] += '/usr/local/opt/flex/bin:'
+			env['PATH'] += '/usr/local/opt/openjdk/bin:'
+			env['PATH'] += os.environ['PATH']
+			env['SHARED_EXT'] = '.dylib'
+		else:
+			env['PATH'] = os.environ['PATH']
+	if os.uname()[0].startswith('MSYS_NT') or os.uname()[0].startswith('MINGW'):
+		env.update(os.environ)
+	env['LC_ALL'] = 'C'
+	env['INSTALL_PREFIX'] = prefix
+
+	scriptfile = tempfile.NamedTemporaryFile()
+	scriptfile.write("set -e -x\n".encode())
+	scriptfile.write(open(os.path.join(target.group, SCRIPTS_ROOT, target.name + ".sh"), 'r').read().encode())
+	scriptfile.flush()
+
+	log_step("Compiling ...")
+	if native:
+		code = run_live(['bash', scriptfile.name], cwd=build_dir, env=env)
+	else:
+		params = ['docker', 
+			'run', '--rm',
+			'--user', '{}:{}'.format(os.getuid(), os.getgid()),
+			'-v', '/tmp:/tmp',
+			'-v', '{}:/work'.format(cwd),
+			'-w', os.path.join('/work', os.path.relpath(build_dir, os.getcwd())),
+		]
+		for i, j in env.items():
+			if i.endswith('_DIR'):
+				params += ['-e', '{}={}'.format(i, os.path.join('/work', os.path.relpath(j, os.getcwd())))]
+			else:
+				params += ['-e', '{}={}'.format(i, j)]
+		params += [
+			'yosyshq/cross-'+ arch + ':1.0',
+			'bash', scriptfile.name
+		]
+		code = run_live(params, cwd=build_dir)
+	return code
+
 def buildCode(target, arch, nproc, no_clean, force, prefix):
 	if arch != getArchitecture() and arch in native_only_architectures:
 		log_error("Files {} architecture can only be built natively.".format(arch))
@@ -356,66 +416,10 @@ def buildCode(target, arch, nproc, no_clean, force, prefix):
 		log_step("Creating output dir ...")
 		os.makedirs(output_dir)
 
-		cwd = os.getcwd()
-
-		env = OrderedDict()
-		env['BUILD_OS'] = getBuildOS()
-		env['WORK_DIR'] = cwd
-		env['BUILD_DIR'] = os.path.abspath(build_dir)
-		env['OUTPUT_DIR'] = os.path.abspath(output_dir)
-		env['SRC_DIR'] = os.path.abspath(SOURCES_ROOT)
-		env['PATCHES_DIR'] = os.path.abspath(os.path.join(target.group, PATCHES_ROOT))
-		env['ARCH'] = arch
-		env['ARCH_BASE'] = arch.split('-')[0]
-		env['NPROC'] = str(nproc)
-		env['SHARED_EXT'] = '.so'
-		if (native):
-			env['STRIP'] = 'strip'
-			if (getBuildOS()=='darwin'):
-				env['PATH'] =  '/usr/local/opt/gnu-sed/libexec/gnubin:'
-				env['PATH'] += '/usr/local/opt/coreutils/libexec/gnubin:'
-				env['PATH'] += '/usr/local/opt/qt/bin:'
-				env['PATH'] += '/usr/local/opt/bison/bin:'
-				env['PATH'] += '/usr/local/opt/flex/bin:'
-				env['PATH'] += '/usr/local/opt/openjdk/bin:'
-				env['PATH'] += os.environ['PATH']
-				env['SHARED_EXT'] = '.dylib'
-			else:
-				env['PATH'] = os.environ['PATH']
-		if os.uname()[0].startswith('MSYS_NT') or os.uname()[0].startswith('MINGW'):
-			env.update(os.environ)
-		env['LC_ALL'] = 'C'
-		env['INSTALL_PREFIX'] = prefix
-
-		scriptfile = tempfile.NamedTemporaryFile()
-		scriptfile.write("set -e -x\n".encode())
-		scriptfile.write(open(os.path.join(target.group, SCRIPTS_ROOT, target.name + ".sh"), 'r').read().encode())
-		scriptfile.flush()
-
-		log_step("Compiling ...")
-		if native:
-			code = run_live(['bash', scriptfile.name], cwd=build_dir, env=env)
-		else:
-			params = ['docker', 
-				'run', '--rm',
-				'--user', '{}:{}'.format(os.getuid(), os.getgid()),
-				'-v', '/tmp:/tmp',
-				'-v', '{}:/work'.format(cwd),
-				'-w', os.path.join('/work', os.path.relpath(build_dir, os.getcwd())),
-			]
-			for i, j in env.items():
-				if i.endswith('_DIR'):
-					params += ['-e', '{}={}'.format(i, os.path.join('/work', os.path.relpath(j, os.getcwd())))]
-				else:
-					params += ['-e', '{}={}'.format(i, j)]
-			params += [
-				'yosyshq/cross-'+ arch + ':1.0',
-			 	'bash', scriptfile.name
-			]
-			code = run_live(params, cwd=build_dir)
+		code = executeBuild(target, arch, prefix, build_dir, output_dir, native, nproc)
 		if code!=0:
 			log_error("Script returned error code {}.".format(code))
-		
+
 		log_step("Marking build finished ...")
 		with open(hash_file, 'w') as f:
 			f.write(target.hash)
