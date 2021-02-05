@@ -382,19 +382,27 @@ def buildCode(target, arch, nproc, no_clean, force, prefix):
 
 		log_info_triple("Step [{:2d}/{:2d}] building ".format(pos,len(build_order)), target.name)
 
+		log_step("Remove old output dir ...")
+		if os.path.exists(output_dir):
+			shutil.rmtree(output_dir, onerror=removeError)
+		log_step("Creating output dir ...")
+		os.makedirs(output_dir)
+
 		build_dir = os.path.join(BUILDS_ROOT, arch, target.name)
 		if no_clean and os.path.exists(build_dir):
 			log_step("Skipping clean of build dir ...")
 		else:
-			log_step("Remove old build dir ...")
-			if os.path.exists(build_dir):
-				shutil.rmtree(build_dir, onerror=removeError)
-			log_step("Creating build dir ...")
-			os.makedirs(build_dir)
-			for s in target.sources:
-				src_dir = os.path.join(SOURCES_ROOT, s)
-				log_step_triple("Copy '", s, "' source to build dir ...")
-				run(['rsync','-a', src_dir, build_dir])
+			if not target.package:
+				log_step("Remove old build dir ...")
+				if os.path.exists(build_dir):
+					shutil.rmtree(build_dir, onerror=removeError)
+				log_step("Creating build dir ...")
+				os.makedirs(build_dir)
+				for s in target.sources:
+					src_dir = os.path.join(SOURCES_ROOT, s)
+					log_step_triple("Copy '", s, "' source to build dir ...")
+					run(['rsync','-a', src_dir, build_dir])
+
 			deps = target.dependencies
 			if t == target.name and target.package:
 				deps = build_order
@@ -407,16 +415,15 @@ def buildCode(target, arch, nproc, no_clean, force, prefix):
 					needed = False
 				if needed:
 					dep_dir = os.path.join(OUTPUTS_ROOT, arch, d)
-					log_step_triple("Copy '", d, "' output to build dir ...")
-					run(['rsync','-a', dep_dir, build_dir])
+					if not target.package:
+						log_step_triple("Copy '", d, "' output to build dir ...")
+						run(['rsync','-a', dep_dir, build_dir])
+					else:
+						log_step_triple("Copy '", d, "' output to package dir ...")
+						run(['rsync','-a', dep_dir+"/", output_dir])
 
-		log_step("Remove old output dir ...")
-		if os.path.exists(output_dir):
-			shutil.rmtree(output_dir, onerror=removeError)
-		log_step("Creating output dir ...")
-		os.makedirs(output_dir)
 
-		code = executeBuild(target, arch, prefix, build_dir, output_dir, native, nproc)
+		code = executeBuild(target, arch, prefix, build_dir if not target.package else output_dir, output_dir, native, nproc)
 		if code!=0:
 			log_error("Script returned error code {}.".format(code))
 
@@ -425,7 +432,7 @@ def buildCode(target, arch, nproc, no_clean, force, prefix):
 			f.write(target.hash)
 		target.built = True
 
-		if not no_clean:
+		if not no_clean and not target.package:
 			log_step("Remove build dir ...")
 			if os.path.exists(build_dir):
 				shutil.rmtree(build_dir, onerror=removeError)

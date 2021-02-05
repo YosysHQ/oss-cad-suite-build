@@ -1,6 +1,3 @@
-for target in *; do
-    cp -r $target/* ${OUTPUT_DIR}/.
-done
 cd ${OUTPUT_DIR}${INSTALL_PREFIX}
 mkdir -p lib
 mkdir -p libexec
