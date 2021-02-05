@@ -33,6 +33,26 @@ def log_error(msg):
 	click.secho(msg, fg="white", bold=True)
 	sys.exit(-1)
 
+def log_info(msg):
+	click.secho("==> ", fg="green", nl=False, bold=True)
+	click.secho(msg, fg="white", bold=True)
+
+def log_info_triple(msg1, msg2, msg3 = " ..."):
+	click.secho("==> ", fg="green", nl=False, bold=True)
+	click.secho(msg1, fg="white", nl=False, bold=True)
+	click.secho(msg2, fg="green", nl=False, bold=True)
+	click.secho(msg3, fg="white", bold=True)
+
+def log_step(msg):
+	click.secho("  -> ", fg="blue", nl=False, bold=True)
+	click.secho(msg, fg="white", bold=True)
+
+def log_step_triple(msg1, msg2, msg3 = " ..."):
+	click.secho("  -> ", fg="blue", nl=False, bold=True)
+	click.secho(msg1, nl=False, fg="white", bold=True)
+	click.secho(msg2, nl=False, fg="green", bold=True)
+	click.secho(msg3, fg="white", bold=True)
+
 class SourceLocation:
 	def __init__(self, name, vcs, location, revision):
 		self.name = name
@@ -58,13 +78,9 @@ class Target:
 		self.group = current_rule_group
 		self.arch = arch
 		if name in targets:
-			click.secho("  -> ", fg="blue", nl=False, bold=True)
-			click.secho("Overriding ", nl=False, fg="white", bold=True)
-			click.secho("{}".format(name), nl=False, fg="yellow", bold=True)
-			click.secho("...", fg="white", bold=True)
+			log_step_triple("Overriding ", name)
 		else:
-			click.secho("  -> ", fg="blue", nl=False, bold=True)
-			click.secho("Loading {}...".format(name), fg="white", bold=True)
+			log_step("Loading {} ...".format(name))
 		targets[name] = self
 
 def getBuildOS():
@@ -88,10 +104,7 @@ def loadRules(group):
 	global current_rule_group
 	current_rule_group = group
 	rules_dir = os.path.abspath(os.path.join(group, RULES_ROOT))
-	click.secho("==> ", fg="green", nl=False, bold=True)
-	click.secho("Loading ", fg="white", nl=False, bold=True)
-	click.secho("{}".format(group), fg="green", nl=False, bold=True)
-	click.secho(" building rules...", fg="white", bold=True)
+	log_info_triple("Loading ", group, " building rules ...")
 	if not os.path.exists(rules_dir):
 		log_error("Path for rule group {} does not exist.".format(group))
 	for cmd_name in sorted(os.listdir(rules_dir)):
@@ -106,8 +119,7 @@ def loadRules(group):
 				log_error(str(e))
 
 def validateRules():
-	click.secho("==> ", fg="green", nl=False, bold=True)
-	click.secho("Validate building rules...", fg="white", bold=True)
+	log_info("Validate building rules ...")
 	usedSources = []
 	for t in targets.values():
 		for s in t.sources:
@@ -173,8 +185,7 @@ def createNeededSourceList(target, arch):
 	return src
 
 def pullCode(target, arch, no_update):
-	click.secho("==> ", fg="green", nl=False, bold=True)
-	click.secho("Downloading sources...", fg="white", bold=True)
+	log_info("Downloading sources ...")
 	for src in createNeededSourceList(target, arch):
 		s = sources[src]
 		repo_dir = os.path.abspath(os.path.join(SOURCES_ROOT, s.name))
@@ -194,37 +205,25 @@ def pullCode(target, arch, no_update):
 				shutil.rmtree(repo_dir)
 
 		if is_cloning:
-			click.secho("  -> ", fg="blue", nl=False, bold=True)
-			click.secho("[{}] Cloning ".format(s.name), fg="white", nl=False, bold=True)
-			click.secho("{}".format(s.location), fg="green", nl=False, bold=True)
-			click.secho(" ...", fg="white", bold=True)
+			log_step_triple("[{}] Cloning ".format(s.name), s.location)
 			try:
 				repo.obtain()
 			except Exception as ex:
 				log_error("Error while cloning repository {}.")
 		else:
 			if not no_update:
-				click.secho("  -> ", fg="blue", nl=False, bold=True)
-				click.secho("[{}] Updating ".format(s.name), nl=False, fg="white", bold=True)
-				click.secho("{}".format(s.location), fg="green", nl=False, bold=True)
-				click.secho(" ...", fg="white", bold=True)
+				log_step_triple("[{}] Updating ".format(s.name), s.location)
 				try:
 					repo.update_repo()
 				except Exception as ex:
 					log_error("Error while updating repository {}.".format(ex))
 		if is_cloning or (not no_update):
-			click.secho("  -> ", fg="blue", nl=False, bold=True)
-			click.secho("[{}] Checkout ".format(s.name), fg="white", nl=False, bold=True)
-			click.secho("{}".format(s.revision), fg="green", nl=False, bold=True)
-			click.secho(" ...", fg="white", bold=True)
+			log_step_triple("[{}] Checkout ".format(s.name), s.revision)
 			repo.checkout(s.revision)
 		
 		s.hash =  repo.get_revision()
 
-		click.secho("  -> ", fg="blue", nl=False, bold=True)
-		click.secho("[{}] Current revision ".format(s.name), fg="white", nl=False, bold=True)			
-		click.secho("{}".format(s.hash), fg="green", nl=False, bold=True)
-		click.secho(" ...", fg="white", bold=True)			
+		log_step_triple("[{}] Current revision ".format(s.name), s.hash)
 
 def removeError(func, path, _):
 	log_error("Error while deleting {}.".format(path))
@@ -240,25 +239,20 @@ def validateArch(arch):
 def cleanBuild(arch, full):
 	if not full:
 		validateArch(arch)
-		click.secho("==> ", fg="green", nl=False, bold=True)
-		click.secho("Cleaning for ", fg="white", nl=False, bold=True)
-		click.secho("{}".format(arch), fg="green", nl=False, bold=True)
-		click.secho(" architecture...", fg="white", bold=True)
+		log_info_triple("Cleaning for ", arch, " architecture ...")
 
 		if (os.path.exists(os.path.join(BUILDS_ROOT, arch))):
 			shutil.rmtree(os.path.join(BUILDS_ROOT, arch), onerror=removeError)
 		if (os.path.exists(os.path.join(OUTPUTS_ROOT, arch))):
 			shutil.rmtree(os.path.join(OUTPUTS_ROOT, arch), onerror=removeError)
 	else:
-		click.secho("==> ", fg="green", nl=False, bold=True)
-		click.secho("Cleaning for all architectures...", fg="white", bold=True)
+		log_info("Cleaning for all architectures ...")
 
 		if (os.path.exists(BUILDS_ROOT)):
 			shutil.rmtree(BUILDS_ROOT, onerror=removeError)
 		if (os.path.exists(OUTPUTS_ROOT)):
 			shutil.rmtree(OUTPUTS_ROOT, onerror=removeError)
-		click.secho("==> ", fg="green", nl=False, bold=True)
-		click.secho("Cleaning sources...", fg="white", bold=True)
+		log_info("Cleaning sources ...")
 		if (os.path.exists(SOURCES_ROOT)):
 			shutil.rmtree(SOURCES_ROOT, onerror=removeError)
 
@@ -307,15 +301,7 @@ def buildCode(target, arch, nproc, no_clean, force, prefix):
 	if arch == getArchitecture() and arch in native_only_architectures:
 		native = True
 
-	click.secho("==> ", fg="green", nl=False, bold=True)
-	click.secho("Building ", fg="white", nl=False, bold=True)
-	click.secho("{}".format(target), fg="green", nl=False, bold=True)
-	click.secho(" for ", fg="white", nl=False, bold=True)
-	if native:
-		click.secho("native [{}]".format(arch), fg="green", nl=False, bold=True)
-	else:
-		click.secho("{}".format(arch), fg="green", nl=False, bold=True)
-	click.secho(" architecture...", fg="white", bold=True)
+	log_info_triple("Building ", target, " for {} architecture ...".format(arch))
 
 	build_order = createBuildOrder(target, arch, True)
 	pos = 0
@@ -330,36 +316,24 @@ def buildCode(target, arch, nproc, no_clean, force, prefix):
 			forceBuild = forceBuild or targets[dep].built
 		hash_file = os.path.join(output_dir, '.hash')
 		if (not forceBuild and os.path.exists(hash_file)):
-			if target.hash == open(hash_file, 'r').read():
-				click.secho("==> ", fg="green", nl=False, bold=True)
-				click.secho("Step [{:2d}/{:2d}] skipping ".format(pos,len(build_order)), fg="white", nl=False, bold=True)
-				click.secho("{}".format(target.name), fg="green", nl=False, bold=True)
-				click.secho(" ...", fg="white", bold=True)
+			if target.hash == open(hash_file, 'r').read():				
+				log_info_triple("Step [{:2d}/{:2d}] skipping ".format(pos,len(build_order)), target.name)
 				continue
 
-		click.secho("==> ", fg="green", nl=False, bold=True)
-		click.secho("Step [{:2d}/{:2d}] building ".format(pos,len(build_order)), fg="white", nl=False, bold=True)
-		click.secho("{}".format(target.name), fg="green", nl=False, bold=True)
-		click.secho(" ...", fg="white", bold=True)
+		log_info_triple("Step [{:2d}/{:2d}] building ".format(pos,len(build_order)), target.name)
 
 		build_dir = os.path.join(BUILDS_ROOT, arch, target.name)
 		if no_clean and os.path.exists(build_dir):
-			click.secho("  -> ", fg="blue", nl=False, bold=True)
-			click.secho("Skipping clean of build dir...", fg="white", bold=True)
+			log_step("Skipping clean of build dir ...")
 		else:
-			click.secho("  -> ", fg="blue", nl=False, bold=True)
-			click.secho("Remove old build dir...", fg="white", bold=True)
+			log_step("Remove old build dir ...")
 			if os.path.exists(build_dir):
 				shutil.rmtree(build_dir, onerror=removeError)
-			click.secho("  -> ", fg="blue", nl=False, bold=True)
-			click.secho("Creating build dir...", fg="white", bold=True)
+			log_step("Creating build dir ...")
 			os.makedirs(build_dir)
 			for s in target.sources:
 				src_dir = os.path.join(SOURCES_ROOT, s)
-				click.secho("  -> ", fg="blue", nl=False, bold=True)
-				click.secho("Copy '", fg="white", nl=False, bold=True)
-				click.secho("{}".format(s), fg="green", nl=False, bold=True)
-				click.secho("' source to build dir...", fg="white", bold=True)
+				log_step_triple("Copy '", s, "' source to build dir ...")
 				run(['rsync','-a', src_dir, build_dir])
 			deps = target.dependencies
 			if t == target.name and target.package:
@@ -373,18 +347,13 @@ def buildCode(target, arch, nproc, no_clean, force, prefix):
 					needed = False
 				if needed:
 					dep_dir = os.path.join(OUTPUTS_ROOT, arch, d)
-					click.secho("  -> ", fg="blue", nl=False, bold=True)
-					click.secho("Copy '", fg="white", nl=False, bold=True)
-					click.secho("{}".format(d), fg="green", nl=False, bold=True)
-					click.secho("' output to build dir...", fg="white", bold=True)
+					log_step_triple("Copy '", d, "' output to build dir ...")
 					run(['rsync','-a', dep_dir, build_dir])
 
-		click.secho("  -> ", fg="blue", nl=False, bold=True)
-		click.secho("Remove old output dir...", fg="white", bold=True)
+		log_step("Remove old output dir ...")
 		if os.path.exists(output_dir):
 			shutil.rmtree(output_dir, onerror=removeError)
-		click.secho("  -> ", fg="blue", nl=False, bold=True)
-		click.secho("Creating output dir...", fg="white", bold=True)
+		log_step("Creating output dir ...")
 		os.makedirs(output_dir)
 
 		cwd = os.getcwd()
@@ -423,8 +392,7 @@ def buildCode(target, arch, nproc, no_clean, force, prefix):
 		scriptfile.write(open(os.path.join(target.group, SCRIPTS_ROOT, target.name + ".sh"), 'r').read().encode())
 		scriptfile.flush()
 
-		click.secho("  -> ", fg="blue", nl=False, bold=True)
-		click.secho("Compiling...", fg="white", bold=True)
+		log_step("Compiling ...")
 		if native:
 			code = run_live(['bash', scriptfile.name], cwd=build_dir, env=env)
 		else:
@@ -448,14 +416,12 @@ def buildCode(target, arch, nproc, no_clean, force, prefix):
 		if code!=0:
 			log_error("Script returned error code {}.".format(code))
 		
-		click.secho("  -> ", fg="blue", nl=False, bold=True)
-		click.secho("Marking build finished...", fg="white", bold=True)
+		log_step("Marking build finished ...")
 		with open(hash_file, 'w') as f:
 			f.write(target.hash)
 		target.built = True
 
 		if not no_clean:
-			click.secho("  -> ", fg="blue", nl=False, bold=True)
-			click.secho("Remove build dir...", fg="white", bold=True)
+			log_step("Remove build dir ...")
 			if os.path.exists(build_dir):
 				shutil.rmtree(build_dir, onerror=removeError)
