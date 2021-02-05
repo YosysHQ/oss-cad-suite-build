@@ -4,7 +4,7 @@ import click, signal, os, sys, shutil
 from src.base import loadRules, validateRules, pullCode, buildCode, validateTarget, validateArch, cleanBuild, getArchitecture
 
 def force_shutdown(signum, frame):
-	if (os.name != 'nt' and signum != signal.SIGPIPE) or not silent_sigpipe:
+	if (os.name != 'nt' and signum != signal.SIGPIPE):
 		click.secho("\n==> Keyboard interrupt or external termination signal", fg="red", nl=True, bold=True)
 	sys.exit(1)
 

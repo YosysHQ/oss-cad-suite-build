@@ -61,7 +61,7 @@ class Target:
 def getBuildOS():
 	system = platform.system().lower()
 	if system.startswith('mingw'):
-		system = 'windows'	
+		system = 'windows'
 	return system
 
 def getArchitecture():
