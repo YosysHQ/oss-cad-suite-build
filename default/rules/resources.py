@@ -1,4 +1,4 @@
-from rules.base import Target
+from src.base import Target
 
 Target(
 	name = 'tcltk-resources',

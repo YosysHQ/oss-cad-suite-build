@@ -1,4 +1,4 @@
-from rules.base import SourceLocation, Target
+from src.base import SourceLocation, Target
 
 SourceLocation(
 	name = 'lingeling',

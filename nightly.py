@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import click, signal, os, sys, shutil
-from rules.base import loadRules, validateRules, pullCode, buildCode, validateTarget, validateArch, cleanBuild, getArchitecture
+from src.base import loadRules, validateRules, pullCode, buildCode, validateTarget, validateArch, cleanBuild, getArchitecture
 
 def force_shutdown(signum, frame):
 	if (os.name != 'nt' and signum != signal.SIGPIPE) or not silent_sigpipe:
