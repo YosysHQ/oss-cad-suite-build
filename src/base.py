@@ -24,6 +24,15 @@ PATCHES_ROOT = "patches"
 RULES_ROOT   = "rules"
 current_rule_group = ""
 
+def log_warning(msg):
+	click.secho("==> WARNING : ", fg="yellow", nl=False, bold=True)
+	click.secho(msg, fg="white", bold=True)
+
+def log_error(msg):
+	click.secho("\n==> ERROR : ", fg="red", nl=False, bold=True)
+	click.secho(msg, fg="white", bold=True)
+	sys.exit(-1)
+
 class SourceLocation:
 	def __init__(self, name, vcs, location, revision):
 		self.name = name
@@ -84,9 +93,7 @@ def loadRules(group):
 	click.secho("{}".format(group), fg="green", nl=False, bold=True)
 	click.secho(" building rules...", fg="white", bold=True)
 	if not os.path.exists(rules_dir):
-		click.secho("==> ERROR : ", fg="red", nl=False, bold=True)
-		click.secho("Path for rule group {} does not exist.".format(group), fg="white")
-		sys.exit(-1)
+		log_error("Path for rule group {} does not exist.".format(group))
 	for cmd_name in sorted(os.listdir(rules_dir)):
 		if cmd_name.startswith("__init__") or cmd_name.startswith("base.py"):
 			continue
@@ -96,9 +103,7 @@ def loadRules(group):
 				foo = importlib.util.module_from_spec(spec)
 				spec.loader.exec_module(foo)
 			except Exception as e:
-				click.secho("==> ERROR loading : ", fg="red", nl=False, bold=True)
-				click.secho(str(e), fg="white")
-				sys.exit(-1)
+				log_error(str(e))
 
 def validateRules():
 	click.secho("==> ", fg="green", nl=False, bold=True)
@@ -108,37 +113,24 @@ def validateRules():
 		for s in t.sources:
 			usedSources.append(s)
 			if s not in sources.keys():
-				click.secho("==> ERROR : ", fg="red", nl=False, bold=True)
-				click.secho("Unknown source {} in {} target.".format(s,t.name), fg="white")
-				sys.exit(-1)
+				log_error("Unknown source {} in {} target.".format(s,t.name))
 		for d in t.dependencies:
 			if d not in targets.keys():
-				click.secho("==> ERROR : ", fg="red", nl=False, bold=True)
-				click.secho("Unknown dependancy {} in {} target.".format(d,t.name), fg="white")
-				sys.exit(-1)
+				log_error("Unknown dependancy {} in {} target.".format(d,t.name))
 			if d == t.name:
-				click.secho("==> ERROR : ", fg="red", nl=False, bold=True)
-				click.secho("Target {} dependent on itself.".format(t.name), fg="white")
-				sys.exit(-1)
+				log_error("Target {} dependent on itself.".format(t.name))
 		for d in t.resources:
 			if d not in targets.keys():
-				click.secho("==> ERROR : ", fg="red", nl=False, bold=True)
-				click.secho("Unknown resources {} in {} target.".format(d,t.name), fg="white")
-				sys.exit(-1)
+				log_error("Unknown resources {} in {} target.".format(d,t.name))
 			if d == t.name:
-				click.secho("==> ERROR : ", fg="red", nl=False, bold=True)
-				click.secho("Target {} use resource of itself.".format(t.name), fg="white")
-				sys.exit(-1)
+				log_error("Target {} use resource of itself.".format(t.name))
 		for p in t.patches:
 			if not os.path.exists(os.path.join(t.group, PATCHES_ROOT, p)):
-				click.secho("==> ERROR : ", fg="red", nl=False, bold=True)
-				click.secho("Target {} does not have corresponding patch.".format(p), fg="white", bold=True)
-				sys.exit(-1)
+				log_error("Target {} does not have corresponding patch.".format(p))
 
 	for s in sources.keys():
 		if s not in usedSources:
-			click.secho("==> WARNING : ", fg="yellow", nl=False, bold=True)
-			click.secho("Source {} not used in any target.".format(s,t.name), fg="white", bold=True)
+			log_warning("Source {} not used in any target.".format(s))
 
 def dependencyResolver(target, resolved, unresolved, arch, display):
 	node = targets[target]
@@ -146,16 +138,13 @@ def dependencyResolver(target, resolved, unresolved, arch, display):
 	if node.arch and arch not in node.arch:
 		needed = False
 		if display:
-			click.secho("==> WARNING : ", fg="yellow", nl=False, bold=True)
-			click.secho("Target {} not built for architecture {}.".format(node.name, arch), fg="white", bold=True)
+			log_warning("Target {} not built for architecture {}.".format(node.name, arch))
 	if needed:
 		unresolved.append(node.name)
 		for dep in node.dependencies:
 			if dep not in resolved:
 				if dep in unresolved:
-					click.secho("==> ERROR : ", fg="red", nl=False, bold=True)
-					click.secho("Circular reference detected: {} -> {}.".format(node.name, dep), fg="white", bold=True)
-					sys.exit(-1)
+					log_error("Circular reference detected: {} -> {}.".format(node.name, dep))
 				dependencyResolver(dep, resolved, unresolved, arch, display)
 		resolved.append(node.name)
 		unresolved.remove(node.name)
@@ -196,13 +185,11 @@ def pullCode(target, arch, no_update):
 			remote_url = repo.get_remote()
 			is_cloning = False
 			if remote_url is None:
-				click.secho("==> WARNING : ", fg="yellow", nl=False, bold=True)
-				click.secho("Destination dir '{}' does not contain repository data. Deleting...".format(s.name), fg="white", bold=True)
+				log_warning("Destination dir '{}' does not contain repository data. Deleting...".format(s.name))
 				is_cloning = True
 				shutil.rmtree(repo_dir)
 			elif remote_url!=s.location:
-				click.secho("==> WARNING : ", fg="yellow", nl=False, bold=True)
-				click.secho("Current source location {} does not match {}. Deleting...".format(remote_url,s.location), fg="white", bold=True)
+				log_warning("Current source location {} does not match {}. Deleting...".format(remote_url,s.location))
 				is_cloning = True
 				shutil.rmtree(repo_dir)
 
@@ -214,9 +201,7 @@ def pullCode(target, arch, no_update):
 			try:
 				repo.obtain()
 			except Exception as ex:
-				click.secho("==> ERROR : ", fg="red", nl=False, bold=True)
-				click.secho("Error while cloning repository {}.".format(ex), fg="white", bold=True)
-				sys.exit(-1)
+				log_error("Error while cloning repository {}.")
 		else:
 			if not no_update:
 				click.secho("  -> ", fg="blue", nl=False, bold=True)
@@ -226,9 +211,7 @@ def pullCode(target, arch, no_update):
 				try:
 					repo.update_repo()
 				except Exception as ex:
-					click.secho("\n==> ERROR : ", fg="red", nl=False, bold=True)
-					click.secho("Error while updating repository {}.".format(ex), fg="white", bold=True)
-					sys.exit(-1)
+					log_error("Error while updating repository {}.".format(ex))
 		if is_cloning or (not no_update):
 			click.secho("  -> ", fg="blue", nl=False, bold=True)
 			click.secho("[{}] Checkout ".format(s.name), fg="white", nl=False, bold=True)
@@ -244,21 +227,15 @@ def pullCode(target, arch, no_update):
 		click.secho(" ...", fg="white", bold=True)			
 
 def removeError(func, path, _):
-	click.secho("==> ERROR : ", fg="red", nl=False, bold=True)
-	click.secho("Error while deleting {}.".format(path), fg="white", bold=True)
-	sys.exit(-1)
+	log_error("Error while deleting {}.".format(path))
 
 def validateTarget(target):
 	if target not in targets:
-		click.secho("==> ERROR : ", fg="red", nl=False, bold=True)
-		click.secho("Target {} does not exist.".format(target), fg="white", bold=True)
-		sys.exit(-1)
+		log_error("Target {} does not exist.".format(target))
 
 def validateArch(arch):
 	if arch not in architectures:
-		click.secho("==> ERROR : ", fg="red", nl=False, bold=True)
-		click.secho("Architecture {} does not exist.".format(arch), fg="white", bold=True)
-		sys.exit(-1)
+		log_error("Architecture {} does not exist.".format(arch))
 
 def cleanBuild(arch, full):
 	if not full:
@@ -325,9 +302,7 @@ def calculateHash(target, prefix):
 		
 def buildCode(target, arch, nproc, no_clean, force, prefix):
 	if arch != getArchitecture() and arch in native_only_architectures:
-		click.secho("==> ERROR : ", fg="red", nl=False, bold=True)
-		click.secho("Files {} architecture can only be built natively.".format(arch), fg="white")
-		sys.exit(-1)
+		log_error("Files {} architecture can only be built natively.".format(arch))
 	native = False
 	if arch == getArchitecture() and arch in native_only_architectures:
 		native = True
@@ -471,9 +446,7 @@ def buildCode(target, arch, nproc, no_clean, force, prefix):
 			]
 			code = run_live(params, cwd=build_dir)
 		if code!=0:
-			click.secho("==> ERROR : ", fg="red", nl=False, bold=True)
-			click.secho("Script returned error code {}.".format(code), fg="white", bold=True)
-			sys.exit(-1)
+			log_error("Script returned error code {}.".format(code))
 		
 		click.secho("  -> ", fg="blue", nl=False, bold=True)
 		click.secho("Marking build finished...", fg="white", bold=True)
