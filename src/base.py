@@ -357,7 +357,9 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, native, nproc, loc
 		code = run_live(params, cwd=build_dir)
 	return code
 
-def buildCode(target, arch, nproc, no_clean, force, prefix, local):
+def buildCode(target, arch, nproc, no_clean, force, prefix, local, deploy, sudo):
+	if deploy and not local:
+		log_error("Deployment only possible for local builds.")
 	if arch != getArchitecture() and arch in native_only_architectures:
 		log_error("Build for {} architecture can only be built natively.".format(arch))
 	native = False
@@ -443,3 +445,11 @@ def buildCode(target, arch, nproc, no_clean, force, prefix, local):
 			log_step("Remove build dir ...")
 			if os.path.exists(build_dir):
 				shutil.rmtree(build_dir, onerror=removeError)
+
+	if deploy:
+		log_step("Deploy {} to {} ...".format(target.name, prefix))
+		out_dir = os.path.join(OUTPUTS_ROOT, "local", target.name, prefix)
+		cmd = ['rsync', '-a', out_dir+"/", prefix+"/"]
+		if sudo:
+			cmd.insert(0, 'sudo')
+		run(cmd)
