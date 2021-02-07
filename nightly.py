@@ -24,8 +24,9 @@ def cli(ctx):
 @click.option('--arch', default=getArchitecture(), show_default=True, help='Build architecture.')
 @click.option('--prefix', default='/opt/fpga-nightly', show_default=True, help='Target prefix to build for.')
 @click.option('--rules', default='default', show_default=True, help='Comma separated list of rules to use.')
+@click.option('--local', help='Preform local build (using machine own installed tools/libs).', is_flag=True)
 @click.option('-j', '--nproc', default=os.cpu_count(), show_default=True, help='Number of build process.')
-def build(no_update, no_clean, force, target, arch, prefix, rules, nproc):
+def build(no_update, no_clean, force, target, arch, prefix, rules, local, nproc):
 	"""Build tools"""
 	for rule in rules.split(","):
 		loadRules(rule)
@@ -33,7 +34,7 @@ def build(no_update, no_clean, force, target, arch, prefix, rules, nproc):
 	validateTarget(target)
 	validateArch(arch)
 	pullCode(target, arch, no_update)
-	buildCode(target, arch, nproc, no_clean, force, prefix)
+	buildCode(target, arch, nproc, no_clean, force, prefix, local)
 
 @cli.command()
 @click.option('--arch', default=getArchitecture(), show_default=True, help='Build architecture.')

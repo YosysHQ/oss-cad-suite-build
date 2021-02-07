@@ -294,7 +294,7 @@ def calculateHash(target, prefix):
 	data.append(prefix)
 	return hashlib.sha256('\n'.join(data).encode()).hexdigest()
 
-def executeBuild(target, arch, prefix, build_dir, output_dir, native, nproc):
+def executeBuild(target, arch, prefix, build_dir, output_dir, native, nproc, local):
 	cwd = os.getcwd()
 
 	env = OrderedDict()
@@ -325,6 +325,9 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, native, nproc):
 		env.update(os.environ)
 	env['LC_ALL'] = 'C'
 	env['INSTALL_PREFIX'] = prefix
+	if (local):
+		env['IS_LOCAL'] = 'True'
+		env['CROSS_NAME'] = os.popen('gcc -dumpmachine').read().strip()
 
 	scriptfile = tempfile.NamedTemporaryFile()
 	scriptfile.write("set -e -x\n".encode())
@@ -354,11 +357,15 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, native, nproc):
 		code = run_live(params, cwd=build_dir)
 	return code
 
-def buildCode(target, arch, nproc, no_clean, force, prefix):
+def buildCode(target, arch, nproc, no_clean, force, prefix, local):
 	if arch != getArchitecture() and arch in native_only_architectures:
-		log_error("Files {} architecture can only be built natively.".format(arch))
+		log_error("Build for {} architecture can only be built natively.".format(arch))
 	native = False
 	if arch == getArchitecture() and arch in native_only_architectures:
+		native = True
+	if arch != getArchitecture() and local:
+		log_error("Local build for {} architecture can only be built natively.".format(arch))
+	if arch == getArchitecture() and local:
 		native = True
 
 	log_info_triple("Building ", target, " for {} architecture ...".format(arch))
@@ -369,7 +376,7 @@ def buildCode(target, arch, nproc, no_clean, force, prefix):
 		pos += 1
 		target = targets[t]
 		target.hash = calculateHash(target, prefix)
-		output_dir = os.path.join(OUTPUTS_ROOT, arch, target.name)
+		output_dir = os.path.join(OUTPUTS_ROOT, arch if not local else "local", target.name)
 
 		forceBuild = force
 		for dep in sorted(target.dependencies):
@@ -388,7 +395,7 @@ def buildCode(target, arch, nproc, no_clean, force, prefix):
 		log_step("Creating output dir ...")
 		os.makedirs(output_dir)
 
-		build_dir = os.path.join(BUILDS_ROOT, arch, target.name)
+		build_dir = os.path.join(BUILDS_ROOT, arch if not local else "local", target.name)
 		if no_clean and os.path.exists(build_dir):
 			log_step("Skipping clean of build dir ...")
 		else:
@@ -414,7 +421,7 @@ def buildCode(target, arch, nproc, no_clean, force, prefix):
 				if dep.arch and arch not in dep.arch:
 					needed = False
 				if needed:
-					dep_dir = os.path.join(OUTPUTS_ROOT, arch, d)
+					dep_dir = os.path.join(OUTPUTS_ROOT, arch if not local else "local", d)
 					if not target.package:
 						log_step_triple("Copy '", d, "' output to build dir ...")
 						run(['rsync','-a', dep_dir, build_dir])
@@ -423,7 +430,7 @@ def buildCode(target, arch, nproc, no_clean, force, prefix):
 						run(['rsync','-a', dep_dir+"/", output_dir])
 
 
-		code = executeBuild(target, arch, prefix, build_dir if not target.package else output_dir, output_dir, native, nproc)
+		code = executeBuild(target, arch, prefix, build_dir if not target.package else output_dir, output_dir, native, nproc, local)
 		if code!=0:
 			log_error("Script returned error code {}.".format(code))
 
