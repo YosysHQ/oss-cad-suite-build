@@ -45,22 +45,36 @@ EOT
             is_using_fonts=true
             cat >> $binfile << EOT
 export QT_PLUGIN_PATH="\$release_topdir_abs/lib/qt5/plugins"
-export FONTCONFIG_FILE="\$release_topdir_abs/etc/fonts/fonts.conf"
-export FONTCONFIG_PATH="\$release_topdir_abs/etc/fonts"
 unset QT_QPA_PLATFORMTHEME
 unset QT_STYLE_OVERRIDE
+unset XDG_DATA_DIRS
+export XDG_DATA_HOME="\$release_topdir_abs"
 export XDG_CONFIG_HOME="\$release_topdir_abs"
+export LC_ALL="C"
+export FONTCONFIG_FILE="\$release_topdir_abs/etc/fonts/fonts.conf"
+export FONTCONFIG_PATH="\$release_topdir_abs/etc/fonts"
 EOT
         fi
         if [ ! -z "$(lddtree -l libexec/$(basename $binfile) | grep gtk)" ]; then
+# Set and unset variables according to:
+# https://refspecs.linuxbase.org/gtk/2.6/gtk/gtk-running.html
             is_using_fonts=true
             cat >> $binfile << EOT
-export GTK_PATH="\$release_topdir_abs/lib/gtk-2.0" GTK_MODULES="" GTK_IM_MODULE="" GTK_IM_MODULE_FILE="/dev/null"
-export GTK2_MODULES="" GTK_EXE_PREFIX="\$release_topdir_abs" GTK_DATA_PREFIX="\$release_topdir_abs"
-export GDK_PIXBUF_MODULE_FILE="\$release_topdir_abs/lib/gtk-2.0/loaders.cache" LC_ALL="C"
+unset GTK_MODULES
+unset GTK2_MODULES
+export GTK_PATH="\$release_topdir_abs/lib/gtk-2.0"
+export GTK_IM_MODULE=""
+export GTK_IM_MODULE_FILE="/dev/null"
+export GTK2_RC_FILES="\$release_topdir_abs/lib/gtk-2.0/gtkrc"
+export GTK_EXE_PREFIX="\$release_topdir_abs"
+export GTK_DATA_PREFIX="\$release_topdir_abs"
+export GDK_PIXBUF_MODULE_FILE="\$release_topdir_abs/lib/gtk-2.0/loaders.cache"
+unset XDG_DATA_DIRS
+export XDG_DATA_HOME="\$release_topdir_abs"
+export XDG_CONFIG_HOME="\$release_topdir_abs"
+export LC_ALL="C"
 export TCL_LIBRARY="\$release_topdir_abs/lib/tcl8.6"
 export TK_LIBRARY="\$release_topdir_abs/lib/tk8.6"
-export GTK2_RC_FILES="\$release_topdir_abs/lib/gtk-2.0/gtkrc"
 export FONTCONFIG_FILE="\$release_topdir_abs/etc/fonts/fonts.conf"
 export FONTCONFIG_PATH="\$release_topdir_abs/etc/fonts"
 EOT
