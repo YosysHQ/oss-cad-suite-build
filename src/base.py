@@ -14,8 +14,8 @@ from libvcs.util import run
 
 sources = dict()
 targets = dict()
-architectures = [ 'linux-x64', 'darwin-x64', 'linux-arm', 'linux-arm64' ]
-native_only_architectures  = [ 'darwin-x64' ]
+architectures = [ 'linux-x64', 'darwin-x64', 'linux-arm', 'linux-arm64', 'windows-x64' ]
+native_only_architectures  = [ 'darwin-x64', 'windows-x64' ]
 SOURCES_ROOT = "_sources"
 BUILDS_ROOT  = "_builds"
 OUTPUTS_ROOT = "_outputs"
@@ -319,6 +319,10 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, native, nproc, loc
 			env['PATH'] += '/usr/local/opt/openjdk/bin:'
 			env['PATH'] += os.environ['PATH']
 			env['SHARED_EXT'] = '.dylib'
+		elif (getBuildOS()=='windows'):
+			env['CMAKE_GENERATOR'] = 'MSYS Makefiles'
+			env['EXE'] = '.exe'
+			env['SHARED_EXT'] = '.dll'
 		else:
 			env['PATH'] = os.environ['PATH']
 	if os.uname()[0].startswith('MSYS_NT') or os.uname()[0].startswith('MINGW'):
