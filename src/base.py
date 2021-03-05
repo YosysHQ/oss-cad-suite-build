@@ -440,6 +440,13 @@ def buildCode(target, arch, nproc, no_clean, force, prefix, local, deploy, sudo)
 		if code!=0:
 			log_error("Script returned error code {}.".format(code))
 
+		if (getBuildOS()=='windows'):
+			msys_dir = os.path.join(output_dir, "msys64")
+			if os.path.exists(msys_dir):
+				log_step("MSYS2 directory fix ...")
+				run(['rsync','-a', msys_dir+"/", output_dir])
+				shutil.rmtree(msys_dir, onerror=removeError)
+
 		log_step("Marking build finished ...")
 		with open(hash_file, 'w') as f:
 			f.write(target.hash)
