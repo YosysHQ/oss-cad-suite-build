@@ -12,6 +12,7 @@ Target(
 	sources = [ 'python3' ],
 	patches = [ 'python38.diff' ],
 	license_file = 'python/LICENSE',
+	no_source_copy = [ 'windows-x64', 'local' ],
 )
 
 SourceLocation(
@@ -26,4 +27,5 @@ Target(
 	sources = [ 'python2' ],
 	patches = [ 'python27.diff' ],
 	license_file = 'python2/LICENSE',
+	no_source_copy = [ 'windows-x64', 'local' ],
 )

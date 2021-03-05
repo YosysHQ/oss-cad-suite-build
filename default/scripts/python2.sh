@@ -1,3 +1,6 @@
+if [ ${LOCAL_PYTHON} == 'True' ]; then
+    exit
+fi
 cd python2
 patch -p1 < ${PATCHES_DIR}/python27.diff
 if [ ${ARCH} == 'darwin-x64' ]; then

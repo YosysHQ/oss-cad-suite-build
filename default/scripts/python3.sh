@@ -1,3 +1,6 @@
+if [ ${LOCAL_PYTHON} == 'True' ]; then
+    exit
+fi
 cd python3
 patch -p1 < ${PATCHES_DIR}/python38.diff
 if [ ${ARCH} == 'darwin-x64' ]; then

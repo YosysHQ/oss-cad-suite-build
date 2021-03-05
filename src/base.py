@@ -63,7 +63,7 @@ class SourceLocation:
 		sources[name] = self
 
 class Target:
-	def __init__(self, name, sources = [], dependencies = [], resources = [], patches = [], arch = [], license_url = None, license_file = None, package = False):
+	def __init__(self, name, sources = [], dependencies = [], resources = [], patches = [], arch = [], no_source_copy = [], license_url = None, license_file = None, package = False):
 		self.name = name
 		self.sources = sources
 		self.dependencies = dependencies
@@ -77,6 +77,7 @@ class Target:
 		global current_rule_group
 		self.group = current_rule_group
 		self.arch = arch
+		self.no_source_copy = no_source_copy
 		if name in targets:
 			log_step_triple("Overriding ", name)
 		else:
@@ -415,10 +416,11 @@ def buildCode(target, arch, nproc, no_clean, force, prefix, local, deploy, sudo)
 					shutil.rmtree(build_dir, onerror=removeError)
 				log_step("Creating build dir ...")
 				os.makedirs(build_dir)
-				for s in target.sources:
-					src_dir = os.path.join(SOURCES_ROOT, s)
-					log_step_triple("Copy '", s, "' source to build dir ...")
-					run(['rsync','-a', src_dir, build_dir])
+				if not((arch if not local else "local") in target.no_source_copy):
+					for s in target.sources:
+						src_dir = os.path.join(SOURCES_ROOT, s)
+						log_step_triple("Copy '", s, "' source to build dir ...")
+						run(['rsync','-a', src_dir, build_dir])
 
 			deps = target.dependencies
 			if t == target.name and target.package:
