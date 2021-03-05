@@ -1,3 +1,6 @@
+if [ ${IS_LOCAL} == 'True' ]; then
+    exit
+fi
 if [ ${ARCH_BASE} == 'linux' ]; then
     mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/gtk-2.0/modules
     cp -v `pkg-config --variable=gdk_pixbuf_moduledir gdk-pixbuf-2.0`/* ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/.

@@ -1,3 +1,6 @@
+if [ ${IS_LOCAL} == 'True' ]; then
+    exit
+fi
 mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/etc/fonts ${OUTPUT_DIR}${INSTALL_PREFIX}/share/fonts
 if [ ${ARCH_BASE} == 'linux' ]; then
     cp -r /usr/share/fonts/. ${OUTPUT_DIR}${INSTALL_PREFIX}/share/fonts
