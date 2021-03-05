@@ -177,17 +177,18 @@ def createBuildOrder(target, arch, display):
 				break
 	return resolved
 
-def createNeededSourceList(target, arch):
+def createNeededSourceList(target, arch, local):
 	src = []
 	for t in createBuildOrder(target, arch, False):
-		for s in targets[t].sources:
-			if s not in src:
-				src.append(s)
+		if not((arch if not local else "local") in targets[t].no_source_copy):
+			for s in targets[t].sources:
+				if s not in src:
+					src.append(s)
 	return src
 
-def pullCode(target, arch, no_update):
+def pullCode(target, arch, no_update, local):
 	log_info("Downloading sources ...")
-	for src in createNeededSourceList(target, arch):
+	for src in createNeededSourceList(target, arch, local):
 		s = sources[src]
 		repo_dir = os.path.abspath(os.path.join(SOURCES_ROOT, s.name))
 		repo = create_repo(url=s.location, vcs=s.vcs, repo_dir=repo_dir)

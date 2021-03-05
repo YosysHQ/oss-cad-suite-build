@@ -35,7 +35,7 @@ def build(no_update, no_clean, force, target, arch, prefix, rules, local, deploy
 	validateRules()
 	validateTarget(target)
 	validateArch(arch)
-	pullCode(target, arch, no_update)
+	pullCode(target, arch, no_update, local)
 	buildCode(target, arch, nproc, no_clean, force, prefix, local, deploy, sudo)
 
 @cli.command()
@@ -49,14 +49,15 @@ def clean(arch, full):
 @click.option('--target', default='default', show_default=True, help='Target project to build.')
 @click.option('--arch', default=getArchitecture(), show_default=True, help='Build architecture.')
 @click.option('--rules', default='default', show_default=True, help='Comma separated list of rules to use.')
-def source(target, arch, rules):
+@click.option('--local', help='Preform local build (using machine own installed tools/libs).', is_flag=True)
+def source(target, arch, rules, local):
 	"""Update sources"""
 	for rule in rules.split(","):
 		loadRules(rule)
 	validateRules()
 	validateTarget(target)
 	validateArch(arch)
-	pullCode(target, arch, False)
+	pullCode(target, arch, False, local)
 
 if __name__ == '__main__':
 	if os.name == "posix":
