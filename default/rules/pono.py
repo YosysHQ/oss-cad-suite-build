@@ -17,6 +17,7 @@ SourceLocation(
 Target(
 	name = 'smt-switch',
 	sources = [ 'smt-switch' ],
+	arch = [ 'linux-x64', 'darwin-x64', 'linux-arm', 'linux-arm64' ],
 	license_file = 'smt-switch/LICENSE',
 )
 
@@ -24,5 +25,6 @@ Target(
 	name = 'pono',
 	sources = [ 'pono' ],
 	dependencies = [ 'smt-switch' ],
+	arch = [ 'linux-x64', 'darwin-x64', 'linux-arm', 'linux-arm64' ],
 	license_file = 'pono/LICENSE',
 )
