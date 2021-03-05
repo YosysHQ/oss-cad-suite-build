@@ -308,6 +308,8 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, native, nproc, loc
 	env['ARCH_BASE'] = arch.split('-')[0]
 	env['NPROC'] = str(nproc)
 	env['SHARED_EXT'] = '.so'
+	env['IS_LOCAL'] = 'False'
+	env['LOCAL_PYTHON'] = 'False'
 	if (native):
 		env['STRIP'] = 'strip'
 		if (getBuildOS()=='darwin'):
@@ -323,6 +325,7 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, native, nproc, loc
 			env['CMAKE_GENERATOR'] = 'MSYS Makefiles'
 			env['EXE'] = '.exe'
 			env['SHARED_EXT'] = '.dll'
+			env['LOCAL_PYTHON'] = 'True'
 		else:
 			env['PATH'] = os.environ['PATH']
 	if os.uname()[0].startswith('MSYS_NT') or os.uname()[0].startswith('MINGW'):
@@ -331,6 +334,7 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, native, nproc, loc
 	env['INSTALL_PREFIX'] = prefix
 	if (local):
 		env['IS_LOCAL'] = 'True'
+		env['LOCAL_PYTHON'] = 'True'
 		env['CROSS_NAME'] = os.popen('gcc -dumpmachine').read().strip()
 
 	scriptfile = tempfile.NamedTemporaryFile()
