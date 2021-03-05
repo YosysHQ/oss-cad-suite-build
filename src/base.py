@@ -283,10 +283,11 @@ async def run_process(command, cwd, env):
 def run_live(command, cwd=None, env=None):
 	return asyncio.get_event_loop().run_until_complete(run_process(command, cwd, env))
 
-def calculateHash(target, prefix):
+def calculateHash(target, prefix, arch, local):
 	data = []
 	for s in sorted(target.sources):
-		data.append(sources[s].hash)
+		if not((arch if not local else "local") in target.no_source_copy):
+			data.append(sources[s].hash)
 	for d in sorted(target.dependencies):
 		if targets[d].hash:
 			data.append(targets[d].hash)
@@ -387,7 +388,7 @@ def buildCode(target, arch, nproc, no_clean, force, prefix, local, deploy, sudo)
 	for t in build_order:
 		pos += 1
 		target = targets[t]
-		target.hash = calculateHash(target, prefix)
+		target.hash = calculateHash(target, prefix, arch, local)
 		output_dir = os.path.join(OUTPUTS_ROOT, arch if not local else "local", target.name)
 
 		forceBuild = force
