@@ -1,4 +1,15 @@
 if [ ${LOCAL_PYTHON} == 'True' ]; then
+	if [ ${ARCH} == 'windows-x64' ]; then
+		for f in $(pacman -Ql mingw-w64-x86_64-python mingw-w64-x86_64-python-pip mingw-w64-x86_64-python-setuptools | cut -f2 -d' '); do
+			if [ -d "$f" ]; then
+				mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/$f
+			elif [ -f "$f" ]; then
+				cp $f ${OUTPUT_DIR}${INSTALL_PREFIX}/$f
+			fi
+		done
+		mv ${OUTPUT_DIR}${INSTALL_PREFIX}/mingw64/* ${OUTPUT_DIR}${INSTALL_PREFIX}/.
+		rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/mingw64
+	fi
     exit
 fi
 cd python3
