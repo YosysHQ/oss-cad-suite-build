@@ -27,4 +27,5 @@ Target(
         'verilator',
         'iverilog',
     ],
+	patches = [ 'win-launcher.c' ],
 )
