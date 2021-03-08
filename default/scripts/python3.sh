@@ -9,6 +9,7 @@ if [ ${LOCAL_PYTHON} == 'True' ]; then
 		done
 		mv ${OUTPUT_DIR}${INSTALL_PREFIX}/mingw64/* ${OUTPUT_DIR}${INSTALL_PREFIX}/.
 		rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/mingw64
+		mv ${OUTPUT_DIR}${INSTALL_PREFIX}/bin ${OUTPUT_DIR}${INSTALL_PREFIX}/py3bin
 	fi
     exit
 fi
