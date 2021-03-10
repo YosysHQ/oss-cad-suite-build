@@ -32,6 +32,7 @@ jobs:
 
       - name: Ubuntu dependencies
         run: |
+          sudo apt -y update ;\
           sudo apt -y install \
               git \
               subversion \
