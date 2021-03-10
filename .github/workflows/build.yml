@@ -26,7 +26,7 @@ jobs:
               subversion \
               python \
               python3 \
-              docker
+              docker \
               qemu-user-static \
               binfmt-support
 
