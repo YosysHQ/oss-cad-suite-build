@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+  # Allows manual run from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Check-out under $GITHUB_WORKSPACE
+      - uses: actions/checkout@v2
+
+      - name: Debian dependencies
+        run: |
+          apt -y update ;\
+          apt -y upgrade ;\
+          apt -y install \
+              git \
+              subversion \
+              python \
+              python3 \
+              docker
+              qemu-user-static \
+              binfmt-support
+
+      - name: Pip depencencies
+        run: pip install click
+
+      - name: Build
+        run: ./nightly.py build --rules=default --target=tabby
