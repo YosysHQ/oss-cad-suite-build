@@ -19,9 +19,9 @@ jobs:
 
       - name: Debian dependencies
         run: |
-          apt -y update ;\
-          apt -y upgrade ;\
-          apt -y install \
+          sudo apt -y update ;\
+          sudo apt -y upgrade ;\
+          sudo apt -y install \
               git \
               subversion \
               python \
