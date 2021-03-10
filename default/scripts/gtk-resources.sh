@@ -16,4 +16,7 @@ elif [ ${ARCH_BASE} == 'darwin' ]; then
     cp -v -L /usr/local/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/gtk-2.0/.
     chmod 644 ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/gtk-2.0/loaders/*
     dylibbundler -of -b -x ${OUTPUT_DIR}${INSTALL_PREFIX}/libexec/gdk-pixbuf-query-loaders -p @executable_path/../lib -d ${OUTPUT_DIR}${INSTALL_PREFIX}/lib
+elif [ ${ARCH_BASE} == 'windows' ]; then
+	mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/lib
+	cp -rf /mingw64/lib/gdk-pixbuf-2.0 ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/.
 fi
