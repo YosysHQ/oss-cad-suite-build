@@ -4,7 +4,7 @@ SourceLocation(
 	name = 'smt-switch',
 	vcs = 'git',
 	location = 'https://github.com/makaimann/smt-switch',
-	revision = 'origin/master'
+	revision = 'c3957b2e7fec8af4fab24df089230c88e523c0e6'
 )
 
 SourceLocation(
