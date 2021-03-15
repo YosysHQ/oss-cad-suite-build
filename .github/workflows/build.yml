@@ -66,5 +66,5 @@ jobs:
           choco install python msys2
 
       - name: Build
-        run: python nightly.py build --rules=default --target=yosys
+        run: nightly.bat
 
