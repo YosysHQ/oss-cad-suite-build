@@ -244,7 +244,6 @@ for script in bin/* py3bin/*; do
 		fi
     fi
 done
-mv libexec/iceboxdb.py bin/.
 # end of Windows section
 fi
 
