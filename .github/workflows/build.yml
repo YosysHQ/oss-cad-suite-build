@@ -61,13 +61,33 @@ jobs:
       # Check-out under $GITHUB_WORKSPACE
       - uses: actions/checkout@v2
 
-      - name: Install homebrew 
+      - name: Install homebrew
         run: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
       - name: Homebrew dependencies
         run: |
           brew cask install \
             docker
+
+      - name: Pip depencencies
+        run: pip install click
+
+      - name: Build
+        run: ./nightly.py build --rules=default --target=yosys
+
+  windows:
+    runs-on: windows-2019
+
+    steps:
+      # Check-out under $GITHUB_WORKSPACE
+      - uses: actions/checkout@v2
+
+      - name: Install chocolatey
+        run: Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+
+      - name: Choco dependencies
+        run: |
+          choco install docker-cli python
 
       - name: Pip depencencies
         run: pip install click
