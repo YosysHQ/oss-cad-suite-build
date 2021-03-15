@@ -67,6 +67,9 @@ jobs:
           update: true
           install: git python mingw-w64-x86_64-toolchain
 
+      - name: Pip dependencies
+        run: pip install click
+
       - name: Build
         working-directory: D:\a\fpga-nightly\fpga-nightly
         run: D:\a\fpga-nightly\fpga-nightly\nightly.bat build --rules=default --target=yosys
