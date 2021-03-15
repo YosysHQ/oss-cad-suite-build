@@ -54,27 +54,6 @@ jobs:
       - name: Build
         run: ./nightly.py build --rules=default --target=yosys
 
-  mac:
-    runs-on: macos-11.0
-
-    steps:
-      # Check-out under $GITHUB_WORKSPACE
-      - uses: actions/checkout@v2
-
-      - name: Install homebrew
-        run: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
-      - name: Homebrew dependencies
-        run: |
-          brew cask install \
-            docker
-
-      - name: Pip depencencies
-        run: pip install click
-
-      - name: Build
-        run: ./nightly.py build --rules=default --target=yosys
-
   windows:
     runs-on: windows-2019
 
