@@ -68,5 +68,5 @@ jobs:
           install: git python mingw-w64-x86_64-toolchain
 
       - name: Build
-        run: nightly.bat build --rules=default --target=yosys
+        run: cd D:\a\fpga-nightly\fpga-nightly; nightly.bat build --rules=default --target=yosys
 
