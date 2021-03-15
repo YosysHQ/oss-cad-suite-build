@@ -54,7 +54,7 @@ jobs:
       - name: Build
         run: ./nightly.py build --rules=default --target=yosys
 
-  windows:
+  mingw:
     runs-on: windows-2019
 
     steps:
@@ -73,4 +73,17 @@ jobs:
       - name: Build
         working-directory: D:\a\fpga-nightly\fpga-nightly
         run: D:\a\fpga-nightly\fpga-nightly\nightly.bat build --rules=default --target=yosys
+
+  choco:
+    runs-on: windows-2019
+
+    steps:
+      # Check-out under $GITHUB_WORKSPACE
+      - uses: actions/checkout@v2
+
+      - name: Choco dependencies
+        run: choco install python msys2
+
+      - name: Build
+        run: python nightly.py build --rules=default --target=yosys
 
