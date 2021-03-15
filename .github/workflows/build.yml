@@ -68,8 +68,8 @@ jobs:
           install: >-
             git
             mingw-w64-x86_64-toolchain
-            python3
-            python3-pip
+            python
+            python-pip
 
       - name: List executables
         run: C:\msys64\usr\bin\bash -lc 'ls -alh /usr/bin/'
