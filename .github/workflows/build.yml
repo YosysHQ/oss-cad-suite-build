@@ -84,7 +84,7 @@ jobs:
 
       - name: Choco dependencies
         run: |
-          choco install docker-cli python
+          choco install docker-cli python msys2
 
       - name: Pip depencencies
         run: pip install click
