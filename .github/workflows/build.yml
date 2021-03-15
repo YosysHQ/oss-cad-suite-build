@@ -35,7 +35,7 @@ jobs:
         env:
           DEBIAN_FRONTEND: noninteractive
         run: |
-          sudo apt -y update ;\
+          sudo apt -y update || echo "Fix the root cause";\
           sudo apt -y install \
               git \
               subversion \
