@@ -18,9 +18,10 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Add docker repository
+        env:
+          DEBIAN_FRONTEND: noninteractive
         run: |
           sudo apt -y update ;\
-          sudo apt -y upgrade ;\
           sudo apt -y install \
               apt-transport-https \
               ca-certificates \
