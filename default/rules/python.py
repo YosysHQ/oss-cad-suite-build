@@ -11,7 +11,7 @@ Target(
 	name = 'python3',
 	sources = [ 'python3' ],
 	patches = [ 'python38.diff' ],
-	license_file = 'python/LICENSE',
+	license_file = 'python3/LICENSE',
 	no_source_copy = [ 'windows-x64', 'local' ],
 )
 
