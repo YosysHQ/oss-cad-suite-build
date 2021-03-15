@@ -69,14 +69,10 @@ jobs:
             git
             mingw-w64-x86_64-toolchain
             python
-            python-pip
             curl
 
-      - name: List executables
-        run: C:\msys64\usr\bin\bash -lc 'ls -alh /usr/bin/'
-
       - name: Pip dependencies
-        run: C:\msys64\usr\bin\bash -lc 'curl -O https://bootstrap.pypa.io/get-pip.py && python get-pip.py'
+        run: C:\msys64\usr\bin\bash -lc 'curl -O https://bootstrap.pypa.io/get-pip.py && python get-pip.py && pip install click'
 
       - name: Build
         working-directory: D:\a\fpga-nightly\fpga-nightly
