@@ -1,7 +1,7 @@
 from src.base import Target
 
 Target(
-	name = 'default',
+    name = 'default',
     package = True,
     dependencies = [
         'yosys',
@@ -27,5 +27,5 @@ Target(
         'verilator',
         'iverilog',
     ],
-	patches = [ 'win-launcher.c' ],
+    patches = [ 'win-launcher.c' ],
 )
