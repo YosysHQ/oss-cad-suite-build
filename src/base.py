@@ -484,7 +484,7 @@ def buildCode(target, arch, nproc, no_clean, force, prefix, local, deploy, sudo)
 				if target.license_file is not None:
 					with open(os.path.join(build_dir, target.license_file), 'r') as lf:
 						f.write(lf.read())
-				f.write('=' * 80 + '\n')
+				f.write('\n' + '=' * 80 + '\n')
 
 		log_step("Marking build finished ...")
 		with open(hash_file, 'w') as f:
