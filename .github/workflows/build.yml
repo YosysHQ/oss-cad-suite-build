@@ -68,7 +68,7 @@ jobs:
           install: git python mingw-w64-x86_64-toolchain
 
       - name: Pip dependencies
-        run: C:\msys64\usr\bin\bash -lc '/usr/bin/pip install click'
+        run: C:\msys64\usr\bin\bash -lc 'python3 -m pip install click'
 
       - name: Build
         working-directory: D:\a\fpga-nightly\fpga-nightly
