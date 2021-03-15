@@ -61,9 +61,11 @@ jobs:
       # Check-out under $GITHUB_WORKSPACE
       - uses: actions/checkout@v2
 
-      - name: Choco dependencies
-        run: |
-          choco install python msys2
+      - uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+          update: true
+          install: git python mingw-w64-x86_64-toolchain
 
       - name: Build
         run: nightly.bat
