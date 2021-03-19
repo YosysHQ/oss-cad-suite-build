@@ -15,7 +15,7 @@ from libvcs.util import run
 sources = dict()
 targets = dict()
 architectures = [ 'linux-x64', 'darwin-x64', 'linux-arm', 'linux-arm64', 'windows-x64' ]
-native_only_architectures  = [ 'darwin-x64', 'windows-x64' ]
+native_only_architectures  = [ 'darwin-x64' ]
 SOURCES_ROOT = "_sources"
 BUILDS_ROOT  = "_builds"
 OUTPUTS_ROOT = "_outputs"
@@ -312,8 +312,14 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, native, nproc, loc
 	env['NPROC'] = str(nproc)
 	env['SHARED_EXT'] = '.so'
 	env['IS_LOCAL'] = 'False'
+	env['IS_NATIVE'] = 'False'
 	env['LOCAL_PYTHON'] = 'False'
+	if (arch=='windows-x64'):
+		env['EXE'] = '.exe'
+		env['SHARED_EXT'] = '.dll'
+		env['LOCAL_PYTHON'] = 'True'
 	if (native):
+		env['IS_NATIVE'] = 'True'
 		env['STRIP'] = 'strip'
 		if (getBuildOS()=='darwin'):
 			env['PATH'] =  '/usr/local/opt/gnu-sed/libexec/gnubin:'
@@ -326,11 +332,14 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, native, nproc, loc
 			env['SHARED_EXT'] = '.dylib'
 		elif (getBuildOS()=='windows'):
 			env['CMAKE_GENERATOR'] = 'MSYS Makefiles'
+		else:
+			env['PATH'] = os.environ['PATH']
+	else:
+		if (getBuildOS()=='windows'):
+			env['CMAKE_GENERATOR'] = 'MSYS Makefiles'
 			env['EXE'] = '.exe'
 			env['SHARED_EXT'] = '.dll'
 			env['LOCAL_PYTHON'] = 'True'
-		else:
-			env['PATH'] = os.environ['PATH']
 	if os.uname()[0].startswith('MSYS_NT') or os.uname()[0].startswith('MINGW'):
 		env.update(os.environ)
 	env['LC_ALL'] = 'C'
