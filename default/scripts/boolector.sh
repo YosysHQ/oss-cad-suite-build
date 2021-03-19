@@ -8,7 +8,16 @@ if [ ${ARCH_BASE} == 'windows' ]; then
 fi
 cd boolector
 patch -p1 < ${PATCHES_DIR}/boolector.diff
-sed -i -re "s,MINGW32,MINGW64,g" contrib/setup-utils.sh
+if [ ${ARCH_BASE} == 'windows' ]; then
+    if [ ${IS_NATIVE} == 'True' ]; then
+        sed -i -re "s,MINGW32,MINGW64,g" contrib/setup-utils.sh
+    else
+        sed -i -re "s,MINGW32,Linux,g" contrib/setup-utils.sh
+        sed -i -re "s,cmake ..,cmake .. -DCMAKE_TOOLCHAIN_FILE=\${CMAKE_TOOLCHAIN_FILE} -DCMAKE_CXX_FLAGS=\"-D__STDC_FORMAT_MACROS=1\",g" ../btor2tools/configure.sh
+        sed -i '247,347d' ../cadical/configure
+        export CMAKE_TOOLCHAIN_FILE=${PATCHES_DIR}/Toolchain.cmake
+    fi
+fi
 sed -i -re "s,test_apply_patch,#test_apply_patch,g" contrib/setup-btor2tools.sh
 bash contrib/setup-btor2tools.sh
 bash contrib/setup-lingeling.sh
@@ -16,7 +25,7 @@ bash contrib/setup-cadical.sh
 if [ ${ARCH_BASE} == 'windows' ]; then
     mkdir -p build
     cd build
-    cmake .. -DPYTHON=OFF -DIS_WINDOWS_BUILD=1 -DCMAKE_INSTALL_PREFIX=${INSTALL_PREFIX}
+    cmake .. -DPYTHON=OFF -DIS_WINDOWS_BUILD=1 -DCMAKE_INSTALL_PREFIX=${INSTALL_PREFIX} -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}
     cd ..
 else
     ./configure.sh --prefix ${INSTALL_PREFIX}
