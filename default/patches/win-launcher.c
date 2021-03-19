@@ -310,7 +310,7 @@ int run(int argc, char **argv, int is_gui) {
 	memset(dir,0,MAX_PATH);
 	GetModuleFileNameA(hModule, path, MAX_PATH);
 	GetDir(path, dir);
-	sprintf(python,"#!%s..\\py3bin\\python.exe",dir);
+	sprintf(python,"#!%s..\\py3bin\\python3.exe",dir);
 	//sprintf(python,"#!%spython.exe",dir);
     parsedargs = parse_argv(python+2, &parsedargc);
 
