@@ -18,5 +18,9 @@ elif [ ${ARCH_BASE} == 'darwin' ]; then
     dylibbundler -of -b -x ${OUTPUT_DIR}${INSTALL_PREFIX}/libexec/gdk-pixbuf-query-loaders -p @executable_path/../lib -d ${OUTPUT_DIR}${INSTALL_PREFIX}/lib
 elif [ ${ARCH_BASE} == 'windows' ]; then
 	mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/lib
-	cp -rf /mingw64/lib/gdk-pixbuf-2.0 ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/.
+    if [ ${IS_NATIVE} == 'True' ]; then
+        cp -rf /mingw64/lib/gdk-pixbuf-2.0 ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/.
+    else
+        cp -rf /usr/x86_64-w64-mingw32/sys-root/mingw/lib/gdk-pixbuf-2.0 ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/.
+    fi
 fi
