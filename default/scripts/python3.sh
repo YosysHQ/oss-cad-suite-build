@@ -26,6 +26,8 @@ if [ ${LOCAL_PYTHON} == 'True' ]; then
 			mv ${OUTPUT_DIR}${INSTALL_PREFIX}/usr/x86_64-w64-mingw32/sys-root/mingw/* ${OUTPUT_DIR}${INSTALL_PREFIX}/.
 			rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/usr
 			mv ${OUTPUT_DIR}${INSTALL_PREFIX}/bin ${OUTPUT_DIR}${INSTALL_PREFIX}/py3bin
+			# Remove link to non-existing file
+			rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libpython3.8.dll.a
 		fi		
 	fi
     exit
