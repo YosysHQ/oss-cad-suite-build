@@ -24,7 +24,8 @@ RUN dnf install -y  mingw64-libftdi \
                     mingw64-gmp \
                     mingw64-eigen3 \
                     mingw64-python3 \
-                    bc
+                    bc \
+                    rsync
 
 ENV CROSS_NAME x86_64-w64-mingw32
 
