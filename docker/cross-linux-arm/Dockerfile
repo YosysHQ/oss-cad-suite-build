@@ -37,7 +37,8 @@ RUN set -e -x ;\
         libssl-dev:armhf \
         tcl-dev:armhf \
         tk-dev:armhf \
-        qtbase5-dev:armhf ; \
+        qtbase5-dev:armhf \
+        libbison-dev:armhf; \
     apt -y autoremove ;\
     rm -rf /var/lib/apt/lists/*
 

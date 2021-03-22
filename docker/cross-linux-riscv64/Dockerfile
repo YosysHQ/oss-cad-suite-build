@@ -37,7 +37,8 @@ RUN set -e -x ;\
         libssl-dev:riscv64 \
         tcl-dev:riscv64 \
         tk-dev:riscv64 \
-        qtbase5-dev:riscv64 ; \
+        qtbase5-dev:riscv64 \
+        libbison-dev:riscv64; \
     apt -y autoremove ;\
     rm -rf /var/lib/apt/lists/*
 

@@ -37,7 +37,8 @@ RUN set -e -x ;\
         libssl-dev:arm64 \
         tcl-dev:arm64 \
         tk-dev:arm64 \
-        qtbase5-dev:arm64 ; \
+        qtbase5-dev:arm64 \
+        libbison-dev:arm64; \
     apt -y autoremove ;\
     rm -rf /var/lib/apt/lists/*
 

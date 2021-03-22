@@ -28,7 +28,8 @@ RUN set -e -x ;\
         libssl-dev \
         tcl-dev \
         tk-dev \
-        qtbase5-dev ; \
+        qtbase5-dev \
+        libbison-dev; \
     apt -y autoremove ;\
     rm -rf /var/lib/apt/lists/*
 
