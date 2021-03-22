@@ -24,9 +24,7 @@ RUN set -e -x ;\
         pax-utils \
         qt5-qmake \
         qtbase5-dev-tools \
-        default-jdk \
-        qemu-user-static \
-        binfmt-support; \
+        default-jdk; \
     apt -y autoremove ;\
     rm -rf /var/lib/apt/lists/*
 
