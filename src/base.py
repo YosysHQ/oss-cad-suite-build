@@ -14,7 +14,7 @@ from libvcs.util import run
 
 sources = dict()
 targets = dict()
-architectures = [ 'linux-x64', 'darwin-x64', 'linux-arm', 'linux-arm64', 'windows-x64' ]
+architectures = [ 'linux-x64', 'darwin-x64', 'linux-arm', 'linux-arm64', 'linux-riscv64', 'windows-x64' ]
 native_only_architectures  = [ 'darwin-x64' ]
 SOURCES_ROOT = "_sources"
 BUILDS_ROOT  = "_builds"
