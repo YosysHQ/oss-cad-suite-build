@@ -13,6 +13,6 @@ Target(
 	dependencies = [ 'python2' ],
 	resources = [ 'python2' ],
 	patches = [ 'suprove.diff' ],
-	arch = [ 'linux-x64', 'linux-arm', 'linux-arm64' ],
+	arch = [ 'linux-x64', 'linux-arm', 'linux-arm64', 'linux-riscv64' ],
 	license_file = 'suprove/pywrapper/LICENSE',
 )
