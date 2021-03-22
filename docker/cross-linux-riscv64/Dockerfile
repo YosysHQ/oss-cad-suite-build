@@ -17,14 +17,10 @@ RUN set -e -x ;\
     echo 'deb [arch=riscv64] http://ports.ubuntu.com/ubuntu-ports/ focal-security main multiverse restricted universe' >> /etc/apt/sources.list ; \
     echo 'deb [arch=amd64] http://archive.ubuntu.com/ubuntu/ focal-updates main multiverse restricted universe' >> /etc/apt/sources.list ; \
     echo 'deb [arch=amd64] http://security.ubuntu.com/ubuntu/ focal-security main multiverse restricted universe' >> /etc/apt/sources.list ; \
-    cat /etc/apt/sources.list ;\
     dpkg --add-architecture riscv64 ;\
     apt -y update ;\
     apt -y upgrade ;\
     apt -y install \
-        libgtk2.0-0:riscv64 \
-        libcups2:riscv64 \
-        libqt5printsupport5:riscv64 \
         libboost-dev:riscv64 \
         libboost-filesystem-dev:riscv64 \
         libboost-thread-dev:riscv64 \
