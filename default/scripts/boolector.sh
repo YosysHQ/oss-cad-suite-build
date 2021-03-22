@@ -8,6 +8,9 @@ if [ ${ARCH_BASE} == 'windows' ]; then
 fi
 cd boolector
 patch -p1 < ${PATCHES_DIR}/boolector.diff
+if [ ${ARCH} == 'linux-arm' ] || [ ${ARCH} == 'linux-arm64' ] || [ ${ARCH} == 'linux-riscv64' ]; then
+    sed -i '286,407d' ../cadical/configure
+fi
 if [ ${ARCH_BASE} == 'windows' ]; then
     if [ ${IS_NATIVE} == 'True' ]; then
         sed -i -re "s,MINGW32,MINGW64,g" contrib/setup-utils.sh
