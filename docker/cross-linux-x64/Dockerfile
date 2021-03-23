@@ -40,7 +40,3 @@ ENV AS=/usr/bin/${CROSS_NAME}-as \
     CXX=/usr/bin/${CROSS_NAME}-g++ \
     LD=/usr/bin/${CROSS_NAME}-ld \
     STRIP=/usr/bin/${CROSS_NAME}-strip
-
-COPY Toolchain.cmake ${CROSS_PREFIX}/
-
-ENV CMAKE_TOOLCHAIN_FILE ${CROSS_PREFIX}/Toolchain.cmake
