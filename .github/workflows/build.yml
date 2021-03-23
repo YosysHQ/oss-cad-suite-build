@@ -15,7 +15,6 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
-      # Check-out under $GITHUB_WORKSPACE
       - uses: actions/checkout@v2
 
       - name: Add docker repository
@@ -55,7 +54,6 @@ jobs:
     runs-on: windows-2019
 
     steps:
-      # Check-out under $GITHUB_WORKSPACE
       - uses: actions/checkout@v2
 
       - uses: msys2/setup-msys2@v2
@@ -64,9 +62,8 @@ jobs:
           update: true
           install: >-
             git
-            mingw-w64-x86_64-toolchain
             python
-            curl
+            mingw-w64-x86_64-toolchain
 
       - name: Pip dependencies
         shell: msys2 {0}
@@ -75,4 +72,3 @@ jobs:
       - name: Build
         shell: msys2 {0}
         run: python nightly.py build --rules=default --target=yosys
-
