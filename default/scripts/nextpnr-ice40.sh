@@ -7,6 +7,9 @@ if [ ${LOCAL_PYTHON} != 'True' ]; then
       python_var="-DPYTHON_INCLUDE_DIR=${BUILD_DIR}/python3${INSTALL_PREFIX}/include/python3.8
                   -DPYTHON_LIBRARY=${BUILD_DIR}/python3${INSTALL_PREFIX}/lib/libpython3.8${SHARED_EXT}"
 fi
+if [ ${ARCH} == 'windows-x64' ]; then
+      sed -i 's,CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE,CMAKE_INTERPROCEDURAL_OPTIMIZATION FALSE,g' CMakeLists.txt
+fi
 cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${INSTALL_PREFIX} -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE} \
       ${python_var} \
       -DARCH=ice40 -DICEBOX_DATADIR=${BUILD_DIR}/icestorm${INSTALL_PREFIX}/share/icebox \
