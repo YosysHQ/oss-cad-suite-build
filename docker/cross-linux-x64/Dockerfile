@@ -29,7 +29,8 @@ RUN set -e -x ;\
         tcl-dev \
         tk-dev \
         qtbase5-dev \
-        libbison-dev; \
+        libbison-dev \
+        python3-dev; \
     apt -y autoremove ;\
     rm -rf /var/lib/apt/lists/*
 

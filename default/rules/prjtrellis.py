@@ -10,6 +10,11 @@ SourceLocation(
 Target(
 	name = 'prjtrellis',
 	sources = [ 'prjtrellis' ],
-	dependencies = [ 'python3' ],
 	license_file = 'prjtrellis/COPYING',
+)
+
+Target(
+	name = 'prjtrellis-py',
+	sources = [ 'prjtrellis' ],
+	build_native = True,
 )

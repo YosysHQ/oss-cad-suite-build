@@ -10,7 +10,7 @@ SourceLocation(
 Target(
 	name = 'nextpnr-ice40',
 	sources = [ 'nextpnr' ],
-	dependencies = [ 'icestorm', 'python3' ],
+	dependencies = [ 'icestorm', 'python3', 'nextpnr-bba' ],
 	resources = [ 'python3' ],
 	license_file = 'nextpnr/COPYING',
 )
@@ -18,7 +18,7 @@ Target(
 Target(
 	name = 'nextpnr-ecp5',
 	sources = [ 'nextpnr' ],
-	dependencies = [ 'prjtrellis', 'python3' ],
+	dependencies = [ 'prjtrellis', 'python3', 'nextpnr-bba', 'prjtrellis-py' ],
 	resources = [ 'python3' ],
 	license_file = 'nextpnr/COPYING',
 )
@@ -26,7 +26,13 @@ Target(
 Target(
 	name = 'nextpnr-generic',
 	sources = [ 'nextpnr' ],
-	dependencies = [ 'python3' ],
+	dependencies = [ 'python3', 'nextpnr-bba' ],
 	resources = [ 'python3' ],
 	license_file = 'nextpnr/COPYING',
+)
+
+Target(
+	name = 'nextpnr-bba',
+	sources = [ 'nextpnr' ],
+	build_native = True,
 )

@@ -63,7 +63,7 @@ class SourceLocation:
 		sources[name] = self
 
 class Target:
-	def __init__(self, name, sources = [], dependencies = [], resources = [], patches = [], arch = [], no_source_copy = [], license_url = None, license_file = None, package = False):
+	def __init__(self, name, sources = [], dependencies = [], resources = [], patches = [], arch = [], no_source_copy = [], license_url = None, license_file = None, package = False, build_native = False):
 		self.name = name
 		self.sources = sources
 		self.dependencies = dependencies
@@ -78,6 +78,7 @@ class Target:
 		self.group = current_rule_group
 		self.arch = arch
 		self.no_source_copy = no_source_copy
+		self.build_native = build_native
 		if name in targets:
 			log_step_triple("Overriding ", name)
 		else:
@@ -377,27 +378,34 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, native, nproc, loc
 		code = run_live(params, cwd=build_dir)
 	return code
 
-def buildCode(target, arch, nproc, no_clean, force, prefix, local, deploy, sudo):
+def buildCode(target, build_arch, nproc, no_clean, force, prefix, local, deploy, sudo):
 	if deploy and not local:
 		log_error("Deployment only possible for local builds.")
-	if arch != getArchitecture() and arch in native_only_architectures:
-		log_error("Build for {} architecture can only be built natively.".format(arch))
+	if build_arch != getArchitecture() and build_arch in native_only_architectures:
+		log_error("Build for {} architecture can only be built natively.".format(build_arch))
 	native = False
-	if arch == getArchitecture() and arch in native_only_architectures:
+	if build_arch == getArchitecture() and build_arch in native_only_architectures:
 		native = True
-	if arch != getArchitecture() and local:
-		log_error("Local build for {} architecture can only be built natively.".format(arch))
-	if arch == getArchitecture() and local:
+	if build_arch != getArchitecture() and local:
+		log_error("Local build for {} architecture can only be built natively.".format(build_arch))
+	if build_arch == getArchitecture() and local:
 		native = True
 
-	log_info_triple("Building ", target, " for {} architecture ...".format(arch))
+	log_info_triple("Building ", target, " for {} architecture ...".format(build_arch))
 
-	build_order = createBuildOrder(target, arch, True)
+	build_order = createBuildOrder(target, build_arch, True)
 	pos = 0
 	for t in build_order:
 		pos += 1
 		target = targets[t]
-		target.hash = calculateHash(target, prefix, arch, local)
+		target.hash = calculateHash(target, prefix, build_arch, local)
+		build_info = ""
+		if (target.build_native and build_arch != getArchitecture()):
+			arch = getArchitecture()
+			build_info = " [" + getArchitecture() + "]"
+		else:
+			arch = build_arch
+
 		output_dir = os.path.join(OUTPUTS_ROOT, arch if not local else "local", target.name)
 
 		forceBuild = force
@@ -406,10 +414,10 @@ def buildCode(target, arch, nproc, no_clean, force, prefix, local, deploy, sudo)
 		hash_file = os.path.join(output_dir, '.hash')
 		if (not forceBuild and os.path.exists(hash_file)):
 			if target.hash == open(hash_file, 'r').read():				
-				log_info_triple("Step [{:2d}/{:2d}] skipping ".format(pos,len(build_order)), target.name)
+				log_info_triple("Step [{:2d}/{:2d}] skipping ".format(pos,len(build_order)), target.name + build_info)
 				continue
 
-		log_info_triple("Step [{:2d}/{:2d}] building ".format(pos,len(build_order)), target.name)
+		log_info_triple("Step [{:2d}/{:2d}] building ".format(pos,len(build_order)), target.name + build_info)
 
 		log_step("Remove old output dir ...")
 		if os.path.exists(output_dir):
@@ -444,7 +452,10 @@ def buildCode(target, arch, nproc, no_clean, force, prefix, local, deploy, sudo)
 				if dep.arch and arch not in dep.arch:
 					needed = False
 				if needed:
-					dep_dir = os.path.join(OUTPUTS_ROOT, arch if not local else "local", d)
+					if (dep.build_native and build_arch != getArchitecture()):
+						dep_dir = os.path.join(OUTPUTS_ROOT, getArchitecture() if not local else "local", d)
+					else:
+						dep_dir = os.path.join(OUTPUTS_ROOT, arch if not local else "local", d)
 					if not target.package:
 						log_step_triple("Copy '", d, "' output to build dir ...")
 						run(['rsync','-a', dep_dir, build_dir])
