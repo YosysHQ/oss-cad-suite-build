@@ -22,6 +22,8 @@ if [ ${ARCH_BASE} == 'windows' ]; then
     fi
 fi
 sed -i -re "s,test_apply_patch,#test_apply_patch,g" contrib/setup-btor2tools.sh
+sed -i -re "s,./configure,CXXFLAGS=-fPIC CFLAGS=-fPIC ./configure,g" contrib/setup-btor2tools.sh
+
 bash contrib/setup-btor2tools.sh
 bash contrib/setup-lingeling.sh
 bash contrib/setup-cadical.sh
@@ -31,8 +33,23 @@ if [ ${ARCH_BASE} == 'windows' ]; then
     cmake .. -DPYTHON=OFF -DIS_WINDOWS_BUILD=1 -DCMAKE_INSTALL_PREFIX=${INSTALL_PREFIX} -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}
     cd ..
 else
-    ./configure.sh --prefix ${INSTALL_PREFIX}
+    ./configure.sh --prefix ${INSTALL_PREFIX} -fPIC
 fi
 cd build
 make DESTDIR=${OUTPUT_DIR} -j${NPROC}
 make DESTDIR=${OUTPUT_DIR} -j${NPROC} install
+if [ ${ARCH_BASE} = 'linux' ]; then
+    cd ..
+    mkdir -p ${OUTPUT_DIR}/dev
+    mkdir -p ${OUTPUT_DIR}/dev/build/lib
+    mkdir -p ${OUTPUT_DIR}/dev/deps/lingeling/build
+    mkdir -p ${OUTPUT_DIR}/dev/deps/cadical/build
+    mkdir -p ${OUTPUT_DIR}/dev/deps/btor2tools/build
+    mkdir -p ${OUTPUT_DIR}/dev/deps/btor2tools/src    
+    cp -r src ${OUTPUT_DIR}/dev/.
+    cp -r build/lib/libboolector.a ${OUTPUT_DIR}/dev/build/lib/libboolector.a
+    cp -r deps/install/lib/liblgl.a ${OUTPUT_DIR}/dev/deps/lingeling/build/liblgl.a
+    cp -r deps/install/lib/libcadical.a ${OUTPUT_DIR}/dev/deps/cadical/build/libcadical.a
+    cp -r deps/install/lib/libbtor2parser.a ${OUTPUT_DIR}/dev/deps/btor2tools/build/libbtor2parser.a
+    cp -r ../btor2tools/src ${OUTPUT_DIR}/dev/deps/btor2tools/.
+fi
