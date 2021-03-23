@@ -74,5 +74,5 @@ jobs:
 
       - name: Build
         shell: msys2 {0}
-        run: ./nightly.py build --rules=default --target=yosys
+        run: python nightly.py build --rules=default --target=yosys
 
