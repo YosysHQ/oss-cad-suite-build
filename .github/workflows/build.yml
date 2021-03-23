@@ -72,7 +72,8 @@ jobs:
             curl
 
       - name: Pip dependencies
-        run: C:\msys64\usr\bin\bash -lc 'curl -O https://bootstrap.pypa.io/get-pip.py && python get-pip.py && pip install click'
+        shell: msys2 {0}
+        run: curl -O https://bootstrap.pypa.io/get-pip.py && python get-pip.py && pip install click
 
       - name: Build
         working-directory: D:\a\fpga-nightly\fpga-nightly
