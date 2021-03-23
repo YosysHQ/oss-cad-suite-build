@@ -74,5 +74,5 @@ jobs:
 
       - name: Build
         shell: msys2 {0}
-        run: nightly.bat build --rules=default --target=yosys
+        run: D:\a\fpga-nightly\fpga-nightly\nightly.bat build --rules=default --target=yosys
 
