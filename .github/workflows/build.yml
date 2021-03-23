@@ -42,9 +42,6 @@ jobs:
               subversion \
               python \
               python3 \
-              docker-ce \
-              docker-ce-cli \
-              containerd.io \
               qemu-user-static \
               binfmt-support
 
@@ -76,6 +73,6 @@ jobs:
         run: curl -O https://bootstrap.pypa.io/get-pip.py && python get-pip.py && pip install click
 
       - name: Build
-        working-directory: D:\a\fpga-nightly\fpga-nightly
-        run: D:\a\fpga-nightly\fpga-nightly\nightly.bat build --rules=default --target=yosys
+        shell: msys2 {0}
+        run: nightly.bat build --rules=default --target=yosys
 
