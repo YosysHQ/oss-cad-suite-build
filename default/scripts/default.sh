@@ -13,6 +13,9 @@ elif [ ${ARCH} == 'linux-arm64' ]; then
 elif [ ${ARCH} == 'linux-arm' ]; then
     ldlinuxname="ld-linux-armhf.so.3"
     arch_prefix="arm-linux-gnueabihf"
+elif [ ${ARCH} == 'linux-riscv64' ]; then
+    ldlinuxname="ld-linux-riscv64-lp64d.so.1"
+    arch_prefix="riscv64-linux-gnu"
 fi
 for bindir in bin py2bin py3bin super_prove/bin; do
     for binfile in $(file $bindir/* | grep ELF | grep dynamically | cut -f1 -d:); do
