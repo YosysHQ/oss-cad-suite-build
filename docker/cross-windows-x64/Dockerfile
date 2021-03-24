@@ -54,6 +54,4 @@ COPY Toolchain.cmake ${CROSS_PREFIX}/
 
 ENV CMAKE_TOOLCHAIN_FILE ${CROSS_PREFIX}/Toolchain.cmake
 
-ENV PYTHONPATH /usr/lib64/python3.8
-
 WORKDIR /work
