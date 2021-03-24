@@ -100,8 +100,12 @@ EOT
     done
 done
 
-cp py3bin/python3 bin/packaged_py3
-cp py2bin/python2 bin/packaged_py2
+if [ -f "py3bin/python3" ]; then
+    cp py3bin/python3 bin/packaged_py3
+fi
+if [ -f "py2bin/python2" ]; then
+    cp py2bin/python2 bin/packaged_py2
+fi
 
 for script in bin/* py3bin/*; do
     rel_path=$(realpath --relative-to=bin .)
@@ -120,8 +124,6 @@ EOT
     fi
 done
 
-bin/packaged_py3 -m pip install flask --no-cache-dir --disable-pip-version-check --target=${OUTPUT_DIR}${INSTALL_PREFIX}/lib/python3.8/site-packages
-bin/packaged_py2 -m pip install future --no-cache-dir --disable-pip-version-check --target=${OUTPUT_DIR}${INSTALL_PREFIX}/lib/python2.7/site-packages
 
 for lib in /lib/$arch_prefix/libnss_dns.so.2 /lib/$arch_prefix/libnss_files.so.2 /lib/$arch_prefix/libnss_compat.so.2 /lib/$arch_prefix/libresolv.so.2 \
         /lib/$arch_prefix/libnss_nis.so.2 /lib/$arch_prefix/libnss_nisplus.so.2 /lib/$arch_prefix/libnss_hesiod.so.2 /lib/$arch_prefix/libnsl.so.1; do
@@ -193,7 +195,9 @@ EOT
     done
 done
 
-cp py3bin/python3 bin/packaged_py3
+if [ -f "py3bin/python3" ]; then
+    cp py3bin/python3 bin/packaged_py3
+fi
 
 for script in bin/* py3bin/*; do
     rel_path=$(realpath --relative-to=bin .)
@@ -211,8 +215,6 @@ EOT
         chmod +x "${script}"
     fi
 done
-
-bin/packaged_py3 -m pip install flask --no-cache-dir --disable-pip-version-check --target=${OUTPUT_DIR}${INSTALL_PREFIX}/lib/python3.8/site-packages
 
 for binfile in $(find -x lib | xargs file | grep Mach-O | grep bundle | cut -f1 -d:); do
     echo $binfile
