@@ -443,8 +443,13 @@ def buildCode(target, build_arch, nproc, no_clean, force, prefix, local, deploy,
 
 			deps = target.dependencies
 			if t == target.name and target.package:
-				deps = build_order
-				deps.pop()
+				res = set()
+				for d in build_order:
+					dep = targets[d]
+					if (dep and dep.resources):
+						for r in dep.resources:
+							res.add(r)
+				deps += list(res)
 
 			for d in deps:
 				dep = targets[d]
