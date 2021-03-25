@@ -4,7 +4,7 @@ SourceLocation(
 	name = 'iverilog',
 	vcs = 'git',
 	location = 'https://github.com/steveicarus/iverilog',
-	revision = 'tags/v11_0',
+	revision = 'origin/master',
 )
 
 Target(

@@ -23,7 +23,9 @@ RUN set -e -x ;\
         curl \
         pax-utils \
         qt5-qmake \
-        qtbase5-dev-tools; \
+        qtbase5-dev-tools \
+        libz-dev \
+        libreadline-dev; \        
     apt -y autoremove ;\
     rm -rf /var/lib/apt/lists/*
 

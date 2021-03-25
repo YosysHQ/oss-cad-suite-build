@@ -25,7 +25,10 @@ RUN dnf install -y  mingw64-libftdi \
                     mingw64-eigen3 \
                     mingw64-python3 \
                     bc \
-                    rsync
+                    rsync \
+                    zlib-devel \
+                    readline-devel \
+                    bzip2-devel
 
 ENV CROSS_NAME x86_64-w64-mingw32
 

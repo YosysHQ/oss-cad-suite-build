@@ -23,7 +23,6 @@ RUN set -e -x ;\
         libgmp-dev \
         libgtk2.0-dev \
         liblzma-dev \
-        libreadline-dev \
         libsqlite3-dev \
         libssl-dev \
         tcl-dev \
