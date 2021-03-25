@@ -11,7 +11,7 @@ on:
 
 jobs:
 
-  linux:
+  linux-x64:
     runs-on: ubuntu-20.04
 
     steps:
@@ -40,35 +40,47 @@ jobs:
               git \
               subversion \
               python \
-              python3 \
-              qemu-user-static \
-              binfmt-support
+              python3
 
       - name: Pip depencencies
         run: pip install click
 
       - name: Build
-        run: ./nightly.py build --rules=default --target=yosys
+        run: ./nightly.py build --arch=linux-x64 --target=yosys
 
-  mingw:
-    runs-on: windows-2019
+  windows-x64:
+    runs-on: ubuntu-20.04
 
     steps:
       - uses: actions/checkout@v2
 
-      - uses: msys2/setup-msys2@v2
-        with:
-          msystem: MINGW64
-          update: true
-          install: >-
-            git
-            python
-            mingw-w64-x86_64-toolchain
+      - name: Add docker repository
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          sudo apt -y update || echo "Fix the root cause" ;\
+          sudo apt -y install \
+              apt-transport-https \
+              ca-certificates \
+              curl \
+              gnupg \
+              lsb-release;\
+          curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg; \
+          echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
-      - name: Pip dependencies
-        shell: msys2 {0}
-        run: curl -O https://bootstrap.pypa.io/get-pip.py && python get-pip.py && pip install click
+      - name: Ubuntu dependencies
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          sudo apt -y update || echo "Fix the root cause";\
+          sudo apt -y install \
+              git \
+              subversion \
+              python \
+              python3
+
+      - name: Pip depencencies
+        run: pip install click
 
       - name: Build
-        shell: msys2 {0}
-        run: python nightly.py build --rules=default --target=yosys
+        run: ./nightly.py build --arch=windows-x64 --target=yosys
