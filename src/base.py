@@ -178,18 +178,18 @@ def createBuildOrder(target, arch, display):
 				break
 	return resolved
 
-def createNeededSourceList(target, arch, local):
+def createNeededSourceList(target, arch):
 	src = []
 	for t in createBuildOrder(target, arch, False):
-		if not((arch if not local else "local") in targets[t].no_source_copy):
+		if not(arch in targets[t].no_source_copy):
 			for s in targets[t].sources:
 				if s not in src:
 					src.append(s)
 	return src
 
-def pullCode(target, arch, no_update, local):
+def pullCode(target, arch, no_update):
 	log_info("Downloading sources ...")
-	for src in createNeededSourceList(target, arch, local):
+	for src in createNeededSourceList(target, arch):
 		s = sources[src]
 		repo_dir = os.path.abspath(os.path.join(SOURCES_ROOT, s.name))
 		repo = create_repo(url=s.location, vcs=s.vcs, repo_dir=repo_dir)
@@ -284,10 +284,10 @@ async def run_process(command, cwd, env):
 def run_live(command, cwd=None, env=None):
 	return asyncio.get_event_loop().run_until_complete(run_process(command, cwd, env))
 
-def calculateHash(target, prefix, arch, local):
+def calculateHash(target, prefix, arch):
 	data = []
 	for s in sorted(target.sources):
-		if not((arch if not local else "local") in target.no_source_copy):
+		if not(arch in target.no_source_copy):
 			data.append(sources[s].hash)
 	for d in sorted(target.dependencies):
 		if targets[d].hash:
@@ -298,7 +298,7 @@ def calculateHash(target, prefix, arch, local):
 	data.append(prefix)
 	return hashlib.sha256('\n'.join(data).encode()).hexdigest()
 
-def executeBuild(target, arch, prefix, build_dir, output_dir, native, nproc, local):
+def executeBuild(target, arch, prefix, build_dir, output_dir, native, nproc):
 	cwd = os.getcwd()
 
 	env = OrderedDict()
@@ -312,7 +312,6 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, native, nproc, loc
 	env['ARCH_BASE'] = arch.split('-')[0]
 	env['NPROC'] = str(nproc)
 	env['SHARED_EXT'] = '.so'
-	env['IS_LOCAL'] = 'False'
 	env['IS_NATIVE'] = 'False'
 	env['LOCAL_PYTHON'] = 'False'
 	if (arch=='windows-x64'):
@@ -345,10 +344,6 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, native, nproc, loc
 		env.update(os.environ)
 	env['LC_ALL'] = 'C'
 	env['INSTALL_PREFIX'] = prefix
-	if (local):
-		env['IS_LOCAL'] = 'True'
-		env['LOCAL_PYTHON'] = 'True'
-		env['CROSS_NAME'] = os.popen('gcc -dumpmachine').read().strip()
 
 	scriptfile = tempfile.NamedTemporaryFile()
 	scriptfile.write("set -e -x\n".encode())
@@ -378,17 +373,11 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, native, nproc, loc
 		code = run_live(params, cwd=build_dir)
 	return code
 
-def buildCode(target, build_arch, nproc, no_clean, force, prefix, local, deploy, sudo):
-	if deploy and not local:
-		log_error("Deployment only possible for local builds.")
+def buildCode(target, build_arch, nproc, no_clean, force, prefix):
 	if build_arch != getArchitecture() and build_arch in native_only_architectures:
 		log_error("Build for {} architecture can only be built natively.".format(build_arch))
 	native = False
 	if build_arch == getArchitecture() and build_arch in native_only_architectures:
-		native = True
-	if build_arch != getArchitecture() and local:
-		log_error("Local build for {} architecture can only be built natively.".format(build_arch))
-	if build_arch == getArchitecture() and local:
 		native = True
 
 	log_info_triple("Building ", target, " for {} architecture ...".format(build_arch))
@@ -398,7 +387,7 @@ def buildCode(target, build_arch, nproc, no_clean, force, prefix, local, deploy,
 	for t in build_order:
 		pos += 1
 		target = targets[t]
-		target.hash = calculateHash(target, prefix, build_arch, local)
+		target.hash = calculateHash(target, prefix, build_arch)
 		build_info = ""
 		if (target.build_native and build_arch != getArchitecture()):
 			arch = getArchitecture()
@@ -406,7 +395,7 @@ def buildCode(target, build_arch, nproc, no_clean, force, prefix, local, deploy,
 		else:
 			arch = build_arch
 
-		output_dir = os.path.join(OUTPUTS_ROOT, arch if not local else "local", target.name)
+		output_dir = os.path.join(OUTPUTS_ROOT, arch, target.name)
 
 		forceBuild = force
 		for dep in sorted(target.dependencies):
@@ -425,7 +414,7 @@ def buildCode(target, build_arch, nproc, no_clean, force, prefix, local, deploy,
 		log_step("Creating output dir ...")
 		os.makedirs(output_dir)
 
-		build_dir = os.path.join(BUILDS_ROOT, arch if not local else "local", target.name)
+		build_dir = os.path.join(BUILDS_ROOT, arch, target.name)
 		if no_clean and os.path.exists(build_dir):
 			log_step("Skipping clean of build dir ...")
 		else:
@@ -435,7 +424,7 @@ def buildCode(target, build_arch, nproc, no_clean, force, prefix, local, deploy,
 					shutil.rmtree(build_dir, onerror=removeError)
 				log_step("Creating build dir ...")
 				os.makedirs(build_dir)
-				if not((arch if not local else "local") in target.no_source_copy):
+				if not(arch in target.no_source_copy):
 					for s in target.sources:
 						src_dir = os.path.join(SOURCES_ROOT, s)
 						log_step_triple("Copy '", s, "' source to build dir ...")
@@ -458,9 +447,9 @@ def buildCode(target, build_arch, nproc, no_clean, force, prefix, local, deploy,
 					needed = False
 				if needed:
 					if (dep.build_native and build_arch != getArchitecture()):
-						dep_dir = os.path.join(OUTPUTS_ROOT, getArchitecture() if not local else "local", d)
+						dep_dir = os.path.join(OUTPUTS_ROOT, getArchitecture(), d)
 					else:
-						dep_dir = os.path.join(OUTPUTS_ROOT, arch if not local else "local", d)
+						dep_dir = os.path.join(OUTPUTS_ROOT, arch, d)
 					if not target.package:
 						log_step_triple("Copy '", d, "' output to build dir ...")
 						run(['rsync','-a', dep_dir, build_dir])
@@ -469,7 +458,7 @@ def buildCode(target, build_arch, nproc, no_clean, force, prefix, local, deploy,
 						run(['rsync','-a', dep_dir+"/", output_dir])
 
 
-		code = executeBuild(target, arch, prefix, build_dir if not target.package else output_dir, output_dir, native, nproc, local)
+		code = executeBuild(target, arch, prefix, build_dir if not target.package else output_dir, output_dir, native, nproc)
 		if code!=0:
 			log_error("Script returned error code {}.".format(code))
 
@@ -490,7 +479,7 @@ def buildCode(target, build_arch, nproc, no_clean, force, prefix, local, deploy,
 				f.write("\nBuild is based on folowing sources:\n")
 				f.write('=' * 80 + '\n')
 				for s in target.sources:
-					if not((arch if not local else "local") in target.no_source_copy):
+					if not(arch in target.no_source_copy):
 						f.write("{} {} checkout revision {}\n".format(sources[s].vcs, sources[s].location, sources[s].hash))
 				f.write("\nFollowing files are included:\n")
 				f.write('=' * 80 + '\n')
@@ -520,11 +509,3 @@ def buildCode(target, build_arch, nproc, no_clean, force, prefix, local, deploy,
 			log_step("Remove build dir ...")
 			if os.path.exists(build_dir):
 				shutil.rmtree(build_dir, onerror=removeError)
-
-	if deploy:
-		log_step("Deploy {} to {} ...".format(target.name, prefix))
-		out_dir = os.path.join(OUTPUTS_ROOT, "local", target.name, prefix)
-		cmd = ['rsync', '-a', out_dir+"/", prefix+"/"]
-		if sudo:
-			cmd.insert(0, 'sudo')
-		run(cmd)

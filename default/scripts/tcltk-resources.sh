@@ -1,6 +1,3 @@
-if [ ${IS_LOCAL} == 'True' ]; then
-    exit
-fi
 if [ ${ARCH_BASE} == 'darwin' ]; then
     mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/lib
     cp -r $(brew --prefix tcl-tk)/lib/tcl8.6/. ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/tcl8.6
