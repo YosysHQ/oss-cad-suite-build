@@ -23,7 +23,6 @@ RUN dnf install -y  mingw64-libftdi \
                     boost-devel \
                     mingw64-gmp \
                     mingw64-eigen3 \
-                    mingw64-python3 \
                     mingw64-dlfcn \
                     bc \
                     rsync \
@@ -69,5 +68,7 @@ RUN rustup target add x86_64-pc-windows-gnu && \
     echo "[target.x86_64-pc-windows-gnu]" > /.cargo/config && \
     echo "linker = \"x86_64-w64-mingw32-gcc\"" >> /.cargo/config && \
     echo "ar = \"x86_64-w64-mingw32-ar\"" >> /.cargo/config
+
+RUN ln -s /usr/bin/python3 /usr/bin/python
 
 WORKDIR /work
