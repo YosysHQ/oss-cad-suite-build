@@ -140,7 +140,7 @@ def validateRules():
 				log_error("Target {} use resource of itself.".format(t.name))
 		for p in t.patches:
 			if not os.path.exists(os.path.join(t.group, PATCHES_ROOT, p)):
-				log_error("Target {} does not have corresponding patch.".format(p))
+				log_error("Target {} does not have corresponding patch '{}'.".format(t.name, p))
 
 	for s in sources.keys():
 		if s not in usedSources:
