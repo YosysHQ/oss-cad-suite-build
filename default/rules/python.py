@@ -4,15 +4,14 @@ SourceLocation(
 	name = 'python3',
 	vcs = 'git',
 	location = 'https://github.com/python/cpython',
-	revision = 'tags/v3.8.7'
+	revision = 'tags/v3.8.6'
 )
 
 Target(
 	name = 'python3',
 	sources = [ 'python3' ],
-	patches = [ 'python38.diff' ],
+	patches = [ 'python38.diff', 'python38-mingw.diff' ],
 	license_file = 'python3/LICENSE',
-	no_source_copy = [ 'windows-x64', 'local' ],
 )
 
 SourceLocation(
@@ -27,5 +26,4 @@ Target(
 	sources = [ 'python2' ],
 	patches = [ 'python27.diff' ],
 	license_file = 'python2/LICENSE',
-	no_source_copy = [ 'windows-x64', 'local' ],
 )
