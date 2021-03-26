@@ -334,12 +334,6 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, native, nproc):
 			env['CMAKE_GENERATOR'] = 'MSYS Makefiles'
 		else:
 			env['PATH'] = os.environ['PATH']
-	else:
-		if (getBuildOS()=='windows'):
-			env['CMAKE_GENERATOR'] = 'MSYS Makefiles'
-			env['EXE'] = '.exe'
-			env['SHARED_EXT'] = '.dll'
-			env['LOCAL_PYTHON'] = 'True'
 	if os.uname()[0].startswith('MSYS_NT') or os.uname()[0].startswith('MINGW'):
 		env.update(os.environ)
 	env['LC_ALL'] = 'C'
