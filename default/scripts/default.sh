@@ -227,37 +227,21 @@ done
 # end of Darwin/macOS section
 elif [ ${ARCH_BASE} == 'windows' ]; then
 # Windows section
-if [ ${IS_NATIVE} == 'True' ]; then
-    for bindir in bin py3bin; do
-        for f in `ntldd -R ${OUTPUT_DIR}${INSTALL_PREFIX}/$bindir/*.exe | grep mingw64 | sed -e 's/.*=..//' | sed -e 's/ (0.*)//'`; do
+for bindir in bin py3bin; do
+    for binfile in $(file -h $bindir/* | grep PE32 | grep executable | cut -f1 -d:); do
+        for f in `peldd --all $binfile --wlist uxtheme.dll --wlist userenv.dll --wlist opengl32.dll | grep sys-root | sed -e 's/.*=..//' | sed -e 's/ (0.*)//'`; do
             cp -v "$f" lib/.
         done
     done
+done
 
-    for libdir in lib; do
-        for libfile in $(find $libdir -type f | xargs file | grep DLL | cut -f1 -d:); do
-            for lib in $(ntldd -R $libfile | grep mingw64 | sed -e 's/.*=..//' | sed -e 's/ (0.*)//'); do
-                cp "${lib}" lib/.
-            done
+for libdir in lib; do
+    for libfile in $(find $libdir -type f | xargs file | grep DLL | cut -f1 -d:); do
+        for lib in $(peldd --all $libfile --wlist uxtheme.dll --wlist userenv.dll --wlist opengl32.dll | grep sys-root | sed -e 's/.*=..//' | sed -e 's/ (0.*)//'); do
+            cp "${lib}" lib/.
         done
     done
-else
-    for bindir in bin py3bin; do
-        for binfile in $(file -h $bindir/* | grep PE32 | grep executable | cut -f1 -d:); do
-            for f in `peldd --all $binfile --wlist uxtheme.dll --wlist userenv.dll --wlist opengl32.dll | grep sys-root | sed -e 's/.*=..//' | sed -e 's/ (0.*)//'`; do
-                cp -v "$f" lib/.
-            done
-        done
-    done
-
-    for libdir in lib; do
-        for libfile in $(find $libdir -type f | xargs file | grep DLL | cut -f1 -d:); do
-            for lib in $(peldd --all $libfile --wlist uxtheme.dll --wlist userenv.dll --wlist opengl32.dll | grep sys-root | sed -e 's/.*=..//' | sed -e 's/ (0.*)//'); do
-                cp "${lib}" lib/.
-            done
-        done
-    done
-fi
+done
 
 for script in bin/* py3bin/*; do
     if $(head -1 "${script}" | grep -q python); then

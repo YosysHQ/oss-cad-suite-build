@@ -1,10 +1,8 @@
 cd prjtrellis
 cd libtrellis
 if [ ${ARCH_BASE} == 'windows' ]; then
-    if [ ${IS_NATIVE} != 'True' ]; then
-        sed -i 's/Windows.h/windows.h/g' tools/ecpbram.cpp
-        sed -i 's,\${CMAKE_DL_LIBS}, ,g' CMakeLists.txt
-    fi
+    sed -i 's/Windows.h/windows.h/g' tools/ecpbram.cpp
+    sed -i 's,\${CMAKE_DL_LIBS}, ,g' CMakeLists.txt
 fi
 cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${INSTALL_PREFIX} \
       -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE} -DBUILD_PYTHON=OFF \

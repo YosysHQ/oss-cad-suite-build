@@ -10,10 +10,8 @@ if [ ${LOCAL_PYTHON} != 'True' ]; then
 fi
 if [ ${ARCH} == 'windows-x64' ]; then
       sed -i 's,CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE,CMAKE_INTERPROCEDURAL_OPTIMIZATION FALSE,g' CMakeLists.txt
-      if [ ${IS_NATIVE} != 'True' ]; then
-            export PYTHONHOME=/usr/lib64/python3.8
-            export PYTHONPATH=/usr/lib64/python3.8
-      fi
+      export PYTHONHOME=/usr/lib64/python3.8
+      export PYTHONPATH=/usr/lib64/python3.8
 fi
 cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${INSTALL_PREFIX} -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE} \
       ${python_var} \

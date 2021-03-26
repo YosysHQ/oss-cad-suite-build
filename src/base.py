@@ -312,14 +312,12 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, native, nproc):
 	env['ARCH_BASE'] = arch.split('-')[0]
 	env['NPROC'] = str(nproc)
 	env['SHARED_EXT'] = '.so'
-	env['IS_NATIVE'] = 'False'
 	env['LOCAL_PYTHON'] = 'False'
-	if (arch=='windows-x64'):
+	if (arch == 'windows-x64'):
 		env['EXE'] = '.exe'
 		env['SHARED_EXT'] = '.dll'
 		env['LOCAL_PYTHON'] = 'True'
 	if (native):
-		env['IS_NATIVE'] = 'True'
 		env['STRIP'] = 'strip'
 		if (getBuildOS()=='darwin'):
 			env['PATH'] =  '/usr/local/opt/gnu-sed/libexec/gnubin:'
@@ -330,12 +328,6 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, native, nproc):
 			env['PATH'] += '/usr/local/opt/openjdk/bin:'
 			env['PATH'] += os.environ['PATH']
 			env['SHARED_EXT'] = '.dylib'
-		elif (getBuildOS()=='windows'):
-			env['CMAKE_GENERATOR'] = 'MSYS Makefiles'
-		else:
-			env['PATH'] = os.environ['PATH']
-	if os.uname()[0].startswith('MSYS_NT') or os.uname()[0].startswith('MINGW'):
-		env.update(os.environ)
 	env['LC_ALL'] = 'C'
 	env['INSTALL_PREFIX'] = prefix
 
