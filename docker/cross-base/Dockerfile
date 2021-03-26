@@ -34,4 +34,10 @@ RUN cd /usr/local && \
     tar xvfz jre-8u281-linux-x64.tar.gz --strip-components 1 && \
     rm -rf jre-8u281-linux-x64.tar.gz
 
+ENV RUSTUP_HOME /opt/rust/rustup
+
+ENV PATH ${PATH}:/opt/rust/cargo/bin
+
+RUN curl https://sh.rustup.rs -sSf | RUSTUP_HOME=/opt/rust/rustup CARGO_HOME=/opt/rust/cargo bash -s -- --default-toolchain stable --profile default --no-modify-path -y
+
 WORKDIR /work

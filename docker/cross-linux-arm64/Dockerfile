@@ -55,3 +55,8 @@ COPY Toolchain.cmake ${CROSS_PREFIX}/
 ENV CMAKE_TOOLCHAIN_FILE ${CROSS_PREFIX}/Toolchain.cmake
 
 ENV PKG_CONFIG_PATH /usr/lib/aarch64-linux-gnu/pkgconfig
+
+RUN rustup target add aarch64-unknown-linux-gnu && \
+    mkdir -p /.cargo && \
+    echo "[target.aarch64-unknown-linux-gnu]" > /.cargo/config && \
+    echo "linker = \"aarch64-linux-gnu-gcc\"" >> /.cargo/config

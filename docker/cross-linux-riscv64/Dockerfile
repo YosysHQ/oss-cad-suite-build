@@ -55,3 +55,8 @@ COPY Toolchain.cmake ${CROSS_PREFIX}/
 ENV CMAKE_TOOLCHAIN_FILE ${CROSS_PREFIX}/Toolchain.cmake
 
 ENV PKG_CONFIG_PATH /usr/lib/riscv64-linux-gnu/pkgconfig
+
+RUN rustup target add riscv64gc-unknown-linux-gnu && \
+    mkdir -p /.cargo && \
+    echo "[target.riscv64gc-unknown-linux-gnu]" > /.cargo/config && \
+    echo "linker = \"riscv64-linux-gnu-gcc\"" >> /.cargo/config

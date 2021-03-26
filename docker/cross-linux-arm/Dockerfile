@@ -55,3 +55,8 @@ COPY Toolchain.cmake ${CROSS_PREFIX}/
 ENV CMAKE_TOOLCHAIN_FILE ${CROSS_PREFIX}/Toolchain.cmake
 
 ENV PKG_CONFIG_PATH /usr/lib/arm-linux-gnueabihf/pkgconfig
+
+RUN rustup target add arm-unknown-linux-gnueabihf && \
+    mkdir -p /.cargo && \
+    echo "[target.arm-unknown-linux-gnueabihf]" > /.cargo/config && \
+    echo "linker = \"arm-linux-gnueabihf-gcc\"" >> /.cargo/config
