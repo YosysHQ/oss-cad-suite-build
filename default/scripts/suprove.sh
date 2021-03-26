@@ -7,12 +7,9 @@ elif [ ${ARCH} == 'linux-arm' ]; then
       sed -i -re 's,ARCHFLAGS_EXE=\$\{CMAKE_CURRENT_BINARY_DIR\}/abc_arch_flags_program.exe,ARCHFLAGS=\"-DLIN -DSIZEOF_VOID_P=4 -DSIZEOF_LONG=4 -DSIZEOF_INT=4\",g' abc/CMakeLists.txt
 fi
 cd build
-if [ ${LOCAL_PYTHON} != 'True' ]; then
-      python_var="-DPYTHON_INCLUDE_DIR=${BUILD_DIR}/python2${INSTALL_PREFIX}/include/python2.7
-                  -DPYTHON_LIBRARY=${BUILD_DIR}/python2${INSTALL_PREFIX}/lib/libpython2.7${SHARED_EXT}"
-fi
 cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${OUTPUT_DIR}${INSTALL_PREFIX}/super_prove \
-      ${python_var} \
+      -DPYTHON_INCLUDE_DIR=${BUILD_DIR}/python2${INSTALL_PREFIX}/include/python2.7 \
+      -DPYTHON_LIBRARY=${BUILD_DIR}/python2${INSTALL_PREFIX}/lib/libpython2.7${SHARED_EXT}
       ..
 make -j${NPROC}
 make -j${NPROC} install

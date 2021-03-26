@@ -312,11 +312,9 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, native, nproc):
 	env['ARCH_BASE'] = arch.split('-')[0]
 	env['NPROC'] = str(nproc)
 	env['SHARED_EXT'] = '.so'
-	env['LOCAL_PYTHON'] = 'False'
 	if (arch == 'windows-x64'):
 		env['EXE'] = '.exe'
 		env['SHARED_EXT'] = '.dll'
-		env['LOCAL_PYTHON'] = 'True'
 	if (native):
 		env['STRIP'] = 'strip'
 		if (getBuildOS()=='darwin'):
