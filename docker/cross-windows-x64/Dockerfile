@@ -3,32 +3,33 @@ FROM fedora:32
 RUN dnf install -y  mingw64-libftdi \
                     mingw64-boost \
                     mingw64-pkg-config \
+                    mingw64-tcl \
+                    mingw64-readline \
+                    mingw64-tk \
+                    mingw64-xz \
+                    mingw64-gtk2 \
+                    mingw64-qt5-qtbase \
+                    mingw64-gmp \
+                    mingw64-eigen3 \
+                    mingw64-dlfcn \
                     git \
                     cmake \
                     autoconf \
                     automake \
-                    mingw64-tcl \
-                    mingw64-readline \
                     flex \
                     bison \
                     patch \
-                    mingw64-tk \
-                    mingw64-xz \
                     gperf \
-                    mingw64-gtk2 \
-                    mingw64-qt5-qtbase \
                     binutils \
                     gcc \
                     g++ \
                     boost-devel \
-                    mingw64-gmp \
-                    mingw64-eigen3 \
-                    mingw64-dlfcn \
                     bc \
                     rsync \
                     zlib-devel \
                     readline-devel \
-                    bzip2-devel
+                    bzip2-devel \
+                    python3-pip
 
 ENV CROSS_NAME x86_64-w64-mingw32
 
