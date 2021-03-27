@@ -10,6 +10,6 @@ SourceLocation(
 Target(
 	name = 'mcy',
 	sources = [ 'mcy' ],
-	resources = [ 'python3', 'qt5-resources' ],
+	resources = [ 'python3', 'python3-pip', 'qt5-resources' ],
 	license_file = 'mcy/COPYING',
 )

@@ -39,21 +39,3 @@ if [ ${ARCH_BASE} == 'darwin' ]; then
 elif [ ${ARCH} == 'windows-x64' ]; then
 	cp ${OUTPUT_DIR}${INSTALL_PREFIX}/py3bin/libpython3.8.dll ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/.
 fi
-
-export _PYTHON_PROJECT_BASE=${BUILD_DIR}/python3 
-export PYTHONPATH=${OUTPUT_DIR}${INSTALL_PREFIX}/lib/python3.8:${OUTPUT_DIR}${INSTALL_PREFIX}/lib/python3.8/site-packages
-pip_cmd="pip install flask --target ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/python3.8/site-packages --no-cache-dir --disable-pip-version-check"
-if [ ${ARCH} == 'linux-arm' ]; then
-	_PYTHON_HOST_PLATFORM=linux-arm  _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__linux_arm-linux-gnueabihf python3.8 -m ${pip_cmd}
-elif [ ${ARCH} == 'linux-arm64' ]; then
-	_PYTHON_HOST_PLATFORM=linux-aarch64 _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__linux_aarch64-linux-gnu python3.8 -m ${pip_cmd}
-elif [ ${ARCH} == 'linux-riscv64' ]; then
-	_PYTHON_HOST_PLATFORM=linux-riscv64 _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__linux_riscv64-linux-gnu python3.8 -m ${pip_cmd}
-elif [ ${ARCH} == 'linux-x64' ]; then
-	_PYTHON_HOST_PLATFORM=linux-x64 _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__linux_x86_64-linux-gnu python3.8 -m ${pip_cmd}
-elif [ ${ARCH} == 'windows-x64' ]; then
-	echo "Skipping for now"
-	#_PYTHON_HOST_PLATFORM=mingw _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__win_ python3.8 -m ${pip_cmd}
-elif [ ${ARCH} == 'darwin-x64' ]; then
-	DYLD_LIBRARY_PATH=${BUILD_DIR}/python3 ./python.exe -m ${pip_cmd}
-fi

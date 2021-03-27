@@ -10,5 +10,6 @@ SourceLocation(
 Target(
 	name = 'yosys',
 	sources = [ 'yosys' ],
+	resources = [ 'python3', 'python3-pip' ],
 	license_file = 'yosys/COPYING',
 )
