@@ -17,7 +17,7 @@ Target(
 Target(
 	name = 'python3-pip',
 	dependencies = [ 'python3' ],
-	resources = [ 'python3' ],
+	resources = [ 'python3', 'gtk-resources' ],
 	sources = [ ],
 )
 

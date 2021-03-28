@@ -146,7 +146,7 @@ def validateRules():
 		if s not in usedSources:
 			log_warning("Source {} not used in any target.".format(s))
 
-def dependencyResolver(target, resolved, unresolved, arch, display):
+def dependencyResolver(target, resolved, unresolved, arch, display, is_package):
 	node = targets[target]
 	needed = True
 	if node.arch and arch not in node.arch:
@@ -155,27 +155,17 @@ def dependencyResolver(target, resolved, unresolved, arch, display):
 			log_warning("Target {} not built for architecture {}.".format(node.name, arch))
 	if needed:
 		unresolved.append(node.name)
-		for dep in node.dependencies:
+		for dep in (node.dependencies + node.resources if is_package else [] ):
 			if dep not in resolved:
 				if dep in unresolved:
 					log_error("Circular reference detected: {} -> {}.".format(node.name, dep))
-				dependencyResolver(dep, resolved, unresolved, arch, display)
+				dependencyResolver(dep, resolved, unresolved, arch, display, is_package)
 		resolved.append(node.name)
 		unresolved.remove(node.name)
 
 def createBuildOrder(target, arch, display):
 	resolved = []
-	dependencyResolver(target, resolved, [], arch, display)
-	if targets[target].package:
-		while True:
-			found = False
-			for t in resolved:
-				for r in targets[t].resources:
-					if r not in resolved:
-						found = True
-						resolved.insert(0, r)
-			if not found:
-				break
+	dependencyResolver(target, resolved, [], arch, display, targets[target].package)
 	return resolved
 
 def createNeededSourceList(target, arch):
@@ -292,6 +282,10 @@ def calculateHash(target, prefix, arch):
 	for d in sorted(target.dependencies):
 		if targets[d].hash:
 			data.append(targets[d].hash)
+	if target.package:
+		for d in sorted(target.resources):
+			if targets[d].hash:
+				data.append(targets[d].hash)
 	for p in sorted(target.patches):
 		data.append(hashlib.sha256(open(os.path.join(target.group, PATCHES_ROOT, p), 'rb').read()).hexdigest())
 	data.append(hashlib.sha256(open(os.path.join(target.group, SCRIPTS_ROOT, target.name + ".sh"), 'r').read().encode()).hexdigest())
