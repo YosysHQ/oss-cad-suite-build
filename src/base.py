@@ -155,7 +155,7 @@ def dependencyResolver(target, resolved, unresolved, arch, display, is_package):
 			log_warning("Target {} not built for architecture {}.".format(node.name, arch))
 	if needed:
 		unresolved.append(node.name)
-		for dep in (node.dependencies + node.resources if is_package else [] ):
+		for dep in (node.dependencies + (node.resources if is_package else [])):
 			if dep not in resolved:
 				if dep in unresolved:
 					log_error("Circular reference detected: {} -> {}.".format(node.name, dep))
