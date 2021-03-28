@@ -60,3 +60,7 @@ RUN rustup target add aarch64-unknown-linux-gnu && \
     mkdir -p /.cargo && \
     echo "[target.aarch64-unknown-linux-gnu]" > /.cargo/config && \
     echo "linker = \"aarch64-linux-gnu-gcc\"" >> /.cargo/config
+
+RUN wget http://ports.ubuntu.com/pool/main/g/gobject-introspection/libgirepository1.0-dev_1.64.1-1~ubuntu20.04.1_arm64.deb && \
+    dpkg-deb -xv libgirepository1.0-dev_1.64.1-1~ubuntu20.04.1_arm64.deb / && \
+    rm -rf libgirepository1.0-dev_1.64.1-1~ubuntu20.04.1_arm64.deb

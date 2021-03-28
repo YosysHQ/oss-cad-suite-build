@@ -60,3 +60,7 @@ RUN rustup target add arm-unknown-linux-gnueabihf && \
     mkdir -p /.cargo && \
     echo "[target.arm-unknown-linux-gnueabihf]" > /.cargo/config && \
     echo "linker = \"arm-linux-gnueabihf-gcc\"" >> /.cargo/config
+
+RUN wget http://ports.ubuntu.com/pool/main/g/gobject-introspection/libgirepository1.0-dev_1.64.1-1~ubuntu20.04.1_armhf.deb && \
+    dpkg-deb -xv libgirepository1.0-dev_1.64.1-1~ubuntu20.04.1_armhf.deb / && \
+    rm -rf libgirepository1.0-dev_1.64.1-1~ubuntu20.04.1_armhf.deb

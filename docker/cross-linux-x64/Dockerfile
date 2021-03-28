@@ -40,3 +40,7 @@ ENV AS=/usr/bin/${CROSS_NAME}-as \
     CXX=/usr/bin/${CROSS_NAME}-g++ \
     LD=/usr/bin/${CROSS_NAME}-ld \
     STRIP=/usr/bin/${CROSS_NAME}-strip
+
+RUN wget http://archive.ubuntu.com/ubuntu/pool/main/g/gobject-introspection/libgirepository1.0-dev_1.64.1-1~ubuntu20.04.1_amd64.deb && \
+    dpkg-deb -xv libgirepository1.0-dev_1.64.1-1~ubuntu20.04.1_amd64.deb / && \
+    rm -rf libgirepository1.0-dev_1.64.1-1~ubuntu20.04.1_amd64.deb

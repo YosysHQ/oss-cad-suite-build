@@ -121,8 +121,45 @@ release_bindir_abs="\$(readlink -f "\$release_bindir/../bin")"
 release_topdir_abs="\$(readlink -f "\$release_bindir/$rel_path")"
 export PATH="\$release_bindir_abs:\$PATH"
 export PYTHONEXECUTABLE="\$release_bindir_abs/packaged_py3"
+EOT
+        is_using_fonts=false
+        if [ $script == 'bin/xdot' ]; then
+# Set and unset variables according to:
+# https://refspecs.linuxbase.org/gtk/2.6/gtk/gtk-running.html
+            is_using_fonts=true
+            cat >> "${script}" <<EOT
+unset GTK_MODULES
+unset GTK2_MODULES
+export GTK_PATH="\$release_topdir_abs/lib/gtk-2.0"
+export GTK_IM_MODULE=""
+export GTK_IM_MODULE_FILE="/dev/null"
+export GTK2_RC_FILES="\$release_topdir_abs/lib/gtk-2.0/gtkrc"
+export GTK_EXE_PREFIX="\$release_topdir_abs"
+export GTK_DATA_PREFIX="\$release_topdir_abs"
+export GDK_PIXBUF_MODULE_FILE="\$release_topdir_abs/lib/gtk-2.0/loaders.cache"
+unset XDG_DATA_DIRS
+export XDG_DATA_HOME="\$release_topdir_abs"
+export XDG_CONFIG_HOME="\$release_topdir_abs"
+export LC_ALL="C"
+export TCL_LIBRARY="\$release_topdir_abs/lib/tcl8.6"
+export TK_LIBRARY="\$release_topdir_abs/lib/tk8.6"
+export FONTCONFIG_FILE="\$release_topdir_abs/etc/fonts/fonts.conf"
+export FONTCONFIG_PATH="\$release_topdir_abs/etc/fonts"
+EOT
+        fi
+        if $is_using_fonts; then
+            cat >> "${script}" <<EOT
+if [ -f "\$FONTCONFIG_FILE" ]; then
+    exec \$release_bindir_abs/packaged_py3 "\$release_topdir_abs"/libexec/$(basename $script) "\$@"
+else
+    echo "Execute \$release_topdir_abs/setup.sh script to do initial setup of YosysHQ configuration files."
+fi
+EOT
+        else
+            cat >> "${script}" <<EOT
 exec \$release_bindir_abs/packaged_py3 "\$release_topdir_abs"/libexec/$(basename $script) "\$@"
 EOT
+        fi
         chmod +x "${script}"
     fi
 done
@@ -213,6 +250,20 @@ release_bindir_abs="\$("\$release_bindir"/../libexec/realpath "\$release_bindir/
 release_topdir_abs="\$("\$release_bindir"/../libexec/realpath "\$release_bindir/$rel_path")"
 export PATH="\$release_bindir_abs:\$PATH"
 export PYTHONEXECUTABLE="\$release_bindir_abs/packaged_py3"
+EOT
+        if [ $script == 'bin/xdot' ]; then
+            cat >> "${script}" <<EOT
+export GTK_PATH="\$release_topdir_abs/lib/gtk-2.0" GTK_MODULES="" GTK_IM_MODULE="" GTK_IM_MODULE_FILE="/dev/null"
+export GTK2_MODULES="" GTK_EXE_PREFIX="\$release_topdir_abs" GTK_DATA_PREFIX="\$release_topdir_abs"
+export GDK_PIXBUF_MODULEDIR="\$release_topdir_abs/lib/gtk-2.0/loaders"
+export GDK_PIXBUF_MODULE_FILE="\$release_topdir_abs/lib/gtk-2.0/loaders.cache" LC_ALL="C"
+export TCL_LIBRARY="\$release_topdir_abs/lib/tcl8.6"
+export TK_LIBRARY="\$release_topdir_abs/lib/tk8.6"
+export GTK2_RC_FILES="\$release_topdir_abs/lib/gtk-2.0/gtkrc"
+"\$release_topdir_abs"/libexec/gdk-pixbuf-query-loaders --update-cache
+EOT
+        fi
+        cat >> "${script}" <<EOT
 exec \$release_bindir_abs/packaged_py3 "\$release_topdir_abs"/libexec/$(basename $script) "\$@"
 EOT
         chmod +x "${script}"
