@@ -36,3 +36,30 @@ Target(
 	sources = [ 'nextpnr' ],
 	build_native = True,
 )
+
+SourceLocation(
+	name = 'prjoxide',
+	vcs = 'git',
+	location = 'https://github.com/gatecat/prjoxide',
+	revision = 'origin/master',
+)
+
+Target(
+	name = 'prjoxide',
+	sources = [ 'prjoxide' ],
+	license_file = 'prjoxide/COPYING',
+)
+
+Target(
+	name = 'prjoxide-bba',
+	sources = [ 'prjoxide' ],
+	build_native = True,
+)
+
+Target(
+	name = 'nextpnr-nexus',
+	sources = [ 'nextpnr' ],
+	dependencies = [ 'python3', 'nextpnr-bba', 'prjoxide-bba' ],
+	resources = [ 'python3' ],
+	license_file = 'nextpnr/COPYING',
+)
