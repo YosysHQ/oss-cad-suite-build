@@ -12,6 +12,7 @@ RUN set -e -x ;\
         g++ \
         clang \
         gnat \
+        graphviz \
         libboost-dev \
         libboost-filesystem-dev \
         libboost-thread-dev \
