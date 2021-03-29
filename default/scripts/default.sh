@@ -3,7 +3,6 @@ mkdir -p lib
 mkdir -p libexec
 
 rm -rf ${OUTPUT_DIR}/dev
-rm -rf include
 
 if [ ${ARCH_BASE} == 'linux' ]; then
 # Linux section
