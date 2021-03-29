@@ -28,5 +28,5 @@ Target(
         'iverilog',
         'litex',
     ],
-    patches = [ 'win-launcher.c' ],
+    patches = [ 'win-launcher.c', 'environment' ],
 )

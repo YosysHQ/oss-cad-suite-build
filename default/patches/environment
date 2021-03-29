@@ -1,0 +1,84 @@
+#!/usr/bin/env bash
+if [ "${BASH_SOURCE-}" = "$0" ]; then
+    echo "You must source this script: \$ source $0" >&2
+    exit 1
+fi
+
+deactivate () {
+    # reset old environment variables
+    # ! [ -z ${VAR+_} ] returns true if VAR is declared at all
+    if ! [ -z "${_OLD_ENVIRONMENT_PATH:+_}" ] ; then
+        PATH="$_OLD_ENVIRONMENT_PATH"
+        export PATH
+        unset _OLD_ENVIRONMENT_PATH
+    fi
+    if ! [ -z "${_OLD_ENVIRONMENT_PYTHONHOME+_}" ] ; then
+        PYTHONHOME="$_OLD_ENVIRONMENT_PYTHONHOME"
+        export PYTHONHOME
+        unset _OLD_ENVIRONMENT_PYTHONHOME
+    fi
+
+    # This should detect bash and zsh, which have a hash command that must
+    # be called to get it to forget past commands.  Without forgetting
+    # past commands the $PATH changes we made may not be respected
+    if [ -n "${BASH-}" ] || [ -n "${ZSH_VERSION-}" ] ; then
+        hash -r 2>/dev/null
+    fi
+
+    if ! [ -z "${_OLD_ENVIRONMENT_PS1+_}" ] ; then
+        PS1="$_OLD_ENVIRONMENT_PS1"
+        export PS1
+        unset _OLD_ENVIRONMENT_PS1
+    fi
+
+    unset VIRTUAL_ENV
+    unset VERILATOR_ROOT
+    unalias pip 2> /dev/null
+    unalias pip3 2> /dev/null
+    unalias python 2> /dev/null
+    unalias python3 2> /dev/null
+    if [ ! "${1-}" = "nondestructive" ] ; then
+    # Self destruct!
+        unset -f deactivate
+    fi
+}
+
+# unset irrelevant variables
+deactivate nondestructive
+
+release_current_dir="$(dirname "${BASH_SOURCE[0]}")"
+release_topdir_abs="$(realpath "$release_current_dir")"
+
+export VIRTUAL_ENV='FPGA'
+
+_OLD_ENVIRONMENT_PATH="$PATH"
+PATH="$release_topdir_abs/bin:$PATH"
+export PATH
+
+# unset PYTHONHOME if set
+if ! [ -z "${PYTHONHOME+_}" ] ; then
+    _OLD_ENVIRONMENT_PYTHONHOME="$PYTHONHOME"
+fi
+export PYTHONHOME="$release_topdir_abs"
+
+_OLD_ENVIRONMENT_PS1="${PS1-}"
+if [ "x" != x ] ; then
+    PS1="${PS1-}"
+else
+    PS1="\[$(tput bold)\]\[\033[38;5;11m\]($VIRTUAL_ENV)\[$(tput sgr0)\] ${PS1-}"
+fi
+export PS1
+
+export VERILATOR_ROOT="$release_topdir_abs"
+
+alias pip="$release_topdir_abs/py3bin/pip3"
+alias pip3="$release_topdir_abs/py3bin/pip3"
+alias python="$release_topdir_abs/py3bin/python3"
+alias python3="$release_topdir_abs/py3bin/python3"
+
+# This should detect bash and zsh, which have a hash command that must
+# be called to get it to forget past commands.  Without forgetting
+# past commands the $PATH changes we made may not be respected
+if [ -n "${BASH-}" ] || [ -n "${ZSH_VERSION-}" ] ; then
+    hash -r 2>/dev/null
+fi

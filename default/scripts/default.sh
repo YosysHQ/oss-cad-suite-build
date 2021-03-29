@@ -19,6 +19,7 @@ elif [ ${ARCH} == 'linux-riscv64' ]; then
     ldlinuxname="ld-linux-riscv64-lp64d.so.1"
     arch_prefix="riscv64-linux-gnu"
 fi
+cp ${PATCHES_DIR}/environment ${OUTPUT_DIR}${INSTALL_PREFIX}/.
 for bindir in bin py2bin py3bin super_prove/bin; do
     for binfile in $(file $bindir/* | grep ELF | grep dynamically | cut -f1 -d:); do
         rel_path=$(realpath --relative-to=$bindir .)
