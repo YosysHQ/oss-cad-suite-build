@@ -17,7 +17,6 @@ elif [ ${ARCH} == 'linux-x64' ]; then
 	${PYTHONHOME}/py3bin/python3 -m ${pip_cmd} xdot==1.1 pycairo PyGObject
 	cp /usr/bin/dot ${OUTPUT_DIR}${INSTALL_PREFIX}/bin/.
 	mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/graphviz
-	cp /usr/lib/x86_64-linux-gnu/libgvc.so.6 ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/.
 	cp -r /usr/lib/x86_64-linux-gnu/graphviz ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/.
 elif [ ${ARCH} == 'windows-x64' ]; then
 	export DLLWRAP=x86_64-w64-mingw32-dllwrap 
