@@ -274,7 +274,7 @@ async def run_process(command, cwd, env):
 def run_live(command, cwd=None, env=None):
 	return asyncio.get_event_loop().run_until_complete(run_process(command, cwd, env))
 
-def calculateHash(target, prefix, arch):
+def calculateHash(target, prefix, arch, build_order):
 	data = []
 	for s in sorted(target.sources):
 		if not(arch in target.no_source_copy):
@@ -283,7 +283,13 @@ def calculateHash(target, prefix, arch):
 		if targets[d].hash:
 			data.append(targets[d].hash)
 	if target.package:
-		for d in sorted(target.resources):
+		resources = set()
+		for d in build_order:
+			dep = targets[d]
+			if (dep and dep.resources):
+				for r in dep.resources:
+					resources.add(r)
+		for d in sorted(list(resources)):
 			if targets[d].hash:
 				data.append(targets[d].hash)
 	for p in sorted(target.patches):
@@ -366,7 +372,7 @@ def buildCode(target, build_arch, nproc, no_clean, force, prefix):
 	for t in build_order:
 		pos += 1
 		target = targets[t]
-		target.hash = calculateHash(target, prefix, build_arch)
+		target.hash = calculateHash(target, prefix, build_arch, build_order)
 		build_info = ""
 		if (target.build_native and build_arch != getArchitecture()):
 			arch = getArchitecture()
