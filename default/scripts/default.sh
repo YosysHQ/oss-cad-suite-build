@@ -201,12 +201,16 @@ release_bindir="\$(dirname "\${BASH_SOURCE[0]}")"
 release_bindir_abs="\$("\$release_bindir"/../libexec/realpath "\$release_bindir")"
 release_topdir_abs="\$("\$release_bindir"/../libexec/realpath "\$release_bindir/$rel_path")"
 export PATH="\$release_bindir_abs:\$PATH"
-export PYTHONHOME="\$release_topdir_abs"
-export PYTHONNOUSERSITE=1
 EOT
         if [ $bindir == 'py3bin' ]; then
             cat >> $binfile << EOT
 export PYTHONEXECUTABLE="\$release_topdir_abs/bin/packaged_py3"
+EOT
+        fi
+        if [ ! -z "$(otool -L libexec/$(basename $binfile) | grep python)" ]; then
+            cat >> $binfile << EOT
+export PYTHONHOME="\$release_topdir_abs"
+export PYTHONNOUSERSITE=1
 EOT
         fi
         if [ ! -z "$(otool -L libexec/$(basename $binfile) | grep QtCore)" ]; then
