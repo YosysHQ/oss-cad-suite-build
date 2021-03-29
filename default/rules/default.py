@@ -26,6 +26,7 @@ Target(
         'gtkwave',
         'verilator',
         'iverilog',
+        'litex',
     ],
     patches = [ 'win-launcher.c' ],
 )
