@@ -34,9 +34,8 @@ release_bindir="\$(dirname "\${BASH_SOURCE[0]}")"
 release_bindir_abs="\$(readlink -f "\$release_bindir")"
 release_topdir_abs="\$(readlink -f "\$release_bindir/$rel_path")"
 export PATH="\$release_bindir_abs:\$PATH"
-export PYTHONHOME="\$release_topdir_abs"
-export PYTHONNOUSERSITE=1
 EOT
+
         if [ $bindir == 'py3bin' ]; then
             cat >> $binfile << EOT
 export PYTHONEXECUTABLE="\$release_topdir_abs/bin/packaged_py3"
@@ -45,6 +44,12 @@ EOT
         if [ $bindir == 'py2bin' ]; then
             cat >> $binfile << EOT
 export PYTHONEXECUTABLE="\$release_topdir_abs/bin/packaged_py2"
+EOT
+        fi
+        if [ ! -z "$(lddtree -l libexec/$(basename $binfile) | grep python)" ]; then
+            cat >> $binfile << EOT
+export PYTHONHOME="\$release_topdir_abs"
+export PYTHONNOUSERSITE=1
 EOT
         fi
         if [ ! -z "$(lddtree -l libexec/$(basename $binfile) | grep Qt5)" ]; then
