@@ -4,10 +4,7 @@ if [ ${ARCH_BASE} == 'darwin' ]; then
 fi
 cd verilator
 if [ ${ARCH_BASE} == 'windows' ]; then
-    sed -i 's,INSTALL_PROGRAM) verilator_bin \$(DESTDIR)\$(bindir)/verilator_bin,INSTALL_PROGRAM) verilator_bin.exe \$(DESTDIR)\$(bindir)/verilator_bin.exe,g' Makefile.in
-    sed -i 's,INSTALL_PROGRAM) verilator_bin_dbg \$(DESTDIR)\$(bindir)/verilator_bin_dbg,INSTALL_PROGRAM) verilator_bin_dbg.exe \$(DESTDIR)\$(bindir)/verilator_bin_dbg.exe,g' Makefile.in
-    sed -i 's,INSTALL_PROGRAM) verilator_coverage_bin_dbg \$(DESTDIR)\$(bindir)/verilator_coverage_bin_dbg,INSTALL_PROGRAM) verilator_coverage_bin_dbg.exe \$(DESTDIR)\$(bindir)/verilator_coverage_bin_dbg.exe,g' Makefile.in
-    sed -i 's,cd bin ;,cd bin ; sync ;,g' Makefile.in
+    patch -p1 < ${PATCHES_DIR}/verilator.diff
 fi
 autoconf
 ./configure --prefix=${INSTALL_PREFIX} --host=${CROSS_NAME}
