@@ -12,4 +12,4 @@ elif [ ${ARCH} == 'darwin-x64' ]; then
 elif [ ${ARCH} == 'windows-x64' ]; then
     param="--target=x86_64-pc-windows-gnu"
 fi
-HOME=/tmp cargo install --path prjoxide --root ${OUTPUT_DIR} ${param}
+HOME=/tmp cargo install --no-track --path prjoxide --root ${OUTPUT_DIR}${INSTALL_PREFIX} ${param}
