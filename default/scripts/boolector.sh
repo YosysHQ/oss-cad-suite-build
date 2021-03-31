@@ -15,7 +15,7 @@ if [ ${ARCH_BASE} == 'windows' ]; then
     sed -i -re "s,MINGW32,Linux,g" contrib/setup-utils.sh
     sed -i -re "s,cmake ..,cmake .. -DCMAKE_TOOLCHAIN_FILE=\${CMAKE_TOOLCHAIN_FILE} -DCMAKE_CXX_FLAGS=\"-D__STDC_FORMAT_MACROS=1\",g" ../btor2tools/configure.sh
     sed -i '247,347d' ../cadical/configure
-    export CMAKE_TOOLCHAIN_FILE=${PATCHES_DIR}/Toolchain.cmake
+    export CMAKE_TOOLCHAIN_FILE=${PATCHES_DIR}/Toolchain-mingw64.cmake
 fi
 sed -i -re "s,test_apply_patch,#test_apply_patch,g" contrib/setup-btor2tools.sh
 sed -i -re "s,./configure,CXXFLAGS=-fPIC CFLAGS=-fPIC ./configure,g" contrib/setup-btor2tools.sh

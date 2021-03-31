@@ -31,6 +31,6 @@ SourceLocation(
 Target(
 	name = 'boolector',
 	sources = [ 'lingeling', 'cadical', 'btor2tools', 'boolector' ],
-	patches = [ 'boolector.diff', 'Toolchain.cmake' ],
+	patches = [ 'boolector.diff', 'Toolchain-mingw64.cmake' ],
 	license_file = 'boolector/COPYING',
 )

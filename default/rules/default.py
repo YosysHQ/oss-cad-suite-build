@@ -28,6 +28,7 @@ Target(
         'iverilog',
         'litex',
         'ecpdap',
+        'fujprog',
     ],
     patches = [ 'win-launcher.c', 'environment' ],
 )
