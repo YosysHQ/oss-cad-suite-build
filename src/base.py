@@ -321,7 +321,7 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, native, nproc):
 			env['PKG_CONFIG_PATH'] = '/usr/local/opt/libffi/lib/pkgconfig'
 			env['PATH'] =  '/usr/local/opt/gnu-sed/libexec/gnubin:'
 			env['PATH'] += '/usr/local/opt/coreutils/libexec/gnubin:'
-			env['PATH'] += '/usr/local/opt/qt/bin:'
+			env['PATH'] += '/usr/local/opt/qt5/bin:'
 			env['PATH'] += '/usr/local/opt/bison/bin:'
 			env['PATH'] += '/usr/local/opt/flex/bin:'
 			env['PATH'] += '/usr/local/opt/openjdk/bin:'
