@@ -325,6 +325,7 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, native, nproc):
 			env['PATH'] += '/usr/local/opt/bison/bin:'
 			env['PATH'] += '/usr/local/opt/flex/bin:'
 			env['PATH'] += '/usr/local/opt/openjdk/bin:'
+			env['PATH'] += '~/.cargo/bin/:'
 			env['PATH'] += os.environ['PATH']
 			env['SHARED_EXT'] = '.dylib'
 	env['LC_ALL'] = 'C'
