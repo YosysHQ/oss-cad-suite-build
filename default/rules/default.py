@@ -27,6 +27,7 @@ Target(
         'verilator',
         'iverilog',
         'litex',
+        'ecpdap',
     ],
     patches = [ 'win-launcher.c', 'environment' ],
 )
