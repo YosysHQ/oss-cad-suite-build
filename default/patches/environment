@@ -33,10 +33,6 @@ deactivate () {
 
     unset VIRTUAL_ENV
     unset VERILATOR_ROOT
-    unalias pip 2> /dev/null
-    unalias pip3 2> /dev/null
-    unalias python 2> /dev/null
-    unalias python3 2> /dev/null
     if [ ! "${1-}" = "nondestructive" ] ; then
     # Self destruct!
         unset -f deactivate
@@ -52,14 +48,14 @@ release_topdir_abs="$(realpath "$release_current_dir")"
 export VIRTUAL_ENV='FPGA'
 
 _OLD_ENVIRONMENT_PATH="$PATH"
-PATH="$release_topdir_abs/bin:$PATH"
+PATH="$release_topdir_abs/bin:$release_topdir_abs/py3bin:$PATH"
 export PATH
 
 # unset PYTHONHOME if set
 if ! [ -z "${PYTHONHOME+_}" ] ; then
     _OLD_ENVIRONMENT_PYTHONHOME="$PYTHONHOME"
+    unset PYTHONHOME
 fi
-export PYTHONHOME="$release_topdir_abs"
 
 _OLD_ENVIRONMENT_PS1="${PS1-}"
 if [ "x" != x ] ; then
@@ -70,11 +66,6 @@ fi
 export PS1
 
 export VERILATOR_ROOT="$release_topdir_abs"
-
-alias pip="$release_topdir_abs/py3bin/pip3"
-alias pip3="$release_topdir_abs/py3bin/pip3"
-alias python="$release_topdir_abs/py3bin/python3"
-alias python3="$release_topdir_abs/py3bin/python3"
 
 # This should detect bash and zsh, which have a hash command that must
 # be called to get it to forget past commands.  Without forgetting
