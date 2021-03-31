@@ -30,6 +30,9 @@ elif [ ${ARCH} == 'windows-x64' ]; then
 	cp ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/python3.8/site-packages/bin/pip* ${OUTPUT_DIR}${INSTALL_PREFIX}/py3bin/.
 elif [ ${ARCH} == 'darwin-x64' ]; then
 	DYLD_LIBRARY_PATH=${PYTHONHOME}/lib ${PYTHONHOME}/py3bin/python3 -m ${pip_cmd} xdot==1.1 pycairo PyGObject
+	cp /usr/local/bin/dot ${OUTPUT_DIR}${INSTALL_PREFIX}/bin/.
+	mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/graphviz
+	cp -r $(brew --prefix graphviz)/lib/graphviz ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/.
 fi
 if [ -f "${OUTPUT_DIR}${INSTALL_PREFIX}/lib/python3.8/site-packages/bin/xdot" ]; then
 	cp ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/python3.8/site-packages/bin/xdot ${OUTPUT_DIR}${INSTALL_PREFIX}/bin/.
