@@ -34,18 +34,16 @@ fi
 cd build
 make DESTDIR=${OUTPUT_DIR} -j${NPROC}
 make DESTDIR=${OUTPUT_DIR} -j${NPROC} install
-if [ ${ARCH_BASE} = 'linux' ]; then
-    cd ..
-    mkdir -p ${OUTPUT_DIR}/dev
-    mkdir -p ${OUTPUT_DIR}/dev/build/lib
-    mkdir -p ${OUTPUT_DIR}/dev/deps/lingeling/build
-    mkdir -p ${OUTPUT_DIR}/dev/deps/cadical/build
-    mkdir -p ${OUTPUT_DIR}/dev/deps/btor2tools/build
-    mkdir -p ${OUTPUT_DIR}/dev/deps/btor2tools/src    
-    cp -r src ${OUTPUT_DIR}/dev/.
-    cp -r build/lib/libboolector.a ${OUTPUT_DIR}/dev/build/lib/libboolector.a
-    cp -r deps/install/lib/liblgl.a ${OUTPUT_DIR}/dev/deps/lingeling/build/liblgl.a
-    cp -r deps/install/lib/libcadical.a ${OUTPUT_DIR}/dev/deps/cadical/build/libcadical.a
-    cp -r deps/install/lib/libbtor2parser.a ${OUTPUT_DIR}/dev/deps/btor2tools/build/libbtor2parser.a
-    cp -r ../btor2tools/src ${OUTPUT_DIR}/dev/deps/btor2tools/.
-fi
+cd ..
+mkdir -p ${OUTPUT_DIR}/dev
+mkdir -p ${OUTPUT_DIR}/dev/build/lib
+mkdir -p ${OUTPUT_DIR}/dev/deps/lingeling/build
+mkdir -p ${OUTPUT_DIR}/dev/deps/cadical/build
+mkdir -p ${OUTPUT_DIR}/dev/deps/btor2tools/build
+mkdir -p ${OUTPUT_DIR}/dev/deps/btor2tools/src    
+cp -r src ${OUTPUT_DIR}/dev/.
+cp -r build/lib/libboolector.a ${OUTPUT_DIR}/dev/build/lib/libboolector.a
+cp -r deps/install/lib/liblgl.a ${OUTPUT_DIR}/dev/deps/lingeling/build/liblgl.a
+cp -r deps/install/lib/libcadical.a ${OUTPUT_DIR}/dev/deps/cadical/build/libcadical.a
+cp -r deps/install/lib/libbtor2parser.a ${OUTPUT_DIR}/dev/deps/btor2tools/build/libbtor2parser.a
+cp -r ../btor2tools/src ${OUTPUT_DIR}/dev/deps/btor2tools/.
