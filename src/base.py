@@ -153,14 +153,15 @@ def dependencyResolver(target, resolved, unresolved, build_arch, arch, display, 
 		if display:
 			log_warning("Target {} not built for architecture {}.".format(node.name, build_arch))
 	if needed:
-		unresolved.append(node.name)
+		name = tuple((build_arch,node.name))
+		unresolved.append(name)
 		for dep in (node.dependencies + (node.resources if is_package else [])):
-			if dep not in resolved:
-				if dep in unresolved:
+			if (build_arch,dep) not in resolved:
+				if (build_arch,dep) in unresolved:
 					log_error("Circular reference detected: {} -> {}.".format(node.name, dep))
-				dependencyResolver(dep, resolved, unresolved, build_arch, arch, display, is_package)
-		resolved.append(node.name)
-		unresolved.remove(node.name)
+				dependencyResolver(dep, resolved, unresolved, arch if (targets[dep].build_native) else build_arch, arch, display, is_package)
+		resolved.append(name)
+		unresolved.remove(name)
 
 def createBuildOrder(target, build_arch, arch, display):
 	resolved = []
@@ -170,7 +171,7 @@ def createBuildOrder(target, build_arch, arch, display):
 def createNeededSourceList(target, build_arch, arch):
 	src = []
 	for t in createBuildOrder(target, build_arch, arch, False):
-		for s in targets[t].sources:
+		for s in targets[t[1]].sources:
 			if s not in src:
 				src.append(s)
 	return src
@@ -282,7 +283,7 @@ def calculateHash(target, prefix, arch, build_order):
 	if target.package:
 		resources = set()
 		for d in build_order:
-			dep = targets[d]
+			dep = targets[d[1]]
 			if (dep and dep.resources):
 				for r in dep.resources:
 					resources.add(r)
@@ -369,14 +370,12 @@ def buildCode(target, build_arch, nproc, no_clean, force, prefix, dry):
 	pos = 0
 	for t in build_order:
 		pos += 1
-		target = targets[t]
-		target.hash = calculateHash(target, prefix, build_arch, build_order)
+		arch = t[0]
+		target = targets[t[1]]
+		target.hash = calculateHash(target, prefix, arch, build_order)
 		build_info = ""
-		if (target.build_native and build_arch != getArchitecture()):
-			arch = getArchitecture()
-			build_info = " [" + getArchitecture() + "]"
-		else:
-			arch = build_arch
+		if (build_arch != arch):
+			build_info = " [" + arch + "]"
 
 		output_dir = os.path.join(OUTPUTS_ROOT, arch, target.name)
 
@@ -429,15 +428,17 @@ def buildCode(target, build_arch, nproc, no_clean, force, prefix, dry):
 				if dep.arch and arch not in dep.arch:
 					needed = False
 				if needed:
+					dep_build_info = ""
 					if (dep.build_native and build_arch != getArchitecture()):
+						dep_build_info = " [" + getArchitecture() + "]"
 						dep_dir = os.path.join(OUTPUTS_ROOT, getArchitecture(), d)
 					else:
 						dep_dir = os.path.join(OUTPUTS_ROOT, arch, d)
 					if not target.package:
-						log_step_triple("Copy '", d, "' output to build dir ...")
+						log_step_triple("Copy '", d + dep_build_info, "' output to build dir ...")
 						run(['rsync','-a', dep_dir, build_dir])
 					else:
-						log_step_triple("Copy '", d, "' output to package dir ...")
+						log_step_triple("Copy '", d + dep_build_info, "' output to package dir ...")
 						run(['rsync','-a', dep_dir+"/", output_dir])
 
 
