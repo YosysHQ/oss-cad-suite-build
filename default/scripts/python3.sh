@@ -39,3 +39,4 @@ if [ ${ARCH_BASE} == 'darwin' ]; then
 elif [ ${ARCH} == 'windows-x64' ]; then
 	cp ${OUTPUT_DIR}${INSTALL_PREFIX}/py3bin/libpython3.8.dll ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/.
 fi
+find ${OUTPUT_DIR}${INSTALL_PREFIX} -name "libpython*.a" | xargs rm -rf

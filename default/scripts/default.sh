@@ -3,6 +3,7 @@ mkdir -p lib
 mkdir -p libexec
 
 rm -rf ${OUTPUT_DIR}/dev
+rm -rf ${OUTPUT_DIR}/include
 
 if [ ${ARCH_BASE} == 'linux' ]; then
 # Linux section
@@ -20,7 +21,7 @@ elif [ ${ARCH} == 'linux-riscv64' ]; then
     arch_prefix="riscv64-linux-gnu"
 fi
 cp ${PATCHES_DIR}/environment ${OUTPUT_DIR}${INSTALL_PREFIX}/.
-for bindir in bin py2bin py3bin super_prove/bin; do
+for bindir in bin py2bin py3bin super_prove/bin share/verilator/bin; do
     for binfile in $(file $bindir/* | grep ELF | grep dynamically | cut -f1 -d:); do
         rel_path=$(realpath --relative-to=$bindir .)
         for lib in $(lddtree -l $binfile | tail -n +2 | grep ^/ ); do
@@ -41,9 +42,9 @@ EOT
 export PYTHONEXECUTABLE="\$release_topdir_abs/bin/packaged_py3"
 EOT
         fi
-        if [ $bindir == 'py2bin' ]; then
+        if [ ! -z "$(basename $binfile) | grep verilator)" ]; then
             cat >> $binfile << EOT
-export PYTHONEXECUTABLE="\$release_topdir_abs/bin/packaged_py2"
+export VERILATOR_ROOT="\$release_topdir_abs/share/verilator"
 EOT
         fi
         if [ ! -z "$(lddtree -l libexec/$(basename $binfile) | grep python)" ]; then
@@ -110,9 +111,6 @@ done
 
 if [ -f "py3bin/python3" ]; then
     cp py3bin/python3 bin/packaged_py3
-fi
-if [ -f "py2bin/python2" ]; then
-    cp py2bin/python2 bin/packaged_py2
 fi
 
 for script in bin/* py3bin/*; do
@@ -189,7 +187,7 @@ cp /usr/local/bin/realpath libexec/.
 
 export DYLD_LIBRARY_PATH=/usr/local/opt/icu4c/lib:$DYLD_LIBRARY_PATH
 
-for bindir in bin py3bin super_prove/bin; do
+for bindir in bin py3bin super_prove/bin share/verilator/bin; do
     for binfile in $(file -h $bindir/* | grep Mach-O | grep executable | cut -f1 -d:); do
         rel_path=$(realpath --relative-to=$bindir .)
         dylibbundler -of -b -x $binfile -p @executable_path/../lib -d lib
@@ -205,6 +203,11 @@ EOT
         if [ $bindir == 'py3bin' ]; then
             cat >> $binfile << EOT
 export PYTHONEXECUTABLE="\$release_topdir_abs/bin/packaged_py3"
+EOT
+        fi
+        if [ ! -z "$(basename $binfile) | grep verilator)" ]; then
+            cat >> $binfile << EOT
+export VERILATOR_ROOT="\$release_topdir_abs/share/verilator"
 EOT
         fi
         if [ ! -z "$(otool -L libexec/$(basename $binfile) | grep python)" ]; then
