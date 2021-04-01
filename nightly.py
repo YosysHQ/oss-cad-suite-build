@@ -24,16 +24,17 @@ def cli(ctx):
 @click.option('--arch', default=getArchitecture(), show_default=True, help='Build architecture.')
 @click.option('--prefix', default='/opt/fpga-nightly', show_default=True, help='Target prefix to build for.')
 @click.option('--rules', default='default', show_default=True, help='Comma separated list of rules to use.')
+@click.option('--dry', help='Just dry run of packages to be built', is_flag=True)
 @click.option('-j', '--nproc', default=os.cpu_count(), show_default=True, help='Number of build process.')
-def build(no_update, no_clean, force, target, arch, prefix, rules, nproc):
+def build(no_update, no_clean, force, target, arch, prefix, rules, dry, nproc):
 	"""Build tools"""
 	for rule in rules.split(","):
 		loadRules(rule)
 	validateRules()
 	validateTarget(target)
 	validateArch(arch)
-	pullCode(target, arch, no_update)
-	buildCode(target, arch, nproc, no_clean, force, prefix)
+	pullCode(target, arch, getArchitecture(), no_update)
+	buildCode(target, arch, nproc, no_clean, force, prefix, dry)
 
 @cli.command()
 @click.option('--arch', default=getArchitecture(), show_default=True, help='Build architecture.')
@@ -53,7 +54,7 @@ def source(target, arch, rules):
 	validateRules()
 	validateTarget(target)
 	validateArch(arch)
-	pullCode(target, arch, False)
+	pullCode(target, arch, getArchitecture(), False)
 
 if __name__ == '__main__':
 	if os.name == "posix":

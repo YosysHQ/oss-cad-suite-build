@@ -145,39 +145,39 @@ def validateRules():
 		if s not in usedSources:
 			log_warning("Source {} not used in any target.".format(s))
 
-def dependencyResolver(target, resolved, unresolved, arch, display, is_package):
+def dependencyResolver(target, resolved, unresolved, build_arch, arch, display, is_package):
 	node = targets[target]
 	needed = True
-	if node.arch and arch not in node.arch:
+	if node.arch and build_arch not in node.arch:
 		needed = False
 		if display:
-			log_warning("Target {} not built for architecture {}.".format(node.name, arch))
+			log_warning("Target {} not built for architecture {}.".format(node.name, build_arch))
 	if needed:
 		unresolved.append(node.name)
 		for dep in (node.dependencies + (node.resources if is_package else [])):
 			if dep not in resolved:
 				if dep in unresolved:
 					log_error("Circular reference detected: {} -> {}.".format(node.name, dep))
-				dependencyResolver(dep, resolved, unresolved, arch, display, is_package)
+				dependencyResolver(dep, resolved, unresolved, build_arch, arch, display, is_package)
 		resolved.append(node.name)
 		unresolved.remove(node.name)
 
-def createBuildOrder(target, arch, display):
+def createBuildOrder(target, build_arch, arch, display):
 	resolved = []
-	dependencyResolver(target, resolved, [], arch, display, targets[target].package)
+	dependencyResolver(target, resolved, [], build_arch, arch, display, targets[target].package)
 	return resolved
 
-def createNeededSourceList(target, arch):
+def createNeededSourceList(target, build_arch, arch):
 	src = []
-	for t in createBuildOrder(target, arch, False):
+	for t in createBuildOrder(target, build_arch, arch, False):
 		for s in targets[t].sources:
 			if s not in src:
 				src.append(s)
 	return src
 
-def pullCode(target, arch, no_update):
+def pullCode(target, build_arch, arch, no_update):
 	log_info("Downloading sources ...")
-	for src in createNeededSourceList(target, arch):
+	for src in createNeededSourceList(target, build_arch, arch):
 		s = sources[src]
 		repo_dir = os.path.abspath(os.path.join(SOURCES_ROOT, s.name))
 		repo = create_repo(url=s.location, vcs=s.vcs, repo_dir=repo_dir)
@@ -356,7 +356,7 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, native, nproc):
 		code = run_live(params, cwd=build_dir)
 	return code
 
-def buildCode(target, build_arch, nproc, no_clean, force, prefix):
+def buildCode(target, build_arch, nproc, no_clean, force, prefix, dry):
 	if build_arch != getArchitecture() and build_arch in native_only_architectures:
 		log_error("Build for {} architecture can only be built natively.".format(build_arch))
 	native = False
@@ -365,7 +365,7 @@ def buildCode(target, build_arch, nproc, no_clean, force, prefix):
 
 	log_info_triple("Building ", target, " for {} architecture ...".format(build_arch))
 
-	build_order = createBuildOrder(target, build_arch, True)
+	build_order = createBuildOrder(target, build_arch, getArchitecture(), True)
 	pos = 0
 	for t in build_order:
 		pos += 1
@@ -390,7 +390,8 @@ def buildCode(target, build_arch, nproc, no_clean, force, prefix):
 				continue
 
 		log_info_triple("Step [{:2d}/{:2d}] building ".format(pos,len(build_order)), target.name + build_info)
-
+		if dry:
+			continue
 		log_step("Remove old output dir ...")
 		if os.path.exists(output_dir):
 			shutil.rmtree(output_dir, onerror=removeError)
