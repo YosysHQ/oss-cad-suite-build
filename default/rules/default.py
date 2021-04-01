@@ -5,11 +5,10 @@ Target(
     package = True,
     dependencies = [
         'yosys',
-        'nextpnr-generic',
+        'nextpnr',
         'icestorm',
-        'nextpnr-ice40',
         'prjtrellis',
-        'nextpnr-ecp5',
+        #'prjoxide',
         'dfu-util',
         'ecpprog',
         'openfpgaloader',

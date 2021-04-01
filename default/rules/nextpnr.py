@@ -1,5 +1,6 @@
 from src.base import SourceLocation, Target
 
+# main
 SourceLocation(
 	name = 'nextpnr',
 	vcs = 'git',
@@ -8,25 +9,9 @@ SourceLocation(
 )
 
 Target(
-	name = 'nextpnr-ice40',
+	name = 'nextpnr',
 	sources = [ 'nextpnr' ],
-	dependencies = [ 'icestorm', 'python3', 'nextpnr-bba' ],
-	resources = [ 'python3' ],
-	license_file = 'nextpnr/COPYING',
-)
-
-Target(
-	name = 'nextpnr-ecp5',
-	sources = [ 'nextpnr' ],
-	dependencies = [ 'prjtrellis', 'python3', 'nextpnr-bba', 'prjtrellis-py' ],
-	resources = [ 'python3' ],
-	license_file = 'nextpnr/COPYING',
-)
-
-Target(
-	name = 'nextpnr-generic',
-	sources = [ 'nextpnr' ],
-	dependencies = [ 'python3', 'nextpnr-bba' ],
+	dependencies = [ 'python3', 'nextpnr-bba', 'icestorm-bba', 'prjtrellis-bba', 'prjoxide-bba' ],
 	resources = [ 'python3' ],
 	license_file = 'nextpnr/COPYING',
 )
@@ -37,6 +22,21 @@ Target(
 	build_native = True,
 )
 
+# architecture specific
+SourceLocation(
+	name = 'icestorm',
+	vcs = 'git',
+	location = 'https://github.com/YosysHQ/icestorm',
+	revision = 'origin/master',
+)
+
+SourceLocation(
+	name = 'prjtrellis',
+	vcs = 'git',
+	location = 'https://github.com/YosysHQ/prjtrellis',
+	revision = 'origin/master',
+)
+
 SourceLocation(
 	name = 'prjoxide',
 	vcs = 'git',
@@ -45,21 +45,41 @@ SourceLocation(
 )
 
 Target(
+	name = 'icestorm',
+	sources = [ 'icestorm' ],
+	license_file = 'icestorm/COPYING',
+)
+
+Target(
+	name = 'prjtrellis',
+	sources = [ 'prjtrellis' ],
+	license_file = 'prjtrellis/COPYING',
+)
+
+Target(
 	name = 'prjoxide',
 	sources = [ 'prjoxide' ],
 	license_file = 'prjoxide/COPYING',
 )
 
+# chip databases
+
 Target(
-	name = 'prjoxide-bba',
-	sources = [ 'prjoxide' ],
+	name = 'icestorm-bba',
+	sources = [ 'nextpnr' ],
+	dependencies = [ 'icestorm' ],
 	build_native = True,
 )
 
 Target(
-	name = 'nextpnr-nexus',
+	name = 'prjtrellis-bba',
+	sources = [ 'prjtrellis', 'nextpnr' ],
+	build_native = True,
+)
+
+Target(
+	name = 'prjoxide-bba',
 	sources = [ 'nextpnr' ],
-	dependencies = [ 'python3', 'nextpnr-bba', 'prjoxide-bba' ],
-	resources = [ 'python3' ],
-	license_file = 'nextpnr/COPYING',
+	dependencies = [ 'prjoxide' ],
+	build_native = True,
 )
