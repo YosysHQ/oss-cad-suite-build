@@ -12,7 +12,7 @@ if [ -d "${OUTPUT_DIR}/usr" ]; then
     cp -r ${OUTPUT_DIR}/usr/* ${OUTPUT_DIR}${INSTALL_PREFIX}/.
     rm -rf ${OUTPUT_DIR}/usr
 fi
-mv ${OUTPUT_DIR}${INSTALL_PREFIX}/bin ${OUTPUT_DIR}${INSTALL_PREFIX}/py2bin
+rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/bin
 
 export _PYTHON_PROJECT_BASE=${BUILD_DIR}/python2
 export PYTHONPATH=${OUTPUT_DIR}${INSTALL_PREFIX}/lib/python2.7:${OUTPUT_DIR}${INSTALL_PREFIX}/lib/python2.7/plat-linux2:${OUTPUT_DIR}${INSTALL_PREFIX}/lib/python2.7/site-packages
@@ -28,3 +28,7 @@ elif [ ${ARCH} == 'linux-x64' ]; then
 elif [ ${ARCH} == 'darwin-x64' ]; then
 	DYLD_LIBRARY_PATH=${BUILD_DIR}/python2 ./python.exe -m ${pip_cmd}
 fi
+
+mkdir -p ${OUTPUT_DIR}/dev
+mv ${OUTPUT_DIR}${INSTALL_PREFIX}/include ${OUTPUT_DIR}/dev/.
+rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/pkgconfig

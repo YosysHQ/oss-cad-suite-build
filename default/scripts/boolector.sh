@@ -47,3 +47,5 @@ cp -r deps/install/lib/liblgl.a ${OUTPUT_DIR}/dev/deps/lingeling/build/liblgl.a
 cp -r deps/install/lib/libcadical.a ${OUTPUT_DIR}/dev/deps/cadical/build/libcadical.a
 cp -r deps/install/lib/libbtor2parser.a ${OUTPUT_DIR}/dev/deps/btor2tools/build/libbtor2parser.a
 cp -r ../btor2tools/src ${OUTPUT_DIR}/dev/deps/btor2tools/.
+rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/include
+rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/lib

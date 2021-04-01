@@ -16,3 +16,5 @@ mkdir -p ${OUTPUT_DIR}/dev
 mkdir -p ${OUTPUT_DIR}/dev/build
 cp -r src ${OUTPUT_DIR}/dev/.
 cp -r build/src ${OUTPUT_DIR}/dev/build/.
+rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/include
+rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/lib

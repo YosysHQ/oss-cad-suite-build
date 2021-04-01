@@ -10,3 +10,5 @@ if [ ${ARCH} == 'linux-riscv64' ]; then
 fi
 make PREFIX=${INSTALL_PREFIX} DESTDIR=${OUTPUT_DIR} -j${NPROC}
 make PREFIX=${INSTALL_PREFIX} DESTDIR=${OUTPUT_DIR} -j${NPROC} install
+rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/include
+rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/lib

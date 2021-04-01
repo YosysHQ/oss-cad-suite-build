@@ -8,7 +8,7 @@ elif [ ${ARCH} == 'linux-arm' ]; then
 fi
 cd build
 cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${OUTPUT_DIR}${INSTALL_PREFIX}/super_prove \
-      -DPYTHON_INCLUDE_DIR=${BUILD_DIR}/python2${INSTALL_PREFIX}/include/python2.7 \
+      -DPYTHON_INCLUDE_DIR=${BUILD_DIR}/python2/dev/include/python2.7 \
       -DPYTHON_LIBRARY=${BUILD_DIR}/python2${INSTALL_PREFIX}/lib/libpython2.7${SHARED_EXT} \
       ..
 make -j${NPROC}

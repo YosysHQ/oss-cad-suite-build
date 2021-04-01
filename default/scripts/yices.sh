@@ -11,3 +11,5 @@ if [ ${ARCH_BASE} == 'windows' ]; then
 fi
 make DESTDIR=${OUTPUT_DIR} -j${NPROC}
 make DESTDIR=${OUTPUT_DIR} install
+rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/include
+rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/lib
