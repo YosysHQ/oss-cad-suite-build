@@ -63,7 +63,7 @@ class SourceLocation:
 		sources[name] = self
 
 class Target:
-	def __init__(self, name, sources = [], dependencies = [], resources = [], patches = [], arch = [], no_source_copy = [], license_url = None, license_file = None, package = False, build_native = False):
+	def __init__(self, name, sources = [], dependencies = [], resources = [], patches = [], arch = [], license_url = None, license_file = None, package = False, build_native = False):
 		self.name = name
 		self.sources = sources
 		self.dependencies = dependencies
@@ -77,7 +77,6 @@ class Target:
 		global current_rule_group
 		self.group = current_rule_group
 		self.arch = arch
-		self.no_source_copy = no_source_copy
 		self.build_native = build_native
 		if name in targets:
 			log_step_triple("Overriding ", name)
@@ -171,10 +170,9 @@ def createBuildOrder(target, arch, display):
 def createNeededSourceList(target, arch):
 	src = []
 	for t in createBuildOrder(target, arch, False):
-		if not(arch in targets[t].no_source_copy):
-			for s in targets[t].sources:
-				if s not in src:
-					src.append(s)
+		for s in targets[t].sources:
+			if s not in src:
+				src.append(s)
 	return src
 
 def pullCode(target, arch, no_update):
@@ -277,8 +275,7 @@ def run_live(command, cwd=None, env=None):
 def calculateHash(target, prefix, arch, build_order):
 	data = []
 	for s in sorted(target.sources):
-		if not(arch in target.no_source_copy):
-			data.append(sources[s].hash)
+		data.append(sources[s].hash)
 	for d in sorted(target.dependencies):
 		if targets[d].hash:
 			data.append(targets[d].hash)
@@ -410,11 +407,10 @@ def buildCode(target, build_arch, nproc, no_clean, force, prefix):
 					shutil.rmtree(build_dir, onerror=removeError)
 				log_step("Creating build dir ...")
 				os.makedirs(build_dir)
-				if not(arch in target.no_source_copy):
-					for s in target.sources:
-						src_dir = os.path.join(SOURCES_ROOT, s)
-						log_step_triple("Copy '", s, "' source to build dir ...")
-						run(['rsync','-a', src_dir, build_dir])
+				for s in target.sources:
+					src_dir = os.path.join(SOURCES_ROOT, s)
+					log_step_triple("Copy '", s, "' source to build dir ...")
+					run(['rsync','-a', src_dir, build_dir])
 
 			deps = target.dependencies
 			if t == target.name and target.package:
@@ -465,8 +461,7 @@ def buildCode(target, build_arch, nproc, no_clean, force, prefix):
 				f.write("\nBuild is based on folowing sources:\n")
 				f.write('=' * 80 + '\n')
 				for s in target.sources:
-					if not(arch in target.no_source_copy):
-						f.write("{} {} checkout revision {}\n".format(sources[s].vcs, sources[s].location, sources[s].hash))
+					f.write("{} {} checkout revision {}\n".format(sources[s].vcs, sources[s].location, sources[s].hash))
 				f.write("\nFollowing files are included:\n")
 				f.write('=' * 80 + '\n')
 				for root, _, files in os.walk(output_dir):
