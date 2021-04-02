@@ -76,5 +76,3 @@ RUN ln -s /usr/bin/python3 /usr/bin/python
 
 WORKDIR /work
 
-RUN dnf install -y 
-
