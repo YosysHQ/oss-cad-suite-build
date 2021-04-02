@@ -140,7 +140,9 @@ def validateRules():
 		for p in t.patches:
 			if not os.path.exists(os.path.join(t.group, PATCHES_ROOT, p)):
 				log_error("Target {} does not have corresponding patch '{}'.".format(t.name, p))
-
+		script_name = os.path.join(t.group, SCRIPTS_ROOT, t.name + ".sh")
+		if not os.path.exists(script_name):
+			log_error("Target {} does not have script file '{}'.".format(t.name, script_name))
 	for s in sources.keys():
 		if s not in usedSources:
 			log_warning("Source {} not used in any target.".format(s))
