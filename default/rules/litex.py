@@ -227,5 +227,6 @@ Target(
 	],
 	dependencies = [ 'python3' ],
 	resources = [ 'python3' ],
+	patches = [ 'python3_package.sh' ],
 	license_file = 'litex/LICENSE',
 )

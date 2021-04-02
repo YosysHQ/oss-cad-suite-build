@@ -10,6 +10,15 @@ SourceLocation(
 Target(
 	name = 'yosys',
 	sources = [ 'yosys' ],
-	resources = [ 'python3', 'python3-pip' ],
+	resources = [ 'xdot' ],
 	license_file = 'yosys/COPYING',
+)
+
+Target(
+	name = 'xdot',
+	dependencies = [ 'python3' ],
+	resources = [ 'python3', 'gtk-resources' ],
+	patches = [ 'python3_package.sh' ],
+	arch = [ 'linux-x64', 'darwin-x64' ],
+	sources = [ ],
 )

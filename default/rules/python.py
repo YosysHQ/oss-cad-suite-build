@@ -14,13 +14,6 @@ Target(
 	license_file = 'python3/LICENSE',
 )
 
-Target(
-	name = 'python3-pip',
-	dependencies = [ 'python3' ],
-	resources = [ 'python3', 'gtk-resources' ],
-	sources = [ ],
-)
-
 SourceLocation(
 	name = 'python2',
 	vcs = 'git',
