@@ -28,6 +28,7 @@ Target(
         'litex',
         'ecpdap',
         'fujprog',
+        'python-programmers',
     ],
     patches = [ 'win-launcher.c', 'environment' ],
 )

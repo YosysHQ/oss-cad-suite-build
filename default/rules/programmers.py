@@ -1,5 +1,7 @@
 from src.base import SourceLocation, Target
 
+# dfu-util
+
 SourceLocation(
 	name = 'dfu-util',
 	vcs = 'git',
@@ -12,6 +14,8 @@ Target(
 	sources = [ 'dfu-util' ],
 	license_file = 'dfu-util/COPYING',
 )
+
+# ecpdap
 
 SourceLocation(
 	name = 'ecpdap',
@@ -26,6 +30,8 @@ Target(
 	license_file = 'ecpdap/LICENSE-MIT',
 )
 
+# ecpprog
+
 SourceLocation(
 	name = 'ecpprog',
 	vcs = 'git',
@@ -39,6 +45,8 @@ Target(
 	license_file = 'ecpprog/COPYING',
 )
 
+# fujprog
+
 SourceLocation(
 	name = 'fujprog',
 	vcs = 'git',
@@ -49,9 +57,11 @@ SourceLocation(
 Target(
 	name = 'fujprog',
 	sources = [ 'fujprog' ],
-	patches = [ 'boolector.diff', 'Toolchain-mingw64.cmake' ],
+	patches = [ 'Toolchain-mingw64.cmake' ],
 	license_file = 'fujprog/LICENSE',
 )
+
+# openfpgaloader
 
 SourceLocation(
 	name = 'openfpgaloader',
@@ -64,4 +74,42 @@ Target(
 	name = 'openfpgaloader',
 	sources = [ 'openfpgaloader' ],
 	license_file = 'openfpgaloader/LICENSE',
+)
+
+# python based programmers
+
+SourceLocation(
+	name = 'black-iceprog',
+	vcs = 'git',
+	location = 'https://github.com/jpenalbae/black-iceprog',
+	revision = 'origin/master',
+)
+
+SourceLocation(
+	name = 'icefunprog',
+	vcs = 'git',
+	location = 'https://github.com/pitrz/icefunprog',
+	revision = 'origin/master',
+)
+
+SourceLocation(
+	name = 'tinyfpgab',
+	vcs = 'git',
+	location = 'https://github.com/tinyfpga/TinyFPGA-B-Series',
+	revision = 'origin/master',
+)
+
+SourceLocation(
+	name = 'tinyprog',
+	vcs = 'git',
+	location = 'https://github.com/tinyfpga/TinyFPGA-Bootloader',
+	revision = 'origin/master',
+)
+
+Target(
+	name = 'python-programmers',
+	sources = [ 'black-iceprog', 'icefunprog', 'tinyfpgab', 'tinyprog'],
+    dependencies = [ 'python3' ],
+	patches = [ 'python3_package.sh' ],
+	resources = [ 'python3' ],
 )
