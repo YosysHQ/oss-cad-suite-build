@@ -211,22 +211,21 @@ SourceLocation(
 Target(
 	name = 'litex',
 	sources = [ 
-        # HDL
-        'migen', 'nmigen',
-        # LiteX SoC builder
-        'pythondata-software-compiler_rt','litex',
-        # LiteX cores ecosystem
-        'liteeth', 'litedram', 'litepcie', 'litesata', 'litesdcard', 'liteiclink', 'litevideo',
-        'litescope', 'litejesd204b', 'litespi', 'litehyperbus',
-        # LiteX boards support
-        'litex-boards',
-        # Optional LiteX data
-        'pythondata-misc-tapcfg', 'pythondata-misc-opentitan', 'pythondata-cpu-lm32', 'pythondata-cpu-mor1kx', 'pythondata-cpu-picorv32',
-        'pythondata-cpu-serv', 'pythondata-cpu-vexriscv',  'pythondata-cpu-vexriscv-smp', 'pythondata-cpu-rocket', 'pythondata-cpu-minerva',
-        'pythondata-cpu-microwatt', 'pythondata-cpu-blackparrot', 'pythondata-cpu-cv32e40p'
-    ],
+		# HDL
+		'migen', 'nmigen',
+		# LiteX SoC builder
+		'pythondata-software-compiler_rt','litex',
+		# LiteX cores ecosystem
+		'liteeth', 'litedram', 'litepcie', 'litesata', 'litesdcard', 'liteiclink', 'litevideo',
+		'litescope', 'litejesd204b', 'litespi', 'litehyperbus',
+		# LiteX boards support
+		'litex-boards',
+		# Optional LiteX data
+		'pythondata-misc-tapcfg', 'pythondata-misc-opentitan', 'pythondata-cpu-lm32', 'pythondata-cpu-mor1kx', 'pythondata-cpu-picorv32',
+		'pythondata-cpu-serv', 'pythondata-cpu-vexriscv',  'pythondata-cpu-vexriscv-smp', 'pythondata-cpu-rocket', 'pythondata-cpu-minerva',
+		'pythondata-cpu-microwatt', 'pythondata-cpu-blackparrot', 'pythondata-cpu-cv32e40p'
+	],
 	dependencies = [ 'python3' ],
 	resources = [ 'python3' ],
-    license_file = 'litex/LICENSE',
+	license_file = 'litex/LICENSE',
 )
-
