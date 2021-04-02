@@ -29,7 +29,9 @@ RUN dnf install -y  mingw64-libftdi \
                     zlib-devel \
                     readline-devel \
                     bzip2-devel \
-                    python3-pip
+                    python3-pip \
+                    which \
+                    libtool
 
 ENV CROSS_NAME x86_64-w64-mingw32
 
@@ -73,3 +75,6 @@ RUN rustup target add x86_64-pc-windows-gnu && \
 RUN ln -s /usr/bin/python3 /usr/bin/python
 
 WORKDIR /work
+
+RUN dnf install -y 
+
