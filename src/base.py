@@ -413,10 +413,10 @@ def buildCode(target, build_arch, nproc, no_clean, force, prefix, dry):
 					run(['rsync','-a', src_dir, build_dir])
 
 			deps = target.dependencies
-			if t == target.name and target.package:
+			if t[1] == target.name and target.package:
 				res = set()
 				for d in build_order:
-					dep = targets[d]
+					dep = targets[d[1]]
 					if (dep and dep.resources):
 						for r in dep.resources:
 							res.add(r)
