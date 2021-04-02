@@ -113,3 +113,19 @@ Target(
 	patches = [ 'python3_package.sh' ],
 	resources = [ 'python3' ],
 )
+
+# openocd
+
+SourceLocation(
+	name = 'openocd',
+	vcs = 'git',
+	location = 'https://repo.or.cz/openocd.git',
+	revision = 'origin/master',
+)
+
+Target(
+	name = 'openocd',
+	sources = [ 'openocd' ],
+	patches = [ 'openocd.diff' ],
+	license_file = 'openocd/COPYING',
+)

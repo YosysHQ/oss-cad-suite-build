@@ -29,6 +29,7 @@ Target(
         'ecpdap',
         'fujprog',
         'python-programmers',
+        'openocd',
     ],
     patches = [ 'win-launcher.c', 'environment' ],
 )

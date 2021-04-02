@@ -1,0 +1,246 @@
+diff --git a/tcl/board/digilent_arty.cfg b/tcl/board/digilent_arty.cfg
+new file mode 100644
+index 00000000..317e7d26
+--- /dev/null
++++ tcl/board/digilent_arty.cfg
+@@ -0,0 +1,22 @@
++#
++# Digilent Arty with Xilinx Artix-7 FPGA
++#
++# http://store.digilentinc.com/arty-artix-7-fpga-development-board-for-makers-and-hobbyists/
++#
++
++# iManufacturer           1 Digilent
++# iProduct                2 Digilent USB Device
++# iSerial                 3 210319A28C7F
++
++interface ftdi
++ftdi_device_desc "Digilent USB Device"
++ftdi_vid_pid 0x0403 0x6010
++# channel 1 does not have any functionality
++ftdi_channel 0
++# just TCK TDI TDO TMS, no reset
++ftdi_layout_init 0x0088 0x008b
++reset_config none
++adapter_khz 10000
++
++source [find cpld/xilinx-xc7.cfg]
++source [find cpld/jtagspi.cfg]
+diff --git a/tcl/board/digilent_cmod_a7.cfg b/tcl/board/digilent_cmod_a7.cfg
+new file mode 100644
+index 00000000..317e7d26
+--- /dev/null
++++ tcl/board/digilent_cmod_a7.cfg
+@@ -0,0 +1,22 @@
++#
++# Digilent CMOD A7 with Xilinx Artix-7 FPGA
++#
++# http://store.digilentinc.com/cmod-a7-breadboardable-artix-7-fpga-module/
++#
++
++# iManufacturer           0 Digilent
++# iProduct                2 Digilent Adept USB Device
++# iSerial                 3 210328A58896
++
++interface ftdi
++ftdi_device_desc "Digilent Adept USB Device"
++ftdi_vid_pid 0x0403 0x6010
++# channel 1 does not have any functionality
++ftdi_channel 0
++# just TCK TDI TDO TMS, no reset
++ftdi_layout_init 0x0088 0x008b
++reset_config none
++adapter_khz 10000
++
++source [find cpld/xilinx-xc7.cfg]
++source [find cpld/jtagspi.cfg]
+diff --git a/tcl/board/digilent_nexys_video.cfg b/tcl/board/digilent_nexys_video.cfg
+new file mode 100644
+index 00000000..317e7d26
+--- /dev/null
++++ tcl/board/digilent_nexys_video.cfg
+@@ -0,0 +1,23 @@
++#
++# Digilent Nexys Video with Xilinx Artix-7 FPGA
++#
++# https://store.digilentinc.com/nexys-video-artix-7-fpga-trainer-board-for-multimedia-applications/
++#
++
++# iManufacturer           1 Digilent
++# iProduct                2 Digilent USB Device
++# iSerial                 3 210276690190
++
++interface ftdi
++ftdi_device_desc "Digilent USB Device"
++ftdi_vid_pid 0x0403 0x6010
++# channel 0 is dedicated for Digilent's DPTI Interface
++# channel 1 is used for JTAG
++ftdi_channel 1
++# just TCK TDI TDO TMS, no reset
++ftdi_layout_init 0x0088 0x008b
++reset_config none
++adapter_khz 10000
++
++source [find cpld/xilinx-xc7.cfg]
++source [find cpld/jtagspi.cfg]
+diff --git a/tcl/cpld/xilinx-xc6s.cfg b/tcl/cpld/xilinx-xc6s.cfg
+index 9ce7ad49..cba7cb0f 100644
+--- a/tcl/cpld/xilinx-xc6s.cfg
++++ b/tcl/cpld/xilinx-xc6s.cfg
+@@ -88,3 +88,9 @@ proc xc6s_print_dna {tap} {
+ 
+ 	puts [format "DNA = %57b (0x%x)\n" $hex_dna $hex_dna]
+ }
++
++proc fpga_program {} {
++	global _CHIPNAME
++	xc6s_print_dna $_CHIPNAME.tap
++	xc6s_program $_CHIPNAME.tap
++}
+diff --git a/tcl/cpld/xilinx-xc7.cfg b/tcl/cpld/xilinx-xc7.cfg
+index d5824f8a..2be7920c 100644
+--- a/tcl/cpld/xilinx-xc7.cfg
++++ b/tcl/cpld/xilinx-xc7.cfg
+@@ -55,3 +55,8 @@ proc xc7_program {tap} {
+ 	irscan $tap $XC7_BYPASS
+ 	runtest 2000
+ }
++
++proc fpga_program {} {
++	global _CHIPNAME
++	xc7_program $_CHIPNAME.tap
++}
+diff --git a/tcl/board/gadgetfactory_papilio_duo.cfg b/tcl/board/gadgetfactory_papilio_duo.cfg
+new file mode 100644
+index 0000000..0307779
+--- /dev/null
++++ tcl/board/gadgetfactory_papilio_duo.cfg
+@@ -0,0 +1,20 @@
++#
++# Papilio DUO
++#
++# http://papilio.cc/index.php?n=Papilio.PapilioDUOHardwareGuide
++#
++
++# iManufacturer           1 Gadget Factory
++# iProduct                2 Papilio DUO
++
++interface ftdi
++ftdi_device_desc "Papilio DUO"
++ftdi_vid_pid 0x0403 0x7bc0
++ftdi_channel 0
++# just TCK TDI TDO TMS, no reset
++ftdi_layout_init 0x0008 0x000b
++reset_config none
++adapter_khz 10000
++
++source [find cpld/xilinx-xc6s.cfg]
++source [find cpld/jtagspi.cfg]
+diff --git a/tcl/board/numato_neso.cfg b/tcl/board/numato_neso.cfg
+new file mode 100644
+index 0000000..37b18a0
+--- /dev/null
++++ tcl/board/numato_neso.cfg
+@@ -0,0 +1,30 @@
++#
++# Numato Neso - Artix 7 FPGA Board
++#
++# https://numato.com/neso-artix-7-fpga-development-board
++#
++# IMPORTANT:
++#   To use openocd with Neso using its onboard FTDI chip,
++#   put the jumpers P10 and P11 in following configuration:
++#
++#   P10: Jumpers one each between 2-4 and 3-5
++#   P11: Jumpers one each between 2-4 and 3-5
++#
++# NOTE:
++#   To put the jumpers configuration back to factory configuration (SPI flash connnections):
++#
++#   P10: Jumpers one each between 1-2 and 5-6
++#   P11: Jumpers one each between 1-2 and 5-6
++
++interface ftdi
++ftdi_device_desc "Neso Artix 7 FPGA Module"
++ftdi_vid_pid 0x0403 0x6010
++# channel 1 is for custom purpose by users (like uart, fifo etc)
++ftdi_channel 0
++# just TCK TDI TDO TMS, no reset
++ftdi_layout_init 0x0008 0x000b
++reset_config none
++adapter_khz 10000
++
++source [find cpld/xilinx-xc7.cfg]
++source [find cpld/jtagspi.cfg]
+diff --git a/tcl/board/numato_saturn.cfg b/tcl/board/numato_saturn.cfg
+new file mode 100644
+index 0000000..6597f2a
+--- /dev/null
++++ tcl/board/numato_saturn.cfg
+@@ -0,0 +1,30 @@
++#
++# Numato Saturn - Spartan 6 FPGA Development Board With DDR SDRAM
++#
++# https://numato.com/saturn-spartan-6-fpga-development-board-with-ddr-sdram
++#
++# IMPORTANT:
++#   To use openocd with Saturn using its onboard FTDI chip,
++#   put the jumpers P10 and P11 in following configuration:
++#
++#   P10: Jumpers one each between 2-4 and 3-5
++#   P11: Jumpers one each between 2-4 and 3-5
++#
++# NOTE:
++#   To put the jumpers configuration back to factory configuration (SPI flash connnections):
++#
++#   P10: Jumpers one each between 1-2 and 5-6
++#   P11: Jumpers one each between 1-2 and 5-6
++
++interface ftdi
++ftdi_device_desc "Saturn Spartan 6 FPGA Module"
++ftdi_vid_pid 0x0403 0x6010
++# channel 1 is for custom purpose by users (like uart, fifo etc)
++ftdi_channel 0
++# just TCK TDI TDO TMS, no reset
++ftdi_layout_init 0x0008 0x000b
++reset_config none
++adapter_khz 10000
++
++source [find cpld/xilinx-xc6s.cfg]
++source [find cpld/jtagspi.cfg]
+diff --git a/tcl/board/numato_waxwing.cfg b/tcl/board/numato_waxwing.cfg
+new file mode 100644
+index 0000000..328e1e5
+--- /dev/null
++++ tcl/board/numato_waxwing.cfg
+@@ -0,0 +1,30 @@
++#
++# Numato Waxwing Spartan 6 FPGA Development Board
++#
++# https://numato.com/waxwing-spartan-6-fpga-development-board
++#
++# IMPORTANT:
++#   To use openocd with Waxwing using its onboard FTDI chip,
++#   put the jumpers P12 and P13 in following configuration:
++#
++#   P12: Jumpers one each between 2-4 and 3-5
++#   P13: Jumpers one each between 2-4 and 3-5
++#
++# NOTE:
++#   To put the jumpers configuration back to factory configuration (SPI flash connnections):
++#
++#   P12: Jumpers one each between 1-2 and 5-6
++#   P13: Jumpers one each between 1-2 and 5-6
++
++interface ftdi
++ftdi_device_desc "Waxwing Spartan 6 FPGA Board"
++ftdi_vid_pid 0x0403 0x6010
++# channel 1 is for custom purpose by users (like uart, fifo etc)
++ftdi_channel 0
++# just TCK TDI TDO TMS, no reset
++ftdi_layout_init 0x0008 0x000b
++reset_config none
++adapter_khz 10000
++
++source [find cpld/xilinx-xc6s.cfg]
++source [find cpld/jtagspi.cfg]
