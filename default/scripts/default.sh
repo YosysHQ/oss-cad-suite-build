@@ -42,7 +42,7 @@ EOT
 export PYTHONEXECUTABLE="\$release_topdir_abs/bin/packaged_py3"
 EOT
         fi
-        if [ ! -z "$(basename $binfile) | grep verilator)" ]; then
+        if [ ! -z "$(basename $binfile | grep verilator)" ]; then
             cat >> $binfile << EOT
 export VERILATOR_ROOT="\$release_topdir_abs/share/verilator"
 EOT
@@ -205,7 +205,7 @@ EOT
 export PYTHONEXECUTABLE="\$release_topdir_abs/bin/packaged_py3"
 EOT
         fi
-        if [ ! -z "$(basename $binfile) | grep verilator)" ]; then
+        if [ ! -z "$(basename $binfile | grep verilator)" ]; then
             cat >> $binfile << EOT
 export VERILATOR_ROOT="\$release_topdir_abs/share/verilator"
 EOT
