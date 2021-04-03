@@ -30,7 +30,8 @@ RUN set -e -x ;\
         tk-dev \
         qtbase5-dev \
         libbison-dev \
-        python3-dev; \
+        python3-dev \
+        libhidapi-dev; \
     apt -y autoremove ;\
     rm -rf /var/lib/apt/lists/*
 

@@ -109,7 +109,9 @@ class GitRepo(BaseRepo):
             self.git_submodules = []
         if 'tls_verify' not in kwargs:
             self.tls_verify = False
-
+        self.no_submodules = False
+        if 'no_submodules' in kwargs:
+            self.no_submodules = kwargs['no_submodules']
         BaseRepo.__init__(self, url, **kwargs)
 
     def get_revision(self):
@@ -160,11 +162,12 @@ class GitRepo(BaseRepo):
         self.info('Cloning.')
         self.run(cmd, log_in_real_time=True)
 
-        self.info('Initializing submodules.')
-        self.run(['submodule', 'init'], log_in_real_time=True)
-        cmd = ['submodule', 'update', '--recursive', '--init']
-        cmd.extend(self.git_submodules)
-        self.run(cmd, log_in_real_time=True)
+        if not self.no_submodules:
+            self.info('Initializing submodules.')
+            self.run(['submodule', 'init'], log_in_real_time=True)
+            cmd = ['submodule', 'update', '--recursive', '--init']
+            cmd.extend(self.git_submodules)
+            self.run(cmd, log_in_real_time=True)
 
     def update_repo(self):
         self.check_destination()
@@ -178,9 +181,10 @@ class GitRepo(BaseRepo):
         except exc.CommandError:
             self.error("Failed to fetch repository '%s'" % url)
             return
-        cmd = ['submodule', 'update', '--recursive', '--init']
-        cmd.extend(self.git_submodules)
-        self.run(cmd, log_in_real_time=True)
+        if not self.no_submodules:
+            cmd = ['submodule', 'update', '--recursive', '--init']
+            cmd.extend(self.git_submodules)
+            self.run(cmd, log_in_real_time=True)
 
     def remotes(self, flat=False):
         """Return remotes like git remote -v.
@@ -249,7 +253,8 @@ class GitRepo(BaseRepo):
 
     def checkout(self, revision):
         self.run(['reset', '--hard', revision])
-        self.run(['submodule', 'update'])
+        if not self.no_submodules:
+            self.run(['submodule', 'update'])
 
     def set_remote(self, name, url, overwrite=False):
         """Set remote with name and URL like git remote add.

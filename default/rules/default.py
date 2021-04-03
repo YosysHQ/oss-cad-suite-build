@@ -30,6 +30,7 @@ Target(
         'fujprog',
         'python-programmers',
         'openocd',
+        'icesprog',
     ],
     patches = [ 'win-launcher.c', 'environment' ],
 )

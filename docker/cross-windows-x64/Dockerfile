@@ -12,6 +12,7 @@ RUN dnf install -y  mingw64-libftdi \
                     mingw64-gmp \
                     mingw64-eigen3 \
                     mingw64-dlfcn \
+                    mingw64-hidapi \
                     git \
                     cmake \
                     autoconf \

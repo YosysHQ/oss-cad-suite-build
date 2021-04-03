@@ -38,7 +38,8 @@ RUN set -e -x ;\
         tcl-dev:arm64 \
         tk-dev:arm64 \
         qtbase5-dev:arm64 \
-        libbison-dev:arm64; \
+        libbison-dev:arm64 \
+        libhidapi-dev:arm64; \
     apt -y autoremove ;\
     rm -rf /var/lib/apt/lists/*
 

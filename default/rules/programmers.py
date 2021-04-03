@@ -129,3 +129,18 @@ Target(
 	patches = [ 'openocd.diff' ],
 	license_file = 'openocd/COPYING',
 )
+
+# icesprog
+
+SourceLocation(
+	name = 'icesprog',
+	vcs = 'git',
+	location = 'https://github.com/wuxx/icesugar',
+	revision = 'origin/master',
+	no_submodules = True,
+)
+
+Target(
+	name = 'icesprog',
+	sources = [ 'icesprog' ],
+)

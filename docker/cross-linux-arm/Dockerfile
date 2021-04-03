@@ -38,7 +38,8 @@ RUN set -e -x ;\
         tcl-dev:armhf \
         tk-dev:armhf \
         qtbase5-dev:armhf \
-        libbison-dev:armhf; \
+        libbison-dev:armhf \
+        libhidapi-dev:armhf; \
     apt -y autoremove ;\
     rm -rf /var/lib/apt/lists/*
 

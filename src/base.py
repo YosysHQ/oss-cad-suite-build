@@ -54,12 +54,13 @@ def log_step_triple(msg1, msg2, msg3 = " ..."):
 	click.secho(msg3, fg="white", bold=True)
 
 class SourceLocation:
-	def __init__(self, name, vcs, location, revision):
+	def __init__(self, name, vcs, location, revision, no_submodules = False):
 		self.name = name
 		self.location = location
 		self.vcs = vcs
 		self.revision = revision
 		self.hash = None
+		self.no_submodules = no_submodules
 		sources[name] = self
 
 class Target:
@@ -183,7 +184,7 @@ def pullCode(target, build_arch, arch, no_update):
 	for src in createNeededSourceList(target, build_arch, arch):
 		s = sources[src]
 		repo_dir = os.path.abspath(os.path.join(SOURCES_ROOT, s.name))
-		repo = create_repo(url=s.location, vcs=s.vcs, repo_dir=repo_dir)
+		repo = create_repo(url=s.location, vcs=s.vcs, repo_dir=repo_dir, no_submodules=s.no_submodules)
 		if not os.path.isdir(repo_dir):
 			is_cloning = True
 		else:
