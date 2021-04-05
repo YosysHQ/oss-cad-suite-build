@@ -4,6 +4,7 @@ if [ ${ARCH} == 'linux-x64' ] || [ ${ARCH} == 'darwin-x64' ]; then
 elif [ ${ARCH} == 'windows-x64' ]; then
 	echo 'CONFIG := msys2-64' > Makefile.conf
 	echo 'ENABLE_PLUGINS := 0' >> Makefile.conf
+	echo 'TCL_VERSION := tcl86' >> Makefile.conf
 else
 	make config-gcc
 	sed -i -re "s,CXX = gcc,CXX = ${CC},g" Makefile
