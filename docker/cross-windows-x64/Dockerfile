@@ -1,4 +1,4 @@
-FROM fedora:32
+FROM fedora:33
 
 RUN dnf install -y  mingw64-libftdi \
                     mingw64-boost \
@@ -13,6 +13,8 @@ RUN dnf install -y  mingw64-libftdi \
                     mingw64-eigen3 \
                     mingw64-dlfcn \
                     mingw64-hidapi \
+                    mingw64-llvm \
+                    mingw64-llvm-static \
                     git \
                     cmake \
                     autoconf \
@@ -30,9 +32,11 @@ RUN dnf install -y  mingw64-libftdi \
                     zlib-devel \
                     readline-devel \
                     bzip2-devel \
-                    python3-pip \
+                    python3 \
+                    python3.8 \
                     which \
-                    libtool
+                    libtool \
+                    diffutils
 
 ENV CROSS_NAME x86_64-w64-mingw32
 
@@ -75,5 +79,13 @@ RUN rustup target add x86_64-pc-windows-gnu && \
 
 RUN ln -s /usr/bin/python3 /usr/bin/python
 
-WORKDIR /work
+RUN curl -L https://github.com/mmicko/fedora-ada/releases/download/v1/mingw64-gcc-10.2.1-2.fc33.x86_64.rpm --output /tmp/mingw64-gcc-10.2.1-2.fc33.x86_64.rpm && \
+    curl -L https://github.com/mmicko/fedora-ada/releases/download/v1/mingw64-gcc-gnat-10.2.1-2.fc33.x86_64.rpm --output /tmp/mingw64-gcc-gnat-10.2.1-2.fc33.x86_64.rpm && \
+    dnf reinstall -y /tmp/mingw64-gcc-10.2.1-2.fc33.x86_64.rpm && \
+    dnf localinstall -y /tmp/mingw64-gcc-gnat-10.2.1-2.fc33.x86_64.rpm && \ 
+    rm -rf /tmp/*.rpm && \
+    cp /usr/x86_64-w64-mingw32/sys-root/mingw/lib/libLLVM* /usr/x86_64-w64-mingw32/lib/. && \
+    touch /usr/x86_64-w64-mingw32/sys-root/mingw/lib/librt.a && \
+    python3.8 -m ensurepip
 
+WORKDIR /work
