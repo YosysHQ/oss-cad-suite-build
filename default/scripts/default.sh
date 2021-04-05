@@ -47,6 +47,11 @@ EOT
 export VERILATOR_ROOT="\$release_topdir_abs/share/verilator"
 EOT
         fi
+        if [ ! -z "$(basename $binfile | grep ghdl)" ]; then
+            cat >> $binfile << EOT
+export GHDL_PREFIX="\$release_topdir_abs/lib/ghdl"
+EOT
+        fi
         if [ ! -z "$(lddtree -l libexec/$(basename $binfile) | grep python)" ]; then
             cat >> $binfile << EOT
 export PYTHONHOME="\$release_topdir_abs"
@@ -208,6 +213,11 @@ EOT
         if [ ! -z "$(basename $binfile | grep verilator)" ]; then
             cat >> $binfile << EOT
 export VERILATOR_ROOT="\$release_topdir_abs/share/verilator"
+EOT
+        fi
+        if [ ! -z "$(basename $binfile | grep ghdl)" ]; then
+            cat >> $binfile << EOT
+export GHDL_PREFIX="\$release_topdir_abs/lib/ghdl"
 EOT
         fi
         if [ ! -z "$(otool -L libexec/$(basename $binfile) | grep python)" ]; then

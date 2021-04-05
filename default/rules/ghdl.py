@@ -10,6 +10,5 @@ SourceLocation(
 Target(
 	name = 'ghdl',
 	sources = [ 'ghdl' ],
-	arch = [ 'linux-x64', 'darwin-x64' ],
 	license_file = 'ghdl/COPYING.md',
 )
