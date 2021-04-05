@@ -21,7 +21,7 @@ Target(
         'mcy',
         'sby',
         'sby-gui',
-        'ghdl',
+        #'ghdl',
         'gtkwave',
         'verilator',
         'iverilog',
