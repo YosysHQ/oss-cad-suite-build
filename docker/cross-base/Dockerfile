@@ -25,7 +25,8 @@ RUN set -e -x ;\
         qt5-qmake \
         qtbase5-dev-tools \
         libz-dev \
-        libreadline-dev; \        
+        libreadline-dev \
+        llvm; \        
     apt -y autoremove ;\
     rm -rf /var/lib/apt/lists/*
 

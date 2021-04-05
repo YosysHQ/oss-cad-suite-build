@@ -10,6 +10,7 @@ RUN set -e -x ;\
     apt -y install \
         gcc-riscv64-linux-gnu \
         g++-riscv64-linux-gnu \
+        gnat-9-riscv64-linux-gnu \
         libc6-dev-riscv64-cross; \
     echo 'deb [arch=amd64] http://archive.ubuntu.com/ubuntu/ focal main multiverse restricted universe' > /etc/apt/sources.list ; \
     echo 'deb [arch=riscv64] http://ports.ubuntu.com/ubuntu-ports/ focal main multiverse restricted universe' >> /etc/apt/sources.list ; \
@@ -39,7 +40,8 @@ RUN set -e -x ;\
         tk-dev:riscv64 \
         qtbase5-dev:riscv64 \
         libbison-dev:riscv64 \
-        libhidapi-dev:riscv64; \
+        libhidapi-dev:riscv64 \
+        libllvm10:riscv64; \
     apt -y autoremove ;\
     rm -rf /var/lib/apt/lists/*
 

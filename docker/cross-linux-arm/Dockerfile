@@ -10,6 +10,7 @@ RUN set -e -x ;\
     apt -y install \
         gcc-arm-linux-gnueabihf \
         g++-arm-linux-gnueabihf \
+        gnat-9-arm-linux-gnueabihf \
         libc6-dev-armhf-cross; \
     echo 'deb [arch=amd64] http://archive.ubuntu.com/ubuntu/ focal main multiverse restricted universe' > /etc/apt/sources.list ; \
     echo 'deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ focal main multiverse restricted universe' >> /etc/apt/sources.list ; \
@@ -39,7 +40,8 @@ RUN set -e -x ;\
         tk-dev:armhf \
         qtbase5-dev:armhf \
         libbison-dev:armhf \
-        libhidapi-dev:armhf; \
+        libhidapi-dev:armhf \
+        libllvm10:armhf; \
     apt -y autoremove ;\
     rm -rf /var/lib/apt/lists/*
 

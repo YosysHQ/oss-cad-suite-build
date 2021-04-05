@@ -10,6 +10,7 @@ RUN set -e -x ;\
     apt -y install \
         gcc-aarch64-linux-gnu \
         g++-aarch64-linux-gnu \
+        gnat-9-aarch64-linux-gnu \
         libc6-dev-arm64-cross; \
     echo 'deb [arch=amd64] http://archive.ubuntu.com/ubuntu/ focal main multiverse restricted universe' > /etc/apt/sources.list ; \
     echo 'deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ focal main multiverse restricted universe' >> /etc/apt/sources.list ; \
@@ -39,7 +40,8 @@ RUN set -e -x ;\
         tk-dev:arm64 \
         qtbase5-dev:arm64 \
         libbison-dev:arm64 \
-        libhidapi-dev:arm64; \
+        libhidapi-dev:arm64 \
+        libllvm10:arm64; \
     apt -y autoremove ;\
     rm -rf /var/lib/apt/lists/*
 
