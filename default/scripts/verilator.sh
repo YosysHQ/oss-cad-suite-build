@@ -5,6 +5,7 @@ fi
 cd verilator
 if [ ${ARCH_BASE} == 'windows' ]; then
     patch -p1 < ${PATCHES_DIR}/verilator.diff
+    export LDFLAGS=-lssp
 fi
 autoconf
 ./configure --prefix=${INSTALL_PREFIX} --host=${CROSS_NAME}
