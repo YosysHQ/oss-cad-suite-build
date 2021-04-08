@@ -1,24 +1,7 @@
 from src.base import Target
 
 Target(
-	name = 'tcltk-resources',
+	name = 'system-resources',
 	sources = [ ],
-)
-
-Target(
-	name = 'gtk-resources',
-	sources = [ ],
-	resources = [ 'font-resources' ],
-)
-
-Target(
-	name = 'qt5-resources',
-	sources = [ ],
-	resources = [ 'font-resources' ],
-)
-
-Target(
-	name = 'font-resources',
-	sources = [ ],
-	patches = [ 'setup.sh', 'fonts.conf.template' ],
+	patches = [ 'setup.sh', 'fonts.conf.template', 'win-launcher.c', 'environment' ],
 )

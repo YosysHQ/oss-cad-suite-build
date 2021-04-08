@@ -10,7 +10,7 @@ SourceLocation(
 Target(
 	name = 'mcy',
 	sources = [ 'mcy' ],
-	resources = [ 'flask', 'qt5-resources' ],
+	resources = [ 'flask' ],
 	license_file = 'mcy/COPYING',
 )
 

@@ -32,5 +32,6 @@ Target(
         'openocd',
         'icesprog',
     ],
-    patches = [ 'win-launcher.c', 'environment' ],
+    patches = [ 'win-launcher.c' ],
+    resources = [ 'system-resources' ],
 )

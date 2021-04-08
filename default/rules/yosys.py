@@ -17,7 +17,7 @@ Target(
 Target(
 	name = 'xdot',
 	dependencies = [ 'python3' ],
-	resources = [ 'python3', 'gtk-resources' ],
+	resources = [ 'python3' ],
 	patches = [ 'python3_package.sh' ],
 	arch = [ 'linux-x64', 'darwin-x64' ],
 	sources = [ ],

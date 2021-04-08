@@ -24,6 +24,5 @@ SourceLocation(
 Target(
 	name = 'sby-gui',
 	sources = [ 'sby-gui' ],
-	resources = [ 'qt5-resources' ],
 	license_file = 'sby-gui/COPYING',
 )
