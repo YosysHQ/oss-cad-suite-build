@@ -48,7 +48,7 @@ release_topdir_abs="$(realpath "$release_current_dir")"
 export VIRTUAL_ENV='FPGA'
 
 _OLD_ENVIRONMENT_PATH="$PATH"
-PATH="$release_topdir_abs/bin:$release_topdir_abs/py3bin:$PATH"
+PATH="$release_topdir_abs/bin:$release_topdir_abs/packages/python3/py3bin:$PATH"
 export PATH
 
 # unset PYTHONHOME if set
@@ -65,7 +65,7 @@ else
 fi
 export PS1
 
-export VERILATOR_ROOT="$release_topdir_abs/share/verilator"
+export VERILATOR_ROOT="$release_topdir_abs/packages/verilator/share/verilator"
 
 # This should detect bash and zsh, which have a hash command that must
 # be called to get it to forget past commands.  Without forgetting
