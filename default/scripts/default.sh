@@ -1,9 +1,6 @@
 cd ${OUTPUT_DIR}${INSTALL_PREFIX}
-mkdir -p lib
-mkdir -p libexec
-
+mkdir -p bin
 rm -rf ${OUTPUT_DIR}/dev
-rm -rf ${OUTPUT_DIR}/include
 
 if [ ${ARCH_BASE} == 'linux' ]; then
 # Linux section
@@ -20,20 +17,28 @@ elif [ ${ARCH} == 'linux-riscv64' ]; then
     ldlinuxname="ld-linux-riscv64-lp64d.so.1"
     arch_prefix="riscv64-linux-gnu"
 fi
-cp ${PATCHES_DIR}/environment ${OUTPUT_DIR}${INSTALL_PREFIX}/.
+
+for package in $(file packages/* | grep directory | cut -f1 -d:); do
+pushd $package
+mkdir -p lib
+mkdir -p libexec
+
 for bindir in bin py2bin py3bin super_prove/bin share/verilator/bin; do
     for binfile in $(file $bindir/* | grep ELF | grep dynamically | cut -f1 -d:); do
-        rel_path=$(realpath --relative-to=$bindir .)
-        for lib in $(lddtree -l $binfile | tail -n +2 | grep ^/ ); do
-            cp -i "${lib}" lib/
-        done
+        rel_path=$(realpath --relative-to=$bindir ../..)
+        rel_path_pkg=$(realpath --relative-to=$bindir .)
+        #for lib in $(lddtree -l $binfile | tail -n +2 | grep ^/ ); do
+        #    cp -i "${lib}" lib/
+        #done
         mv $binfile libexec
         is_using_fonts=false
         cat > $binfile << EOT
 #!/usr/bin/env bash
-release_bindir="\$(dirname "\${BASH_SOURCE[0]}")"
+release_bindir="\$(dirname \$(readlink -f "\${BASH_SOURCE[0]}"))"
 release_bindir_abs="\$(readlink -f "\$release_bindir")"
 release_topdir_abs="\$(readlink -f "\$release_bindir/$rel_path")"
+release_pkgdir_abs="\$(readlink -f "\$release_bindir/$rel_path_pkg")"
+pkg_add=""
 export PATH="\$release_bindir_abs:\$PATH"
 EOT
 
@@ -44,7 +49,7 @@ EOT
         fi
         if [ ! -z "$(basename $binfile | grep verilator)" ]; then
             cat >> $binfile << EOT
-export VERILATOR_ROOT="\$release_topdir_abs/share/verilator"
+export VERILATOR_ROOT="\$release_topdir_abs/packages/verilator/share/verilator"
 EOT
         fi
         if [ ! -z "$(basename $binfile | grep ghdl)" ]; then
@@ -54,7 +59,8 @@ EOT
         fi
         if [ ! -z "$(lddtree -l libexec/$(basename $binfile) | grep python)" ]; then
             cat >> $binfile << EOT
-export PYTHONHOME="\$release_topdir_abs"
+export PYTHONHOME="\$release_topdir_abs"/packages/python3
+pkg_add="\$release_topdir_abs"/packages/python3/lib:
 export PYTHONNOUSERSITE=1
 EOT
         fi
@@ -100,33 +106,37 @@ EOT
         if $is_using_fonts; then
             cat >> $binfile << EOT
 if [ -f "\$FONTCONFIG_FILE" ]; then
-    exec "\$release_topdir_abs"/lib/$ldlinuxname --inhibit-cache --inhibit-rpath "" --library-path "\$release_topdir_abs"/lib "\$release_topdir_abs"/libexec/$(basename $binfile) "\$@"
+    exec "\$release_topdir_abs"/lib/$ldlinuxname --inhibit-cache --inhibit-rpath "" --library-path "\$release_pkgdir_abs"/lib:\$pkg_add"\$release_topdir_abs"/lib "\$release_pkgdir_abs"/libexec/$(basename $binfile) "\$@"
 else
     echo "Execute \$release_topdir_abs/setup.sh script to do initial setup of YosysHQ configuration files."
 fi
 EOT
         else
             cat >> $binfile << EOT
-exec "\$release_topdir_abs"/lib/$ldlinuxname --inhibit-cache --inhibit-rpath "" --library-path "\$release_topdir_abs"/lib "\$release_topdir_abs"/libexec/$(basename $binfile) "\$@"
+exec "\$release_topdir_abs"/lib/$ldlinuxname --inhibit-cache --inhibit-rpath "" --library-path "\$release_pkgdir_abs"/lib:\$pkg_add"\$release_topdir_abs"/lib "\$release_pkgdir_abs"/libexec/$(basename $binfile) "\$@"
 EOT
         fi
         chmod +x $binfile
     done
 done
 
+
 if [ -f "py3bin/python3" ]; then
+    mkdir -p bin
     cp py3bin/python3 bin/packaged_py3
 fi
 
 for script in bin/* py3bin/*; do
-    rel_path=$(realpath --relative-to=bin .)
+    rel_path=$(realpath --relative-to=bin ../..)
+    rel_path_pkg=$(realpath --relative-to=bin .)
     if $(head -1 "${script}" | grep -q python3); then
         mv "${script}" libexec
         cat > "${script}" <<EOT
 #!/usr/bin/env bash
-release_bindir="\$(dirname "\${BASH_SOURCE[0]}")"
-release_bindir_abs="\$(readlink -f "\$release_bindir/../bin")"
+release_bindir="\$(dirname \$(readlink -f "\${BASH_SOURCE[0]}"))"
 release_topdir_abs="\$(readlink -f "\$release_bindir/$rel_path")"
+release_bindir_abs="\$(readlink -f "\$release_topdir_abs/bin")"
+release_pkgdir_abs="\$(readlink -f "\$release_bindir/$rel_path_pkg")"
 export PATH="\$release_bindir_abs:\$PATH"
 export PYTHONEXECUTABLE="\$release_bindir_abs/packaged_py3"
 EOT
@@ -158,32 +168,42 @@ EOT
         if $is_using_fonts; then
             cat >> "${script}" <<EOT
 if [ -f "\$FONTCONFIG_FILE" ]; then
-    exec \$release_bindir_abs/packaged_py3 "\$release_topdir_abs"/libexec/$(basename $script) "\$@"
+    exec \$release_bindir_abs/packaged_py3 "\$release_pkgdir_abs"/libexec/$(basename $script) "\$@"
 else
     echo "Execute \$release_topdir_abs/setup.sh script to do initial setup of YosysHQ configuration files."
 fi
 EOT
         else
             cat >> "${script}" <<EOT
-exec \$release_bindir_abs/packaged_py3 "\$release_topdir_abs"/libexec/$(basename $script) "\$@"
+exec \$release_bindir_abs/packaged_py3 "\$release_pkgdir_abs"/libexec/$(basename $script) "\$@"
 EOT
         fi
         chmod +x "${script}"
     fi
 done
 
+popd
+done #packages
 
-for lib in /lib/$arch_prefix/libnss_dns.so.2 /lib/$arch_prefix/libnss_files.so.2 /lib/$arch_prefix/libnss_compat.so.2 /lib/$arch_prefix/libresolv.so.2 \
-        /lib/$arch_prefix/libnss_nis.so.2 /lib/$arch_prefix/libnss_nisplus.so.2 /lib/$arch_prefix/libnss_hesiod.so.2 /lib/$arch_prefix/libnsl.so.1; do
-    cp "${lib}" lib/
-done
-
-for libdir in lib; do
-    for libfile in $(find $libdir -type f | xargs file | grep ELF | grep dynamically | cut -f1 -d:); do
-        for lib in $(lddtree -l $libfile | tail -n +2 | grep ^/ ); do
-            cp -i "${lib}" lib/
+mkdir -p license
+mkdir -p examples
+for package in $(file packages/* | grep directory | cut -f1 -d:); do
+    if [ -d $package/bin ]; then
+        for binfile in $(file $package/bin/* | cut -f1 -d:); do
+            ln -sf ../$binfile bin/$(basename $binfile)
+            chmod +x bin/$(basename $binfile)
         done
-    done
+    fi
+    if [ -d $package/license ]; then
+        for lfile in $(file $package/license/* | cut -f1 -d:); do
+            ln -sf ../$lfile license/$(basename $lfile)
+        done
+    fi
+    if [ -d $package/examples ]; then
+        for lfile in $(file $package/examples/* | cut -f1 -d:); do
+            ln -sf ../$lfile examples/$(basename $lfile)
+        done
+    fi
 done
 # end of Linux section
 elif [ ${ARCH_BASE} == 'darwin' ]; then
