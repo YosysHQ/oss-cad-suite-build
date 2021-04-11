@@ -1,7 +1,7 @@
 function python3_package_setup {
-    export _PYTHON_PROJECT_BASE=${BUILD_DIR}/python3${INSTALL_PREFIX}
-    export PYTHONHOME=${BUILD_DIR}/python3${INSTALL_PREFIX}
-    export PYTHONPATH=${OUTPUT_DIR}${INSTALL_PREFIX}/lib/python3.8/site-packages:${BUILD_DIR}/python3${INSTALL_PREFIX}/lib/python3.8:${BUILD_DIR}/python3${INSTALL_PREFIX}/lib/python3.8/site-packages
+    export _PYTHON_PROJECT_BASE=${BUILD_DIR}/python3/packages/python3
+    export PYTHONHOME=${BUILD_DIR}/python3/packages/python3
+    export PYTHONPATH=${OUTPUT_DIR}${INSTALL_PREFIX}/lib/python3.8/site-packages:${BUILD_DIR}/python3/packages/python3/lib/python3.8:${BUILD_DIR}/python3/packages/python3/lib/python3.8/site-packages
 
     if [ ${ARCH} == 'linux-arm' ]; then
         cp /usr/lib/python3.8/lib-dynload/* ${PYTHONHOME}/lib/python3.8/lib-dynload/.
@@ -14,7 +14,7 @@ function python3_package_setup {
         export PYTHONPATH=${PYTHONPATH}:/usr/lib/python3.9/site-packages
         export HOME=/tmp
         cp /usr/lib64/python3.8/lib-dynload/* ${PYTHONHOME}/lib/python3.8/lib-dynload/.
-        cp -r ${BUILD_DIR}/python3${INSTALL_PREFIX}/lib ${BUILD_DIR}/python3${INSTALL_PREFIX}/lib64
+        cp -r ${BUILD_DIR}/python3/packages/python3/lib ${BUILD_DIR}/python3/packages/python3/lib64
     fi
 }
 

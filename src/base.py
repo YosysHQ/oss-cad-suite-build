@@ -445,7 +445,7 @@ def buildCode(target, build_arch, nproc, no_clean, force, dry):
 
 
 		prefix = "/packages/" + target.name
-		if target.name == "system-resources":
+		if (target.name == "system-resources") or (target.name == "default"):
 			prefix = "/"
 		code = executeBuild(target, arch, prefix, build_dir if not target.package else output_dir, output_dir, native, nproc)
 		if code!=0:
