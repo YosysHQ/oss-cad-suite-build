@@ -276,7 +276,7 @@ async def run_process(command, cwd, env):
 def run_live(command, cwd=None, env=None):
 	return asyncio.get_event_loop().run_until_complete(run_process(command, cwd, env))
 
-def calculateHash(target, prefix, arch, build_order):
+def calculateHash(target, arch, build_order):
 	data = []
 	for s in sorted(target.sources):
 		data.append(sources[s].hash)
@@ -296,7 +296,6 @@ def calculateHash(target, prefix, arch, build_order):
 	for p in sorted(target.patches):
 		data.append(hashlib.sha256(open(os.path.join(target.group, PATCHES_ROOT, p), 'rb').read()).hexdigest())
 	data.append(hashlib.sha256(open(os.path.join(target.group, SCRIPTS_ROOT, target.name + ".sh"), 'r').read().encode()).hexdigest())
-	data.append(prefix)
 	return hashlib.sha256('\n'.join(data).encode()).hexdigest()
 
 def executeBuild(target, arch, prefix, build_dir, output_dir, native, nproc):
@@ -360,7 +359,7 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, native, nproc):
 		code = run_live(params, cwd=build_dir)
 	return code
 
-def buildCode(target, build_arch, nproc, no_clean, force, prefix, dry):
+def buildCode(target, build_arch, nproc, no_clean, force, dry):
 	if build_arch != getArchitecture() and build_arch in native_only_architectures:
 		log_error("Build for {} architecture can only be built natively.".format(build_arch))
 	native = False
@@ -375,7 +374,7 @@ def buildCode(target, build_arch, nproc, no_clean, force, prefix, dry):
 		pos += 1
 		arch = t[0]
 		target = targets[t[1]]
-		target.hash = calculateHash(target, prefix, arch, build_order)
+		target.hash = calculateHash(target, arch, build_order)
 		build_info = ""
 		if (build_arch != arch):
 			build_info = " [" + arch + "]"
@@ -445,6 +444,9 @@ def buildCode(target, build_arch, nproc, no_clean, force, prefix, dry):
 						run(['rsync','-a', dep_dir+"/", output_dir])
 
 
+		prefix = "/packages/" + target.name
+		if target.name == "system-resources":
+			prefix = "/"
 		code = executeBuild(target, arch, prefix, build_dir if not target.package else output_dir, output_dir, native, nproc)
 		if code!=0:
 			log_error("Script returned error code {}.".format(code))
