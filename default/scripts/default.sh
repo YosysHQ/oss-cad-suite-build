@@ -163,12 +163,16 @@ export TCL_LIBRARY="\$release_topdir_abs/lib/tcl8.6"
 export TK_LIBRARY="\$release_topdir_abs/lib/tk8.6"
 export FONTCONFIG_FILE="\$release_topdir_abs/etc/fonts/fonts.conf"
 export FONTCONFIG_PATH="\$release_topdir_abs/etc/fonts"
+export PYTHONPATH="\$release_topdir_abs"/packages/xdot/lib/python3.8/site-packages
+export PYTHONHOME="\$release_topdir_abs"/packages/python3
+pkg_add="\$release_topdir_abs"/packages/python3/lib:"\$release_pkgdir_abs"/lib:
+export PYTHONNOUSERSITE=1
 EOT
         fi
         if $is_using_fonts; then
             cat >> "${script}" <<EOT
 if [ -f "\$FONTCONFIG_FILE" ]; then
-    exec \$release_bindir_abs/packaged_py3 "\$release_pkgdir_abs"/libexec/$(basename $script) "\$@"
+    exec "\$release_topdir_abs"/lib/ld-linux-x86-64.so.2 --inhibit-cache --inhibit-rpath "" --library-path "\$release_pkgdir_abs"/lib:\$pkg_add"\$release_topdir_abs"/lib "\$release_topdir_abs"/packages/python3/libexec/python3.8 "\$release_pkgdir_abs"/libexec/$(basename $script) "\$@"
 else
     echo "Execute \$release_topdir_abs/setup.sh script to do initial setup of YosysHQ configuration files."
 fi
@@ -203,6 +207,14 @@ for package in $(file packages/* | grep directory | cut -f1 -d:); do
         for lfile in $(file $package/examples/* | cut -f1 -d:); do
             ln -sf ../$lfile examples/$(basename $lfile)
         done
+    fi
+    if [ $package != 'packages/python3' ]; then
+        if [ -d $package/lib/python3.8/site-packages ]; then
+            for lfile in $(file $package/lib/python3.8/site-packages/*.pth | cut -f1 -d:); do
+                cp $lfile packages/python3/lib/python3.8/site-packages/.
+                sed -i 's,./,../../../../../'$package'/lib/python3.8/site-packages/,g' packages/python3/lib/python3.8/site-packages/$(basename $lfile)
+            done
+        fi
     fi
 done
 # end of Linux section
