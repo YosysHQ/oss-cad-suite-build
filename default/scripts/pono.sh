@@ -1,6 +1,6 @@
 mkdir -p pono/deps/smt-switch/local
 mkdir -p pono/deps/btor2tools/build/lib
-cp -R ${BUILD_DIR}/smt-switch${INSTALL_PREFIX}/* pono/deps/smt-switch/local/.
+cp -R ${BUILD_DIR}/smt-switch/packages/smt-switch/* pono/deps/smt-switch/local/.
 cp -R ${BUILD_DIR}/boolector/dev/deps/btor2tools/src pono/deps/btor2tools/.
 cp -R pono/deps/smt-switch/local/cmake pono/deps/smt-switch/.
 cp boolector/dev/deps/btor2tools/build/libbtor2parser.a pono/deps/btor2tools/build/lib/.
