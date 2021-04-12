@@ -452,13 +452,6 @@ def buildCode(target, build_arch, nproc, no_clean, force, dry):
 		if code!=0:
 			log_error("Script returned error code {}.".format(code))
 
-		if (getBuildOS()=='windows'):
-			msys_dir = os.path.join(output_dir, "msys64")
-			if os.path.exists(msys_dir):
-				log_step("MSYS2 directory fix ...")
-				run(['rsync','-a', msys_dir+"/", output_dir])
-				shutil.rmtree(msys_dir, onerror=removeError)
-
 		if target.license_file is not None or target.license_url is not None:
 			log_step("Generating license file ...")
 			license_dir = os.path.join(output_dir + prefix, "license")
