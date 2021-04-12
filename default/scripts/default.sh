@@ -34,10 +34,10 @@ for bindir in bin py2bin py3bin super_prove/bin share/verilator/bin; do
         is_using_fonts=false
         cat > $binfile << EOT
 #!/usr/bin/env bash
-release_bindir="\$(dirname \$(readlink -f "\${BASH_SOURCE[0]}"))"
-release_bindir_abs="\$(readlink -f "\$release_bindir")"
-release_topdir_abs="\$(readlink -f "\$release_bindir/$rel_path")"
-release_pkgdir_abs="\$(readlink -f "\$release_bindir/$rel_path_pkg")"
+release_exedir="\$(dirname \$(readlink -f "\${BASH_SOURCE[0]}"))"
+release_bindir_abs="\$(readlink -f "\$release_exedir")"
+release_topdir_abs="\$(readlink -f "\$release_exedir/$rel_path")"
+release_pkgdir_abs="\$(readlink -f "\$release_exedir/$rel_path_pkg")"
 pkg_add=""
 export PATH="\$release_bindir_abs:\$PATH"
 EOT
@@ -133,10 +133,10 @@ for script in bin/* py3bin/*; do
         mv "${script}" libexec
         cat > "${script}" <<EOT
 #!/usr/bin/env bash
-release_bindir="\$(dirname \$(readlink -f "\${BASH_SOURCE[0]}"))"
-release_topdir_abs="\$(readlink -f "\$release_bindir/$rel_path")"
-release_bindir_abs="\$(readlink -f "\$release_topdir_abs/bin")"
-release_pkgdir_abs="\$(readlink -f "\$release_bindir/$rel_path_pkg")"
+release_exedir="\$(dirname \$(readlink -f "\${BASH_SOURCE[0]}"))"
+release_topdir_abs="\$(readlink -f "\$release_exedir/$rel_path")"
+release_bindir_abs="\$release_topdir_abs/bin"
+release_pkgdir_abs="\$(readlink -f "\$release_exedir/$rel_path_pkg")"
 export PATH="\$release_bindir_abs:\$PATH"
 export PYTHONEXECUTABLE="\$release_bindir_abs/packaged_py3"
 EOT
@@ -224,17 +224,24 @@ cp /usr/local/bin/realpath libexec/.
 
 export DYLD_LIBRARY_PATH=/usr/local/opt/icu4c/lib:$DYLD_LIBRARY_PATH
 
+for package in $(file packages/* | grep directory | cut -f1 -d:); do
+pushd $package
+mkdir -p lib
+mkdir -p libexec
+
 for bindir in bin py3bin super_prove/bin share/verilator/bin; do
     for binfile in $(file -h $bindir/* | grep Mach-O | grep executable | cut -f1 -d:); do
-        rel_path=$(realpath --relative-to=$bindir .)
+        rel_path=$(realpath --relative-to=$bindir ../..)
+        rel_path_pkg=$(realpath --relative-to=$bindir .)
         dylibbundler -of -b -x $binfile -p @executable_path/../lib -d lib
         mv $binfile libexec
         is_using_fonts=false
         cat > $binfile << EOT
 #!/usr/bin/env bash
-release_bindir="\$(dirname "\${BASH_SOURCE[0]}")"
-release_bindir_abs="\$("\$release_bindir"/../libexec/realpath "\$release_bindir")"
-release_topdir_abs="\$("\$release_bindir"/../libexec/realpath "\$release_bindir/$rel_path")"
+release_exedir="\$(dirname \$(pwd)/\$(readlink "\${BASH_SOURCE[0]}"))"
+release_topdir_abs="\$("\$release_exedir"/$rel_path/libexec/realpath "\$release_exedir/$rel_path")"
+release_bindir_abs="\$release_topdir_abs/bin"
+release_pkgdir_abs="\$("\$release_exedir"/$rel_path/libexec/realpath "\$release_exedir/$rel_path_pkg")"
 export PATH="\$release_bindir_abs:\$PATH"
 EOT
         if [ $bindir == 'py3bin' ]; then
@@ -244,7 +251,7 @@ EOT
         fi
         if [ ! -z "$(basename $binfile | grep verilator)" ]; then
             cat >> $binfile << EOT
-export VERILATOR_ROOT="\$release_topdir_abs/share/verilator"
+export VERILATOR_ROOT="\$release_topdir_abs/packages/verilator/share/verilator"
 EOT
         fi
         if [ ! -z "$(basename $binfile | grep ghdl)" ]; then
@@ -254,7 +261,7 @@ EOT
         fi
         if [ ! -z "$(otool -L libexec/$(basename $binfile) | grep python)" ]; then
             cat >> $binfile << EOT
-export PYTHONHOME="\$release_topdir_abs"
+export PYTHONHOME="\$release_topdir_abs"/packages/python3
 export PYTHONNOUSERSITE=1
 EOT
         fi
@@ -283,25 +290,28 @@ EOT
         fi
 
         cat >> $binfile << EOT
-exec "\$release_topdir_abs"/libexec/$(basename $binfile) "\$@"
+exec "\$release_pkgdir_abs"/libexec/$(basename $binfile) "\$@"
 EOT
         chmod +x $binfile
     done
 done
 
 if [ -f "py3bin/python3" ]; then
+    mkdir -p bin
     cp py3bin/python3 bin/packaged_py3
 fi
 
 for script in bin/* py3bin/*; do
-    rel_path=$(realpath --relative-to=bin .)
+    rel_path=$(realpath --relative-to=bin ../..)
+    rel_path_pkg=$(realpath --relative-to=bin .)
     if $(head -1 "${script}" | grep -q python3); then
         mv "${script}" libexec
         cat > "${script}" <<EOT
 #!/usr/bin/env bash
-release_bindir="\$(dirname "\${BASH_SOURCE[0]}")"
-release_bindir_abs="\$("\$release_bindir"/../libexec/realpath "\$release_bindir/../bin")"
-release_topdir_abs="\$("\$release_bindir"/../libexec/realpath "\$release_bindir/$rel_path")"
+release_exedir="\$(dirname \$(pwd)/\$(readlink "\${BASH_SOURCE[0]}"))"
+release_topdir_abs="\$("\$release_exedir"/$rel_path/libexec/realpath "\$release_exedir/$rel_path")"
+release_bindir_abs="\$release_topdir_abs/bin"
+release_pkgdir_abs="\$("\$release_exedir"/$rel_path/libexec/realpath "\$release_exedir/$rel_path_pkg")"
 export PATH="\$release_bindir_abs:\$PATH"
 export PYTHONEXECUTABLE="\$release_bindir_abs/packaged_py3"
 EOT
@@ -318,16 +328,48 @@ export GTK2_RC_FILES="\$release_topdir_abs/lib/gtk-2.0/gtkrc"
 EOT
         fi
         cat >> "${script}" <<EOT
-exec \$release_bindir_abs/packaged_py3 "\$release_topdir_abs"/libexec/$(basename $script) "\$@"
+exec \$release_bindir_abs/packaged_py3 "\$release_pkgdir_abs"/libexec/$(basename $script) "\$@"
 EOT
         chmod +x "${script}"
     fi
 done
 
-for binfile in $(find -x lib | xargs file | grep Mach-O | grep bundle | cut -f1 -d:); do
-    echo $binfile
-    dylibbundler -of -b -x $binfile -p @executable_path/../lib -d ${OUTPUT_DIR}${INSTALL_PREFIX}/lib
+popd
 done
+
+mkdir -p license
+mkdir -p examples
+for package in $(file packages/* | grep directory | cut -f1 -d:); do
+    if [ -d $package/bin ]; then
+        for binfile in $(file $package/bin/* | cut -f1 -d:); do
+            ln -sf ../$binfile bin/$(basename $binfile)
+            chmod +x bin/$(basename $binfile)
+        done
+    fi
+    if [ -d $package/license ]; then
+        for lfile in $(file $package/license/* | cut -f1 -d:); do
+            ln -sf ../$lfile license/$(basename $lfile)
+        done
+    fi
+    if [ -d $package/examples ]; then
+        for lfile in $(file $package/examples/* | cut -f1 -d:); do
+            ln -sf ../$lfile examples/$(basename $lfile)
+        done
+    fi
+    if [ $package != 'packages/python3' ]; then
+        if [ -d $package/lib/python3.8/site-packages ]; then
+            for lfile in $(file $package/lib/python3.8/site-packages/*.pth | cut -f1 -d:); do
+                cp $lfile packages/python3/lib/python3.8/site-packages/.
+                sed -i 's,./,../../../../../'$package'/lib/python3.8/site-packages/,g' packages/python3/lib/python3.8/site-packages/$(basename $lfile)
+            done
+        fi
+    fi
+done
+
+#for binfile in $(find -x lib | xargs file | grep Mach-O | grep bundle | cut -f1 -d:); do
+#    echo $binfile
+#    dylibbundler -of -b -x $binfile -p @executable_path/../lib -d ${OUTPUT_DIR}${INSTALL_PREFIX}/lib
+#done
 
 # end of Darwin/macOS section
 elif [ ${ARCH_BASE} == 'windows' ]; then
