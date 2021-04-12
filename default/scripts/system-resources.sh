@@ -60,6 +60,10 @@ if [ ${ARCH_BASE} == 'linux' ]; then
 fi
 
 if [ ${ARCH_BASE} == 'darwin' ]; then
+    cp ${PATCHES_DIR}/environment ${OUTPUT_DIR}${INSTALL_PREFIX}/.
+
+    cp -rv $(brew --prefix qt5)/plugins/* ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/qt5/plugins/.
+
     mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/lib
     cp -r $(brew --prefix tcl-tk)/lib/tcl8.6/. ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/tcl8.6
     cp -r $(brew --prefix tcl-tk)/lib/tk8.6/. ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/tk8.6
@@ -73,6 +77,15 @@ if [ ${ARCH_BASE} == 'darwin' ]; then
     chmod 644 ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/gtk-2.0/loaders/*
     dylibbundler -of -b -x ${OUTPUT_DIR}${INSTALL_PREFIX}/libexec/gdk-pixbuf-query-loaders -p @executable_path/../lib -d ${OUTPUT_DIR}${INSTALL_PREFIX}/lib
 
+    pkgs="assimp atk boost cairo confuse dbus double-conversion flex fontconfig freetype fribidi gd gdbm gdk-pixbuf \
+         gettext glib gmp gobject-introspection graphite2  gtk gtk+3 gtk-mac-integration gts harfbuzz  hidapi \
+         icu4c jasper jpeg libb2 libepoxy libffi libftdi libgd libidn2 libjpeg libmagic libmpdec libpng libproxy \
+         librsvg libssh2  libtiff  libtool  libunistring libusb libx11 libxau libxcb  libxdmcp libxext libxrender \
+         lzo mpdecimal netpbm openssl pango pcre pixman pzstd readline slang sqlite3 tcl-tk  webp xz zlib zstd"
+    
+    for pkg in $pkgs; do
+        cp -af /usr/local/opt/$pkg/lib/*.dylib  ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/.
+    done
 fi
 if [ ${ARCH_BASE} == 'windows' ]; then
     mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/lib
