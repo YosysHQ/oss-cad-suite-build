@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import click, signal, os, sys, shutil
-from src.base import loadRules, validateRules, pullCode, buildCode, validateTarget, validateArch, cleanBuild, getArchitecture
+from src.base import loadRules, loadSystem, validateRules, pullCode, buildCode, validateTarget, validateArch, cleanBuild, getArchitecture
 
 def force_shutdown(signum, frame):
 	if (os.name != 'nt' and signum != signal.SIGPIPE):
@@ -32,6 +32,7 @@ def build(no_update, no_clean, force, target, arch, rules, dry, nproc):
 	validateRules()
 	validateTarget(target)
 	validateArch(arch)
+	loadSystem(arch)
 	pullCode(target, arch, getArchitecture(), no_update)
 	buildCode(target, arch, nproc, no_clean, force, dry)
 

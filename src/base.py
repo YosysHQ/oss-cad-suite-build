@@ -14,6 +14,7 @@ from libvcs.util import run
 
 sources = dict()
 targets = dict()
+system = dict()
 architectures = [ 'linux-x64', 'darwin-x64', 'linux-arm', 'linux-arm64', 'linux-riscv64', 'windows-x64' ]
 native_only_architectures  = [ 'darwin-x64' ]
 SOURCES_ROOT = "_sources"
@@ -22,6 +23,7 @@ OUTPUTS_ROOT = "_outputs"
 SCRIPTS_ROOT = "scripts"
 PATCHES_ROOT = "patches"
 RULES_ROOT   = "rules"
+SYSTEM_ROOT = "system"
 current_rule_group = ""
 
 def log_warning(msg):
@@ -64,7 +66,7 @@ class SourceLocation:
 		sources[name] = self
 
 class Target:
-	def __init__(self, name, sources = [], dependencies = [], resources = [], patches = [], arch = [], license_url = None, license_file = None, package = False, build_native = False):
+	def __init__(self, name, sources = [], dependencies = [], resources = [], patches = [], arch = [], license_url = None, license_file = None, package = False, build_native = False, system = False):
 		self.name = name
 		self.sources = sources
 		self.dependencies = dependencies
@@ -79,11 +81,18 @@ class Target:
 		self.group = current_rule_group
 		self.arch = arch
 		self.build_native = build_native
+		self.system = system
 		if name in targets:
 			log_step_triple("Overriding ", name)
 		else:
 			log_step("Loading {} ...".format(name))
 		targets[name] = self
+
+class SystemFiles:
+	def __init__(self, name, files):
+		self.name = name
+		self.files = files
+		system[name] = self
 
 def getBuildOS():
 	system = platform.system().lower()
@@ -119,6 +128,20 @@ def loadRules(group):
 				spec.loader.exec_module(foo)
 			except Exception as e:
 				log_error(str(e))
+
+def loadSystem(arch):
+	system_dir = os.path.abspath(os.path.join(SYSTEM_ROOT, arch))
+	log_info_triple("Loading ", arch, " system image info ...")
+	if not os.path.exists(os.path.join(system_dir,"system.py")):
+		log_warning("System image info for {} does not exist.".format(arch))
+	else:
+		try:
+			spec = importlib.util.spec_from_file_location("system", os.path.abspath(os.path.join(SYSTEM_ROOT, arch, "system.py")))
+			foo = importlib.util.module_from_spec(spec)
+			spec.loader.exec_module(foo)
+		except Exception as e:
+			log_error(str(e))
+
 
 def validateRules():
 	log_info("Validate building rules ...")
@@ -486,6 +509,22 @@ def buildCode(target, build_arch, nproc, no_clean, force, dry):
 		with open(hash_file, 'w') as f:
 			f.write(target.hash)
 		target.built = True
+
+		if target.system:
+			log_step("Generating system file list ...")
+			system_dir = os.path.join(SYSTEM_ROOT, arch)
+			os.makedirs(system_dir, exist_ok=True)
+			system_file = os.path.join(system_dir, "system.py")
+			with open(system_file, 'w') as f:
+				f.write("from src.base import SystemFiles\n\n")
+				f.write("SystemFiles(\n")
+				f.write("	name = '" + arch+ "',\n")
+				f.write("	files = [\n")
+				for item in sorted(os.scandir(os.path.join(output_dir,"lib")), key=lambda f: f.name):
+					if item.is_file():
+						f.write("		'" +item.name + "',\n")
+				f.write("	],\n")
+				f.write(")\n")
 
 		if not no_clean and not target.package:
 			log_step("Remove build dir ...")
