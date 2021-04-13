@@ -505,11 +505,6 @@ def buildCode(target, build_arch, nproc, no_clean, force, dry):
 						f.write(lf.read())
 				f.write('\n' + '=' * 80 + '\n')
 
-		log_step("Marking build finished ...")
-		with open(hash_file, 'w') as f:
-			f.write(target.hash)
-		target.built = True
-
 		if target.system:
 			log_step("Generating system file list ...")
 			system_dir = os.path.join(SYSTEM_ROOT, arch)
@@ -525,6 +520,16 @@ def buildCode(target, build_arch, nproc, no_clean, force, dry):
 						f.write("		'" +item.name + "',\n")
 				f.write("	],\n")
 				f.write(")\n")
+		else:
+			log_step("Removing files contained in system package ...")
+			for item in os.scandir(os.path.join(output_dir + prefix, "lib")):
+				if item.is_file() and item.name in system[arch].files:
+					os.remove(item)
+
+		log_step("Marking build finished ...")
+		with open(hash_file, 'w') as f:
+			f.write(target.hash)
+		target.built = True
 
 		if not no_clean and not target.package:
 			log_step("Remove build dir ...")
