@@ -27,11 +27,11 @@ function python3_package_install {
     elif [ ${ARCH} == 'linux-riscv64' ]; then
         _PYTHON_HOST_PLATFORM=linux-riscv64 _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__linux_riscv64-linux-gnu python3.8 ${install_cmd}
     elif [ ${ARCH} == 'linux-x64' ]; then
-        ${PYTHONHOME}/py3bin/python3 ${install_cmd}
+        ${PYTHONHOME}/libexec/python3.8 ${install_cmd}
     elif [ ${ARCH} == 'windows-x64' ]; then
         _PYTHON_HOST_PLATFORM=mingw-x64 _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__win_ python3.8 ${install_cmd}
     elif [ ${ARCH} == 'darwin-x64' ]; then
-        DYLD_LIBRARY_PATH=${PYTHONHOME}/lib ${PYTHONHOME}/py3bin/python3 ${install_cmd}
+        DYLD_LIBRARY_PATH=${PYTHONHOME}/lib ${PYTHONHOME}/libexec/python3.8 ${install_cmd}
     fi
 }
 
@@ -44,11 +44,11 @@ function python3_package_develop {
     elif [ ${ARCH} == 'linux-riscv64' ]; then
         _PYTHON_HOST_PLATFORM=linux-riscv64 _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__linux_riscv64-linux-gnu python3.8 ${install_cmd}
     elif [ ${ARCH} == 'linux-x64' ]; then
-        ${PYTHONHOME}/py3bin/python3 ${install_cmd}
+        ${PYTHONHOME}/libexec/python3.8 ${install_cmd}
     elif [ ${ARCH} == 'windows-x64' ]; then
         _PYTHON_HOST_PLATFORM=mingw-x64 _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__win_ python3.8 ${install_cmd}
     elif [ ${ARCH} == 'darwin-x64' ]; then
-        DYLD_LIBRARY_PATH=${PYTHONHOME}/lib ${PYTHONHOME}/py3bin/python3 ${install_cmd}
+        DYLD_LIBRARY_PATH=${PYTHONHOME}/lib ${PYTHONHOME}/libexec/python3.8 ${install_cmd}
     fi
 }
 
@@ -61,11 +61,11 @@ function python3_package_pip_install {
     elif [ ${ARCH} == 'linux-riscv64' ]; then
         _PYTHON_HOST_PLATFORM=linux-riscv64 _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__linux_riscv64-linux-gnu python3.8 ${install_cmd}
     elif [ ${ARCH} == 'linux-x64' ]; then
-        ${PYTHONHOME}/py3bin/python3 ${install_cmd}
+        ${PYTHONHOME}/libexec/python3.8 ${install_cmd}
     elif [ ${ARCH} == 'windows-x64' ]; then
         _PYTHON_HOST_PLATFORM=mingw-x64 _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__win_ python3.8 ${install_cmd}
     elif [ ${ARCH} == 'darwin-x64' ]; then
-        DYLD_LIBRARY_PATH=${PYTHONHOME}/lib ${PYTHONHOME}/py3bin/python3 ${install_cmd}
+        DYLD_LIBRARY_PATH=${PYTHONHOME}/lib ${PYTHONHOME}/libexec/python3.8 ${install_cmd}
     fi
 }
 function python3_package_pth {
