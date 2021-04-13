@@ -67,7 +67,8 @@ class SourceLocation:
 
 class Target:
 	def __init__(self, name, sources = [], dependencies = [], resources = [], patches = [], arch = [], license_url = None, 
-				 license_file = None, top_package = False, build_native = False, system = False, params = { 'BIN_DIRS': 'bin', 'PY_DIRS': 'bin' }):
+				 license_file = None, top_package = False, build_native = False, system = False, params = { 'BIN_DIRS': 'bin', 'PY_DIRS': 'bin' },
+				 create_package = True):
 		self.name = name
 		self.sources = sources
 		self.dependencies = dependencies
@@ -320,6 +321,8 @@ def calculateHash(target, arch, build_order):
 				data.append(targets[d].hash)
 	for p in sorted(target.patches):
 		data.append(hashlib.sha256(open(os.path.join(target.group, PATCHES_ROOT, p), 'rb').read()).hexdigest())
+	if target.create_package:
+		data.append(hashlib.sha256(open(os.path.join(SYSTEM_ROOT, "package-" + arch.split('-')[0] + ".sh"), 'r').read().encode()).hexdigest())
 	data.append(hashlib.sha256(open(os.path.join(target.group, SCRIPTS_ROOT, target.name + ".sh"), 'r').read().encode()).hexdigest())
 	return hashlib.sha256('\n'.join(data).encode()).hexdigest()
 
@@ -501,7 +504,8 @@ def buildCode(target, build_arch, nproc, no_clean, force, dry):
 						f.write("		'" +item.name + "',\n")
 				f.write("	],\n")
 				f.write(")\n")
-		else:
+
+		if target.create_package:
 			log_step("Package software ...")
 			code = executePackaging(target, arch, prefix, build_dir if not target.top_package else output_dir, output_dir, native, nproc, target.params)
 			if code!=0:

@@ -5,4 +5,5 @@ Target(
 	sources = [ ],
 	patches = [ 'setup.sh', 'fonts.conf.template', 'win-launcher.c', 'environment' ],
 	system = True,
+	create_package = False,
 )

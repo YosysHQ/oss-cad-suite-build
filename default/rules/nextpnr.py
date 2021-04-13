@@ -20,6 +20,7 @@ Target(
 	name = 'nextpnr-bba',
 	sources = [ 'nextpnr' ],
 	build_native = True,
+	create_package = False,
 )
 
 # architecture specific
@@ -69,12 +70,14 @@ Target(
 	sources = [ 'nextpnr' ],
 	dependencies = [ 'icestorm' ],
 	build_native = True,
+	create_package = False,
 )
 
 Target(
 	name = 'prjtrellis-bba',
 	sources = [ 'prjtrellis', 'nextpnr' ],
 	build_native = True,
+	create_package = False,
 )
 
 Target(
@@ -82,4 +85,5 @@ Target(
 	sources = [ 'nextpnr' ],
 	dependencies = [ 'prjoxide' ],
 	build_native = True,
+	create_package = False,
 )
