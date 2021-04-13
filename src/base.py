@@ -486,36 +486,6 @@ def buildCode(target, build_arch, nproc, no_clean, force, dry):
 		if code!=0:
 			log_error("Script returned error code {}.".format(code))
 
-		if target.license_file is not None or target.license_url is not None:
-			log_step("Generating license file ...")
-			license_dir = os.path.join(output_dir + prefix, "license")
-			os.makedirs(license_dir)
-			license_file = os.path.join(license_dir, "LICENSE." + target.name)
-			with open(license_file, 'w') as f:
-				f.write("YosysHQ embeds '{}' in its distribution bundle.\n".format(target.name))
-				f.write("\nBuild is based on folowing sources:\n")
-				f.write('=' * 80 + '\n')
-				for s in target.sources:
-					f.write("{} {} checkout revision {}\n".format(sources[s].vcs, sources[s].location, sources[s].hash))
-				f.write("\nFollowing files are included:\n")
-				f.write('=' * 80 + '\n')
-				for root, _, files in os.walk(output_dir):
-					for filename in files:
-						f.write(os.path.join(root, filename).replace(output_dir,"") + '\n')
-				f.write("\nSoftware is under following license :\n")
-				f.write('=' * 80 + '\n')
-				if target.license_url is not None:
-					log_step("Retrieving license file for {}...".format(target.name))
-					try:
-						with urllib.request.urlopen(target.license_url) as lf:
-							f.write(lf.read().decode('utf-8'))
-					except urllib.error.URLError as e:
-						log_error(str(e))
-				if target.license_file is not None:
-					with open(os.path.join(build_dir, target.license_file), 'r') as lf:
-						f.write(lf.read())
-				f.write('\n' + '=' * 80 + '\n')
-
 		if target.system:
 			log_step("Generating system file list ...")
 			system_dir = os.path.join(SYSTEM_ROOT, arch)
@@ -543,6 +513,36 @@ def buildCode(target, build_arch, nproc, no_clean, force, dry):
 				for item in os.scandir(libdir):
 					if item.is_file() and item.name in system[arch].files:
 						os.remove(item)
+
+		if target.license_file is not None or target.license_url is not None:
+			log_step("Generating license file ...")
+			license_dir = os.path.join(output_dir + prefix, "license")
+			os.makedirs(license_dir)
+			license_file = os.path.join(license_dir, "LICENSE." + target.name)
+			with open(license_file, 'w') as f:
+				f.write("YosysHQ embeds '{}' in its distribution bundle.\n".format(target.name))
+				f.write("\nBuild is based on folowing sources:\n")
+				f.write('=' * 80 + '\n')
+				for s in target.sources:
+					f.write("{} {} checkout revision {}\n".format(sources[s].vcs, sources[s].location, sources[s].hash))
+				f.write("\nFollowing files are included:\n")
+				f.write('=' * 80 + '\n')
+				for root, _, files in sorted(os.walk(output_dir)):
+					for filename in files:
+						f.write(os.path.join(root, filename).replace(output_dir,"") + '\n')
+				f.write("\nSoftware is under following license :\n")
+				f.write('=' * 80 + '\n')
+				if target.license_url is not None:
+					log_step("Retrieving license file for {}...".format(target.name))
+					try:
+						with urllib.request.urlopen(target.license_url) as lf:
+							f.write(lf.read().decode('utf-8'))
+					except urllib.error.URLError as e:
+						log_error(str(e))
+				if target.license_file is not None:
+					with open(os.path.join(build_dir, target.license_file), 'r') as lf:
+						f.write(lf.read())
+				f.write('\n' + '=' * 80 + '\n')
 
 		log_step("Marking build finished ...")
 		with open(hash_file, 'w') as f:
