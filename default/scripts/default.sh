@@ -27,9 +27,12 @@ for bindir in bin py2bin py3bin super_prove/bin share/verilator/bin; do
     for binfile in $(file $bindir/* | grep ELF | grep dynamically | cut -f1 -d:); do
         rel_path=$(realpath --relative-to=$bindir ../..)
         rel_path_pkg=$(realpath --relative-to=$bindir .)
-        #for lib in $(lddtree -l $binfile | tail -n +2 | grep ^/ ); do
-        #    cp -i "${lib}" lib/
-        #done
+        for lib in $(lddtree -l $binfile | tail -n +2 | grep ^/ ); do
+            cp -i "${lib}" lib/
+        done
+        for libfile in $(find ../../lib/ -maxdepth 1 -type f); do
+            rm -rf lib/$(basename $libfile) 
+        done
         mv $binfile libexec
         is_using_fonts=false
         cat > $binfile << EOT
