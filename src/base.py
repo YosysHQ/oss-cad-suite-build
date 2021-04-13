@@ -67,7 +67,7 @@ class SourceLocation:
 
 class Target:
 	def __init__(self, name, sources = [], dependencies = [], resources = [], patches = [], arch = [], license_url = None, 
-				 license_file = None, package = False, build_native = False, system = False, params = { 'BIN_DIRS': 'bin', 'PY_DIRS': 'bin' }):
+				 license_file = None, top_package = False, build_native = False, system = False, params = { 'BIN_DIRS': 'bin', 'PY_DIRS': 'bin' }):
 		self.name = name
 		self.sources = sources
 		self.dependencies = dependencies
@@ -77,7 +77,7 @@ class Target:
 		self.license_file = license_file
 		self.hash = None
 		self.built = False
-		self.package = package
+		self.top_package = top_package
 		global current_rule_group
 		self.group = current_rule_group
 		self.arch = arch
@@ -193,7 +193,7 @@ def dependencyResolver(target, resolved, unresolved, build_arch, arch, display, 
 
 def createBuildOrder(target, build_arch, arch, display):
 	resolved = []
-	dependencyResolver(target, resolved, [], build_arch, arch, display, targets[target].package)
+	dependencyResolver(target, resolved, [], build_arch, arch, display, targets[target].top_package)
 	return resolved
 
 def createNeededSourceList(target, build_arch, arch):
@@ -308,7 +308,7 @@ def calculateHash(target, arch, build_order):
 	for d in sorted(target.dependencies):
 		if targets[d].hash:
 			data.append(targets[d].hash)
-	if target.package:
+	if target.top_package:
 		resources = set()
 		for d in build_order:
 			dep = targets[d[1]]
@@ -437,7 +437,7 @@ def buildCode(target, build_arch, nproc, no_clean, force, dry):
 		if no_clean and os.path.exists(build_dir):
 			log_step("Skipping clean of build dir ...")
 		else:
-			if not target.package:
+			if not target.top_package:
 				log_step("Remove old build dir ...")
 				if os.path.exists(build_dir):
 					shutil.rmtree(build_dir, onerror=removeError)
@@ -449,7 +449,7 @@ def buildCode(target, build_arch, nproc, no_clean, force, dry):
 					run(['rsync','-a', src_dir, build_dir])
 
 			deps = target.dependencies
-			if t[1] == target.name and target.package:
+			if t[1] == target.name and target.top_package:
 				res = set()
 				for d in build_order:
 					dep = targets[d[1]]
@@ -470,7 +470,7 @@ def buildCode(target, build_arch, nproc, no_clean, force, dry):
 						dep_dir = os.path.join(OUTPUTS_ROOT, getArchitecture(), d)
 					else:
 						dep_dir = os.path.join(OUTPUTS_ROOT, arch, d)
-					if not target.package:
+					if not target.top_package:
 						log_step_triple("Copy '", d + dep_build_info, "' output to build dir ...")
 						run(['rsync','-a', dep_dir, build_dir])
 					else:
@@ -479,10 +479,10 @@ def buildCode(target, build_arch, nproc, no_clean, force, dry):
 
 
 		prefix = "/packages/" + target.name
-		if (target.name == "system-resources") or (target.name == "default"):
+		if target.system or target.top_package:
 			prefix = "/"
 		log_step("Compiling ...")
-		code = executeBuild(target, arch, prefix, build_dir if not target.package else output_dir, output_dir, native, nproc)
+		code = executeBuild(target, arch, prefix, build_dir if not target.top_package else output_dir, output_dir, native, nproc)
 		if code!=0:
 			log_error("Script returned error code {}.".format(code))
 
@@ -503,7 +503,7 @@ def buildCode(target, build_arch, nproc, no_clean, force, dry):
 				f.write(")\n")
 		else:
 			log_step("Package software ...")
-			code = executePackaging(target, arch, prefix, build_dir if not target.package else output_dir, output_dir, native, nproc, target.params)
+			code = executePackaging(target, arch, prefix, build_dir if not target.top_package else output_dir, output_dir, native, nproc, target.params)
 			if code!=0:
 				log_error("Script returned error code {}.".format(code))
 
@@ -528,7 +528,7 @@ def buildCode(target, build_arch, nproc, no_clean, force, dry):
 				f.write("\nFollowing files are included:\n")
 				f.write('=' * 80 + '\n')
 				for root, _, files in sorted(os.walk(output_dir)):
-					for filename in files:
+					for filename in sorted(files):
 						f.write(os.path.join(root, filename).replace(output_dir,"") + '\n')
 				f.write("\nSoftware is under following license :\n")
 				f.write('=' * 80 + '\n')
@@ -549,7 +549,7 @@ def buildCode(target, build_arch, nproc, no_clean, force, dry):
 			f.write(target.hash)
 		target.built = True
 
-		if not no_clean and not target.package:
+		if not no_clean and not target.top_package:
 			log_step("Remove build dir ...")
 			if os.path.exists(build_dir):
 				shutil.rmtree(build_dir, onerror=removeError)
