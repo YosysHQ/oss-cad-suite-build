@@ -71,6 +71,7 @@ EOT
             is_using_fonts=true
             cat >> $binfile << EOT
 export QT_PLUGIN_PATH="\$release_topdir_abs/lib/qt5/plugins"
+export QT_LOGGING_RULES="*=false"
 unset QT_QPA_PLATFORMTHEME
 unset QT_STYLE_OVERRIDE
 unset XDG_DATA_DIRS
@@ -272,6 +273,7 @@ EOT
             is_using_fonts=true
             cat >> $binfile << EOT
 export QT_PLUGIN_PATH="\$release_topdir_abs/lib/qt5/plugins"
+export QT_LOGGING_RULES="*=false"
 unset QT_QPA_PLATFORMTHEME
 unset QT_STYLE_OVERRIDE
 export XDG_CONFIG_HOME="\$release_topdir_abs"
