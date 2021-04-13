@@ -12,13 +12,14 @@ Target(
 	sources = [ 'python3' ],
 	patches = [ 'python38.diff', 'python38-mingw.diff' ],
 	license_file = 'python3/LICENSE',
+	params = { 'BIN_DIRS': 'py3bin', 'PY_DIRS': 'py3bin' },
 )
 
 SourceLocation(
 	name = 'python2',
 	vcs = 'git',
 	location = 'https://github.com/python/cpython',
-	revision = 'tags/v2.7.18'
+	revision = 'tags/v2.7.18',
 )
 
 Target(
@@ -26,4 +27,5 @@ Target(
 	sources = [ 'python2' ],
 	patches = [ 'python27.diff' ],
 	license_file = 'python2/LICENSE',
+	params = { 'BIN_DIRS': '', 'PY_DIRS': '' },
 )

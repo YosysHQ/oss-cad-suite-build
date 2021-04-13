@@ -114,6 +114,7 @@ Target(
 	patches = [ 'suprove.diff' ],
 	arch = [ 'linux-x64', 'linux-arm', 'linux-arm64', 'linux-riscv64' ],
 	license_file = 'suprove/pywrapper/LICENSE',
+	params = { 'BIN_DIRS': 'super_prove/bin', 'PY_DIRS': '' },
 )
 
 # yices

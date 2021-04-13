@@ -12,4 +12,5 @@ Target(
 	sources = [ 'verilator' ],
 	patches = [ 'verilator.diff' ],
 	license_file = 'verilator/LICENSE',
+	params = { 'BIN_DIRS': 'bin share/verilator/bin', 'PY_DIRS': '' },
 )
