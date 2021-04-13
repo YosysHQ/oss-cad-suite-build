@@ -27,7 +27,7 @@ for package in $(file packages/* | grep directory | cut -f1 -d:); do
         if [ -d $package/lib/python3.8/site-packages ]; then
             for lfile in $(file $package/lib/python3.8/site-packages/*.pth | cut -f1 -d:); do
                 cp $lfile packages/python3/lib/python3.8/site-packages/.
-                sed -i 's,./,../../../../../'$package'/lib/python3.8/site-packages/,g' packages/python3/lib/python3.8/site-packages/$(basename $lfile)
+                sed -i -re 's,\./,../../../../../'$package'/lib/python3.8/site-packages/,g' packages/python3/lib/python3.8/site-packages/$(basename $lfile)
             done
         fi
     fi
@@ -59,7 +59,7 @@ for package in $(file packages/* | grep directory | cut -f1 -d:); do
         if [ -d $package/lib/python3.8/site-packages ]; then
             for lfile in $(file $package/lib/python3.8/site-packages/*.pth | cut -f1 -d:); do
                 cp $lfile packages/python3/lib/python3.8/site-packages/.
-                sed -i 's,./,../../../../../'$package'/lib/python3.8/site-packages/,g' packages/python3/lib/python3.8/site-packages/$(basename $lfile)
+                sed -i -re 's,\./,../../../../../'$package'/lib/python3.8/site-packages/,g' packages/python3/lib/python3.8/site-packages/$(basename $lfile)
             done
         fi
     fi

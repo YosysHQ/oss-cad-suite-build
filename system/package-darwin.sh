@@ -1,7 +1,5 @@
 cd ${OUTPUT_DIR}${INSTALL_PREFIX}
 
-cp /usr/local/bin/realpath libexec/.
-
 export DYLD_LIBRARY_PATH=/usr/local/opt/icu4c/lib:$DYLD_LIBRARY_PATH
 
 mkdir -p lib
