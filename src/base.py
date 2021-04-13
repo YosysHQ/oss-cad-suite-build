@@ -85,6 +85,7 @@ class Target:
 		self.build_native = build_native
 		self.system = system
 		self.params = params
+		self.create_package = create_package
 		if name in targets:
 			log_step_triple("Overriding ", name)
 		else:
