@@ -66,7 +66,8 @@ class SourceLocation:
 		sources[name] = self
 
 class Target:
-	def __init__(self, name, sources = [], dependencies = [], resources = [], patches = [], arch = [], license_url = None, license_file = None, package = False, build_native = False, system = False):
+	def __init__(self, name, sources = [], dependencies = [], resources = [], patches = [], arch = [], license_url = None, 
+				 license_file = None, package = False, build_native = False, system = False, params = { 'BIN_DIRS': 'bin', 'PY_DIRS': 'bin' }):
 		self.name = name
 		self.sources = sources
 		self.dependencies = dependencies
@@ -82,6 +83,7 @@ class Target:
 		self.arch = arch
 		self.build_native = build_native
 		self.system = system
+		self.params = params
 		if name in targets:
 			log_step_triple("Overriding ", name)
 		else:
@@ -322,6 +324,14 @@ def calculateHash(target, arch, build_order):
 	return hashlib.sha256('\n'.join(data).encode()).hexdigest()
 
 def executeBuild(target, arch, prefix, build_dir, output_dir, native, nproc):
+	script = open(os.path.join(target.group, SCRIPTS_ROOT, target.name + ".sh"), 'r').read().encode()
+	return executeScript(target, arch, prefix, build_dir, output_dir, native, nproc, script, [])
+
+def executePackaging(target, arch, prefix, build_dir, output_dir, native, nproc, params):
+	script = open(os.path.join(SYSTEM_ROOT, "package-" + arch.split('-')[0] + ".sh"), 'r').read().encode()
+	return executeScript(target, arch, prefix, build_dir, output_dir, native, nproc, script, params)
+
+def executeScript(target, arch, prefix, build_dir, output_dir, native, nproc, script, params):
 	cwd = os.getcwd()
 
 	env = OrderedDict()
@@ -354,13 +364,13 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, native, nproc):
 			env['SHARED_EXT'] = '.dylib'
 	env['LC_ALL'] = 'C'
 	env['INSTALL_PREFIX'] = prefix
+	env.update(params)
 
 	scriptfile = tempfile.NamedTemporaryFile()
 	scriptfile.write("set -e -x\n".encode())
-	scriptfile.write(open(os.path.join(target.group, SCRIPTS_ROOT, target.name + ".sh"), 'r').read().encode())
+	scriptfile.write(script)
 	scriptfile.flush()
 
-	log_step("Compiling ...")
 	if native:
 		code = run_live(['bash', scriptfile.name], cwd=build_dir, env=env)
 	else:
@@ -471,6 +481,7 @@ def buildCode(target, build_arch, nproc, no_clean, force, dry):
 		prefix = "/packages/" + target.name
 		if (target.name == "system-resources") or (target.name == "default"):
 			prefix = "/"
+		log_step("Compiling ...")
 		code = executeBuild(target, arch, prefix, build_dir if not target.package else output_dir, output_dir, native, nproc)
 		if code!=0:
 			log_error("Script returned error code {}.".format(code))
@@ -521,10 +532,17 @@ def buildCode(target, build_arch, nproc, no_clean, force, dry):
 				f.write("	],\n")
 				f.write(")\n")
 		else:
-			log_step("Removing files contained in system package ...")
-			for item in os.scandir(os.path.join(output_dir + prefix, "lib")):
-				if item.is_file() and item.name in system[arch].files:
-					os.remove(item)
+			log_step("Package software ...")
+			code = executePackaging(target, arch, prefix, build_dir if not target.package else output_dir, output_dir, native, nproc, target.params)
+			if code!=0:
+				log_error("Script returned error code {}.".format(code))
+
+			libdir = os.path.join(output_dir + prefix, "lib")
+			if os.path.exists(libdir):
+				log_step("Removing files contained in system package ...")
+				for item in os.scandir(libdir):
+					if item.is_file() and item.name in system[arch].files:
+						os.remove(item)
 
 		log_step("Marking build finished ...")
 		with open(hash_file, 'w') as f:
