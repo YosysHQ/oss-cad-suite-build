@@ -3,6 +3,7 @@ from src.base import Target
 Target(
     name = 'default',
     top_package = True,
+    create_package = False,
     dependencies = [
         'yosys',
         'nextpnr',

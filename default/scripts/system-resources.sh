@@ -60,6 +60,8 @@ if [ ${ARCH_BASE} == 'linux' ]; then
 fi
 
 if [ ${ARCH_BASE} == 'darwin' ]; then
+    cp /usr/local/bin/realpath libexec/.
+
     cp ${PATCHES_DIR}/environment ${OUTPUT_DIR}${INSTALL_PREFIX}/.
 
     cp -rv $(brew --prefix qt5)/plugins/* ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/qt5/plugins/.
