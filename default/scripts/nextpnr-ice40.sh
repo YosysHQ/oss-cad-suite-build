@@ -1,7 +1,7 @@
 cd nextpnr
 export LD_LIBRARY_PATH=${BUILD_DIR}/prjtrellis-py
 build_gui="ON"
-use_ipo="ON"
+use_ipo="OFF"
 if [ ${ARCH} == 'linux-arm' ]; then
       build_gui="OFF"
 fi
