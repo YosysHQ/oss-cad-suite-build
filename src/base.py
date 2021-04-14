@@ -514,10 +514,23 @@ def buildCode(target, build_arch, nproc, no_clean, force, dry):
 
 			libdir = os.path.join(output_dir + prefix, "lib")
 			if os.path.exists(libdir):
-				log_step("Removing files contained in system package ...")
+				log_step("Removing libraries contained in system package ...")
 				for item in os.scandir(libdir):
 					if item.is_file() and item.name in system[arch].files:
 						os.remove(item)
+			if target.resources:
+				for r in target.resources:
+					if r in target.dependencies:
+						log_step("Removing libraries contained in '{}' package ...".format(r))
+						files = []
+						res_lib_dir = os.path.join(build_dir, r, "packages/" + r , "lib")
+						if os.path.exists(res_lib_dir):
+							for item in os.scandir(res_lib_dir):
+								if item.is_file():
+									files.append(item.name)
+							for item in os.scandir(libdir):
+								if item.is_file() and item.name in files:
+									os.remove(item)				
 
 		if target.license_file is not None or target.license_url is not None:
 			log_step("Generating license file ...")
