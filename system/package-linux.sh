@@ -109,14 +109,14 @@ EOT
         if $is_using_fonts; then
             cat >> $binfile << EOT
 if [ -f "\$FONTCONFIG_FILE" ]; then
-    exec "\$release_topdir_abs"/lib/$ldlinuxname --inhibit-cache --inhibit-rpath "" --library-path "\$release_pkgdir_abs"/lib:\$pkg_add"\$release_topdir_abs"/lib "\$release_pkgdir_abs"/libexec/$(basename $binfile) "\$@"
+    exec "\$release_pkgdir_abs"/lib/$ldlinuxname --inhibit-cache --inhibit-rpath "" --library-path "\$release_pkgdir_abs"/lib:\$pkg_add"\$release_topdir_abs"/lib "\$release_pkgdir_abs"/libexec/$(basename $binfile) "\$@"
 else
     echo "Execute \$release_topdir_abs/setup.sh script to do initial setup of YosysHQ configuration files."
 fi
 EOT
         else
             cat >> $binfile << EOT
-exec "\$release_topdir_abs"/lib/$ldlinuxname --inhibit-cache --inhibit-rpath "" --library-path "\$release_pkgdir_abs"/lib:\$pkg_add"\$release_topdir_abs"/lib "\$release_pkgdir_abs"/libexec/$(basename $binfile) "\$@"
+exec "\$release_pkgdir_abs"/lib/$ldlinuxname --inhibit-cache --inhibit-rpath "" --library-path "\$release_pkgdir_abs"/lib:\$pkg_add"\$release_topdir_abs"/lib "\$release_pkgdir_abs"/libexec/$(basename $binfile) "\$@"
 EOT
         fi
         chmod +x $binfile
