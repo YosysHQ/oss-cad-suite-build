@@ -529,7 +529,7 @@ def buildCode(target, build_arch, nproc, no_clean, force, dry):
 								if item.is_file():
 									files.append(item.name)
 							for item in os.scandir(libdir):
-								if item.is_file() and item.name in files:
+								if item.is_file() and item.name in files and not item.name.startswith("ld-linux"):
 									os.remove(item)				
 
 		if target.license_file is not None or target.license_url is not None:
