@@ -3,7 +3,6 @@ from src.base import SystemFiles
 SystemFiles(
 	name = 'linux-x64',
 	files = [
-		'ld-linux-x86-64.so.2',
 		'libEGL.so.1',
 		'libGL.so.1',
 		'libGLX.so.0',

@@ -501,7 +501,7 @@ def buildCode(target, build_arch, nproc, no_clean, force, dry):
 				f.write("	name = '" + arch+ "',\n")
 				f.write("	files = [\n")
 				for item in sorted(os.scandir(os.path.join(output_dir,"lib")), key=lambda f: f.name):
-					if item.is_file():
+					if item.is_file() and not item.name.startswith("ld-linux"):
 						f.write("		'" +item.name + "',\n")
 				f.write("	],\n")
 				f.write(")\n")

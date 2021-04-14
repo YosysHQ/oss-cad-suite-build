@@ -3,7 +3,6 @@ from src.base import SystemFiles
 SystemFiles(
 	name = 'linux-arm',
 	files = [
-		'ld-linux-armhf.so.3',
 		'libEGL.so.1',
 		'libGLESv2.so.2',
 		'libGLdispatch.so.0',
