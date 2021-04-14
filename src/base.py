@@ -322,8 +322,8 @@ def calculateHash(target, arch, build_order):
 				data.append(targets[d].hash)
 	for p in sorted(target.patches):
 		data.append(hashlib.sha256(open(os.path.join(target.group, PATCHES_ROOT, p), 'rb').read()).hexdigest())
-	if target.create_package:
-		data.append(hashlib.sha256(open(os.path.join(SYSTEM_ROOT, "package-" + arch.split('-')[0] + ".sh"), 'r').read().encode()).hexdigest())
+	#if target.create_package:
+	#	data.append(hashlib.sha256(open(os.path.join(SYSTEM_ROOT, "package-" + arch.split('-')[0] + ".sh"), 'r').read().encode()).hexdigest())
 	data.append(hashlib.sha256(open(os.path.join(target.group, SCRIPTS_ROOT, target.name + ".sh"), 'r').read().encode()).hexdigest())
 	return hashlib.sha256('\n'.join(data).encode()).hexdigest()
 
