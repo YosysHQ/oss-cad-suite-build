@@ -9,18 +9,50 @@ SourceLocation(
 )
 
 Target(
-	name = 'nextpnr',
+	name = 'nextpnr-bba',
 	sources = [ 'nextpnr' ],
-	dependencies = [ 'python3', 'nextpnr-bba', 'icestorm-bba', 'prjtrellis-bba', 'prjoxide-bba' ],
+	build_native = True,
+	create_package = False,
+)
+
+Target(
+	name = 'nextpnr-generic',
+	sources = [ 'nextpnr' ],
+	dependencies = [ 'python3', 'nextpnr-bba'],
 	resources = [ 'python3' ],
 	license_file = 'nextpnr/COPYING',
 )
 
 Target(
-	name = 'nextpnr-bba',
+	name = 'nextpnr-ice40',
 	sources = [ 'nextpnr' ],
-	build_native = True,
-	create_package = False,
+	dependencies = [ 'python3', 'nextpnr-bba', 'icestorm-bba'],
+	resources = [ 'python3' ],
+	license_file = 'nextpnr/COPYING',
+)
+
+Target(
+	name = 'nextpnr-ecp5',
+	sources = [ 'nextpnr' ],
+	dependencies = [ 'python3', 'nextpnr-bba', 'prjtrellis-bba'],
+	resources = [ 'python3' ],
+	license_file = 'nextpnr/COPYING',
+)
+
+Target(
+	name = 'nextpnr-machxo2',
+	sources = [ 'nextpnr' ],
+	dependencies = [ 'python3', 'nextpnr-bba', 'prjtrellis-bba'],
+	resources = [ 'python3' ],
+	license_file = 'nextpnr/COPYING',
+)
+
+Target(
+	name = 'nextpnr-nexus',
+	sources = [ 'nextpnr' ],
+	dependencies = [ 'python3', 'nextpnr-bba', 'prjoxide-bba' ],
+	resources = [ 'python3' ],
+	license_file = 'nextpnr/COPYING',
 )
 
 # architecture specific

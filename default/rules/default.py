@@ -6,7 +6,11 @@ Target(
     create_package = False,
     dependencies = [
         'yosys',
-        'nextpnr',
+        'nextpnr-generic',
+        'nextpnr-ice40',
+        'nextpnr-ecp5',
+        'nextpnr-machxo2',
+        'nextpnr-nexus',
         'icestorm',
         'prjtrellis',
         #'prjoxide',
