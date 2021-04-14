@@ -52,10 +52,17 @@ EOT
 export GHDL_PREFIX="\$release_topdir_abs/lib/ghdl"
 EOT
         fi
-        if [ ! -z "$(lddtree -l libexec/$(basename $binfile) | grep python)" ]; then
+        if [ ! -z "$(lddtree -l libexec/$(basename $binfile) | grep python3)" ]; then
             cat >> $binfile << EOT
 export PYTHONHOME="\$release_topdir_abs"/packages/python3
 pkg_add="\$release_topdir_abs"/packages/python3/lib:
+export PYTHONNOUSERSITE=1
+EOT
+        fi
+        if [ ! -z "$(lddtree -l libexec/$(basename $binfile) | grep python2)" ]; then
+            cat >> $binfile << EOT
+export PYTHONHOME="\$release_topdir_abs"/packages/python2
+pkg_add="\$release_topdir_abs"/packages/python2/lib:
 export PYTHONNOUSERSITE=1
 EOT
         fi

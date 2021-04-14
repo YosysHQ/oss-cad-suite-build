@@ -18,7 +18,7 @@ cat > ${OUTPUT_DIR}${INSTALL_PREFIX}/bin/suprove <<EOT
 #!/usr/bin/env bash
 tool=super_prove; if [ "\$1" != "\${1#+}" ]; then tool="\${1#+}"; shift; fi
 export PYTHONNOUSERSITE=1
-export PYTHONPATH=\$(dirname \${BASH_SOURCE[0]})/../lib/python2.7:\$(dirname \${BASH_SOURCE[0]})/../lib/python2.7/site-packages
-exec \$(dirname \${BASH_SOURCE[0]})/../super_prove/bin/\${tool}.sh "\$@"
+export PYTHONPATH=\$(dirname \${BASH_SOURCE[0]})/../packages/python2/lib/python2.7:\$(dirname \${BASH_SOURCE[0]})/../packages/python2/lib/python2.7/site-packages
+exec \$(dirname \${BASH_SOURCE[0]})/../packages/suprove/super_prove/bin/\${tool}.sh "\$@"
 EOT
 chmod +x ${OUTPUT_DIR}${INSTALL_PREFIX}/bin/suprove
