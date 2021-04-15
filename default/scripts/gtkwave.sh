@@ -1,4 +1,4 @@
-cd gtkwave
+cd gtkwave/gtkwave3
 if [ ${ARCH_BASE} == 'darwin' ]; then
     ./configure --prefix=${INSTALL_PREFIX} --with-tcl=$(xcrun --show-sdk-path)/System/Library/Frameworks/Tcl.framework --with-tk=$(xcrun --show-sdk-path)/System/Library/Frameworks/Tk.Framework
 elif [ ${ARCH_BASE} == 'windows' ]; then

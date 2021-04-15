@@ -2,13 +2,13 @@ from src.base import SourceLocation, Target
 
 SourceLocation(
 	name = 'gtkwave',
-	vcs = 'svn',
-	location = 'svn://svn.code.sf.net/p/gtkwave/code/gtkwave3',
-	revision = 'HEAD',
+	vcs = 'git',
+	location = 'https://github.com/gtkwave/gtkwave',
+	revision = 'origin/master',
 )
 
 Target(
 	name = 'gtkwave',
 	sources = [ 'gtkwave' ],
-	license_file = 'gtkwave/COPYING',
+	license_file = 'gtkwave/LICENSE',
 )
