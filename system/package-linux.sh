@@ -176,7 +176,7 @@ EOT
             if $is_using_fonts; then
                 cat >> "${script}" <<EOT
 if [ -f "\$FONTCONFIG_FILE" ]; then
-    exec "\$release_pkgdir_abs"/lib/$ldlinuxname --inhibit-cache --inhibit-rpath "" --library-path "\$release_pkgdir_abs"/lib:\$pkg_add"\$release_topdir_abs"/lib "\$release_pkgdir_abs"/packages/python3/libexec/python3.8 "\$release_pkgdir_abs"/libexec/$(basename $script) "\$@"
+    exec "\$release_pkgdir_abs"/lib/$ldlinuxname --inhibit-cache --inhibit-rpath "" --library-path "\$release_pkgdir_abs"/lib:\$pkg_add"\$release_topdir_abs"/lib "\$release_topdir_abs"/packages/python3/libexec/python3.8 "\$release_pkgdir_abs"/libexec/$(basename $script) "\$@"
 else
     echo "Execute \$release_topdir_abs/setup.sh script to do initial setup of YosysHQ configuration files."
 fi
