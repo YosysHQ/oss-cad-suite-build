@@ -84,6 +84,7 @@ EOT
         if [ ! -z "$(lddtree -l libexec/$(basename $binfile) | grep gtk)" ]; then
 # Set and unset variables according to:
 # https://refspecs.linuxbase.org/gtk/2.6/gtk/gtk-running.html
+# https://specifications.freedesktop.org/basedir-spec/0.6/ar01s03.html
             is_using_fonts=true
             cat >> $binfile << EOT
 unset GTK_MODULES
@@ -96,6 +97,7 @@ export GTK_EXE_PREFIX="\$release_topdir_abs"
 export GTK_DATA_PREFIX="\$release_topdir_abs"
 export GDK_PIXBUF_MODULE_FILE="\$release_topdir_abs/lib/gtk-2.0/loaders.cache"
 unset XDG_DATA_DIRS
+unset XDG_CONFIG_DIRS
 export XDG_CONFIG_HOME=\$HOME/.config/yosyshq
 export XDG_CACHE_HOME=\$HOME/.cache/yosyshq
 export XDG_DATA_HOME=\$HOME/.local/share/yosyshq
@@ -104,6 +106,7 @@ export TCL_LIBRARY="\$release_topdir_abs/lib/tcl8.6"
 export TK_LIBRARY="\$release_topdir_abs/lib/tk8.6"
 export FONTCONFIG_FILE="\$release_topdir_abs/etc/fonts/fonts.conf"
 export FONTCONFIG_PATH="\$release_topdir_abs/etc/fonts"
+mkdir -p \$HOME/.config/yosyshq \$HOME/.local/share/yosyshq
 EOT
         fi
 
@@ -149,6 +152,7 @@ EOT
             if [ $script == 'bin/xdot' ]; then
 # Set and unset variables according to:
 # https://refspecs.linuxbase.org/gtk/2.6/gtk/gtk-running.html
+# https://specifications.freedesktop.org/basedir-spec/0.6/ar01s03.html
                 is_using_fonts=true
                 cat >> "${script}" <<EOT
 unset GTK_MODULES
@@ -161,6 +165,7 @@ export GTK_EXE_PREFIX="\$release_topdir_abs"
 export GTK_DATA_PREFIX="\$release_topdir_abs"
 export GDK_PIXBUF_MODULE_FILE="\$release_topdir_abs/lib/gtk-2.0/loaders.cache"
 unset XDG_DATA_DIRS
+unset XDG_CONFIG_DIRS
 export XDG_CONFIG_HOME=\$HOME/.config/yosyshq
 export XDG_CACHE_HOME=\$HOME/.cache/yosyshq
 export XDG_DATA_HOME=\$HOME/.local/share/yosyshq
@@ -173,6 +178,7 @@ export PYTHONPATH="\$release_topdir_abs"/packages/xdot/lib/python3.8/site-packag
 export PYTHONHOME="\$release_topdir_abs"/packages/python3
 pkg_add="\$release_topdir_abs"/packages/python3/lib:"\$release_pkgdir_abs"/lib:
 export PYTHONNOUSERSITE=1
+mkdir -p \$HOME/.config/yosyshq \$HOME/.local/share/yosyshq
 EOT
             fi
             if $is_using_fonts; then
