@@ -17,3 +17,7 @@ done
 python3_package_pth "python-programmers"
 rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/bin/tqdm
 rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/bin/jsonschema
+for f in ${OUTPUT_DIR}${INSTALL_PREFIX}/bin/*.py
+do
+    [ -f "$f" ] && mv "$f" "${f%.py}"
+done
