@@ -79,8 +79,6 @@ export XDG_CONFIG_HOME=\$HOME/.config/yosyshq
 export XDG_CACHE_HOME=\$HOME/.cache/yosyshq
 export XDG_DATA_HOME=\$HOME/.local/share/yosyshq
 export LC_ALL="C"
-export FONTCONFIG_FILE="\$release_topdir_abs/etc/fonts/fonts.conf"
-export FONTCONFIG_PATH="\$release_topdir_abs/etc/fonts"
 EOT
         fi
         if [ ! -z "$(lddtree -l libexec/$(basename $binfile) | grep gtk)" ]; then
@@ -106,13 +104,15 @@ export XDG_DATA_HOME=\$HOME/.local/share/yosyshq
 export LC_ALL="C"
 export TCL_LIBRARY="\$release_topdir_abs/lib/tcl8.6"
 export TK_LIBRARY="\$release_topdir_abs/lib/tk8.6"
-export FONTCONFIG_FILE="\$release_topdir_abs/etc/fonts/fonts.conf"
-export FONTCONFIG_PATH="\$release_topdir_abs/etc/fonts"
 EOT
         fi
 
         if $is_using_fonts; then
             cat >> $binfile << EOT
+export FONTCONFIG_FILE="\$XDG_CONFIG_HOME/fonts.conf"
+export FONTCONFIG_PATH="\$release_topdir_abs/etc/fonts"
+mkdir -p \$HOME/.config/yosyshq \$HOME/.local/share/yosyshq
+sed "s|TARGET_DIR|\$release_topdir_abs|g" "\$release_topdir_abs/etc/fonts/fonts.conf.template" > \$FONTCONFIG_FILE
 if [ -f "\$FONTCONFIG_FILE" ]; then
     exec "\$release_pkgdir_abs"/lib/$ldlinuxname --inhibit-cache --inhibit-rpath "" --library-path "\$release_pkgdir_abs"/lib:\$pkg_add"\$release_topdir_abs"/lib "\$release_pkgdir_abs"/libexec/$(basename $binfile) "\$@"
 else
@@ -173,8 +173,6 @@ export XDG_DATA_HOME=\$HOME/.local/share/yosyshq
 export LC_ALL="C"
 export TCL_LIBRARY="\$release_topdir_abs/lib/tcl8.6"
 export TK_LIBRARY="\$release_topdir_abs/lib/tk8.6"
-export FONTCONFIG_FILE="\$release_topdir_abs/etc/fonts/fonts.conf"
-export FONTCONFIG_PATH="\$release_topdir_abs/etc/fonts"
 export PYTHONPATH="\$release_topdir_abs"/packages/xdot/lib/python3.8/site-packages
 export PYTHONHOME="\$release_topdir_abs"/packages/python3
 pkg_add="\$release_topdir_abs"/packages/python3/lib:"\$release_pkgdir_abs"/lib:
@@ -183,6 +181,10 @@ EOT
             fi
             if $is_using_fonts; then
                 cat >> "${script}" <<EOT
+export FONTCONFIG_FILE="\$XDG_CONFIG_HOME/fonts.conf"
+export FONTCONFIG_PATH="\$release_topdir_abs/etc/fonts"
+mkdir -p \$HOME/.config/yosyshq \$HOME/.local/share/yosyshq
+sed "s|TARGET_DIR|\$release_topdir_abs|g" "\$release_topdir_abs/etc/fonts/fonts.conf.template" > \$FONTCONFIG_FILE
 if [ -f "\$FONTCONFIG_FILE" ]; then
     exec "\$release_pkgdir_abs"/lib/$ldlinuxname --inhibit-cache --inhibit-rpath "" --library-path "\$release_pkgdir_abs"/lib:\$pkg_add"\$release_topdir_abs"/lib "\$release_topdir_abs"/packages/python3/libexec/python3.8 "\$release_pkgdir_abs"/libexec/$(basename $script) "\$@"
 else

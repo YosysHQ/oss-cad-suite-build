@@ -18,7 +18,6 @@ if [ ${ARCH_BASE} == 'linux' ]; then
     cp -r /usr/share/fonts/. ${OUTPUT_DIR}${INSTALL_PREFIX}/share/fonts
     cp -r /etc/fonts/.   ${OUTPUT_DIR}${INSTALL_PREFIX}/etc/fonts
     rm ${OUTPUT_DIR}${INSTALL_PREFIX}/etc/fonts/fonts.conf
-    cp ${PATCHES_DIR}/setup.sh ${OUTPUT_DIR}${INSTALL_PREFIX}/.
     cp ${PATCHES_DIR}/fonts.conf.template ${OUTPUT_DIR}${INSTALL_PREFIX}/etc/fonts/.
     mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/lib
     cp -r /usr/share/tcltk/tcl8.6/. ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/tcl8.6
@@ -60,7 +59,8 @@ if [ ${ARCH_BASE} == 'linux' ]; then
 fi
 
 if [ ${ARCH_BASE} == 'darwin' ]; then
-    cp /usr/local/bin/realpath libexec/.
+    mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/libexec
+    cp /usr/local/bin/realpath ${OUTPUT_DIR}${INSTALL_PREFIX}/libexec/.
 
     cp ${PATCHES_DIR}/environment ${OUTPUT_DIR}${INSTALL_PREFIX}/.
 
@@ -88,6 +88,13 @@ if [ ${ARCH_BASE} == 'darwin' ]; then
     for pkg in $pkgs; do
         cp -af /usr/local/opt/$pkg/lib/*.dylib  ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/.
     done
+    pushd ${OUTPUT_DIR}${INSTALL_PREFIX}/lib
+    chmod +w *.dylib
+    for libfile in $(find . -not -type d | xargs file | grep dynamically | cut -f1 -d:); do
+        dylibbundler -of -b -x $libfile -p @rpath  -d .
+        install_name_tool -id @rpath/$(basename $libfile) $libfile
+    done
+    popd
 fi
 if [ ${ARCH_BASE} == 'windows' ]; then
     mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/lib
