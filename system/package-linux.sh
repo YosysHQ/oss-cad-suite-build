@@ -96,8 +96,9 @@ export GTK_EXE_PREFIX="\$release_topdir_abs"
 export GTK_DATA_PREFIX="\$release_topdir_abs"
 export GDK_PIXBUF_MODULE_FILE="\$release_topdir_abs/lib/gtk-2.0/loaders.cache"
 unset XDG_DATA_DIRS
-export XDG_DATA_HOME="\$release_topdir_abs"
-export XDG_CONFIG_HOME="\$release_topdir_abs"
+export XDG_CONFIG_HOME=\$HOME/.config/yosyshq
+export XDG_CACHE_HOME=\$HOME/.cache/yosyshq
+export XDG_DATA_HOME=\$HOME/.local/share/yosyshq
 export LC_ALL="C"
 export TCL_LIBRARY="\$release_topdir_abs/lib/tcl8.6"
 export TK_LIBRARY="\$release_topdir_abs/lib/tk8.6"
@@ -160,8 +161,9 @@ export GTK_EXE_PREFIX="\$release_topdir_abs"
 export GTK_DATA_PREFIX="\$release_topdir_abs"
 export GDK_PIXBUF_MODULE_FILE="\$release_topdir_abs/lib/gtk-2.0/loaders.cache"
 unset XDG_DATA_DIRS
-export XDG_DATA_HOME="\$release_topdir_abs"
-export XDG_CONFIG_HOME="\$release_topdir_abs"
+export XDG_CONFIG_HOME=\$HOME/.config/yosyshq
+export XDG_CACHE_HOME=\$HOME/.cache/yosyshq
+export XDG_DATA_HOME=\$HOME/.local/share/yosyshq
 export LC_ALL="C"
 export TCL_LIBRARY="\$release_topdir_abs/lib/tcl8.6"
 export TK_LIBRARY="\$release_topdir_abs/lib/tk8.6"
