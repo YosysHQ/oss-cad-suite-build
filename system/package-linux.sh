@@ -56,7 +56,7 @@ EOT
             cat >> $binfile << EOT
 export PYTHONHOME="\$release_topdir_abs"/packages/python3
 pkg_add="\$release_topdir_abs"/packages/python3/lib:
-export PYTHONNOUSERSITE=1
+export PYTHONUSERBASE=\$HOME/.local/yosyshq
 EOT
         fi
         if [ ! -z "$(lddtree -l libexec/$(basename $binfile) | grep python2)" ]; then
