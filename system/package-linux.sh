@@ -74,8 +74,10 @@ export QT_LOGGING_RULES="*=false"
 unset QT_QPA_PLATFORMTHEME
 unset QT_STYLE_OVERRIDE
 unset XDG_DATA_DIRS
-export XDG_DATA_HOME="\$release_topdir_abs"
-export XDG_CONFIG_HOME="\$release_topdir_abs"
+unset XDG_CONFIG_DIRS
+export XDG_CONFIG_HOME=\$HOME/.config/yosyshq
+export XDG_CACHE_HOME=\$HOME/.cache/yosyshq
+export XDG_DATA_HOME=\$HOME/.local/share/yosyshq
 export LC_ALL="C"
 export FONTCONFIG_FILE="\$release_topdir_abs/etc/fonts/fonts.conf"
 export FONTCONFIG_PATH="\$release_topdir_abs/etc/fonts"
@@ -106,7 +108,6 @@ export TCL_LIBRARY="\$release_topdir_abs/lib/tcl8.6"
 export TK_LIBRARY="\$release_topdir_abs/lib/tk8.6"
 export FONTCONFIG_FILE="\$release_topdir_abs/etc/fonts/fonts.conf"
 export FONTCONFIG_PATH="\$release_topdir_abs/etc/fonts"
-mkdir -p \$HOME/.config/yosyshq \$HOME/.local/share/yosyshq
 EOT
         fi
 
@@ -178,7 +179,6 @@ export PYTHONPATH="\$release_topdir_abs"/packages/xdot/lib/python3.8/site-packag
 export PYTHONHOME="\$release_topdir_abs"/packages/python3
 pkg_add="\$release_topdir_abs"/packages/python3/lib:"\$release_pkgdir_abs"/lib:
 export PYTHONNOUSERSITE=1
-mkdir -p \$HOME/.config/yosyshq \$HOME/.local/share/yosyshq
 EOT
             fi
             if $is_using_fonts; then
