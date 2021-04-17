@@ -582,13 +582,13 @@ def buildCode(target, build_arch, nproc, no_clean, force, dry):
 
 		if target.create_package:
 			package_dir = os.path.join(output_dir + "/packages")
-			package_name = target.name + "-" + arch + "-" + datetime.now().strftime("%Y%m%d") +".tgz"
+			package_name = target.name + "-" + arch + ".tgz"
 			log_step("Creating {} package ...".format(package_name))
 			create_tar("../" + package_name, target.name, package_dir)
 
 		if target.system:
 			package_dir = os.path.join(output_dir)
-			package_name = target.name + "-" + arch + "-" + datetime.now().strftime("%Y%m%d") +".tgz"
+			package_name = target.name + "-" + arch + ".tgz"
 			log_step("Creating {} system image ...".format(package_name))
 			create_tar("../" + package_name, ".", package_dir)
 			os.replace(os.path.join(package_dir,"../" + package_name),os.path.join(package_dir, package_name))
