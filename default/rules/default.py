@@ -38,5 +38,5 @@ Target(
         'icesprog',
     ],
     patches = [ 'win-launcher.c' ],
-    resources = [ 'system-resources' ],
+    resources = [ 'system' ],
 )

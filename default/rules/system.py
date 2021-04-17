@@ -1,7 +1,7 @@
 from src.base import Target
 
 Target(
-	name = 'system-resources',
+	name = 'system',
 	sources = [ ],
 	patches = [ 'fonts.conf.template', 'win-launcher.c', 'environment' ],
 	system = True,
