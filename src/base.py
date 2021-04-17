@@ -398,6 +398,21 @@ def executeScript(target, arch, prefix, build_dir, output_dir, native, nproc, sc
 		code = run_live(params, cwd=build_dir)
 	return code
 
+def create_tar(tar_name, directory, cwd):
+	params= [
+		'tar',
+		'--owner=root', '--group=root',
+		'-czf', tar_name, directory
+	]
+	if (getBuildOS()=='darwin'):
+		params= [
+			'tar',
+			'-czf', tar_name, directory
+		]
+	code = run_live(params, cwd=cwd)
+	if code!=0:
+		log_error("Script returned error code {}.".format(code))
+
 def buildCode(target, build_arch, nproc, no_clean, force, dry):
 	if build_arch != getArchitecture() and build_arch in native_only_architectures:
 		log_error("Build for {} architecture can only be built natively.".format(build_arch))
@@ -569,33 +584,20 @@ def buildCode(target, build_arch, nproc, no_clean, force, dry):
 			package_dir = os.path.join(output_dir + "/packages")
 			package_name = target.name + "-" + arch + "-" + datetime.now().strftime("%Y%m%d") +".tgz"
 			log_step("Creating {} package ...".format(package_name))
-			params= [
-				'tar',
-				'--owner=root', '--group=root',
-				'-czf', "../" + package_name, target.name
-			]
-			if (getBuildOS()=='darwin'):
-				params= [
-					'tar',
-					'-czf', "../" + package_name, target.name
-				]
-			code = run_live(params, cwd=package_dir)
+			create_tar("../" + package_name, target.name, package_dir)
 
 		if target.system:
 			package_dir = os.path.join(output_dir)
 			package_name = target.name + "-" + arch + "-" + datetime.now().strftime("%Y%m%d") +".tgz"
 			log_step("Creating {} system image ...".format(package_name))
-			params= [
-				'tar',
-				'--owner=root', '--group=root',
-				'-czf', "../" + package_name, "."
-			]
-			if (getBuildOS()=='darwin'):
-				params= [
-					'tar',
-					'-czf', "../" + package_name, "."
-				]
-			code = run_live(params, cwd=package_dir)
+			create_tar("../" + package_name, ".", package_dir)
+			os.replace(os.path.join(package_dir,"../" + package_name),os.path.join(package_dir, package_name))
+
+		if target.top_package:
+			package_dir = os.path.join(output_dir)
+			package_name = ("fpga-nightly" if (target.name=="default") else target.name) + "-" + arch + "-" + datetime.now().strftime("%Y%m%d") +".tgz"
+			log_step("Creating {} main image ...".format(package_name))
+			create_tar("../" + package_name, ".", package_dir)
 			os.replace(os.path.join(package_dir,"../" + package_name),os.path.join(package_dir, package_name))
 
 		log_step("Marking build finished ...")
