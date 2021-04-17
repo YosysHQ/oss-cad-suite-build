@@ -1,6 +1,6 @@
 cd ${OUTPUT_DIR}${INSTALL_PREFIX}
 rm -rf ${OUTPUT_DIR}/dev
-
+rm -rf ${OUTPUT_DIR}/*.tgz
 if [ ${ARCH_BASE} == 'linux' ]; then
 # Linux section
 mkdir -p bin
