@@ -8,6 +8,7 @@ import tempfile
 import asyncio
 import hashlib
 import platform
+from datetime import datetime
 from collections import OrderedDict
 from libvcs.shortcuts import create_repo
 from libvcs.util import run
@@ -563,6 +564,39 @@ def buildCode(target, build_arch, nproc, no_clean, force, dry):
 					with open(os.path.join(build_dir, target.license_file), 'r') as lf:
 						f.write(lf.read())
 				f.write('\n' + '=' * 80 + '\n')
+
+		if target.create_package:
+			package_dir = os.path.join(output_dir + "/packages")
+			package_name = target.name + "-" + arch + "-" + datetime.now().strftime("%Y%m%d") +".tgz"
+			log_step("Creating {} package ...".format(package_name))
+			params= [
+				'tar',
+				'--owner=root', '--group=root',
+				'-czf', "../" + package_name, target.name
+			]
+			if (getBuildOS()=='darwin'):
+				params= [
+					'tar',
+					'-czf', "../" + package_name, target.name
+				]
+			code = run_live(params, cwd=package_dir)
+
+		if target.system:
+			package_dir = os.path.join(output_dir)
+			package_name = target.name + "-" + arch + "-" + datetime.now().strftime("%Y%m%d") +".tgz"
+			log_step("Creating {} system image ...".format(package_name))
+			params= [
+				'tar',
+				'--owner=root', '--group=root',
+				'-czf', "../" + package_name, "."
+			]
+			if (getBuildOS()=='darwin'):
+				params= [
+					'tar',
+					'-czf', "../" + package_name, "."
+				]
+			code = run_live(params, cwd=package_dir)
+			os.replace(os.path.join(package_dir,"../" + package_name),os.path.join(package_dir, package_name))
 
 		log_step("Marking build finished ...")
 		with open(hash_file, 'w') as f:
