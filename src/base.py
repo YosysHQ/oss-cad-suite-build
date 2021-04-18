@@ -21,6 +21,7 @@ native_only_architectures  = [ 'darwin-x64' ]
 SOURCES_ROOT = "_sources"
 BUILDS_ROOT  = "_builds"
 OUTPUTS_ROOT = "_outputs"
+HASHES_ROOT = "_hashes"
 SCRIPTS_ROOT = "scripts"
 PATCHES_ROOT = "patches"
 RULES_ROOT   = "rules"
@@ -435,10 +436,13 @@ def buildCode(target, build_arch, nproc, no_clean, force, dry):
 
 		output_dir = os.path.join(OUTPUTS_ROOT, arch, target.name)
 
+		hash_dir = os.path.join(HASHES_ROOT, arch, target.name)
+		hash_file = os.path.join(hash_dir, 'hash')
+		os.makedirs(hash_dir, exist_ok=True)
+
 		forceBuild = force
 		for dep in sorted(target.dependencies):
 			forceBuild = forceBuild or targets[dep].built
-		hash_file = os.path.join(output_dir, '.hash')
 		if (not forceBuild and os.path.exists(hash_file)):
 			if target.hash == open(hash_file, 'r').read():				
 				log_info_triple("Step [{:2d}/{:2d}] skipping ".format(pos,len(build_order)), target.name + build_info)
