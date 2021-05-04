@@ -40,3 +40,22 @@ Target(
     patches = [ 'win-launcher.c' ],
     resources = [ 'system' ],
 )
+
+
+Target(
+    name = 'minimal',
+    top_package = True,
+    create_package = False,
+    dependencies = [
+        'yosys',
+        'avy',
+        'boolector',
+        'yices',
+        'suprove',
+        'pono',
+        'z3',
+        'sby',
+    ],
+    patches = [ 'win-launcher.c' ],
+    resources = [ 'system' ],
+)
