@@ -414,7 +414,7 @@ def create_tar(tar_name, directory, cwd):
 	if code!=0:
 		log_error("Script returned error code {}.".format(code))
 
-def buildCode(target, build_arch, nproc, no_clean, force, dry):
+def buildCode(target, build_arch, nproc, no_clean, force, dry, tar):
 	if build_arch != getArchitecture() and build_arch in native_only_architectures:
 		log_error("Build for {} architecture can only be built natively.".format(build_arch))
 	native = False
@@ -584,25 +584,26 @@ def buildCode(target, build_arch, nproc, no_clean, force, dry):
 						f.write(lf.read())
 				f.write('\n' + '=' * 80 + '\n')
 
-		if target.create_package:
-			package_dir = os.path.join(output_dir + "/packages")
-			package_name = target.name + "-" + arch + ".tgz"
-			log_step("Creating {} package ...".format(package_name))
-			create_tar("../" + package_name, target.name, package_dir)
+		if tar:
+			if target.create_package:
+				package_dir = os.path.join(output_dir + "/packages")
+				package_name = target.name + "-" + arch + ".tgz"
+				log_step("Creating {} package ...".format(package_name))
+				create_tar("../" + package_name, target.name, package_dir)
 
-		if target.system:
-			package_dir = os.path.join(output_dir)
-			package_name = target.name + "-" + arch + ".tgz"
-			log_step("Creating {} system image ...".format(package_name))
-			create_tar("../" + package_name, ".", package_dir)
-			os.replace(os.path.join(package_dir,"../" + package_name),os.path.join(package_dir, package_name))
+			if target.system:
+				package_dir = os.path.join(output_dir)
+				package_name = target.name + "-" + arch + ".tgz"
+				log_step("Creating {} system image ...".format(package_name))
+				create_tar("../" + package_name, ".", package_dir)
+				os.replace(os.path.join(package_dir,"../" + package_name),os.path.join(package_dir, package_name))
 
-		if target.top_package:
-			package_dir = os.path.join(output_dir)
-			package_name = ("fpga-nightly" if (target.name=="default") else target.name) + "-" + arch + "-" + datetime.now().strftime("%Y%m%d") +".tgz"
-			log_step("Creating {} main image ...".format(package_name))
-			create_tar("../" + package_name, ".", package_dir)
-			os.replace(os.path.join(package_dir,"../" + package_name),os.path.join(package_dir, package_name))
+			if target.top_package:
+				package_dir = os.path.join(output_dir)
+				package_name = ("fpga-nightly" if (target.name=="default") else target.name) + "-" + arch + "-" + datetime.now().strftime("%Y%m%d") +".tgz"
+				log_step("Creating {} main image ...".format(package_name))
+				create_tar("../" + package_name, ".", package_dir)
+				os.replace(os.path.join(package_dir,"../" + package_name),os.path.join(package_dir, package_name))
 
 		log_step("Marking build finished ...")
 		with open(hash_file, 'w') as f:

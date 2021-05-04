@@ -24,8 +24,9 @@ def cli(ctx):
 @click.option('--arch', default=getArchitecture(), show_default=True, help='Build architecture.')
 @click.option('--rules', default='default', show_default=True, help='Comma separated list of rules to use.')
 @click.option('--dry', help='Just dry run of packages to be built', is_flag=True)
+@click.option('--tar', help='Create tar files for packages', is_flag=True)
 @click.option('-j', '--nproc', default=os.cpu_count(), show_default=True, help='Number of build process.')
-def build(no_update, no_clean, force, target, arch, rules, dry, nproc):
+def build(no_update, no_clean, force, target, arch, rules, dry, tar, nproc):
 	"""Build tools"""
 	for rule in rules.split(","):
 		loadRules(rule)
@@ -34,7 +35,7 @@ def build(no_update, no_clean, force, target, arch, rules, dry, nproc):
 	validateArch(arch)
 	loadSystem(arch)
 	pullCode(target, arch, getArchitecture(), no_update)
-	buildCode(target, arch, nproc, no_clean, force, dry)
+	buildCode(target, arch, nproc, no_clean, force, dry, tar)
 
 @cli.command()
 @click.option('--arch', default=getArchitecture(), show_default=True, help='Build architecture.')
