@@ -24,7 +24,10 @@ if [ ${ARCH_BASE} == 'linux' ]; then
 fi
 
 if [ ${ARCH_BASE} == 'darwin' ]; then
-    mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/lib
+    mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/Frameworks
+    cp -r ~/Qt5.15.2/lib/*.framework ${OUTPUT_DIR}${INSTALL_PREFIX}/Frameworks/.
+    cp -rv ~/Qt5.15.2/plugins/* ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/qt5/plugins/.
+
     cp -r $(brew --prefix tcl-tk)/lib/tcl8.6/. ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/tcl8.6
     cp -r $(brew --prefix tcl-tk)/lib/tk8.6/. ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/tk8.6
 

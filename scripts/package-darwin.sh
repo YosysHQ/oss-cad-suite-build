@@ -13,6 +13,7 @@ for bindir in bin py3bin super_prove/bin share/verilator/bin; do
     for binfile in $(file -h $bindir/* | grep Mach-O | grep executable | cut -f1 -d:); do
         rel_path=$(realpath --relative-to=$bindir .)
         dylibbundler -of -b -x $binfile -p @executable_path/../lib -d lib
+
         mv $binfile libexec
         is_using_fonts=false
         cat > $binfile << EOT
@@ -44,6 +45,7 @@ export PYTHONNOUSERSITE=1
 EOT
         fi
         if [ ! -z "$(otool -L libexec/$(basename $binfile) | grep QtCore)" ]; then
+            install_name_tool -add_rpath @executable_path/../Frameworks libexec/$(basename $binfile)
             cat >> $binfile << EOT
 export QT_PLUGIN_PATH="\$release_topdir_abs/lib/qt5/plugins"
 export QT_LOGGING_RULES="*=false"

@@ -320,7 +320,7 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, native, nproc, pac
 	env['ARCH_BASE'] = arch.split('-')[0]
 	env['NPROC'] = str(nproc)
 	env['SHARED_EXT'] = '.so'
-	env['PACK_SOURCES'] = pack_sources
+	env['PACK_SOURCES'] = 'True' if pack_sources else 'False'
 	if (arch == 'windows-x64'):
 		env['EXE'] = '.exe'
 		env['SHARED_EXT'] = '.dll'
@@ -330,7 +330,7 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, native, nproc, pac
 			env['PKG_CONFIG_PATH'] = '/usr/local/opt/libffi/lib/pkgconfig'
 			env['PATH'] =  '/usr/local/opt/gnu-sed/libexec/gnubin:'
 			env['PATH'] += '/usr/local/opt/coreutils/libexec/gnubin:'
-			env['PATH'] += '/usr/local/opt/qt5/bin:'
+			env['PATH'] += '~/Qt5.15.2/bin:'
 			env['PATH'] += '/usr/local/opt/bison/bin:'
 			env['PATH'] += '/usr/local/opt/flex/bin:'
 			env['PATH'] += '/usr/local/opt/openjdk/bin:'
@@ -343,6 +343,8 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, native, nproc, pac
 
 	scriptfile = tempfile.NamedTemporaryFile()
 	scriptfile.write("set -e -x\n".encode())
+	if (getBuildOS()=='darwin'):
+		scriptfile.write(str('export CMAKE_PREFIX_PATH=~/Qt5.15.2\n').encode())
 	if (not target.top_package):
 		scriptfile.write(open(os.path.join(target.group, SCRIPTS_ROOT, target.name + ".sh"), 'r').read().encode())
 	else:
