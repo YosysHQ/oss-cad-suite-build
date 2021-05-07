@@ -76,6 +76,12 @@ SourceLocation(
 )
 
 Target(
+	name = 'cvc4',
+	sources = [ 'cvc4' ],
+	arch = [ 'linux-x64', 'darwin-x64', 'linux-arm', 'linux-arm64', 'linux-riscv64' ],
+)
+
+Target(
 	name = 'smt-switch',
 	sources = [ 'smt-switch' ],
 	dependencies = [ 'cvc4', 'boolector' ],
@@ -89,12 +95,6 @@ Target(
 	dependencies = [ 'smt-switch', 'boolector' ],
 	arch = [ 'linux-x64', 'darwin-x64', 'linux-arm', 'linux-arm64', 'linux-riscv64' ],
 	license_file = 'pono/LICENSE',
-)
-
-Target(
-	name = 'cvc4',
-	sources = [ 'cvc4' ],
-	arch = [ 'linux-x64', 'darwin-x64', 'linux-arm', 'linux-arm64', 'linux-riscv64' ],
 )
 
 # suprove

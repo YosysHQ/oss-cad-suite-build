@@ -18,7 +18,7 @@ SourceLocation(
 	name = 'python2',
 	vcs = 'git',
 	location = 'https://github.com/python/cpython',
-	revision = 'tags/v2.7.18'
+	revision = 'tags/v2.7.18',
 )
 
 Target(
