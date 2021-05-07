@@ -494,7 +494,7 @@ def buildCode(target, build_arch, nproc, no_clean, force, dry):
 					for filename in sorted(files):
 						fpath = os.path.join(root, filename).replace(output_dir,"")
 						if not fpath.startswith("/dev"):
-							f.write(fpath + '\n')
+							f.write(fpath.replace("/yosyshq/","") + '\n')
 				f.write("\nSoftware is under following license :\n")
 				f.write('=' * 80 + '\n')
 				if target.license_url is not None:
