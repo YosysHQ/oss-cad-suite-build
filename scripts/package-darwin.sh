@@ -44,26 +44,45 @@ export PYTHONNOUSERSITE=1
 EOT
         fi
         if [ ! -z "$(otool -L libexec/$(basename $binfile) | grep QtCore)" ]; then
-            is_using_fonts=true
             cat >> $binfile << EOT
 export QT_PLUGIN_PATH="\$release_topdir_abs/lib/qt5/plugins"
+export QT_LOGGING_RULES="*=false"
 unset QT_QPA_PLATFORMTHEME
 unset QT_STYLE_OVERRIDE
-export XDG_CONFIG_HOME="\$release_topdir_abs"
+unset XDG_DATA_DIRS
+unset XDG_CONFIG_DIRS
+export XDG_CONFIG_HOME=\$HOME/.config/yosyshq
+export XDG_CACHE_HOME=\$HOME/.cache/yosyshq
+export XDG_DATA_HOME=\$HOME/.local/share/yosyshq
+export LC_ALL="C"
+mkdir -p \$HOME/.config/yosyshq \$HOME/.local/share/yosyshq
 EOT
         fi
         if [ ! -z "$(otool -L libexec/$(basename $binfile) | grep libgtk)" ]; then
-            is_using_fonts=true
+# Set and unset variables according to:
+# https://refspecs.linuxbase.org/gtk/2.6/gtk/gtk-running.html
+# https://specifications.freedesktop.org/basedir-spec/0.6/ar01s03.html
             cat >> $binfile << EOT
-export GTK_PATH="\$release_topdir_abs/lib/gtk-2.0" GTK_MODULES="" GTK_IM_MODULE="" GTK_IM_MODULE_FILE="/dev/null"
-export GTK2_MODULES="" GTK_EXE_PREFIX="\$release_topdir_abs" GTK_DATA_PREFIX="\$release_topdir_abs"
+unset GTK_MODULES
+unset GTK2_MODULES
+export GTK_PATH="\$release_topdir_abs/lib/gtk-2.0"
+export GTK_IM_MODULE=""
+export GTK_IM_MODULE_FILE="/dev/null"
+export GTK2_RC_FILES="\$release_topdir_abs/lib/gtk-2.0/gtkrc"
+export GTK_EXE_PREFIX="\$release_topdir_abs"
+export GTK_DATA_PREFIX="\$release_topdir_abs"
 export GDK_PIXBUF_MODULEDIR="\$release_topdir_abs/lib/gtk-2.0/loaders"
-export GDK_PIXBUF_MODULE_FILE="\$release_topdir_abs/lib/gtk-2.0/loaders.cache" LC_ALL="C"
+export GDK_PIXBUF_MODULE_FILE="\$release_topdir_abs/lib/gtk-2.0/loaders.cache"
+unset XDG_DATA_DIRS
+unset XDG_CONFIG_DIRS
+export XDG_CONFIG_HOME=\$HOME/.config/yosyshq
+export XDG_CACHE_HOME=\$HOME/.cache/yosyshq
+export XDG_DATA_HOME=\$HOME/.local/share/yosyshq
+export LC_ALL="C"
 export TCL_LIBRARY="\$release_topdir_abs/lib/tcl8.6"
 export TK_LIBRARY="\$release_topdir_abs/lib/tk8.6"
-export GTK2_RC_FILES="\$release_topdir_abs/lib/gtk-2.0/gtkrc"
 "\$release_topdir_abs"/libexec/gdk-pixbuf-query-loaders --update-cache
-
+mkdir -p \$HOME/.config/yosyshq \$HOME/.local/share/yosyshq
 EOT
         fi
 
@@ -75,6 +94,7 @@ EOT
 done
 
 if [ -f "py3bin/python3" ]; then
+    mkdir -p bin
     cp py3bin/python3 bin/packaged_py3
 fi
 
@@ -91,15 +111,31 @@ export PATH="\$release_bindir_abs:\$PATH"
 export PYTHONEXECUTABLE="\$release_bindir_abs/packaged_py3"
 EOT
         if [ $script == 'bin/xdot' ]; then
+# Set and unset variables according to:
+# https://refspecs.linuxbase.org/gtk/2.6/gtk/gtk-running.html
+# https://specifications.freedesktop.org/basedir-spec/0.6/ar01s03.html
             cat >> "${script}" <<EOT
-export GTK_PATH="\$release_topdir_abs/lib/gtk-2.0" GTK_MODULES="" GTK_IM_MODULE="" GTK_IM_MODULE_FILE="/dev/null"
-export GTK2_MODULES="" GTK_EXE_PREFIX="\$release_topdir_abs" GTK_DATA_PREFIX="\$release_topdir_abs"
+unset GTK_MODULES
+unset GTK2_MODULES
+export GTK_PATH="\$release_topdir_abs/lib/gtk-2.0"
+export GTK_IM_MODULE=""
+export GTK_IM_MODULE_FILE="/dev/null"
+export GTK2_RC_FILES="\$release_topdir_abs/lib/gtk-2.0/gtkrc"
+export GTK_EXE_PREFIX="\$release_topdir_abs"
+export GTK_DATA_PREFIX="\$release_topdir_abs"
 export GDK_PIXBUF_MODULEDIR="\$release_topdir_abs/lib/gtk-2.0/loaders"
-export GDK_PIXBUF_MODULE_FILE="\$release_topdir_abs/lib/gtk-2.0/loaders.cache" LC_ALL="C"
+export GDK_PIXBUF_MODULE_FILE="\$release_topdir_abs/lib/gtk-2.0/loaders.cache"
+unset XDG_DATA_DIRS
+unset XDG_CONFIG_DIRS
+export XDG_CONFIG_HOME=\$HOME/.config/yosyshq
+export XDG_CACHE_HOME=\$HOME/.cache/yosyshq
+export XDG_DATA_HOME=\$HOME/.local/share/yosyshq
 export TCL_LIBRARY="\$release_topdir_abs/lib/tcl8.6"
 export TK_LIBRARY="\$release_topdir_abs/lib/tk8.6"
-export GTK2_RC_FILES="\$release_topdir_abs/lib/gtk-2.0/gtkrc"
+export LC_ALL="C"
+export GI_TYPELIB_PATH="\$release_topdir_abs/lib/girepository-1.0"
 "\$release_topdir_abs"/libexec/gdk-pixbuf-query-loaders --update-cache
+mkdir -p \$HOME/.config/yosyshq \$HOME/.local/share/yosyshq
 EOT
         fi
         cat >> "${script}" <<EOT
