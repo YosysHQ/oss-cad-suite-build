@@ -43,7 +43,8 @@ Target(
 
 
 Target(
-    name = 'minimal',
+    name = 'default-formal',
+    release_name = 'fpga-nightly-formal',
     top_package = True,
     dependencies = [
         'yosys',
@@ -53,7 +54,10 @@ Target(
         'suprove',
         'pono',
         'z3',
+        'mcy',
         'sby',
+        'sby-gui',
+        'gtkwave',
     ],
     patches = [ 'win-launcher.c' ],
     resources = [ 'system-resources' ],
