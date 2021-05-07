@@ -3,7 +3,7 @@ mkdir -p lib
 mkdir -p libexec
 
 rm -rf ${OUTPUT_DIR}/dev
-rm -rf ${OUTPUT_DIR}/include
+rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/include
 
 for bindir in bin py3bin; do
     for binfile in $(file -h $bindir/* | grep PE32 | grep executable | cut -f1 -d:); do

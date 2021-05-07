@@ -3,7 +3,7 @@ mkdir -p lib
 mkdir -p libexec
 
 rm -rf ${OUTPUT_DIR}/dev
-rm -rf ${OUTPUT_DIR}/include
+rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/include
 
 if [ ${ARCH} == 'linux-x64' ]; then
     ldlinuxname="ld-linux-x86-64.so.2"
@@ -60,19 +60,21 @@ EOT
             is_using_fonts=true
             cat >> $binfile << EOT
 export QT_PLUGIN_PATH="\$release_topdir_abs/lib/qt5/plugins"
+export QT_LOGGING_RULES="*=false"
 unset QT_QPA_PLATFORMTHEME
 unset QT_STYLE_OVERRIDE
 unset XDG_DATA_DIRS
-export XDG_DATA_HOME="\$release_topdir_abs"
-export XDG_CONFIG_HOME="\$release_topdir_abs"
+unset XDG_CONFIG_DIRS
+export XDG_CONFIG_HOME=\$HOME/.config/yosyshq
+export XDG_CACHE_HOME=\$HOME/.cache/yosyshq
+export XDG_DATA_HOME=\$HOME/.local/share/yosyshq
 export LC_ALL="C"
-export FONTCONFIG_FILE="\$release_topdir_abs/etc/fonts/fonts.conf"
-export FONTCONFIG_PATH="\$release_topdir_abs/etc/fonts"
 EOT
         fi
         if [ ! -z "$(lddtree -l libexec/$(basename $binfile) | grep gtk)" ]; then
 # Set and unset variables according to:
 # https://refspecs.linuxbase.org/gtk/2.6/gtk/gtk-running.html
+# https://specifications.freedesktop.org/basedir-spec/0.6/ar01s03.html
             is_using_fonts=true
             cat >> $binfile << EOT
 unset GTK_MODULES
@@ -85,34 +87,33 @@ export GTK_EXE_PREFIX="\$release_topdir_abs"
 export GTK_DATA_PREFIX="\$release_topdir_abs"
 export GDK_PIXBUF_MODULE_FILE="\$release_topdir_abs/lib/gtk-2.0/loaders.cache"
 unset XDG_DATA_DIRS
-export XDG_DATA_HOME="\$release_topdir_abs"
-export XDG_CONFIG_HOME="\$release_topdir_abs"
+unset XDG_CONFIG_DIRS
+export XDG_CONFIG_HOME=\$HOME/.config/yosyshq
+export XDG_CACHE_HOME=\$HOME/.cache/yosyshq
+export XDG_DATA_HOME=\$HOME/.local/share/yosyshq
 export LC_ALL="C"
 export TCL_LIBRARY="\$release_topdir_abs/lib/tcl8.6"
 export TK_LIBRARY="\$release_topdir_abs/lib/tk8.6"
-export FONTCONFIG_FILE="\$release_topdir_abs/etc/fonts/fonts.conf"
-export FONTCONFIG_PATH="\$release_topdir_abs/etc/fonts"
 EOT
         fi
 
         if $is_using_fonts; then
             cat >> $binfile << EOT
-if [ -f "\$FONTCONFIG_FILE" ]; then
-    exec "\$release_topdir_abs"/lib/$ldlinuxname --inhibit-cache --inhibit-rpath "" --library-path "\$release_topdir_abs"/lib "\$release_topdir_abs"/libexec/$(basename $binfile) "\$@"
-else
-    echo "Execute \$release_topdir_abs/setup.sh script to do initial setup of YosysHQ configuration files."
-fi
-EOT
-        else
-            cat >> $binfile << EOT
-exec "\$release_topdir_abs"/lib/$ldlinuxname --inhibit-cache --inhibit-rpath "" --library-path "\$release_topdir_abs"/lib "\$release_topdir_abs"/libexec/$(basename $binfile) "\$@"
+export FONTCONFIG_FILE="\$XDG_CONFIG_HOME/fonts.conf"
+export FONTCONFIG_PATH="\$release_topdir_abs/etc/fonts"
+mkdir -p \$HOME/.config/yosyshq \$HOME/.local/share/yosyshq
+sed "s|TARGET_DIR|\$release_topdir_abs|g" "\$release_topdir_abs/etc/fonts/fonts.conf.template" > \$FONTCONFIG_FILE
 EOT
         fi
+        cat >> $binfile << EOT
+exec "\$release_topdir_abs"/lib/$ldlinuxname --inhibit-cache --inhibit-rpath "" --library-path "\$release_topdir_abs"/lib "\$release_topdir_abs"/libexec/$(basename $binfile) "\$@"
+EOT
         chmod +x $binfile
     done
 done
 
 if [ -f "py3bin/python3" ]; then
+    mkdir -p bin
     cp py3bin/python3 bin/packaged_py3
 fi
 
@@ -132,6 +133,7 @@ EOT
         if [ $script == 'bin/xdot' ]; then
 # Set and unset variables according to:
 # https://refspecs.linuxbase.org/gtk/2.6/gtk/gtk-running.html
+# https://specifications.freedesktop.org/basedir-spec/0.6/ar01s03.html
             is_using_fonts=true
             cat >> "${script}" <<EOT
 unset GTK_MODULES
@@ -144,28 +146,27 @@ export GTK_EXE_PREFIX="\$release_topdir_abs"
 export GTK_DATA_PREFIX="\$release_topdir_abs"
 export GDK_PIXBUF_MODULE_FILE="\$release_topdir_abs/lib/gtk-2.0/loaders.cache"
 unset XDG_DATA_DIRS
-export XDG_DATA_HOME="\$release_topdir_abs"
-export XDG_CONFIG_HOME="\$release_topdir_abs"
-export LC_ALL="C"
+unset XDG_CONFIG_DIRS
+export XDG_CONFIG_HOME=\$HOME/.config/yosyshq
+export XDG_CACHE_HOME=\$HOME/.cache/yosyshq
+export XDG_DATA_HOME=\$HOME/.local/share/yosyshq
 export TCL_LIBRARY="\$release_topdir_abs/lib/tcl8.6"
 export TK_LIBRARY="\$release_topdir_abs/lib/tk8.6"
-export FONTCONFIG_FILE="\$release_topdir_abs/etc/fonts/fonts.conf"
-export FONTCONFIG_PATH="\$release_topdir_abs/etc/fonts"
+export LC_ALL="C"
+export GI_TYPELIB_PATH="\$release_topdir_abs/lib/girepository-1.0"
 EOT
         fi
         if $is_using_fonts; then
             cat >> "${script}" <<EOT
-if [ -f "\$FONTCONFIG_FILE" ]; then
-    exec \$release_bindir_abs/packaged_py3 "\$release_topdir_abs"/libexec/$(basename $script) "\$@"
-else
-    echo "Execute \$release_topdir_abs/setup.sh script to do initial setup of YosysHQ configuration files."
-fi
-EOT
-        else
-            cat >> "${script}" <<EOT
-exec \$release_bindir_abs/packaged_py3 "\$release_topdir_abs"/libexec/$(basename $script) "\$@"
+export FONTCONFIG_FILE="\$XDG_CONFIG_HOME/fonts.conf"
+export FONTCONFIG_PATH="\$release_topdir_abs/etc/fonts"
+mkdir -p \$HOME/.config/yosyshq \$HOME/.local/share/yosyshq
+sed "s|TARGET_DIR|\$release_topdir_abs|g" "\$release_topdir_abs/etc/fonts/fonts.conf.template" > \$FONTCONFIG_FILE
 EOT
         fi
+        cat >> "${script}" <<EOT
+exec \$release_bindir_abs/packaged_py3 "\$release_topdir_abs"/libexec/$(basename $script) "\$@"
+EOT
         chmod +x "${script}"
     fi
 done

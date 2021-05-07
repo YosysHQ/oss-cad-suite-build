@@ -3,7 +3,6 @@ mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/qt5/plugins
 if [ ${ARCH_BASE} == 'linux' ]; then
     # Linux section
     cp ${PATCHES_DIR}/environment ${OUTPUT_DIR}${INSTALL_PREFIX}/.
-    cp ${PATCHES_DIR}/setup.sh ${OUTPUT_DIR}${INSTALL_PREFIX}/.
 
     mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/etc/fonts ${OUTPUT_DIR}${INSTALL_PREFIX}/share/fonts
     cp -r /usr/share/fonts/. ${OUTPUT_DIR}${INSTALL_PREFIX}/share/fonts

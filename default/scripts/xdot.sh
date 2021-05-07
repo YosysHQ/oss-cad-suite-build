@@ -6,6 +6,7 @@ if [ ${ARCH} == 'linux-x64' ]; then
 	cp /usr/bin/dot ${OUTPUT_DIR}${INSTALL_PREFIX}/bin/.
 	mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/graphviz
 	cp -r /usr/lib/x86_64-linux-gnu/graphviz ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/.
+	cp -r /usr/lib/x86_64-linux-gnu/girepository-1.0 ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/.
 elif [ ${ARCH} == 'darwin-x64' ]; then
 	cp /usr/local/bin/dot ${OUTPUT_DIR}${INSTALL_PREFIX}/bin/.
 	mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/graphviz
