@@ -2,7 +2,7 @@ from src.base import Target
 
 Target(
     name = 'default',
-    package = True,
+    top_package = True,
     dependencies = [
         'yosys',
         'nextpnr-generic',

@@ -8,6 +8,7 @@ import tempfile
 import asyncio
 import hashlib
 import platform
+from datetime import datetime
 from collections import OrderedDict
 from libvcs.shortcuts import create_repo
 from libvcs.util import run
@@ -64,7 +65,7 @@ class SourceLocation:
 		sources[name] = self
 
 class Target:
-	def __init__(self, name, sources = [], dependencies = [], resources = [], patches = [], arch = [], license_url = None, license_file = None, package = False, build_native = False):
+	def __init__(self, name, sources = [], dependencies = [], resources = [], patches = [], arch = [], license_url = None, license_file = None, top_package = False, build_native = False):
 		self.name = name
 		self.sources = sources
 		self.dependencies = dependencies
@@ -74,7 +75,7 @@ class Target:
 		self.license_file = license_file
 		self.hash = None
 		self.built = False
-		self.package = package
+		self.top_package = top_package
 		global current_rule_group
 		self.group = current_rule_group
 		self.arch = arch
@@ -168,7 +169,7 @@ def dependencyResolver(target, resolved, unresolved, build_arch, arch, display, 
 
 def createBuildOrder(target, build_arch, arch, display):
 	resolved = []
-	dependencyResolver(target, resolved, [], build_arch, arch, display, targets[target].package)
+	dependencyResolver(target, resolved, [], build_arch, arch, display, targets[target].top_package)
 	return resolved
 
 def createNeededSourceList(target, build_arch, arch):
@@ -283,7 +284,7 @@ def calculateHash(target, prefix, arch, build_order):
 	for d in sorted(target.dependencies):
 		if targets[d].hash:
 			data.append(targets[d].hash)
-	if target.package:
+	if target.top_package:
 		resources = set()
 		for d in build_order:
 			dep = targets[d[1]]
@@ -326,6 +327,7 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, native, nproc):
 			env['PATH'] += '/usr/local/opt/bison/bin:'
 			env['PATH'] += '/usr/local/opt/flex/bin:'
 			env['PATH'] += '/usr/local/opt/openjdk/bin:'
+			env['PATH'] += '/usr/local/opt/texinfo/bin:'
 			env['PATH'] += '~/.cargo/bin/:'
 			env['PATH'] += os.environ['PATH']
 			env['SHARED_EXT'] = '.dylib'
@@ -359,6 +361,21 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, native, nproc):
 		]
 		code = run_live(params, cwd=build_dir)
 	return code
+
+def create_tar(tar_name, directory, cwd):
+	params= [
+		'tar',
+		'--owner=root', '--group=root',
+		'-czf', tar_name, directory
+	]
+	if (getBuildOS()=='darwin'):
+		params= [
+			'tar',
+			'-czf', tar_name, directory
+		]
+	code = run_live(params, cwd=cwd)
+	if code!=0:
+		log_error("Script returned error code {}.".format(code))
 
 def buildCode(target, build_arch, nproc, no_clean, force, prefix, dry):
 	if build_arch != getArchitecture() and build_arch in native_only_architectures:
@@ -404,7 +421,7 @@ def buildCode(target, build_arch, nproc, no_clean, force, prefix, dry):
 		if no_clean and os.path.exists(build_dir):
 			log_step("Skipping clean of build dir ...")
 		else:
-			if not target.package:
+			if not target.top_package:
 				log_step("Remove old build dir ...")
 				if os.path.exists(build_dir):
 					shutil.rmtree(build_dir, onerror=removeError)
@@ -416,7 +433,7 @@ def buildCode(target, build_arch, nproc, no_clean, force, prefix, dry):
 					run(['rsync','-a', src_dir, build_dir])
 
 			deps = target.dependencies
-			if t[1] == target.name and target.package:
+			if t[1] == target.name and target.top_package:
 				res = set()
 				for d in build_order:
 					dep = targets[d[1]]
@@ -437,7 +454,7 @@ def buildCode(target, build_arch, nproc, no_clean, force, prefix, dry):
 						dep_dir = os.path.join(OUTPUTS_ROOT, getArchitecture(), d)
 					else:
 						dep_dir = os.path.join(OUTPUTS_ROOT, arch, d)
-					if not target.package:
+					if not target.top_package:
 						log_step_triple("Copy '", d + dep_build_info, "' output to build dir ...")
 						run(['rsync','-a', dep_dir, build_dir])
 					else:
@@ -445,16 +462,9 @@ def buildCode(target, build_arch, nproc, no_clean, force, prefix, dry):
 						run(['rsync','-a', dep_dir+"/", output_dir])
 
 
-		code = executeBuild(target, arch, prefix, build_dir if not target.package else output_dir, output_dir, native, nproc)
+		code = executeBuild(target, arch, prefix, build_dir if not target.top_package else output_dir, output_dir, native, nproc)
 		if code!=0:
 			log_error("Script returned error code {}.".format(code))
-
-		if (getBuildOS()=='windows'):
-			msys_dir = os.path.join(output_dir, "msys64")
-			if os.path.exists(msys_dir):
-				log_step("MSYS2 directory fix ...")
-				run(['rsync','-a', msys_dir+"/", output_dir])
-				shutil.rmtree(msys_dir, onerror=removeError)
 
 		if target.license_file is not None or target.license_url is not None:
 			log_step("Generating license file ...")
@@ -469,9 +479,11 @@ def buildCode(target, build_arch, nproc, no_clean, force, prefix, dry):
 					f.write("{} {} checkout revision {}\n".format(sources[s].vcs, sources[s].location, sources[s].hash))
 				f.write("\nFollowing files are included:\n")
 				f.write('=' * 80 + '\n')
-				for root, _, files in os.walk(output_dir):
-					for filename in files:
-						f.write(os.path.join(root, filename).replace(output_dir,"") + '\n')
+				for root, _, files in sorted(os.walk(output_dir)):
+					for filename in sorted(files):
+						fpath = os.path.join(root, filename).replace(output_dir,"")
+						if not fpath.startswith("/dev"):
+							f.write(fpath + '\n')
 				f.write("\nSoftware is under following license :\n")
 				f.write('=' * 80 + '\n')
 				if target.license_url is not None:
@@ -491,7 +503,7 @@ def buildCode(target, build_arch, nproc, no_clean, force, prefix, dry):
 			f.write(target.hash)
 		target.built = True
 
-		if not no_clean and not target.package:
+		if not no_clean and not target.top_package:
 			log_step("Remove build dir ...")
 			if os.path.exists(build_dir):
 				shutil.rmtree(build_dir, onerror=removeError)
