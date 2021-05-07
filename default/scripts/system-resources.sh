@@ -1,15 +1,16 @@
-mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/etc/fonts ${OUTPUT_DIR}${INSTALL_PREFIX}/share/fonts
 mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/qt5/plugins
 
 if [ ${ARCH_BASE} == 'linux' ]; then
     # Linux section
     cp ${PATCHES_DIR}/environment ${OUTPUT_DIR}${INSTALL_PREFIX}/.
+    cp ${PATCHES_DIR}/setup.sh ${OUTPUT_DIR}${INSTALL_PREFIX}/.
 
+    mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/etc/fonts ${OUTPUT_DIR}${INSTALL_PREFIX}/share/fonts
     cp -r /usr/share/fonts/. ${OUTPUT_DIR}${INSTALL_PREFIX}/share/fonts
     cp -r /etc/fonts/.   ${OUTPUT_DIR}${INSTALL_PREFIX}/etc/fonts
     rm ${OUTPUT_DIR}${INSTALL_PREFIX}/etc/fonts/fonts.conf
-    cp ${PATCHES_DIR}/setup.sh ${OUTPUT_DIR}${INSTALL_PREFIX}/.
     cp ${PATCHES_DIR}/fonts.conf.template ${OUTPUT_DIR}${INSTALL_PREFIX}/etc/fonts/.
+
     mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/lib
     cp -r /usr/share/tcltk/tcl8.6/. ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/tcl8.6
     cp -r /usr/share/tcltk/tk8.6/. ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/tk8.6
