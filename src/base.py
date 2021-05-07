@@ -65,7 +65,7 @@ class SourceLocation:
 		sources[name] = self
 
 class Target:
-	def __init__(self, name, sources = [], dependencies = [], resources = [], patches = [], arch = [], license_url = None, license_file = None, top_package = False, build_native = False):
+	def __init__(self, name, sources = [], dependencies = [], resources = [], patches = [], arch = [], license_url = None, license_file = None, top_package = False, build_native = False, release_name = None):
 		self.name = name
 		self.sources = sources
 		self.dependencies = dependencies
@@ -80,6 +80,10 @@ class Target:
 		self.group = current_rule_group
 		self.arch = arch
 		self.build_native = build_native
+		if release_name:
+			self.release_name = release_name
+		else:
+			self.release_name = name
 		if name in targets:
 			log_step_triple("Overriding ", name)
 		else:
@@ -504,6 +508,12 @@ def buildCode(target, build_arch, nproc, no_clean, force, dry):
 					with open(os.path.join(build_dir, target.license_file), 'r') as lf:
 						f.write(lf.read())
 				f.write('\n' + '=' * 80 + '\n')
+
+		if target.top_package:
+			package_name = target.release_name + "-" + arch + "-" + datetime.now().strftime("%Y%m%d") +".tgz"
+			log_step("Packing {} ...".format(package_name))
+			os.replace(os.path.join(output_dir, "yosyshq"), os.path.join(output_dir, "tabby"))
+			create_tar(package_name, "tabby", output_dir)
 
 		log_step("Marking build finished ...")
 		with open(hash_file, 'w') as f:

@@ -2,6 +2,7 @@ from src.base import Target
 
 Target(
     name = 'default',
+    release_name = 'fpga-nightly',
     top_package = True,
     dependencies = [
         'yosys',
