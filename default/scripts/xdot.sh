@@ -11,4 +11,5 @@ elif [ ${ARCH} == 'darwin-x64' ]; then
 	cp /usr/local/bin/dot ${OUTPUT_DIR}${INSTALL_PREFIX}/bin/.
 	mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/graphviz
 	cp -r $(brew --prefix graphviz)/lib/graphviz ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/.
+	cp -r /usr/local/lib/girepository-1.0 ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/.
 fi
