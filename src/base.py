@@ -306,7 +306,7 @@ def calculateHash(target, arch, build_order):
 		data.append(hashlib.sha256(open(os.path.join(SCRIPTS_ROOT, "package-" + arch.split('-')[0] + ".sh"), 'r').read().encode()).hexdigest())
 	return hashlib.sha256('\n'.join(data).encode()).hexdigest()
 
-def executeBuild(target, arch, prefix, build_dir, output_dir, native, nproc):
+def executeBuild(target, arch, prefix, build_dir, output_dir, native, nproc, pack_sources):
 	cwd = os.getcwd()
 
 	env = OrderedDict()
@@ -320,6 +320,7 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, native, nproc):
 	env['ARCH_BASE'] = arch.split('-')[0]
 	env['NPROC'] = str(nproc)
 	env['SHARED_EXT'] = '.so'
+	env['PACK_SOURCES'] = pack_sources
 	if (arch == 'windows-x64'):
 		env['EXE'] = '.exe'
 		env['SHARED_EXT'] = '.dll'
@@ -387,7 +388,7 @@ def create_tar(tar_name, directory, cwd):
 	if code!=0:
 		log_error("Script returned error code {}.".format(code))
 
-def buildCode(target, build_arch, nproc, no_clean, force, dry):
+def buildCode(target, build_arch, nproc, no_clean, force, dry, pack_sources):
 	if build_arch != getArchitecture() and build_arch in native_only_architectures:
 		log_error("Build for {} architecture can only be built natively.".format(build_arch))
 	native = False
@@ -473,7 +474,7 @@ def buildCode(target, build_arch, nproc, no_clean, force, dry):
 
 
 		prefix = "/yosyshq"
-		code = executeBuild(target, arch, prefix, build_dir if not target.top_package else output_dir, output_dir, native, nproc)
+		code = executeBuild(target, arch, prefix, build_dir if not target.top_package else output_dir, output_dir, native, nproc, pack_sources)
 		if code!=0:
 			log_error("Script returned error code {}.".format(code))
 

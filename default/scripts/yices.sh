@@ -1,4 +1,10 @@
 cd yices
+if [ ${PACK_SOURCES} == 'True' ]; then
+	pushd ..
+	mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/src
+	tar -cf ${OUTPUT_DIR}${INSTALL_PREFIX}/src/yices.tar yices
+	popd
+fi
 autoconf
 ./configure --prefix=${INSTALL_PREFIX} --host=${CROSS_NAME}
 if [ ${ARCH_BASE} == 'linux' ]; then
