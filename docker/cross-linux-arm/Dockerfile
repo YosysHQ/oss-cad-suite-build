@@ -41,6 +41,8 @@ RUN set -e -x ;\
         qtbase5-dev:armhf \
         libbison-dev:armhf \
         libhidapi-dev:armhf \
+        libcurl4-openssl-dev:armhf \
+        libbz2-dev:armhf \
         libllvm10:armhf; \
     apt -y autoremove ;\
     rm -rf /var/lib/apt/lists/*
@@ -66,4 +68,7 @@ RUN rustup target add arm-unknown-linux-gnueabihf && \
 
 RUN wget http://ports.ubuntu.com/pool/main/g/gobject-introspection/libgirepository1.0-dev_1.64.1-1~ubuntu20.04.1_armhf.deb && \
     dpkg-deb -xv libgirepository1.0-dev_1.64.1-1~ubuntu20.04.1_armhf.deb / && \
-    rm -rf libgirepository1.0-dev_1.64.1-1~ubuntu20.04.1_armhf.deb
+    rm -rf libgirepository1.0-dev_1.64.1-1~ubuntu20.04.1_armhf.deb && \
+    wget http://ports.ubuntu.com/pool/main/g/gobject-introspection/gir1.2-glib-2.0_1.64.1-1~ubuntu20.04.1_armhf.deb && \
+    dpkg-deb -xv gir1.2-glib-2.0_1.64.1-1~ubuntu20.04.1_armhf.deb / && \
+    rm -rf gir1.2-glib-2.0_1.64.1-1~ubuntu20.04.1_armhf.deb

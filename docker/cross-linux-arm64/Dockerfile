@@ -41,6 +41,8 @@ RUN set -e -x ;\
         qtbase5-dev:arm64 \
         libbison-dev:arm64 \
         libhidapi-dev:arm64 \
+        libcurl4-openssl-dev:arm64 \
+        libbz2-dev:arm64 \
         libllvm10:arm64; \
     apt -y autoremove ;\
     rm -rf /var/lib/apt/lists/*
@@ -66,4 +68,7 @@ RUN rustup target add aarch64-unknown-linux-gnu && \
 
 RUN wget http://ports.ubuntu.com/pool/main/g/gobject-introspection/libgirepository1.0-dev_1.64.1-1~ubuntu20.04.1_arm64.deb && \
     dpkg-deb -xv libgirepository1.0-dev_1.64.1-1~ubuntu20.04.1_arm64.deb / && \
-    rm -rf libgirepository1.0-dev_1.64.1-1~ubuntu20.04.1_arm64.deb
+    rm -rf libgirepository1.0-dev_1.64.1-1~ubuntu20.04.1_arm64.deb && \
+    wget http://ports.ubuntu.com/pool/main/g/gobject-introspection/gir1.2-glib-2.0_1.64.1-1~ubuntu20.04.1_arm64.deb && \
+    dpkg-deb -xv gir1.2-glib-2.0_1.64.1-1~ubuntu20.04.1_arm64.deb / && \
+    rm -rf gir1.2-glib-2.0_1.64.1-1~ubuntu20.04.1_arm64.deb

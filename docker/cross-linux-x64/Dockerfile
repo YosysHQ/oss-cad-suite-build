@@ -31,7 +31,9 @@ RUN set -e -x ;\
         qtbase5-dev \
         libbison-dev \
         python3-dev \
-        libhidapi-dev; \
+        libhidapi-dev \
+        libcurl4-openssl-dev \
+        libbz2-dev; \
     apt -y autoremove ;\
     rm -rf /var/lib/apt/lists/*
 
