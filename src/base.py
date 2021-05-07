@@ -143,7 +143,7 @@ def validateRules():
 			if not os.path.exists(os.path.join(t.group, PATCHES_ROOT, p)):
 				log_error("Target {} does not have corresponding patch '{}'.".format(t.name, p))
 		script_name = os.path.join(t.group, SCRIPTS_ROOT, t.name + ".sh")
-		if not os.path.exists(script_name):
+		if not os.path.exists(script_name) and not t.top_package:
 			log_error("Target {} does not have script file '{}'.".format(t.name, script_name))
 	for s in sources.keys():
 		if s not in usedSources:
@@ -296,7 +296,10 @@ def calculateHash(target, arch, build_order):
 				data.append(targets[d].hash)
 	for p in sorted(target.patches):
 		data.append(hashlib.sha256(open(os.path.join(target.group, PATCHES_ROOT, p), 'rb').read()).hexdigest())
-	data.append(hashlib.sha256(open(os.path.join(target.group, SCRIPTS_ROOT, target.name + ".sh"), 'r').read().encode()).hexdigest())
+	if (not target.top_package):
+		data.append(hashlib.sha256(open(os.path.join(target.group, SCRIPTS_ROOT, target.name + ".sh"), 'r').read().encode()).hexdigest())
+	else:
+		data.append(hashlib.sha256(open(os.path.join(SCRIPTS_ROOT, "package-" + arch.split('-')[0] + ".sh"), 'r').read().encode()).hexdigest())
 	return hashlib.sha256('\n'.join(data).encode()).hexdigest()
 
 def executeBuild(target, arch, prefix, build_dir, output_dir, native, nproc):
@@ -335,7 +338,11 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, native, nproc):
 
 	scriptfile = tempfile.NamedTemporaryFile()
 	scriptfile.write("set -e -x\n".encode())
-	scriptfile.write(open(os.path.join(target.group, SCRIPTS_ROOT, target.name + ".sh"), 'r').read().encode())
+	if (not target.top_package):
+		scriptfile.write(open(os.path.join(target.group, SCRIPTS_ROOT, target.name + ".sh"), 'r').read().encode())
+	else:
+		scriptfile.write(open(os.path.join(SCRIPTS_ROOT, "package-" + arch.split('-')[0] + ".sh"), 'r').read().encode())
+
 	scriptfile.flush()
 
 	log_step("Compiling ...")
