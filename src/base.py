@@ -515,8 +515,8 @@ def buildCode(target, build_arch, nproc, no_clean, force, dry, pack_sources):
 		if target.top_package:
 			package_name = target.release_name + "-" + arch + "-" + datetime.now().strftime("%Y%m%d") +".tgz"
 			log_step("Packing {} ...".format(package_name))
-			os.replace(os.path.join(output_dir, "yosyshq"), os.path.join(output_dir, "tabby"))
-			create_tar(package_name, "tabby", output_dir)
+			os.replace(os.path.join(output_dir, "yosyshq"), os.path.join(output_dir, target.release_name))
+			create_tar(package_name, target.release_name, output_dir)
 
 		log_step("Marking build finished ...")
 		with open(hash_file, 'w') as f:
