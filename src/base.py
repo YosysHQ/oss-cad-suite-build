@@ -406,25 +406,44 @@ def buildCode(build_target, build_arch, nproc, no_clean, force, dry, pack_source
 	build_order = createBuildOrder(build_target, build_arch, getArchitecture(), True)
 	pos = 0
 	if single:
-		for t in build_order[:-1]:
-			pos += 1
-			arch = t[0]
-			target = targets[t[1]]
-			build_info = ""
-			if (build_arch != arch):
-				build_info = " [" + arch + "]"
-			output_dir = os.path.join(OUTPUTS_ROOT, arch, target.name)
-			hash_file = os.path.join(output_dir, '.hash')
-			if (os.path.exists(hash_file)):
-				target.hash = open(hash_file, 'r').read()
-				log_info_triple("Step [{:2d}/{:2d}] loading hash ".format(pos,len(build_order)), target.name + build_info)
-			else:
-				log_error("Missing hash file for {} [{}] does not exist.".format(target.name, target.arch))
+		t = build_order[-1]
+		arch = t[0]
+		target = targets[t[1]]
+
+		deps = target.dependencies
+		if build_target == target.name and target.top_package:
+			res = set()
+			for d in build_order:
+				dep = targets[d[1]]
+				if (dep and dep.resources):
+					for r in dep.resources:
+						res.add(r)
+			deps += list(res)
 
 		target_build_order = []
 		target_build_order.append(tuple((build_arch,build_target)))
+		total_pos = len(target_build_order) + len(deps)
+
+		for d in deps:
+			pos += 1
+			dep = targets[d]
+			needed = True
+			if dep.arch and arch not in dep.arch:
+				needed = False
+			if needed:
+				build_info = ""
+				if (build_arch != arch):
+					build_info = " [" + arch + "]"
+				output_dir = os.path.join(OUTPUTS_ROOT, arch, dep.name)
+				hash_file = os.path.join(output_dir, '.hash')
+				if (os.path.exists(hash_file)):
+					dep.hash = open(hash_file, 'r').read()
+					log_info_triple("Step [{:2d}/{:2d}] loading hash ".format(pos,total_pos), dep.name + build_info)
+				else:
+					log_error("Missing hash file for {} [{}] does not exist.".format(dep.name, dep.arch))		
 	else:
 		target_build_order = build_order
+		total_pos = len(target_build_order)
 
 	for t in target_build_order:
 		pos += 1
@@ -443,10 +462,10 @@ def buildCode(build_target, build_arch, nproc, no_clean, force, dry, pack_source
 		hash_file = os.path.join(output_dir, '.hash')
 		if (not forceBuild and os.path.exists(hash_file)):
 			if target.hash == open(hash_file, 'r').read():				
-				log_info_triple("Step [{:2d}/{:2d}] skipping ".format(pos,len(build_order)), target.name + build_info)
+				log_info_triple("Step [{:2d}/{:2d}] skipping ".format(pos, total_pos), target.name + build_info)
 				continue
 
-		log_info_triple("Step [{:2d}/{:2d}] building ".format(pos,len(build_order)), target.name + build_info)
+		log_info_triple("Step [{:2d}/{:2d}] building ".format(pos, total_pos), target.name + build_info)
 		if dry:
 			continue
 		log_step("Remove old output dir ...")
