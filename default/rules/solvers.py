@@ -92,7 +92,7 @@ Target(
 Target(
 	name = 'pono',
 	sources = [ 'pono' ],
-	dependencies = [ 'smt-switch', 'boolector' ],
+	dependencies = [ 'smt-switch', 'cvc4', 'boolector' ],
 	arch = [ 'linux-x64', 'darwin-x64', 'linux-arm', 'linux-arm64', 'linux-riscv64' ],
 	license_file = 'pono/LICENSE',
 )
