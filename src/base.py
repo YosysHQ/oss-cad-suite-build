@@ -551,7 +551,7 @@ def buildCode(build_target, build_arch, nproc, no_clean, force, dry, pack_source
 		target.built = True
 
 		if tar:
-			package_name = target.name + "-" + arch +".tgz"
+			package_name = arch + "-" + target.name +".tgz"
 			log_step("Packing {} ...".format(package_name))
 			create_tar(package_name, output_dir, ".")
 
@@ -590,7 +590,7 @@ def generateYaml(target, build_arch):
 						res.add(r)
 			deps += list(res)
 
-		needs = ""
+		needs = []
 		for d in deps:
 			dep = targets[d]
 			needed = True
@@ -601,23 +601,21 @@ def generateYaml(target, build_arch):
 				if (dep.build_native and build_arch != getArchitecture()):
 					dep_arch = getArchitecture()
 			name = "{}-{}".format(dep_arch, dep.name)
-			if needs:
-				needs += ", " + name
-			else:
-				needs = name
+			needs.append(name)
 
 
 		yaml_content +="  {}-{}:\n".format(arch, target.name)
 		yaml_content +="    runs-on: ubuntu-latest\n"
-		if needs:
-			if "," in needs:
-				yaml_content +="    needs: [ {} ]\n".format(needs)
-			else:
-				yaml_content +="    needs: {}\n".format(needs)
+		if len(needs)==1:
+			yaml_content +="    needs: {}\n".format(needs[0])
+		elif len(needs)>1:
+			yaml_content +="    needs: [ {} ]\n".format(", ".join(needs))
+
 		yaml_content +="    steps:\n"
-#		yaml_content +="      - name: Get current date\n"
-#		yaml_content +="        id: date\n"
-#		yaml_content +="        run: echo \"::set-output name=date::$(date +'%Y-%m-%d')\"\n"
+		if target.top_package:
+			yaml_content +="      - name: Get current date\n"
+			yaml_content +="        id: date\n"
+			yaml_content +="        run: echo \"::set-output name=date::$(date +'%Y-%m-%d')\"\n"
 		yaml_content +="      - uses: actions/checkout@v2\n"
 		yaml_content +="        with:\n"
 		yaml_content +="          repository: 'yosyshq/fpga-nightly'\n"
@@ -627,25 +625,28 @@ def generateYaml(target, build_arch):
 		yaml_content +="        with:\n"
 		yaml_content +="          path: _sources\n"
 		yaml_content +="          key: cache-sources-{}".format(target.name) + "\n"
-		yaml_content +="      - name: Download a file\n"
+		yaml_content +="      - name: Download previous build\n"
 		yaml_content +="        run: |\n"
-		yaml_content +="          URL=\"{}/{}-{}.tgz\"\n".format(BUCKET_URL, target.name, arch)
+		yaml_content +="          URL=\"{}/{}-{}.tgz\"\n".format(BUCKET_URL, arch, target.name)
 		yaml_content +="          if wget --spider \"${URL}\" 2>/dev/null; then\n"
 		yaml_content +="              wget -qO- \"${URL}\" | tar xvfz -\n"
 		yaml_content +="          else\n"
 		yaml_content +="              echo \"Previous version not found in bucket\"\n"
 		yaml_content +="          fi\n"
+		for n in needs:
+			yaml_content +="      - name: Download {}\n".format(n)
+			yaml_content +="        run: wget -qO- \"{}/{}.tgz\" | tar xvfz -\n".format(BUCKET_URL, n)
 		yaml_content +="      - name: Build\n"
 		yaml_content +="        run: ./nightly.py build --no-update --arch={} --target={} --single --tar\n".format(arch, target.name)
 		yaml_content +="      - uses: ncipollo/release-action@v1\n"
-		yaml_content +="        if: hashFiles('{}-{}.tgz') != ''\n".format(target.name, arch)
+		yaml_content +="        if: hashFiles('{}-{}.tgz') != ''\n".format(arch, target.name)
 		yaml_content +="        with:\n"
 		yaml_content +="          allowUpdates: True\n"
 		yaml_content +="          omitBody: True\n"
 		yaml_content +="          omitBodyDuringUpdate: True\n"
 		yaml_content +="          omitNameDuringUpdate: True\n"
 		yaml_content +="          tag: bucket\n"
-		yaml_content +="          artifacts: \"{}-{}.tgz\"\n".format(target.name, arch)
+		yaml_content +="          artifacts: \"{}-{}.tgz\"\n".format(arch, target.name)
 		yaml_content +="          token: ${{ secrets.GITHUB_TOKEN }}\n"
 
 	print(yaml_content)
