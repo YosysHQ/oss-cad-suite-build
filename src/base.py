@@ -629,7 +629,7 @@ def generateYaml(target, build_arch):
 		yaml_content +="          key: cache-sources-{}".format(target.name) + "\n"
 		yaml_content +="      - name: Download a file\n"
 		yaml_content +="        run: |\n"
-		yaml_content +="          URL=\"{}/{}-{}.tar.gz\"\n".format(BUCKET_URL, target.name, arch)
+		yaml_content +="          URL=\"{}/{}-{}.tgz\"\n".format(BUCKET_URL, target.name, arch)
 		yaml_content +="          if wget --spider \"${URL}\" 2>/dev/null; then\n"
 		yaml_content +="              wget -qO- \"${URL}\" | tar xvfz -\n"
 		yaml_content +="          else\n"
@@ -638,7 +638,7 @@ def generateYaml(target, build_arch):
 		yaml_content +="      - name: Build\n"
 		yaml_content +="        run: ./nightly.py build --no-update --arch={} --target={} --single --tar\n".format(arch, target.name)
 		yaml_content +="      - uses: ncipollo/release-action@v1\n"
-		yaml_content +="        if: hashFiles('{}-{}.tar.gz') != ''\n".format(target.name, arch)
+		yaml_content +="        if: hashFiles('{}-{}.tgz') != ''\n".format(target.name, arch)
 		yaml_content +="        with:\n"
 		yaml_content +="          allowUpdates: True\n"
 		yaml_content +="          omitBody: True\n"
