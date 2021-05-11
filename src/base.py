@@ -619,18 +619,19 @@ def generateYaml(target, build_arch):
 			deps += list(res)
 
 		needs = []
+		needs_download = []
 		for d in deps:
 			dep = targets[d]
 			needed = True
 			if dep.arch and arch not in dep.arch:
 				needed = False
 			if needed:
-				dep_arch = arch
 				if (dep.build_native and build_arch != getArchitecture()):
-					dep_arch = getArchitecture()
-				name = "{}-{}".format(dep_arch, dep.name)
-				needs.append(name)
-
+					name = "{}-{}".format(getArchitecture(), dep.name)
+				else:
+					name = "{}-{}".format(arch, dep.name)
+					needs.append(name)
+				needs_download.append(name)
 
 		yaml_content +="  {}-{}:\n".format(arch, target.name)
 		yaml_content +="    runs-on: ubuntu-latest\n"
@@ -662,7 +663,7 @@ def generateYaml(target, build_arch):
 			yaml_content +="          else\n"
 			yaml_content +="              echo \"Previous version not found in bucket\"\n"
 			yaml_content +="          fi\n"
-		for n in sorted(needs):
+		for n in sorted(needs_download):
 			yaml_content +="      - name: Download {}\n".format(n)
 			yaml_content +="        run: wget -qO- \"{}/{}.tgz\" | tar xvfz -\n".format(BUCKET_URL, n)
 		if target.top_package:
