@@ -628,8 +628,8 @@ def generateYaml(target, build_arch):
 				dep_arch = arch
 				if (dep.build_native and build_arch != getArchitecture()):
 					dep_arch = getArchitecture()
-			name = "{}-{}".format(dep_arch, dep.name)
-			needs.append(name)
+				name = "{}-{}".format(dep_arch, dep.name)
+				needs.append(name)
 
 
 		yaml_content +="  {}-{}:\n".format(arch, target.name)
