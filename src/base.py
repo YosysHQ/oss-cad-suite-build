@@ -288,7 +288,7 @@ def run_live(command, cwd=None, env=None):
 def calculateHash(target, arch, build_order):
 	data = []
 	for s in sorted(target.sources):
-		data.append(sources[s].hash)
+		data.append(sources[s].hash)	
 	for d in sorted(target.dependencies):
 		if targets[d].hash:
 			data.append(targets[d].hash)
@@ -394,22 +394,39 @@ def create_tar(tar_name, directory, cwd):
 	if code!=0:
 		log_error("Script returned error code {}.".format(code))
 
-def buildCode(target, build_arch, nproc, no_clean, force, dry, pack_sources, single):
+def buildCode(build_target, build_arch, nproc, no_clean, force, dry, pack_sources, single):
 	if build_arch != getArchitecture() and build_arch in native_only_architectures:
 		log_error("Build for {} architecture can only be built natively.".format(build_arch))
 	native = False
 	if build_arch == getArchitecture() and build_arch in native_only_architectures:
 		native = True
 
-	log_info_triple("Building ", target, " for {} architecture ...".format(build_arch))
+	log_info_triple("Building ", build_target, " for {} architecture ...".format(build_arch))
 
-	if single:
-		build_order = []
-		build_order.append(tuple((build_arch,target)))
-	else:
-		build_order = createBuildOrder(target, build_arch, getArchitecture(), True)
+	build_order = createBuildOrder(build_target, build_arch, getArchitecture(), True)
 	pos = 0
-	for t in build_order:
+	if single:
+		for t in build_order[:-1]:
+			pos += 1
+			arch = t[0]
+			target = targets[t[1]]
+			build_info = ""
+			if (build_arch != arch):
+				build_info = " [" + arch + "]"
+			output_dir = os.path.join(OUTPUTS_ROOT, arch, target.name)
+			hash_file = os.path.join(output_dir, '.hash')
+			if (os.path.exists(hash_file)):
+				target.hash = open(hash_file, 'r').read()
+				log_info_triple("Step [{:2d}/{:2d}] loading hash ".format(pos,len(build_order)), target.name + build_info)
+			else:
+				log_error("Missing hash file for {} [{}] does not exist.".format(target.name, target.arch))
+
+		target_build_order = []
+		target_build_order.append(tuple((build_arch,build_target)))
+	else:
+		target_build_order = build_order
+
+	for t in target_build_order:
 		pos += 1
 		arch = t[0]
 		target = targets[t[1]]
