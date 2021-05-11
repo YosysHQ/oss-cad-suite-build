@@ -174,7 +174,7 @@ def dependencyResolver(target, resolved, unresolved, build_arch, arch, display, 
 def createBuildOrder(target, build_arch, arch, display):
 	resolved = []
 	dependencyResolver(target, resolved, [], build_arch, arch, display, targets[target].top_package)
-	return resolved
+	return list(dict.fromkeys(resolved))
 
 def createNeededSourceList(target, build_arch, arch):
 	src = []
@@ -419,7 +419,7 @@ def buildCode(build_target, build_arch, nproc, no_clean, force, dry, pack_source
 					for r in dep.resources:
 						res.add(r)
 			deps += list(res)
-
+		
 		target_build_order = []
 		target_build_order.append(tuple((build_arch,build_target)))
 		total_pos = len(target_build_order) + len(deps)
@@ -432,15 +432,19 @@ def buildCode(build_target, build_arch, nproc, no_clean, force, dry, pack_source
 				needed = False
 			if needed:
 				build_info = ""
-				if (build_arch != arch):
-					build_info = " [" + arch + "]"
-				output_dir = os.path.join(OUTPUTS_ROOT, arch, dep.name)
+				dep_arch = arch
+				if (dep.build_native and build_arch != getArchitecture()):
+					dep_arch = getArchitecture()
+					build_info = " [" + dep_arch + "]"
+				output_dir = os.path.join(OUTPUTS_ROOT, dep_arch, dep.name)
 				hash_file = os.path.join(output_dir, '.hash')
+				log_info_triple("Step [{:2d}/{:2d}] loading hash ".format(pos,total_pos), dep.name + build_info)
+				if dry:
+					continue
 				if (os.path.exists(hash_file)):
 					dep.hash = open(hash_file, 'r').read()
-					log_info_triple("Step [{:2d}/{:2d}] loading hash ".format(pos,total_pos), dep.name + build_info)
 				else:
-					log_error("Missing hash file for {} [{}] does not exist.".format(dep.name, dep.arch))		
+					log_error("Missing hash file for {} does not exist.".format(dep.name + build_info))		
 	else:
 		target_build_order = build_order
 		total_pos = len(target_build_order)
@@ -601,6 +605,9 @@ def generateYaml(target, build_arch):
 		arch = t[0]
 		target = targets[t[1]]
 		
+		if arch != build_arch:
+			continue
+
 		deps = target.dependencies
 		if t[1] == target.name and target.top_package:
 			res = set()
