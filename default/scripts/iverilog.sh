@@ -1,5 +1,5 @@
 cd iverilog
-sed -i "s/\$(CC) \$(CFLAGS) -o draw_tt/gcc \$(CFLAGS) -o draw_tt/g" vvp/Makefile.in
+patch -p1 < ${PATCHES_DIR}/iverilog_fix.diff
 sh autoconf.sh
 if [ ${ARCH} == 'windows-x64' ]; then
     sed -i "s/EXTRALIBS=/EXTRALIBS=-lssp/g" configure
