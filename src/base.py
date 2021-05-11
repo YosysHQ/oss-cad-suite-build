@@ -394,7 +394,7 @@ def create_tar(tar_name, directory, cwd):
 	if code!=0:
 		log_error("Script returned error code {}.".format(code))
 
-def buildCode(build_target, build_arch, nproc, no_clean, force, dry, pack_sources, single):
+def buildCode(build_target, build_arch, nproc, no_clean, force, dry, pack_sources, single, tar):
 	if build_arch != getArchitecture() and build_arch in native_only_architectures:
 		log_error("Build for {} architecture can only be built natively.".format(build_arch))
 	native = False
@@ -550,7 +550,102 @@ def buildCode(build_target, build_arch, nproc, no_clean, force, dry, pack_source
 			f.write(target.hash)
 		target.built = True
 
+		if tar:
+			package_name = target.name + "-" + arch +".tgz"
+			log_step("Packing {} ...".format(package_name))
+			create_tar(package_name, output_dir, ".")
+
 		if not no_clean and not target.top_package:
 			log_step("Remove build dir ...")
 			if os.path.exists(build_dir):
 				shutil.rmtree(build_dir, onerror=removeError)
+
+def generateYaml(target, build_arch):
+	if build_arch != getArchitecture() and build_arch in native_only_architectures:
+		log_error("Build for {} architecture can only be built natively.".format(build_arch))
+	native = False
+	if build_arch == getArchitecture() and build_arch in native_only_architectures:
+		native = True
+
+	log_info_triple("Building ", target, " for {} architecture ...".format(build_arch))
+
+	build_order = createBuildOrder(target, build_arch, getArchitecture(), True)
+	yaml_content =  "name: {} \n\n" \
+					"on:\n" \
+					"  workflow_dispatch:\n\n" \
+					"jobs:\n".format(build_arch)
+
+	BUCKET_URL = "https://github.com/mmicko/test-ci/releases/download/bucket"
+	for t in build_order:
+		arch = t[0]
+		target = targets[t[1]]
+		
+		deps = target.dependencies
+		if t[1] == target.name and target.top_package:
+			res = set()
+			for d in build_order:
+				dep = targets[d[1]]
+				if (dep and dep.resources):
+					for r in dep.resources:
+						res.add(r)
+			deps += list(res)
+
+		needs = ""
+		for d in deps:
+			dep = targets[d]
+			needed = True
+			if dep.arch and arch not in dep.arch:
+				needed = False
+			if needed:
+				dep_arch = arch
+				if (dep.build_native and build_arch != getArchitecture()):
+					dep_arch = getArchitecture()
+			name = "{}-{}".format(dep_arch, dep.name)
+			if needs:
+				needs += ", " + name
+			else:
+				needs = name
+
+
+		yaml_content +="  {}-{}:\n".format(arch, target.name)
+		yaml_content +="    runs-on: ubuntu-latest\n"
+		if needs:
+			if "," in needs:
+				yaml_content +="    needs: [ {} ]\n".format(needs)
+			else:
+				yaml_content +="    needs: {}\n".format(needs)
+		yaml_content +="    steps:\n"
+#		yaml_content +="      - name: Get current date\n"
+#		yaml_content +="        id: date\n"
+#		yaml_content +="        run: echo \"::set-output name=date::$(date +'%Y-%m-%d')\"\n"
+		yaml_content +="      - uses: actions/checkout@v2\n"
+		yaml_content +="        with:\n"
+		yaml_content +="          repository: 'yosyshq/fpga-nightly'\n"
+		yaml_content +="      - name: Cache sources\n"
+		yaml_content +="        id: cache-sources\n"
+		yaml_content +="        uses: actions/cache@v2\n"
+		yaml_content +="        with:\n"
+		yaml_content +="          path: _sources\n"
+		yaml_content +="          key: cache-sources-{}".format(target.name) + "\n"
+		yaml_content +="      - name: Download a file\n"
+		yaml_content +="        run: |\n"
+		yaml_content +="          URL=\"{}/{}-{}.tar.gz\"\n".format(BUCKET_URL, target.name, arch)
+		yaml_content +="          if wget --spider \"${URL}\" 2>/dev/null; then\n"
+		yaml_content +="              wget -qO- \"${URL}\" | tar xvfz -\n"
+		yaml_content +="          else\n"
+		yaml_content +="              echo \"Previous version not found in bucket\"\n"
+		yaml_content +="          fi\n"
+		yaml_content +="      - name: Build\n"
+		yaml_content +="        run: ./nightly.py build --no-update --arch={} --target={} --single --tar\n".format(arch, target.name)
+		yaml_content +="      - uses: ncipollo/release-action@v1\n"
+		yaml_content +="        if: hashFiles('{}-{}.tar.gz') != ''\n".format(target.name, arch)
+		yaml_content +="        with:\n"
+		yaml_content +="          allowUpdates: True\n"
+		yaml_content +="          omitBody: True\n"
+		yaml_content +="          omitBodyDuringUpdate: True\n"
+		yaml_content +="          omitNameDuringUpdate: True\n"
+		yaml_content +="          tag: bucket\n"
+		yaml_content +="          artifacts: \"{}-{}.tgz\"\n".format(target.name, arch)
+		yaml_content +="          token: ${{ secrets.GITHUB_TOKEN }}\n"
+
+	print(yaml_content)

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import click, signal, os, sys, shutil
-from src.base import loadRules, validateRules, pullCode, buildCode, validateTarget, validateArch, cleanBuild, getArchitecture
+from src.base import loadRules, validateRules, pullCode, buildCode, validateTarget, validateArch, cleanBuild, getArchitecture, generateYaml
 
 def force_shutdown(signum, frame):
 	if (os.name != 'nt' and signum != signal.SIGPIPE):
@@ -25,9 +25,10 @@ def cli(ctx):
 @click.option('--rules', default='default', show_default=True, help='Comma separated list of rules to use.')
 @click.option('--dry', help='Just dry run of packages to be built', is_flag=True)
 @click.option('--src', help='Pack sources where applicable', is_flag=True)
-@click.option('--single', help='Separate build for CI only', is_flag=True)
+@click.option('--single', help='Single target build (for CI only)', is_flag=True)
+@click.option('--tar', help='Single target package (for CI only)', is_flag=True)
 @click.option('-j', '--nproc', default=os.cpu_count(), show_default=True, help='Number of build process.')
-def build(no_update, no_clean, force, target, arch, rules, dry, src, single, nproc):
+def build(no_update, no_clean, force, target, arch, rules, dry, src, single, tar, nproc):
 	"""Build tools"""
 	for rule in rules.split(","):
 		loadRules(rule)
@@ -35,7 +36,7 @@ def build(no_update, no_clean, force, target, arch, rules, dry, src, single, npr
 	validateTarget(target)
 	validateArch(arch)
 	pullCode(target, arch, getArchitecture(), no_update, single)
-	buildCode(target, arch, nproc, no_clean, force, dry, src, single)
+	buildCode(target, arch, nproc, no_clean, force, dry, src, single, tar)
 
 @cli.command()
 @click.option('--arch', default=getArchitecture(), show_default=True, help='Build architecture.')
@@ -57,6 +58,19 @@ def source(target, arch, rules):
 	validateArch(arch)
 	pullCode(target, arch, getArchitecture(), False, False)
 
+@cli.command()
+@click.option('--target', default='default', show_default=True, help='Target project to build.')
+@click.option('--arch', default=getArchitecture(), show_default=True, help='Build architecture.')
+@click.option('--rules', default='default', show_default=True, help='Comma separated list of rules to use.')
+def ci(target, arch, rules):
+	"""Generate yaml for GitHub Actions"""
+	for rule in rules.split(","):
+		loadRules(rule)
+	validateRules()
+	validateTarget(target)
+	validateArch(arch)
+	generateYaml(target, arch)
+	
 if __name__ == '__main__':
 	if os.name == "posix":
 		signal.signal(signal.SIGHUP, force_shutdown)
