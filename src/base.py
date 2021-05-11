@@ -184,9 +184,13 @@ def createNeededSourceList(target, build_arch, arch):
 				src.append(s)
 	return src
 
-def pullCode(target, build_arch, arch, no_update):
+def pullCode(target, build_arch, arch, no_update, single):
 	log_info("Downloading sources ...")
-	for src in createNeededSourceList(target, build_arch, arch):
+	if single:
+		needed_sources = targets[target].sources
+	else:
+		needed_sources = createNeededSourceList(target, build_arch, arch)
+	for src in needed_sources:
 		s = sources[src]
 		repo_dir = os.path.abspath(os.path.join(SOURCES_ROOT, s.name))
 		repo = create_repo(url=s.location, vcs=s.vcs, repo_dir=repo_dir, no_submodules=s.no_submodules)
@@ -390,7 +394,7 @@ def create_tar(tar_name, directory, cwd):
 	if code!=0:
 		log_error("Script returned error code {}.".format(code))
 
-def buildCode(target, build_arch, nproc, no_clean, force, dry, pack_sources):
+def buildCode(target, build_arch, nproc, no_clean, force, dry, pack_sources, single):
 	if build_arch != getArchitecture() and build_arch in native_only_architectures:
 		log_error("Build for {} architecture can only be built natively.".format(build_arch))
 	native = False
@@ -399,7 +403,11 @@ def buildCode(target, build_arch, nproc, no_clean, force, dry, pack_sources):
 
 	log_info_triple("Building ", target, " for {} architecture ...".format(build_arch))
 
-	build_order = createBuildOrder(target, build_arch, getArchitecture(), True)
+	if single:
+		build_order = []
+		build_order.append(tuple((build_arch,target)))
+	else:
+		build_order = createBuildOrder(target, build_arch, getArchitecture(), True)
 	pos = 0
 	for t in build_order:
 		pos += 1
@@ -467,6 +475,8 @@ def buildCode(target, build_arch, nproc, no_clean, force, dry, pack_sources):
 						dep_dir = os.path.join(OUTPUTS_ROOT, getArchitecture(), d)
 					else:
 						dep_dir = os.path.join(OUTPUTS_ROOT, arch, d)
+					if not os.path.exists(dep_dir):
+						log_error("Dependency output directory for {} does not exist.".format(d + dep_build_info))
 					if not target.top_package:
 						log_step_triple("Copy '", d + dep_build_info, "' output to build dir ...")
 						run(['rsync','-a', dep_dir, build_dir])

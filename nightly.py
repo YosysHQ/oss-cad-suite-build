@@ -25,16 +25,17 @@ def cli(ctx):
 @click.option('--rules', default='default', show_default=True, help='Comma separated list of rules to use.')
 @click.option('--dry', help='Just dry run of packages to be built', is_flag=True)
 @click.option('--src', help='Pack sources where applicable', is_flag=True)
+@click.option('--single', help='Separate build for CI only', is_flag=True)
 @click.option('-j', '--nproc', default=os.cpu_count(), show_default=True, help='Number of build process.')
-def build(no_update, no_clean, force, target, arch, rules, dry, src, nproc):
+def build(no_update, no_clean, force, target, arch, rules, dry, src, single, nproc):
 	"""Build tools"""
 	for rule in rules.split(","):
 		loadRules(rule)
 	validateRules()
 	validateTarget(target)
 	validateArch(arch)
-	pullCode(target, arch, getArchitecture(), no_update)
-	buildCode(target, arch, nproc, no_clean, force, dry, src)
+	pullCode(target, arch, getArchitecture(), no_update, single)
+	buildCode(target, arch, nproc, no_clean, force, dry, src, single)
 
 @cli.command()
 @click.option('--arch', default=getArchitecture(), show_default=True, help='Build architecture.')
@@ -54,7 +55,7 @@ def source(target, arch, rules):
 	validateRules()
 	validateTarget(target)
 	validateArch(arch)
-	pullCode(target, arch, getArchitecture(), False)
+	pullCode(target, arch, getArchitecture(), False, False)
 
 if __name__ == '__main__':
 	if os.name == "posix":
