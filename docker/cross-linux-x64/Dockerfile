@@ -13,6 +13,7 @@ RUN set -e -x ;\
         clang \
         gnat \
         graphviz \
+        python3-dev \
         libboost-dev \
         libboost-filesystem-dev \
         libboost-thread-dev \
@@ -24,13 +25,13 @@ RUN set -e -x ;\
         libgmp-dev \
         libgtk2.0-dev \
         liblzma-dev \
+        libreadline-dev \
         libsqlite3-dev \
         libssl-dev \
         tcl-dev \
         tk-dev \
         qtbase5-dev \
         libbison-dev \
-        python3-dev \
         libhidapi-dev \
         libcurl4-openssl-dev \
         libbz2-dev; \

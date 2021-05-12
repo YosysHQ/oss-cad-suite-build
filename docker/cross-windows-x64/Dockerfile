@@ -31,9 +31,6 @@ RUN dnf install -y  mingw64-libftdi \
                     boost-devel \
                     bc \
                     rsync \
-                    zlib-devel \
-                    readline-devel \
-                    bzip2-devel \
                     python3 \
                     python3.8 \
                     which \
