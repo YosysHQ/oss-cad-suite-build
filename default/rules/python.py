@@ -24,6 +24,6 @@ SourceLocation(
 Target(
 	name = 'python2',
 	sources = [ 'python2' ],
-	patches = [ 'python27.diff' ],
+	patches = [ 'python27.diff', 'python27-darwin.diff' ],
 	license_file = 'python2/LICENSE',
 )
