@@ -7,7 +7,7 @@ cp boolector/dev/deps/btor2tools/build/libbtor2parser.a pono/deps/btor2tools/bui
 cp boolector/dev/deps/lingeling/build/liblgl.a pono/deps/smt-switch/local/lib/.
 cd pono
 sed -i -re 's,./configure,./configure --host=\$\{CROSS_NAME\},g' contrib/setup-bison.sh
-sed -i -re 's,cmake \"$root_dir\" \$cmake_opts,cmake \"$root_dir\" \$cmake_opts -DCMAKE_TOOLCHAIN_FILE=\$\{CMAKE_TOOLCHAIN_FILE\},g' CMakeLists.txt 
+sed -i -re 's,cmake \"\$root_dir\" \$cmake_opts,cmake \"\$root_dir\" \$cmake_opts -DCMAKE_TOOLCHAIN_FILE=\$\{CMAKE_TOOLCHAIN_FILE\},g' configure.sh
 sed -i 's,target_link_libraries(pono-lib PUBLIC "${SMT_SWITCH_DIR}/local/lib/libsmt-switch-btor.a"),target_link_libraries(pono-lib PUBLIC "${SMT_SWITCH_DIR}/local/lib/libsmt-switch-btor.a")\ntarget_link_libraries(pono-lib PUBLIC "${SMT_SWITCH_DIR}/local/lib/liblgl.a"),g' CMakeLists.txt 
 ./configure.sh --static-lib
 cd build

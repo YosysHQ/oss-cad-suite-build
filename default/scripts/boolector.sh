@@ -11,6 +11,11 @@ patch -p1 < ${PATCHES_DIR}/boolector.diff
 if [ ${ARCH} == 'linux-arm' ] || [ ${ARCH} == 'linux-arm64' ] || [ ${ARCH} == 'linux-riscv64' ]; then
     sed -i '295,419d' ../cadical/configure
 fi
+if [ ${ARCH} == 'darwin-x64' ]; then
+    sed -i '295,419d' ../cadical/configure
+    sed -i -re "s,cmake ..,cmake .. -DCMAKE_TOOLCHAIN_FILE=\${CMAKE_TOOLCHAIN_FILE},g" ../btor2tools/configure.sh
+    sed -i -re "s,cmake ..,cmake .. -DCMAKE_TOOLCHAIN_FILE=\${CMAKE_TOOLCHAIN_FILE},g" ./configure.sh
+fi
 if [ ${ARCH_BASE} == 'windows' ]; then
     sed -i -re "s,MINGW32,Linux,g" contrib/setup-utils.sh
     sed -i -re "s,cmake ..,cmake .. -DCMAKE_TOOLCHAIN_FILE=\${CMAKE_TOOLCHAIN_FILE} -DCMAKE_CXX_FLAGS=\"-D__STDC_FORMAT_MACROS=1\",g" ../btor2tools/configure.sh
