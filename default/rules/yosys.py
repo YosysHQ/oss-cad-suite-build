@@ -19,6 +19,6 @@ Target(
 	dependencies = [ 'python3' ],
 	resources = [ 'python3' ],
 	patches = [ 'python3_package.sh' ],
-	arch = [ 'linux-x64', 'darwin-x64' ],
+	arch = [ 'linux-x64' ],
 	sources = [ ],
 )
