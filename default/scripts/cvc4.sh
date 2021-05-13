@@ -6,7 +6,7 @@ fi
 ANTLR_CONFIGURE_ARGS="--host=${CROSS_NAME} --build=`gcc -dumpmachine`"  ./contrib/get-antlr-3.4
 git clone https://github.com/uiri/toml.git
 export PYTHONPATH=$PYTHONPATH:`pwd`/toml
-sed -i -re 's,cmake \"$root_dir\" \$cmake_opts,cmake \"$root_dir\" \$cmake_opts -DCMAKE_TOOLCHAIN_FILE=\$\{CMAKE_TOOLCHAIN_FILE\},g' CMakeLists.txt 
+sed -i -re 's,cmake \"\$root_dir\" \$cmake_opts,cmake \"\$root_dir\" \$cmake_opts -DCMAKE_TOOLCHAIN_FILE=\$\{CMAKE_TOOLCHAIN_FILE\},g' configure.sh
 CXXFLAGS=-fPIC CFLAGS=-fPIC ./configure.sh --static --no-static-binary --prefix=${INSTALL_PREFIX}
 cd build
 make DESTDIR=${OUTPUT_DIR} -j${NPROC}
