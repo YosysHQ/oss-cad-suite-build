@@ -1,9 +1,13 @@
 cd python3
 patch -p1 < ${PATCHES_DIR}/python38.diff
 if [ ${ARCH} == 'darwin-x64' ]; then
-    export CFLAGS="-I$(brew --prefix zlib)/include -I$(brew --prefix libffi)/include -I$(brew --prefix readline)/include -I$(brew --prefix openssl)/include -I$(xcrun --show-sdk-path)/usr/include"
-    export LDFLAGS="-L$(brew --prefix zlib)/lib -L$(brew --prefix libffi)/lib -L$(brew --prefix readline)/lib -L$(brew --prefix openssl)/lib"
-    ./configure --prefix=${INSTALL_PREFIX} --enable-optimizations --enable-shared --with-system-ffi --with-openssl=$(brew --prefix openssl)
+	patch -p1 < ${PATCHES_DIR}/python38-darwin.diff
+	autoreconf -vfi
+    export CFLAGS="-I/opt/local/include"
+    export LDFLAGS="-L/opt/local/lib"
+    echo "ac_cv_file__dev_ptmx=no" > config.site
+    echo "ac_cv_file__dev_ptc=no" >> config.site
+    CONFIG_SITE=config.site ./configure --prefix=${INSTALL_PREFIX} --enable-optimizations --enable-shared --with-system-ffi --with-openssl=/opt/local --host=${CROSS_NAME} --build=`gcc -dumpmachine`  --disable-ipv6
 elif [ ${ARCH} == 'windows-x64' ]; then
 	patch -p1 < ${PATCHES_DIR}/python38-mingw.diff
 	autoreconf -vfi

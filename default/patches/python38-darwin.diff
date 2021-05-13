@@ -1,0 +1,115 @@
+diff --git a/configure.ac b/configure.ac
+index 18a044629a..a64b609ccd 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -376,6 +376,9 @@ then
+ 	*-*-linux*)
+ 		ac_sys_system=Linux
+ 		;;
++	*-*-darwin*)
++		ac_sys_system=Darwin
++		;;
+ 	*-*-cygwin*)
+ 		ac_sys_system=Cygwin
+ 		;;
+@@ -425,6 +428,15 @@ if test "$cross_compiling" = yes; then
+ 			_host_cpu=$host_cpu
+ 		esac
+ 		;;
++	*-*-darwin*)
++		case "$host_cpu" in
++		arm*)
++			_host_cpu=arm
++			;;
++		*)
++			_host_cpu=$host_cpu
++		esac
++		;;
+ 	*-*-cygwin*)
+ 		_host_cpu=
+ 		;;
+@@ -1184,17 +1196,6 @@ then
+         ARFLAGS="rcs"
+ fi
+ 
+-AC_CHECK_TOOLS([READELF], [readelf], [:])
+-if test "$cross_compiling" = yes; then
+-    case "$READELF" in
+-	readelf|:)
+-	AC_MSG_ERROR([readelf for the host is required for cross builds])
+-	;;
+-    esac
+-fi
+-AC_SUBST(READELF)
+-
+-
+ case $MACHDEP in
+ hp*|HP*)
+ 	# install -d does not work on HP-UX
+@@ -2404,51 +2405,7 @@ case $ac_sys_system/$ac_sys_release in
+     LIBTOOL_CRUFT=$LIBTOOL_CRUFT' -compatibility_version $(VERSION) -current_version $(VERSION)';;
+   Darwin/*)
+     gcc_version=`gcc -dumpversion`
+-    if test ${gcc_version} '<' 4.0
+-        then
+-            LIBTOOL_CRUFT="-lcc_dynamic"
+-        else
+-            LIBTOOL_CRUFT=""
+-    fi
+-    AC_RUN_IFELSE([AC_LANG_SOURCE([[
+-    #include <unistd.h>
+-    int main(int argc, char*argv[])
+-    {
+-      if (sizeof(long) == 4) {
+-    	  return 0;
+-      } else {
+-      	  return 1;
+-      }
+-    }
+-    ]])],[ac_osx_32bit=yes],[ac_osx_32bit=no],[ac_osx_32bit=yes])
+-
+-    if test "${ac_osx_32bit}" = "yes"; then
+-    	case `/usr/bin/arch` in
+-    	i386)
+-    		MACOSX_DEFAULT_ARCH="i386"
+-    		;;
+-    	ppc)
+-    		MACOSX_DEFAULT_ARCH="ppc"
+-    		;;
+-    	*)
+-    		AC_MSG_ERROR([Unexpected output of 'arch' on OSX])
+-    		;;
+-    	esac
+-    else
+-    	case `/usr/bin/arch` in
+-    	i386)
+-    		MACOSX_DEFAULT_ARCH="x86_64"
+-    		;;
+-    	ppc)
+-    		MACOSX_DEFAULT_ARCH="ppc64"
+-    		;;
+-    	*)
+-    		AC_MSG_ERROR([Unexpected output of 'arch' on OSX])
+-    		;;
+-    	esac
+-
+-    fi
+-
++    MACOSX_DEFAULT_ARCH="x86_64"
+     LIBTOOL_CRUFT=$LIBTOOL_CRUFT" -lSystem -lSystemStubs -arch_only ${MACOSX_DEFAULT_ARCH}"
+     LIBTOOL_CRUFT=$LIBTOOL_CRUFT' -install_name $(PYTHONFRAMEWORKINSTALLDIR)/Versions/$(VERSION)/$(PYTHONFRAMEWORK)'
+     LIBTOOL_CRUFT=$LIBTOOL_CRUFT' -compatibility_version $(VERSION) -current_version $(VERSION)';;
+@@ -3571,10 +3528,10 @@ AC_CHECK_FUNCS(alarm accept4 setitimer getitimer bind_textdomain_codeset chown \
+  initgroups kill killpg lchown lockf linkat lstat lutimes mmap \
+  memrchr mbrtowc mkdirat mkfifo \
+  madvise mkfifoat mknod mknodat mktime mremap nice openat pathconf pause pipe2 plock poll \
+- posix_fallocate posix_fadvise posix_spawn posix_spawnp pread preadv preadv2 \
+- pthread_condattr_setclock pthread_init pthread_kill putenv pwrite pwritev pwritev2 \
++ posix_fallocate posix_fadvise posix_spawn posix_spawnp pread preadv2 \
++ pthread_condattr_setclock pthread_init pthread_kill putenv pwrite pwritev2 \
+  readlink readlinkat readv realpath renameat \
+- sem_open sem_timedwait sem_getvalue sem_unlink sendfile setegid seteuid \
++ sem_open sem_timedwait sem_getvalue sem_unlink setegid seteuid \
+  setgid sethostname \
+  setlocale setregid setreuid setresuid setresgid setsid setpgid setpgrp setpriority setuid setvbuf \
+  sched_get_priority_max sched_setaffinity sched_setscheduler sched_setparam \

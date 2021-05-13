@@ -9,6 +9,8 @@ function python3_package_setup {
         cp /usr/lib/python3.8/lib-dynload/* ${PYTHONHOME}/lib/python3.8/lib-dynload/.
     elif [ ${ARCH} == 'linux-riscv64' ]; then
         cp /usr/lib/python3.8/lib-dynload/* ${PYTHONHOME}/lib/python3.8/lib-dynload/.
+    elif [ ${ARCH} == 'darwin-x64' ]; then
+        cp /usr/lib/python3.8/lib-dynload/* ${PYTHONHOME}/lib/python3.8/lib-dynload/.
     elif [ ${ARCH} == 'windows-x64' ]; then
         export DLLWRAP=x86_64-w64-mingw32-dllwrap 
         export PYTHONPATH=${PYTHONPATH}:/usr/lib/python3.9/site-packages
@@ -30,8 +32,8 @@ function python3_package_install {
         ${PYTHONHOME}/py3bin/python3 ${install_cmd}
     elif [ ${ARCH} == 'windows-x64' ]; then
         _PYTHON_HOST_PLATFORM=mingw-x64 _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__win_ python3.8 ${install_cmd}
-    elif [ ${ARCH} == 'darwin-x64' ]; then
-        DYLD_LIBRARY_PATH=${PYTHONHOME}/lib ${PYTHONHOME}/py3bin/python3 ${install_cmd}
+    elif [ ${ARCH} == 'darwin-x64' ]; then        
+        _PYTHON_HOST_PLATFORM=darwin-x64 _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__darwin_darwin python3.8 ${install_cmd}
     fi
 }
 
@@ -48,7 +50,7 @@ function python3_package_develop {
     elif [ ${ARCH} == 'windows-x64' ]; then
         _PYTHON_HOST_PLATFORM=mingw-x64 _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__win_ python3.8 ${install_cmd}
     elif [ ${ARCH} == 'darwin-x64' ]; then
-        DYLD_LIBRARY_PATH=${PYTHONHOME}/lib ${PYTHONHOME}/py3bin/python3 ${install_cmd}
+        _PYTHON_HOST_PLATFORM=darwin-x64 _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__darwin_darwin python3.8 ${install_cmd}
     fi
 }
 
@@ -65,7 +67,7 @@ function python3_package_pip_install {
     elif [ ${ARCH} == 'windows-x64' ]; then
         _PYTHON_HOST_PLATFORM=mingw-x64 _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__win_ python3.8 ${install_cmd}
     elif [ ${ARCH} == 'darwin-x64' ]; then
-        DYLD_LIBRARY_PATH=${PYTHONHOME}/lib ${PYTHONHOME}/py3bin/python3 ${install_cmd}
+        _PYTHON_HOST_PLATFORM=darwin-x64 _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__darwin_darwin python3.8 ${install_cmd}
     fi
 }
 function python3_package_pth {

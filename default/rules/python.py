@@ -10,7 +10,7 @@ SourceLocation(
 Target(
 	name = 'python3',
 	sources = [ 'python3' ],
-	patches = [ 'python38.diff', 'python38-mingw.diff' ],
+	patches = [ 'python38.diff', 'python38-mingw.diff', 'python38-darwin.diff' ],
 	license_file = 'python3/LICENSE',
 )
 

@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+options=`getopt ahmnprsv $*`
+
+eval set -- "$options"
+
+while true
+do
+case $1 in
+-h) 
+    echo "Help"
+    exit 0
+    ;;
+-a) echo "Darwin" `/usr/bin/uname -n` "18.7.0 Darwin Kernel Version 18.7.0: Mon Dec 21 19:59:13 PST 2020; root:xnu-4903.278.55~1/RELEASE_X86_64 x86_64" 
+    exit 0 ;;
+-m) echo "x86_64" 
+    exit 0 ;;
+-n) /usr/bin/uname -n 
+    exit 0 ;;
+-p) echo "i386"
+    exit 0 ;;
+-r) echo "18.7.0"
+    exit 0 ;;
+-s) echo "Darwin"
+    exit 0 ;;
+-v) echo "Darwin Kernel Version 18.7.0: Mon Dec 21 19:59:13 PST 2020; root:xnu-4903.278.55~1/RELEASE_X86_64"
+    exit 0;;
+--)
+    shift
+    break;;
+*) echo "uname: invalid option" ; exit 1 ;;
+esac
+shift
+done
+echo "Darwin"
+

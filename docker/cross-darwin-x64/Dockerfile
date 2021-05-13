@@ -120,4 +120,4 @@ RUN cd /opt/Qt5.15.2/bin && \
     ln -s /usr/bin/qmake /opt/Qt5.15.2/bin/qmake 
 
 RUN cp /usr/local/osxcross/target/bin/x86_64-apple-darwin20.2-ranlib /usr/local/osxcross/target/bin/ranlib
-RUN echo "echo Darwin" > /usr/local/osxcross/target/bin/uname && chmod +x /usr/local/osxcross/target/bin/uname
+COPY uname /usr/local/osxcross/target/bin/
