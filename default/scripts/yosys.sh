@@ -1,5 +1,9 @@
 cd yosys
-if [ ${ARCH} == 'linux-x64' ] || [ ${ARCH} == 'darwin-x64' ]; then
+if  [ ${ARCH} == 'darwin-x64' ]; then
+	make config-clang
+	sed -i -re "s,CXX = clang,CXX = ${CC},g" Makefile
+	sed -i -re "s,LD = clang\+\+,LD = ${CXX},g" Makefile
+elif [ ${ARCH} == 'linux-x64' ]; then
 	make config-clang
 elif [ ${ARCH} == 'windows-x64' ]; then
 	echo 'CONFIG := msys2-64' > Makefile.conf
