@@ -1,3 +1,134 @@
+diff --git a/abc/src/sat/bsat/satSolver.c b/abc/src/sat/bsat/satSolver.c
+index 1796ccc..3cbfca7 100644
+--- a/abc/src/sat/bsat/satSolver.c
++++ b/abc/src/sat/bsat/satSolver.c
+@@ -49,7 +49,7 @@ static void printlits(lit* begin, lit* end)
+ {
+     int i;
+     for (i = 0; i < end - begin; i++)
+-        printf(L_LIT" ",L_lit(begin[i]));
++        printf(L_LIT " ",L_lit(begin[i]));
+ }
+ 
+ //=================================================================================================
+@@ -473,7 +473,7 @@ static inline int sat_solver_enqueue(sat_solver* s, lit l, int from)
+ //    }
+ 
+ #ifdef VERBOSEDEBUG
+-    printf(L_IND"enqueue("L_LIT")\n", L_ind, L_lit(l));
++    printf(L_IND"enqueue(" L_LIT ")\n", L_ind, L_lit(l));
+ #endif
+     if (var_value(s, v) != varX)
+         return var_value(s, v) == lit_sign(l);
+@@ -499,7 +499,7 @@ static inline int sat_solver_enqueue(sat_solver* s, lit l, int from)
+         }
+         // New fact -- store it.
+ #ifdef VERBOSEDEBUG
+-        printf(L_IND"bind("L_LIT")\n", L_ind, L_lit(l));
++        printf(L_IND"bind(" L_LIT ")\n", L_ind, L_lit(l));
+ #endif
+         var_set_value(s, v, lit_sign(l));
+         var_set_level(s, v, sat_solver_dl(s));
+@@ -515,7 +515,7 @@ static inline int sat_solver_assume(sat_solver* s, lit l){
+     assert(s->qtail == s->qhead);
+     assert(var_value(s, lit_var(l)) == varX);
+ #ifdef VERBOSEDEBUG
+-    printf(L_IND"assume("L_LIT")  ", L_ind, L_lit(l));
++    printf(L_IND"assume(" L_LIT ")  ", L_ind, L_lit(l));
+     printf( "act = %.20f\n", s->activity[lit_var(l)] );
+ #endif
+     veci_push(&s->trail_lim,s->qtail);
+@@ -851,7 +851,7 @@ static void sat_solver_analyze(sat_solver* s, int h, veci* learnt)
+ 
+ #ifdef VERBOSEDEBUG
+     printf(L_IND"Learnt {", L_ind);
+-    for (i = 0; i < veci_size(learnt); i++) printf(" "L_LIT, L_lit(lits[i]));
++    for (i = 0; i < veci_size(learnt); i++) printf(" " L_LIT, L_lit(lits[i]));
+ #endif
+     if (veci_size(learnt) > 1){
+         int max_i = 1;
+@@ -894,7 +894,7 @@ int sat_solver_propagate(sat_solver* s)
+         s->stats.propagations++;
+ //        s->simpdb_props--;
+ 
+-        //printf("checking lit %d: "L_LIT"\n", veci_size(ws), L_lit(p));
++        //printf("checking lit %d: " L_LIT "\n", veci_size(ws), L_lit(p));
+         for (i = j = begin; i < end; ){
+             if (clause_is_lit(*i)){
+ 
+@@ -1494,7 +1494,7 @@ int sat_solver_addclause(sat_solver* s, lit* begin, lit* end)
+     // delete duplicates
+     last = lit_Undef;
+     for (i = j = begin; i < end; i++){
+-        //printf("lit: "L_LIT", value = %d\n", L_lit(*i), (lit_sign(*i) ? -s->assignss[lit_var(*i)] : s->assignss[lit_var(*i)]));
++        //printf("lit: " L_LIT ", value = %d\n", L_lit(*i), (lit_sign(*i) ? -s->assignss[lit_var(*i)] : s->assignss[lit_var(*i)]));
+         if (*i == lit_neg(last) || var_value(s, lit_var(*i)) == lit_sign(*i))
+             return true;   // tautology
+         else if (*i != last && var_value(s, lit_var(*i)) == varX)
+diff --git a/abc/src/sat/msat/msatClause.c b/abc/src/sat/msat/msatClause.c
+index a464f23..268bf1a 100644
+--- a/abc/src/sat/msat/msatClause.c
++++ b/abc/src/sat/msat/msatClause.c
+@@ -519,7 +519,7 @@ void Msat_ClausePrintSymbols( Msat_Clause_t * pC )
+ //        if ( pC->fLearned )
+ //            printf( "Act = %.4f  ", Msat_ClauseReadActivity(pC) );
+         for ( i = 0; i < (int)pC->nSize; i++ )
+-            printf(" "L_LIT, L_lit(pC->pData[i]));
++            printf(" " L_LIT, L_lit(pC->pData[i]));
+     }
+     printf( "\n" );
+ }
+diff --git a/abc/src/sat/msat/msatSolverSearch.c b/abc/src/sat/msat/msatSolverSearch.c
+index b3190e3..d58255d 100644
+--- a/abc/src/sat/msat/msatSolverSearch.c
++++ b/abc/src/sat/msat/msatSolverSearch.c
+@@ -52,7 +52,7 @@ int  Msat_SolverAssume( Msat_Solver_t * p, Msat_Lit_t Lit )
+ {
+     assert( Msat_QueueReadSize(p->pQueue) == 0 );
+     if ( p->fVerbose )
+-        printf(L_IND"assume("L_LIT")\n", L_ind, L_lit(Lit));
++        printf(L_IND"assume(" L_LIT ")\n", L_ind, L_lit(Lit));
+     Msat_IntVecPush( p->vTrailLim, Msat_IntVecReadSize(p->vTrail) );
+ //    assert( Msat_IntVecReadSize(p->vTrailLim) <= Msat_IntVecReadSize(p->vTrail) + 1 );
+ //    assert( Msat_IntVecReadSize( p->vTrailLim ) < p->nVars );
+@@ -83,7 +83,7 @@ void Msat_SolverUndoOne( Msat_Solver_t * p )
+     Msat_OrderVarUnassigned( p->pOrder, Var );
+ 
+     if ( p->fVerbose )
+-        printf(L_IND"unbind("L_LIT")\n", L_ind, L_lit(Lit)); 
++        printf(L_IND"unbind(" L_LIT ")\n", L_ind, L_lit(Lit)); 
+ }
+ 
+ /**Function*************************************************************
+@@ -107,7 +107,7 @@ void Msat_SolverCancel( Msat_Solver_t * p )
+         {
+             Msat_Lit_t Lit;
+             Lit = Msat_IntVecReadEntry( p->vTrail, Msat_IntVecReadEntryLast(p->vTrailLim) ); 
+-            printf(L_IND"cancel("L_LIT")\n", L_ind, L_lit(Lit));
++            printf(L_IND"cancel(" L_LIT ")\n", L_ind, L_lit(Lit));
+         }
+     }
+     for ( c = Msat_IntVecReadSize(p->vTrail) - Msat_IntVecPop( p->vTrailLim ); c != 0; c-- )
+@@ -187,8 +187,8 @@ int  Msat_SolverEnqueue( Msat_Solver_t * p, Msat_Lit_t Lit, Msat_Clause_t * pC )
+     // new fact - store it
+     if ( p->fVerbose )
+     {
+-//        printf(L_IND"bind("L_LIT")\n", L_ind, L_lit(Lit));
+-        printf(L_IND"bind("L_LIT")  ", L_ind, L_lit(Lit));
++//        printf(L_IND"bind(" L_LIT ")\n", L_ind, L_lit(Lit));
++        printf(L_IND"bind(" L_LIT ")  ", L_ind, L_lit(Lit));
+         Msat_ClausePrintSymbols( pC );
+     }
+     p->pAssigns[Var] = Lit;
+@@ -513,7 +513,7 @@ void Msat_SolverAnalyze( Msat_Solver_t * p, Msat_Clause_t * pC, Msat_IntVec_t *
+         nReasonSize  = Msat_IntVecReadSize( vLits_out );
+         pReasonArray = Msat_IntVecReadArray( vLits_out );
+         for ( j = 0; j < nReasonSize; j++ ) 
+-            printf(" "L_LIT, L_lit(pReasonArray[j]));
++            printf(" " L_LIT, L_lit(pReasonArray[j]));
+         printf(" } at level %d\n", *pLevel_out); 
+     }
+ }
 diff --git a/avy/include/avy/Util/Stats.h b/avy/include/avy/Util/Stats.h
 index aa1e2ff..f5f5e4e 100644
 --- a/avy/include/avy/Util/Stats.h
@@ -33,7 +164,7 @@ index aa1e2ff..f5f5e4e 100644
 +#endif
    public:
      Stopwatch () { start (); }
-
+     
 diff --git a/avy/src/ItpGlucose.h b/avy/src/ItpGlucose.h
 index 657253d..67ec17c 100644
 --- a/avy/src/ItpGlucose.h
@@ -69,10 +200,37 @@ index d145d7c..609a70d 100644
  
      int core (int **out)
      {
-diff --git a/glucose/core/Main.ccb/glucose/core/Main.cc
-index c96aadd..7b3c6bb 100644
+diff --git a/glucose/core/Main.cc b/glucose/core/Main.cc
+index c96aadd..ccd5d85 100644
 --- a/glucose/core/Main.cc
-+++b/glucose/core/Main.cc
++++ b/glucose/core/Main.cc
+@@ -48,19 +48,19 @@ void printStats(Solver& solver)
+ {
+     double cpu_time = cpuTime();
+     double mem_used = 0;//memUsedPeak();
+-    printf("c restarts              : %"PRIu64" (%"PRIu64" conflicts in avg)\n", solver.starts,(solver.starts>0 ?solver.conflicts/solver.starts : 0));
+-    printf("c blocked restarts      : %"PRIu64" (multiple: %"PRIu64") \n", solver.nbstopsrestarts,solver.nbstopsrestartssame);
+-    printf("c last block at restart : %"PRIu64"\n",solver.lastblockatrestart);
++    printf("c restarts              : %" PRIu64 " (%" PRIu64 " conflicts in avg)\n", solver.starts,(solver.starts>0 ?solver.conflicts/solver.starts : 0));
++    printf("c blocked restarts      : %" PRIu64 " (multiple: %" PRIu64 ") \n", solver.nbstopsrestarts,solver.nbstopsrestartssame);
++    printf("c last block at restart : %" PRIu64 "\n",solver.lastblockatrestart);
+     printf("c nb ReduceDB           : %lld\n", solver.nbReduceDB);
+     printf("c nb removed Clauses    : %lld\n",solver.nbRemovedClauses);
+     printf("c nb learnts DL2        : %lld\n", solver.nbDL2);
+     printf("c nb learnts size 2     : %lld\n", solver.nbBin);
+     printf("c nb learnts size 1     : %lld\n", solver.nbUn);
+ 
+-    printf("c conflicts             : %-12"PRIu64"   (%.0f /sec)\n", solver.conflicts   , solver.conflicts   /cpu_time);
+-    printf("c decisions             : %-12"PRIu64"   (%4.2f %% random) (%.0f /sec)\n", solver.decisions, (float)solver.rnd_decisions*100 / (float)solver.decisions, solver.decisions   /cpu_time);
+-    printf("c propagations          : %-12"PRIu64"   (%.0f /sec)\n", solver.propagations, solver.propagations/cpu_time);
+-    printf("c conflict literals     : %-12"PRIu64"   (%4.2f %% deleted)\n", solver.tot_literals, (solver.max_literals - solver.tot_literals)*100 / (double)solver.max_literals);
++    printf("c conflicts             : %-12" PRIu64 "   (%.0f /sec)\n", solver.conflicts   , solver.conflicts   /cpu_time);
++    printf("c decisions             : %-12" PRIu64 "   (%4.2f %% random) (%.0f /sec)\n", solver.decisions, (float)solver.rnd_decisions*100 / (float)solver.decisions, solver.decisions   /cpu_time);
++    printf("c propagations          : %-12" PRIu64 "   (%.0f /sec)\n", solver.propagations, solver.propagations/cpu_time);
++    printf("c conflict literals     : %-12" PRIu64 "   (%4.2f %% deleted)\n", solver.tot_literals, (solver.max_literals - solver.tot_literals)*100 / (double)solver.max_literals);
+     printf("c nb reduced Clauses    : %lld\n",solver.nbReducedClauses);
+     
+     if (mem_used != 0) printf("Memory used           : %.2f MB\n", mem_used);
 @@ -95,7 +95,7 @@ int main(int argc, char** argv)
          setUsageHelp("c USAGE: %s [options] <input-file> <result-output-file>\n\n  where input may be either in plain or gzipped DIMACS.\n");
          // printf("This is MiniSat 2.0 beta\n");
@@ -100,10 +258,10 @@ index c96aadd..7b3c6bb 100644
          if (argc == 1)
              printf("c Reading from standard input... Use '--help' for help.\n");
          
-diff --git a/glucose/simp/Main.ccb/glucose/simp/Main.cc
-index 4f4772d..5332e21 100644
+diff --git a/glucose/simp/Main.cc b/glucose/simp/Main.cc
+index 4f4772d..c4ff52f 100644
 --- a/glucose/simp/Main.cc
-+++b/glucose/simp/Main.cc
++++ b/glucose/simp/Main.cc
 @@ -31,8 +31,9 @@ OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWA
  
  #include <signal.h>
@@ -115,6 +273,33 @@ index 4f4772d..5332e21 100644
  #include "glucose/utils/System.h"
  #include "glucose/utils/ParseUtils.h"
  #include "glucose/utils/Options.h"
+@@ -48,19 +49,19 @@ void printStats(Solver& solver)
+ {
+     double cpu_time = cpuTime();
+     double mem_used = 0;//memUsedPeak();
+-    printf("c restarts              : %"PRIu64" (%"PRIu64" conflicts in avg)\n", solver.starts,(solver.starts>0 ?solver.conflicts/solver.starts : 0));
+-    printf("c blocked restarts      : %"PRIu64" (multiple: %"PRIu64") \n", solver.nbstopsrestarts,solver.nbstopsrestartssame);
+-    printf("c last block at restart : %"PRIu64"\n",solver.lastblockatrestart);
++    printf("c restarts              : %" PRIu64 " (%" PRIu64 " conflicts in avg)\n", solver.starts,(solver.starts>0 ?solver.conflicts/solver.starts : 0));
++    printf("c blocked restarts      : %" PRIu64 " (multiple: %" PRIu64 ") \n", solver.nbstopsrestarts,solver.nbstopsrestartssame);
++    printf("c last block at restart : %" PRIu64 "\n",solver.lastblockatrestart);
+     printf("c nb ReduceDB           : %lld\n", solver.nbReduceDB);
+     printf("c nb removed Clauses    : %lld\n",solver.nbRemovedClauses);
+     printf("c nb learnts DL2        : %lld\n", solver.nbDL2);
+     printf("c nb learnts size 2     : %lld\n", solver.nbBin);
+     printf("c nb learnts size 1     : %lld\n", solver.nbUn);
+ 
+-    printf("c conflicts             : %-12"PRIu64"   (%.0f /sec)\n", solver.conflicts   , solver.conflicts   /cpu_time);
+-    printf("c decisions             : %-12"PRIu64"   (%4.2f %% random) (%.0f /sec)\n", solver.decisions, (float)solver.rnd_decisions*100 / (float)solver.decisions, solver.decisions   /cpu_time);
+-    printf("c propagations          : %-12"PRIu64"   (%.0f /sec)\n", solver.propagations, solver.propagations/cpu_time);
+-    printf("c conflict literals     : %-12"PRIu64"   (%4.2f %% deleted)\n", solver.tot_literals, (solver.max_literals - solver.tot_literals)*100 / (double)solver.max_literals);
++    printf("c conflicts             : %-12" PRIu64 "   (%.0f /sec)\n", solver.conflicts   , solver.conflicts   /cpu_time);
++    printf("c decisions             : %-12" PRIu64 "   (%4.2f %% random) (%.0f /sec)\n", solver.decisions, (float)solver.rnd_decisions*100 / (float)solver.decisions, solver.decisions   /cpu_time);
++    printf("c propagations          : %-12" PRIu64 "   (%.0f /sec)\n", solver.propagations, solver.propagations/cpu_time);
++    printf("c conflict literals     : %-12" PRIu64 "   (%4.2f %% deleted)\n", solver.tot_literals, (solver.max_literals - solver.tot_literals)*100 / (double)solver.max_literals);
+     printf("c nb reduced Clauses    : %lld\n",solver.nbReducedClauses);
+     
+     if (mem_used != 0) printf("Memory used           : %.2f MB\n", mem_used);
 @@ -96,7 +97,7 @@ int main(int argc, char** argv)
        setUsageHelp("c USAGE: %s [options] <input-file> <result-output-file>\n\n  where input may be either in plain or gzipped DIMACS.\n");
          
@@ -153,10 +338,10 @@ index 4f4772d..5332e21 100644
          S.eliminate(true);
          double simplified_time = cpuTime();
 diff --git a/minisat/core/Main.cc b/minisat/core/Main.cc
-index 2b0d97b..fd1e03c 100644
+index 2b0d97b..4e77a6b 100644
 --- a/minisat/core/Main.cc
 +++ b/minisat/core/Main.cc
-@@ -38,7 +38,7 @@ void printStats(Solver& solver)
+@@ -38,14 +38,14 @@ void printStats(Solver& solver)
  {
      double cpu_time = cpuTime();
      double mem_used = 0.0;
@@ -164,7 +349,19 @@ index 2b0d97b..fd1e03c 100644
 +#if defined(__linux__) && defined(__x86_64__)
      mem_used = memUsedPeak();
  #endif
-     printf("restarts              : %"PRIu64"\n", solver.starts);
+-    printf("restarts              : %"PRIu64"\n", solver.starts);
+-    printf("conflicts             : %-12"PRIu64"   (%.0f /sec)\n", solver.conflicts   , solver.conflicts   /cpu_time);
+-    printf("decisions             : %-12"PRIu64"   (%4.2f %% random) (%.0f /sec)\n", solver.decisions, (float)solver.rnd_decisions*100 / (float)solver.decisions, solver.decisions   /cpu_time);
+-    printf("propagations          : %-12"PRIu64"   (%.0f /sec)\n", solver.propagations, solver.propagations/cpu_time);
+-    printf("conflict literals     : %-12"PRIu64"   (%4.2f %% deleted)\n", solver.tot_literals, (solver.max_literals - solver.tot_literals)*100 / (double)solver.max_literals);
++    printf("restarts              : %" PRIu64 "\n", solver.starts);
++    printf("conflicts             : %-12" PRIu64 "   (%.0f /sec)\n", solver.conflicts   , solver.conflicts   /cpu_time);
++    printf("decisions             : %-12" PRIu64 "   (%4.2f %% random) (%.0f /sec)\n", solver.decisions, (float)solver.rnd_decisions*100 / (float)solver.decisions, solver.decisions   /cpu_time);
++    printf("propagations          : %-12" PRIu64 "   (%.0f /sec)\n", solver.propagations, solver.propagations/cpu_time);
++    printf("conflict literals     : %-12" PRIu64 "   (%4.2f %% deleted)\n", solver.tot_literals, (solver.max_literals - solver.tot_literals)*100 / (double)solver.max_literals);
+     if (mem_used != 0) printf("Memory used           : %.2f MB\n", mem_used);
+     printf("CPU time              : %g s\n", cpu_time);
+ }
 @@ -77,7 +77,7 @@ int main(int argc, char** argv)
          setUsageHelp("USAGE: %s [options] <input-file> <result-output-file>\n\n  where input may be either in plain or gzipped DIMACS.\n");
          // printf("This is MiniSat 2.0 beta\n");
@@ -203,7 +400,7 @@ index 2b0d97b..fd1e03c 100644
              if (res != NULL) fprintf(res, "UNSAT\n"), fclose(res);
              if (S.verbosity > 0){
 diff --git a/minisat/simp/Main.cc b/minisat/simp/Main.cc
-index 2804d7f..972e799 100644
+index 2804d7f..9169f92 100644
 --- a/minisat/simp/Main.cc
 +++ b/minisat/simp/Main.cc
 @@ -22,8 +22,9 @@ OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWA
@@ -217,7 +414,7 @@ index 2804d7f..972e799 100644
  #include "utils/System.h"
  #include "utils/ParseUtils.h"
  #include "utils/Options.h"
-@@ -40,7 +41,7 @@ void printStats(Solver& solver)
+@@ -40,14 +41,14 @@ void printStats(Solver& solver)
  {
      double cpu_time = cpuTime();
      double mem_used = 0.0;
@@ -225,7 +422,19 @@ index 2804d7f..972e799 100644
 +#if defined(__linux__) && defined(__x86_64__)
      mem_used = memUsedPeak();
  #endif
-     printf("restarts              : %"PRIu64"\n", solver.starts);
+-    printf("restarts              : %"PRIu64"\n", solver.starts);
+-    printf("conflicts             : %-12"PRIu64"   (%.0f /sec)\n", solver.conflicts   , solver.conflicts   /cpu_time);
+-    printf("decisions             : %-12"PRIu64"   (%4.2f %% random) (%.0f /sec)\n", solver.decisions, (float)solver.rnd_decisions*100 / (float)solver.decisions, solver.decisions   /cpu_time);
+-    printf("propagations          : %-12"PRIu64"   (%.0f /sec)\n", solver.propagations, solver.propagations/cpu_time);
+-    printf("conflict literals     : %-12"PRIu64"   (%4.2f %% deleted)\n", solver.tot_literals, (solver.max_literals - solver.tot_literals)*100 / (double)solver.max_literals);
++    printf("restarts              : %" PRIu64 "\n", solver.starts);
++    printf("conflicts             : %-12" PRIu64 "   (%.0f /sec)\n", solver.conflicts   , solver.conflicts   /cpu_time);
++    printf("decisions             : %-12" PRIu64 "   (%4.2f %% random) (%.0f /sec)\n", solver.decisions, (float)solver.rnd_decisions*100 / (float)solver.decisions, solver.decisions   /cpu_time);
++    printf("propagations          : %-12" PRIu64 "   (%.0f /sec)\n", solver.propagations, solver.propagations/cpu_time);
++    printf("conflict literals     : %-12" PRIu64 "   (%4.2f %% deleted)\n", solver.tot_literals, (solver.max_literals - solver.tot_literals)*100 / (double)solver.max_literals);
+     if (mem_used != 0) printf("Memory used           : %.2f MB\n", mem_used);
+     printf("CPU time              : %g s\n", cpu_time);
+ }
 @@ -78,7 +79,7 @@ int main(int argc, char** argv)
          setUsageHelp("USAGE: %s [options] <input-file> <result-output-file>\n\n  where input may be either in plain or gzipped DIMACS.\n");
          // printf("This is MiniSat 2.0 beta\n");
