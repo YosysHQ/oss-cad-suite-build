@@ -106,6 +106,7 @@ RUN mkdir -p /usr/local/osxcross/target/macports/pkgs/opt \
 RUN cp /usr/local/osxcross/target/bin/x86_64-apple-darwin20.2-otool /usr/local/osxcross/target/bin/otool
 RUN cp /usr/local/osxcross/target/bin/x86_64-apple-darwin20.2-install_name_tool /usr/local/osxcross/target/bin/install_name_tool
 RUN cp /usr/local/osxcross/target/bin/x86_64-apple-darwin20.2-ar /usr/local/osxcross/target/bin/ar
+RUN cp /usr/local/osxcross/target/bin/x86_64-apple-darwin20.2-ranlib /usr/local/osxcross/target/bin/ranlib
 
 COPY Qt5.15.2.tar.gz  /tmp/
 
@@ -119,5 +120,4 @@ RUN cd /opt/Qt5.15.2/bin && \
     ln -s /usr/bin/uic /opt/Qt5.15.2/bin/uic && \
     ln -s /usr/bin/qmake /opt/Qt5.15.2/bin/qmake 
 
-RUN cp /usr/local/osxcross/target/bin/x86_64-apple-darwin20.2-ranlib /usr/local/osxcross/target/bin/ranlib
 COPY uname /usr/local/osxcross/target/bin/
