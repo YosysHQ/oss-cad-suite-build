@@ -16,7 +16,6 @@ from libvcs.util import run
 sources = dict()
 targets = dict()
 architectures = [ 'linux-x64', 'darwin-x64', 'linux-arm', 'linux-arm64', 'linux-riscv64', 'windows-x64' ]
-native_only_architectures  = [ 'darwin-x64' ]
 SOURCES_ROOT = "_sources"
 BUILDS_ROOT  = "_builds"
 OUTPUTS_ROOT = "_outputs"
@@ -310,7 +309,7 @@ def calculateHash(target, arch, build_order):
 		data.append(hashlib.sha256(open(os.path.join(SCRIPTS_ROOT, "package-" + arch.split('-')[0] + ".sh"), 'r').read().encode()).hexdigest())
 	return hashlib.sha256('\n'.join(data).encode()).hexdigest()
 
-def executeBuild(target, arch, prefix, build_dir, output_dir, native, nproc, pack_sources):
+def executeBuild(target, arch, prefix, build_dir, output_dir, nproc, pack_sources):
 	cwd = os.getcwd()
 
 	env = OrderedDict()
@@ -328,27 +327,15 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, native, nproc, pac
 	if (arch == 'windows-x64'):
 		env['EXE'] = '.exe'
 		env['SHARED_EXT'] = '.dll'
-	if (native):
-		env['STRIP'] = 'strip'
-		if (getBuildOS()=='darwin'):
-			env['PKG_CONFIG_PATH'] = '/usr/local/opt/libffi/lib/pkgconfig'
-			env['PATH'] =  '/usr/local/opt/gnu-sed/libexec/gnubin:'
-			env['PATH'] += '/usr/local/opt/coreutils/libexec/gnubin:'
-			env['PATH'] += '~/Qt5.15.2/bin:'
-			env['PATH'] += '/usr/local/opt/bison/bin:'
-			env['PATH'] += '/usr/local/opt/flex/bin:'
-			env['PATH'] += '/usr/local/opt/openjdk/bin:'
-			env['PATH'] += '/usr/local/opt/texinfo/bin:'
-			env['PATH'] += '~/.cargo/bin/:'
-			env['PATH'] += os.environ['PATH']
-			env['SHARED_EXT'] = '.dylib'
+	if (arch == 'darwin-x64'):
+		env['SHARED_EXT'] = '.dylib'
 	env['LC_ALL'] = 'C'
 	env['INSTALL_PREFIX'] = prefix
 
 	scriptfile = tempfile.NamedTemporaryFile()
 	scriptfile.write("set -e -x\n".encode())
-	if (getBuildOS()=='darwin'):
-		scriptfile.write(str('export CMAKE_PREFIX_PATH=~/Qt5.15.2\n').encode())
+	#if (getBuildOS()=='darwin'):
+	#	scriptfile.write(str('export CMAKE_PREFIX_PATH=~/Qt5.15.2\n').encode())
 	if (not target.top_package):
 		scriptfile.write(open(os.path.join(target.group, SCRIPTS_ROOT, target.name + ".sh"), 'r').read().encode())
 	else:
@@ -357,27 +344,23 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, native, nproc, pac
 	scriptfile.flush()
 
 	log_step("Compiling ...")
-	if native:
-		code = run_live(['bash', scriptfile.name], cwd=build_dir, env=env)
-	else:
-		params = ['docker', 
-			'run', '--rm',
-			'--user', '{}:{}'.format(os.getuid(), os.getgid()),
-			'-v', '/tmp:/tmp',
-			'-v', '{}:/work'.format(cwd),
-			'-w', os.path.join('/work', os.path.relpath(build_dir, os.getcwd())),
-		]
-		for i, j in env.items():
-			if i.endswith('_DIR'):
-				params += ['-e', '{}={}'.format(i, os.path.join('/work', os.path.relpath(j, os.getcwd())))]
-			else:
-				params += ['-e', '{}={}'.format(i, j)]
-		params += [
-			'yosyshq/cross-'+ arch + ':1.0',
-			'bash', scriptfile.name
-		]
-		code = run_live(params, cwd=build_dir)
-	return code
+	params = ['docker', 
+		'run', '--rm',
+		'--user', '{}:{}'.format(os.getuid(), os.getgid()),
+		'-v', '/tmp:/tmp',
+		'-v', '{}:/work'.format(cwd),
+		'-w', os.path.join('/work', os.path.relpath(build_dir, os.getcwd())),
+	]
+	for i, j in env.items():
+		if i.endswith('_DIR'):
+			params += ['-e', '{}={}'.format(i, os.path.join('/work', os.path.relpath(j, os.getcwd())))]
+		else:
+			params += ['-e', '{}={}'.format(i, j)]
+	params += [
+		'yosyshq/cross-'+ arch + ':1.0',
+		'bash', scriptfile.name
+	]
+	return run_live(params, cwd=build_dir)
 
 def create_tar(tar_name, directory, cwd):
 	params= [
@@ -395,12 +378,6 @@ def create_tar(tar_name, directory, cwd):
 		log_error("Script returned error code {}.".format(code))
 
 def buildCode(build_target, build_arch, nproc, no_clean, force, dry, pack_sources, single, tar):
-	if build_arch != getArchitecture() and build_arch in native_only_architectures:
-		log_error("Build for {} architecture can only be built natively.".format(build_arch))
-	native = False
-	if build_arch == getArchitecture() and build_arch in native_only_architectures:
-		native = True
-
 	log_info_triple("Building ", build_target, " for {} architecture ...".format(build_arch))
 
 	build_order = createBuildOrder(build_target, build_arch, getArchitecture(), True)
@@ -526,7 +503,7 @@ def buildCode(build_target, build_arch, nproc, no_clean, force, dry, pack_source
 
 
 		prefix = "/yosyshq"
-		code = executeBuild(target, arch, prefix, build_dir if not target.top_package else output_dir, output_dir, native, nproc, pack_sources)
+		code = executeBuild(target, arch, prefix, build_dir if not target.top_package else output_dir, output_dir, nproc, pack_sources)
 		if code!=0:
 			log_error("Script returned error code {}.".format(code))
 
@@ -584,12 +561,6 @@ def buildCode(build_target, build_arch, nproc, no_clean, force, dry, pack_source
 				shutil.rmtree(build_dir, onerror=removeError)
 
 def generateYaml(target, build_arch):
-	if build_arch != getArchitecture() and build_arch in native_only_architectures:
-		log_error("Build for {} architecture can only be built natively.".format(build_arch))
-	native = False
-	if build_arch == getArchitecture() and build_arch in native_only_architectures:
-		native = True
-
 	log_info_triple("Building ", target, " for {} architecture ...".format(build_arch))
 
 	build_order = createBuildOrder(target, build_arch, getArchitecture(), True)
