@@ -1036,40 +1036,6 @@ jobs:
           tag: bucket-windows-x64
           artifacts: "windows-x64-icesprog.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
-  windows-x64-python2:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          repository: 'yosyshq/oss-cad-suite-build'
-      - name: Cache sources
-        id: cache-sources
-        uses: actions/cache@v2
-        with:
-          path: _sources
-          key: cache-sources-python2
-      - name: Download previous build
-        run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-windows-x64/windows-x64-python2.tgz"
-          if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
-          else
-              echo "Previous version not found in bucket"
-          fi
-      - name: Build
-        run: ./builder.py build --arch=windows-x64 --target=python2 --single --tar
-      - uses: ncipollo/release-action@v1
-        if: hashFiles('windows-x64-python2.tgz') != ''
-        with:
-          allowUpdates: True
-          prerelease: True
-          omitBody: True
-          omitBodyDuringUpdate: True
-          omitNameDuringUpdate: True
-          tag: bucket-windows-x64
-          artifacts: "windows-x64-python2.tgz"
-          token: ${{ secrets.GITHUB_TOKEN }}
   windows-x64-system-resources:
     if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
@@ -1107,7 +1073,7 @@ jobs:
   windows-x64-default:
     if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
-    needs: [ windows-x64-avy, windows-x64-boolector, windows-x64-dfu-util, windows-x64-ecpdap, windows-x64-ecpprog, windows-x64-flask, windows-x64-flask, windows-x64-flask, windows-x64-flask, windows-x64-flask, windows-x64-flask, windows-x64-fujprog, windows-x64-gtkwave, windows-x64-icesprog, windows-x64-icestorm, windows-x64-iverilog, windows-x64-litex, windows-x64-mcy, windows-x64-nextpnr-ecp5, windows-x64-nextpnr-generic, windows-x64-nextpnr-ice40, windows-x64-nextpnr-machxo2, windows-x64-nextpnr-nexus, windows-x64-openfpgaloader, windows-x64-openocd, windows-x64-prjtrellis, windows-x64-python-programmers, windows-x64-python2, windows-x64-python2, windows-x64-python2, windows-x64-python2, windows-x64-python3, windows-x64-python3, windows-x64-python3, windows-x64-python3, windows-x64-python3, windows-x64-python3, windows-x64-sby, windows-x64-sby-gui, windows-x64-system-resources, windows-x64-system-resources, windows-x64-system-resources, windows-x64-system-resources, windows-x64-system-resources, windows-x64-system-resources, windows-x64-verilator, windows-x64-yices, windows-x64-yosys, windows-x64-z3 ]
+    needs: [ windows-x64-avy, windows-x64-boolector, windows-x64-dfu-util, windows-x64-ecpdap, windows-x64-ecpprog, windows-x64-flask, windows-x64-fujprog, windows-x64-gtkwave, windows-x64-icesprog, windows-x64-icestorm, windows-x64-iverilog, windows-x64-litex, windows-x64-mcy, windows-x64-nextpnr-ecp5, windows-x64-nextpnr-generic, windows-x64-nextpnr-ice40, windows-x64-nextpnr-machxo2, windows-x64-nextpnr-nexus, windows-x64-openfpgaloader, windows-x64-openocd, windows-x64-prjtrellis, windows-x64-python-programmers, windows-x64-python3, windows-x64-sby, windows-x64-sby-gui, windows-x64-system-resources, windows-x64-verilator, windows-x64-yices, windows-x64-yosys, windows-x64-z3 ]
     steps:
       - name: Get current date
         id: date
@@ -1125,16 +1091,6 @@ jobs:
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-windows-x64/windows-x64-ecpdap.tgz" | tar xvfz -
       - name: Download windows-x64-ecpprog
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-windows-x64/windows-x64-ecpprog.tgz" | tar xvfz -
-      - name: Download windows-x64-flask
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-windows-x64/windows-x64-flask.tgz" | tar xvfz -
-      - name: Download windows-x64-flask
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-windows-x64/windows-x64-flask.tgz" | tar xvfz -
-      - name: Download windows-x64-flask
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-windows-x64/windows-x64-flask.tgz" | tar xvfz -
-      - name: Download windows-x64-flask
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-windows-x64/windows-x64-flask.tgz" | tar xvfz -
-      - name: Download windows-x64-flask
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-windows-x64/windows-x64-flask.tgz" | tar xvfz -
       - name: Download windows-x64-flask
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-windows-x64/windows-x64-flask.tgz" | tar xvfz -
       - name: Download windows-x64-fujprog
@@ -1169,40 +1125,12 @@ jobs:
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-windows-x64/windows-x64-prjtrellis.tgz" | tar xvfz -
       - name: Download windows-x64-python-programmers
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-windows-x64/windows-x64-python-programmers.tgz" | tar xvfz -
-      - name: Download windows-x64-python2
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-windows-x64/windows-x64-python2.tgz" | tar xvfz -
-      - name: Download windows-x64-python2
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-windows-x64/windows-x64-python2.tgz" | tar xvfz -
-      - name: Download windows-x64-python2
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-windows-x64/windows-x64-python2.tgz" | tar xvfz -
-      - name: Download windows-x64-python2
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-windows-x64/windows-x64-python2.tgz" | tar xvfz -
-      - name: Download windows-x64-python3
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-windows-x64/windows-x64-python3.tgz" | tar xvfz -
-      - name: Download windows-x64-python3
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-windows-x64/windows-x64-python3.tgz" | tar xvfz -
-      - name: Download windows-x64-python3
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-windows-x64/windows-x64-python3.tgz" | tar xvfz -
-      - name: Download windows-x64-python3
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-windows-x64/windows-x64-python3.tgz" | tar xvfz -
-      - name: Download windows-x64-python3
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-windows-x64/windows-x64-python3.tgz" | tar xvfz -
       - name: Download windows-x64-python3
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-windows-x64/windows-x64-python3.tgz" | tar xvfz -
       - name: Download windows-x64-sby
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-windows-x64/windows-x64-sby.tgz" | tar xvfz -
       - name: Download windows-x64-sby-gui
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-windows-x64/windows-x64-sby-gui.tgz" | tar xvfz -
-      - name: Download windows-x64-system-resources
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-windows-x64/windows-x64-system-resources.tgz" | tar xvfz -
-      - name: Download windows-x64-system-resources
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-windows-x64/windows-x64-system-resources.tgz" | tar xvfz -
-      - name: Download windows-x64-system-resources
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-windows-x64/windows-x64-system-resources.tgz" | tar xvfz -
-      - name: Download windows-x64-system-resources
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-windows-x64/windows-x64-system-resources.tgz" | tar xvfz -
-      - name: Download windows-x64-system-resources
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-windows-x64/windows-x64-system-resources.tgz" | tar xvfz -
       - name: Download windows-x64-system-resources
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-windows-x64/windows-x64-system-resources.tgz" | tar xvfz -
       - name: Download windows-x64-verilator

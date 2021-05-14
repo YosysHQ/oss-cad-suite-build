@@ -578,7 +578,7 @@ def generateYaml(target, build_arch, write_to_file):
 		if arch != build_arch:
 			continue
 
-		deps = target.dependencies
+		deps = target.dependencies.copy()
 		if t[1] == target.name and target.top_package:
 			res = set()
 			for d in build_order:
