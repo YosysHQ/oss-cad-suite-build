@@ -1,4 +1,4 @@
-# FPGA-Nightly
+# OSS CAD Suite
 
 Steps for building
 
@@ -8,19 +8,19 @@ Install required python3 library
 pip install click
 ```
 
-After that just running ```./nightly.py``` should work fine.
+After that just running ```./builder.py``` should work fine.
 
 To build default build:
 ```
-./nightly.py build 
+./builder.py build 
 ```
 
 To skip update of source code you can always:
 ```
-./nightly.py build --no-update
+./builder.py build --no-update
 ```
 
 To build specific target:
 ```
-./nightly.py build --target yosys
+./builder.py build --target yosys
 ```

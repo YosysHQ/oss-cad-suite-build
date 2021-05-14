@@ -45,7 +45,7 @@ deactivate nondestructive
 release_current_dir="$(dirname "${BASH_SOURCE[0]}")"
 release_topdir_abs="$(realpath "$release_current_dir")"
 
-export VIRTUAL_ENV='FPGA'
+export VIRTUAL_ENV='OSS CAD Suite'
 
 _OLD_ENVIRONMENT_PATH="$PATH"
 PATH="$release_topdir_abs/bin:$release_topdir_abs/py3bin:$PATH"

@@ -8,7 +8,7 @@ def force_shutdown(signum, frame):
 		click.secho("\n==> Keyboard interrupt or external termination signal", fg="red", nl=True, bold=True)
 	sys.exit(1)
 
-@click.group(help="""FPGA-Nightly Tool Builder\n""", context_settings=dict(help_option_names=["-h", "--help"]), invoke_without_command=True)
+@click.group(help="""OSS CAD Suite Builder\n""", context_settings=dict(help_option_names=["-h", "--help"]), invoke_without_command=True)
 @click.pass_context
 def cli(ctx):
 	ctx.ensure_object(dict)

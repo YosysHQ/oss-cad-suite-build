@@ -611,7 +611,7 @@ def generateYaml(target, build_arch):
 			yaml_content +="        run: echo \"::set-output name=date::$(date +'%Y-%m-%d')\"\n"
 		yaml_content +="      - uses: actions/checkout@v2\n"
 		yaml_content +="        with:\n"
-		yaml_content +="          repository: 'yosyshq/fpga-nightly'\n"
+		yaml_content +="          repository: 'yosyshq/oss-cad-suite-build'\n"
 		if not target.top_package:
 			yaml_content +="      - name: Cache sources\n"
 			yaml_content +="        id: cache-sources\n"
@@ -632,7 +632,7 @@ def generateYaml(target, build_arch):
 			yaml_content +="        run: wget -qO- \"{}/{}.tgz\" | tar xvfz -\n".format(BUCKET_URL, n)
 		if target.top_package:
 			yaml_content +="      - name: Build\n"
-			yaml_content +="        run: ./nightly.py build --arch={} --target={} --single\n".format(arch, target.name)
+			yaml_content +="        run: ./builder.py build --arch={} --target={} --single\n".format(arch, target.name)
 			yaml_content +="      - uses: ncipollo/release-action@v1\n"
 			yaml_content +="        if: hashFiles('_outputs/{}/{}/*.tgz') != ''\n".format(arch, target.name)
 			yaml_content +="        with:\n"
@@ -640,12 +640,12 @@ def generateYaml(target, build_arch):
 			yaml_content +="          omitBody: True\n"
 			yaml_content +="          omitBodyDuringUpdate: True\n"
 			yaml_content +="          omitNameDuringUpdate: True\n"
-			yaml_content +="          tag: fpga-nightly-${{ steps.date.outputs.date }}\n"
+			yaml_content +="          tag: oss-cad-suite-${{ steps.date.outputs.date }}\n"
 			yaml_content +="          artifacts: \"_outputs/{}/{}/*.tgz\"\n".format(arch, target.name)
 			yaml_content +="          token: ${{ secrets.GITHUB_TOKEN }}\n"
 		else:
 			yaml_content +="      - name: Build\n"
-			yaml_content +="        run: ./nightly.py build --arch={} --target={} --single --tar\n".format(arch, target.name)
+			yaml_content +="        run: ./builder.py build --arch={} --target={} --single --tar\n".format(arch, target.name)
 			yaml_content +="      - uses: ncipollo/release-action@v1\n"
 			yaml_content +="        if: hashFiles('{}-{}.tgz') != ''\n".format(arch, target.name)
 			yaml_content +="        with:\n"

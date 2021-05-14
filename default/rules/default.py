@@ -2,7 +2,7 @@ from src.base import Target
 
 Target(
     name = 'default',
-    release_name = 'fpga-nightly',
+    release_name = 'oss-cad-suite',
     top_package = True,
     dependencies = [
         'yosys',
@@ -44,7 +44,7 @@ Target(
 
 Target(
     name = 'default-formal',
-    release_name = 'fpga-nightly-formal',
+    release_name = 'oss-cad-suite-formal',
     top_package = True,
     dependencies = [
         'yosys',
