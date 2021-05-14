@@ -121,6 +121,13 @@ class GitRepo(BaseRepo):
         except exc.CommandError:
             return 'initial'
 
+    def get_revision_dir(self, dir):
+        """Return current revision. Initial repositories return 'initial'."""
+        try:
+            return self.run(['rev-parse', '--verify', 'HEAD:' + dir])
+        except exc.CommandError:
+            return 'initial'
+
     @classmethod
     def get_url_and_revision_from_pip_url(cls, pip_url):
         """

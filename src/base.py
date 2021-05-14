@@ -64,7 +64,7 @@ class SourceLocation:
 		sources[name] = self
 
 class Target:
-	def __init__(self, name, sources = [], dependencies = [], resources = [], patches = [], arch = [], license_url = None, license_file = None, top_package = False, build_native = False, release_name = None):
+	def __init__(self, name, sources = [], dependencies = [], resources = [], patches = [], arch = [], license_url = None, license_file = None, top_package = False, build_native = False, release_name = None, gitrev = []):
 		self.name = name
 		self.sources = sources
 		self.dependencies = dependencies
@@ -79,6 +79,7 @@ class Target:
 		self.group = current_rule_group
 		self.arch = arch
 		self.build_native = build_native
+		self.gitrev = gitrev
 		if release_name:
 			self.release_name = release_name
 		else:
@@ -142,12 +143,17 @@ def validateRules():
 				log_error("Unknown resources {} in {} target.".format(d,t.name))
 			if d == t.name:
 				log_error("Target {} use resource of itself.".format(t.name))
+		for g in t.gitrev:
+			if (type(g) is not tuple) or (len(g)!=2):
+				log_error("Unknown element '{}' in gitrev for {}.".format(g,t.name))
+			if g[0] not in sources.keys():
+				log_error("Unknown source {} in gitrev for {} target.".format(g[0],t.name))
 		for p in t.patches:
 			if not os.path.exists(os.path.join(t.group, PATCHES_ROOT, p)):
 				log_error("Target {} does not have corresponding patch '{}'.".format(t.name, p))
 		script_name = os.path.join(t.group, SCRIPTS_ROOT, t.name + ".sh")
 		if not os.path.exists(script_name) and not t.top_package:
-			log_error("Target {} does not have script file '{}'.".format(t.name, script_name))
+			log_error("Target {} does not have script file '{}'.".format(t.name, script_name))		
 	for s in sources.keys():
 		if s not in usedSources:
 			log_warning("Source {} not used in any target.".format(s))
@@ -182,6 +188,12 @@ def createNeededSourceList(target, build_arch, arch):
 			if s not in src:
 				src.append(s)
 	return src
+
+def getDirHash(src, dir):
+	s = sources[src]
+	repo_dir = os.path.abspath(os.path.join(SOURCES_ROOT, s.name))
+	repo = create_repo(url=s.location, vcs=s.vcs, repo_dir=repo_dir, no_submodules=s.no_submodules)
+	return repo.get_revision_dir(dir)
 
 def pullCode(target, build_arch, arch, no_update, single):
 	log_info("Downloading sources ...")
@@ -286,8 +298,16 @@ def run_live(command, cwd=None, env=None):
 
 def calculateHash(target, arch, build_order):
 	data = []
+	srcs = set()
+	for g in target.gitrev:
+		srcs.add(g[0])
 	for s in sorted(target.sources):
-		data.append(sources[s].hash)	
+		if (s not in srcs):
+			data.append(sources[s].hash)
+		else:
+			for g in target.gitrev:
+				if (s==g[0]):
+					data.append(getDirHash(g[0],g[1]))
 	for d in sorted(target.dependencies):
 		if targets[d].hash:
 			data.append(targets[d].hash)

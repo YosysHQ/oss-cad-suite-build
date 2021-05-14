@@ -12,6 +12,7 @@ Target(
 	name = 'nextpnr-bba',
 	sources = [ 'nextpnr' ],
 	build_native = True,
+	gitrev = [ ('nextpnr', 'bba') ],
 )
 
 Target(
@@ -100,12 +101,14 @@ Target(
 	name = 'icestorm-bba',
 	sources = [ 'nextpnr' ],
 	dependencies = [ 'icestorm' ],
+	gitrev = [ ('nextpnr', 'ice40') ],
 	build_native = True,
 )
 
 Target(
 	name = 'prjtrellis-bba',
 	sources = [ 'prjtrellis', 'nextpnr' ],
+	gitrev = [ ('nextpnr', 'ecp5'), ('nextpnr', 'machxo2') ],
 	build_native = True,
 )
 
@@ -113,5 +116,6 @@ Target(
 	name = 'prjoxide-bba',
 	sources = [ 'nextpnr' ],
 	dependencies = [ 'prjoxide' ],
+	gitrev = [ ('nextpnr', 'nexus') ],
 	build_native = True,
 )
