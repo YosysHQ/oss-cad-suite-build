@@ -108,16 +108,12 @@ RUN cp /usr/local/osxcross/target/bin/x86_64-apple-darwin20.2-install_name_tool 
 RUN cp /usr/local/osxcross/target/bin/x86_64-apple-darwin20.2-ar /usr/local/osxcross/target/bin/ar
 RUN cp /usr/local/osxcross/target/bin/x86_64-apple-darwin20.2-ranlib /usr/local/osxcross/target/bin/ranlib
 
-COPY Qt5.15.2.tar.gz  /tmp/
+COPY Qt5.12.8.tar.gz  /tmp/
 
 RUN cd /opt \
-  && tar xvfz /tmp/Qt5.15.2.tar.gz \
-  && rm /tmp/Qt5.15.2.tar.gz
-RUN cd /opt/Qt5.15.2/bin && \
-    rm -rf * && \
-    ln -s /usr/bin/moc /opt/Qt5.15.2/bin/moc && \
-    ln -s /usr/bin/rcc /opt/Qt5.15.2/bin/rcc && \
-    ln -s /usr/bin/uic /opt/Qt5.15.2/bin/uic && \
-    ln -s /usr/bin/qmake /opt/Qt5.15.2/bin/qmake 
+  && tar xvfz /tmp/Qt5.12.8.tar.gz \
+  && rm /tmp/Qt5.12.8.tar.gz
+RUN rm -rf  /opt/Qt5.12.8/bin && \
+    ln -s /usr/lib/qt5/bin /opt/Qt5.12.8/bin
 
 COPY uname /usr/local/osxcross/target/bin/
