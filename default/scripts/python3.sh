@@ -2,6 +2,7 @@ cd python3
 patch -p1 < ${PATCHES_DIR}/python38.diff
 if [ ${ARCH} == 'darwin-x64' ]; then
 	patch -p1 < ${PATCHES_DIR}/python38-darwin.diff
+	sed -e "s|MACOS = (HOST_PLATFORM == 'darwin')|MACOS = (HOST_PLATFORM.startswith('darwin'))|g" -i setup.py 
 	autoreconf -vfi
     export CFLAGS="-I/opt/local/include"
     export LDFLAGS="-L/opt/local/lib"
