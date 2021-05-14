@@ -564,7 +564,7 @@ def generateYaml(target, build_arch):
     				"    - cron: '30 0 * * *'\n\n" \
 					"jobs:\n".format(build_arch)
 
-	BUCKET_URL = "https://github.com/mmicko/test-ci/releases/download/bucket"
+	BUCKET_URL = "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket"
 	for t in build_order:
 		arch = t[0]
 		target = targets[t[1]]
@@ -621,7 +621,7 @@ def generateYaml(target, build_arch):
 			yaml_content +="          key: cache-sources-{}".format(target.name) + "\n"
 			yaml_content +="      - name: Download previous build\n"
 			yaml_content +="        run: |\n"
-			yaml_content +="          URL=\"{}/{}-{}.tgz\"\n".format(BUCKET_URL, arch, target.name)
+			yaml_content +="          URL=\"{}-{}/{}-{}.tgz\"\n".format(BUCKET_URL, arch, arch, target.name)
 			yaml_content +="          if wget --spider \"${URL}\" 2>/dev/null; then\n"
 			yaml_content +="              wget -qO- \"${URL}\" | tar xvfz -\n"
 			yaml_content +="          else\n"
@@ -629,7 +629,10 @@ def generateYaml(target, build_arch):
 			yaml_content +="          fi\n"
 		for n in sorted(needs_download):
 			yaml_content +="      - name: Download {}\n".format(n)
-			yaml_content +="        run: wget -qO- \"{}/{}.tgz\" | tar xvfz -\n".format(BUCKET_URL, n)
+			if (n.startswith(arch)):
+				yaml_content +="        run: wget -qO- \"{}-{}/{}.tgz\" | tar xvfz -\n".format(BUCKET_URL, arch, n)
+			else:
+				yaml_content +="        run: wget -qO- \"{}-{}/{}.tgz\" | tar xvfz -\n".format(BUCKET_URL, "linux-x64", n)
 		if target.top_package:
 			yaml_content +="      - name: Build\n"
 			yaml_content +="        run: ./builder.py build --arch={} --target={} --single\n".format(arch, target.name)
