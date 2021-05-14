@@ -3,13 +3,12 @@ name: windows-x64
 on:
   workflow_dispatch:
   workflow_run:
-    workflows: [ linux-x64 ]
+    workflows: [ darwin-x64 ]
     types:
       - completed
 
 jobs:
   windows-x64-yosys:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -43,7 +42,6 @@ jobs:
           artifacts: "windows-x64-yosys.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   windows-x64-python3:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -77,7 +75,6 @@ jobs:
           artifacts: "windows-x64-python3.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   windows-x64-nextpnr-generic:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     needs: windows-x64-python3
     steps:
@@ -116,7 +113,6 @@ jobs:
           artifacts: "windows-x64-nextpnr-generic.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   windows-x64-nextpnr-ice40:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     needs: windows-x64-python3
     steps:
@@ -157,7 +153,6 @@ jobs:
           artifacts: "windows-x64-nextpnr-ice40.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   windows-x64-nextpnr-ecp5:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     needs: windows-x64-python3
     steps:
@@ -198,7 +193,6 @@ jobs:
           artifacts: "windows-x64-nextpnr-ecp5.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   windows-x64-nextpnr-machxo2:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     needs: windows-x64-python3
     steps:
@@ -239,7 +233,6 @@ jobs:
           artifacts: "windows-x64-nextpnr-machxo2.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   windows-x64-nextpnr-nexus:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     needs: windows-x64-python3
     steps:
@@ -280,7 +273,6 @@ jobs:
           artifacts: "windows-x64-nextpnr-nexus.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   windows-x64-icestorm:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -314,7 +306,6 @@ jobs:
           artifacts: "windows-x64-icestorm.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   windows-x64-prjtrellis:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -348,7 +339,6 @@ jobs:
           artifacts: "windows-x64-prjtrellis.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   windows-x64-dfu-util:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -382,7 +372,6 @@ jobs:
           artifacts: "windows-x64-dfu-util.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   windows-x64-ecpprog:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -416,7 +405,6 @@ jobs:
           artifacts: "windows-x64-ecpprog.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   windows-x64-openfpgaloader:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -450,7 +438,6 @@ jobs:
           artifacts: "windows-x64-openfpgaloader.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   windows-x64-avy:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -484,7 +471,6 @@ jobs:
           artifacts: "windows-x64-avy.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   windows-x64-boolector:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -518,7 +504,6 @@ jobs:
           artifacts: "windows-x64-boolector.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   windows-x64-yices:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -552,7 +537,6 @@ jobs:
           artifacts: "windows-x64-yices.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   windows-x64-z3:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -586,7 +570,6 @@ jobs:
           artifacts: "windows-x64-z3.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   windows-x64-flask:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     needs: windows-x64-python3
     steps:
@@ -623,7 +606,6 @@ jobs:
           artifacts: "windows-x64-flask.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   windows-x64-mcy:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -657,7 +639,6 @@ jobs:
           artifacts: "windows-x64-mcy.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   windows-x64-sby:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -691,7 +672,6 @@ jobs:
           artifacts: "windows-x64-sby.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   windows-x64-sby-gui:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -725,7 +705,6 @@ jobs:
           artifacts: "windows-x64-sby-gui.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   windows-x64-gtkwave:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -759,7 +738,6 @@ jobs:
           artifacts: "windows-x64-gtkwave.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   windows-x64-verilator:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -793,7 +771,6 @@ jobs:
           artifacts: "windows-x64-verilator.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   windows-x64-iverilog:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -827,7 +804,6 @@ jobs:
           artifacts: "windows-x64-iverilog.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   windows-x64-litex:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     needs: windows-x64-python3
     steps:
@@ -864,7 +840,6 @@ jobs:
           artifacts: "windows-x64-litex.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   windows-x64-ecpdap:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -898,7 +873,6 @@ jobs:
           artifacts: "windows-x64-ecpdap.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   windows-x64-fujprog:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -932,7 +906,6 @@ jobs:
           artifacts: "windows-x64-fujprog.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   windows-x64-python-programmers:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     needs: windows-x64-python3
     steps:
@@ -969,7 +942,6 @@ jobs:
           artifacts: "windows-x64-python-programmers.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   windows-x64-openocd:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -1003,7 +975,6 @@ jobs:
           artifacts: "windows-x64-openocd.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   windows-x64-icesprog:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -1037,7 +1008,6 @@ jobs:
           artifacts: "windows-x64-icesprog.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   windows-x64-system-resources:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -1071,7 +1041,6 @@ jobs:
           artifacts: "windows-x64-system-resources.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   windows-x64-default:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     needs: [ windows-x64-avy, windows-x64-boolector, windows-x64-dfu-util, windows-x64-ecpdap, windows-x64-ecpprog, windows-x64-flask, windows-x64-fujprog, windows-x64-gtkwave, windows-x64-icesprog, windows-x64-icestorm, windows-x64-iverilog, windows-x64-litex, windows-x64-mcy, windows-x64-nextpnr-ecp5, windows-x64-nextpnr-generic, windows-x64-nextpnr-ice40, windows-x64-nextpnr-machxo2, windows-x64-nextpnr-nexus, windows-x64-openfpgaloader, windows-x64-openocd, windows-x64-prjtrellis, windows-x64-python-programmers, windows-x64-python3, windows-x64-sby, windows-x64-sby-gui, windows-x64-system-resources, windows-x64-verilator, windows-x64-yices, windows-x64-yosys, windows-x64-z3 ]
     steps:

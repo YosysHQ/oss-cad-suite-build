@@ -3,13 +3,12 @@ name: linux-riscv64
 on:
   workflow_dispatch:
   workflow_run:
-    workflows: [ linux-x64 ]
+    workflows: [ linux-arm64 ]
     types:
       - completed
 
 jobs:
   linux-riscv64-yosys:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -43,7 +42,6 @@ jobs:
           artifacts: "linux-riscv64-yosys.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-riscv64-python3:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -77,7 +75,6 @@ jobs:
           artifacts: "linux-riscv64-python3.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-riscv64-nextpnr-generic:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     needs: linux-riscv64-python3
     steps:
@@ -116,7 +113,6 @@ jobs:
           artifacts: "linux-riscv64-nextpnr-generic.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-riscv64-nextpnr-ice40:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     needs: linux-riscv64-python3
     steps:
@@ -157,7 +153,6 @@ jobs:
           artifacts: "linux-riscv64-nextpnr-ice40.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-riscv64-nextpnr-ecp5:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     needs: linux-riscv64-python3
     steps:
@@ -198,7 +193,6 @@ jobs:
           artifacts: "linux-riscv64-nextpnr-ecp5.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-riscv64-nextpnr-machxo2:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     needs: linux-riscv64-python3
     steps:
@@ -239,7 +233,6 @@ jobs:
           artifacts: "linux-riscv64-nextpnr-machxo2.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-riscv64-nextpnr-nexus:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     needs: linux-riscv64-python3
     steps:
@@ -280,7 +273,6 @@ jobs:
           artifacts: "linux-riscv64-nextpnr-nexus.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-riscv64-icestorm:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -314,7 +306,6 @@ jobs:
           artifacts: "linux-riscv64-icestorm.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-riscv64-prjtrellis:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -348,7 +339,6 @@ jobs:
           artifacts: "linux-riscv64-prjtrellis.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-riscv64-dfu-util:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -382,7 +372,6 @@ jobs:
           artifacts: "linux-riscv64-dfu-util.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-riscv64-ecpprog:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -416,7 +405,6 @@ jobs:
           artifacts: "linux-riscv64-ecpprog.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-riscv64-openfpgaloader:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -450,7 +438,6 @@ jobs:
           artifacts: "linux-riscv64-openfpgaloader.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-riscv64-avy:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -484,7 +471,6 @@ jobs:
           artifacts: "linux-riscv64-avy.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-riscv64-boolector:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -518,7 +504,6 @@ jobs:
           artifacts: "linux-riscv64-boolector.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-riscv64-yices:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -552,7 +537,6 @@ jobs:
           artifacts: "linux-riscv64-yices.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-riscv64-python2:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -586,7 +570,6 @@ jobs:
           artifacts: "linux-riscv64-python2.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-riscv64-suprove:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     needs: linux-riscv64-python2
     steps:
@@ -623,7 +606,6 @@ jobs:
           artifacts: "linux-riscv64-suprove.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-riscv64-cvc4:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -657,7 +639,6 @@ jobs:
           artifacts: "linux-riscv64-cvc4.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-riscv64-smt-switch:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     needs: [ linux-riscv64-boolector, linux-riscv64-cvc4 ]
     steps:
@@ -696,7 +677,6 @@ jobs:
           artifacts: "linux-riscv64-smt-switch.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-riscv64-pono:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     needs: [ linux-riscv64-boolector, linux-riscv64-cvc4, linux-riscv64-smt-switch ]
     steps:
@@ -737,7 +717,6 @@ jobs:
           artifacts: "linux-riscv64-pono.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-riscv64-z3:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -771,7 +750,6 @@ jobs:
           artifacts: "linux-riscv64-z3.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-riscv64-flask:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     needs: linux-riscv64-python3
     steps:
@@ -808,7 +786,6 @@ jobs:
           artifacts: "linux-riscv64-flask.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-riscv64-mcy:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -842,7 +819,6 @@ jobs:
           artifacts: "linux-riscv64-mcy.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-riscv64-sby:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -876,7 +852,6 @@ jobs:
           artifacts: "linux-riscv64-sby.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-riscv64-sby-gui:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -910,7 +885,6 @@ jobs:
           artifacts: "linux-riscv64-sby-gui.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-riscv64-gtkwave:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -944,7 +918,6 @@ jobs:
           artifacts: "linux-riscv64-gtkwave.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-riscv64-verilator:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -978,7 +951,6 @@ jobs:
           artifacts: "linux-riscv64-verilator.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-riscv64-iverilog:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -1012,7 +984,6 @@ jobs:
           artifacts: "linux-riscv64-iverilog.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-riscv64-litex:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     needs: linux-riscv64-python3
     steps:
@@ -1049,7 +1020,6 @@ jobs:
           artifacts: "linux-riscv64-litex.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-riscv64-ecpdap:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -1083,7 +1053,6 @@ jobs:
           artifacts: "linux-riscv64-ecpdap.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-riscv64-fujprog:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -1117,7 +1086,6 @@ jobs:
           artifacts: "linux-riscv64-fujprog.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-riscv64-python-programmers:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     needs: linux-riscv64-python3
     steps:
@@ -1154,7 +1122,6 @@ jobs:
           artifacts: "linux-riscv64-python-programmers.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-riscv64-openocd:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -1188,7 +1155,6 @@ jobs:
           artifacts: "linux-riscv64-openocd.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-riscv64-icesprog:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -1222,7 +1188,6 @@ jobs:
           artifacts: "linux-riscv64-icesprog.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-riscv64-system-resources:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -1256,7 +1221,6 @@ jobs:
           artifacts: "linux-riscv64-system-resources.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-riscv64-default:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     needs: [ linux-riscv64-avy, linux-riscv64-boolector, linux-riscv64-dfu-util, linux-riscv64-ecpdap, linux-riscv64-ecpprog, linux-riscv64-flask, linux-riscv64-fujprog, linux-riscv64-gtkwave, linux-riscv64-icesprog, linux-riscv64-icestorm, linux-riscv64-iverilog, linux-riscv64-litex, linux-riscv64-mcy, linux-riscv64-nextpnr-ecp5, linux-riscv64-nextpnr-generic, linux-riscv64-nextpnr-ice40, linux-riscv64-nextpnr-machxo2, linux-riscv64-nextpnr-nexus, linux-riscv64-openfpgaloader, linux-riscv64-openocd, linux-riscv64-pono, linux-riscv64-prjtrellis, linux-riscv64-python-programmers, linux-riscv64-python2, linux-riscv64-python3, linux-riscv64-sby, linux-riscv64-sby-gui, linux-riscv64-suprove, linux-riscv64-system-resources, linux-riscv64-verilator, linux-riscv64-yices, linux-riscv64-yosys, linux-riscv64-z3 ]
     steps:

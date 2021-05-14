@@ -9,7 +9,6 @@ on:
 
 jobs:
   darwin-x64-yosys:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -43,7 +42,6 @@ jobs:
           artifacts: "darwin-x64-yosys.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   darwin-x64-python3:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -77,7 +75,6 @@ jobs:
           artifacts: "darwin-x64-python3.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   darwin-x64-nextpnr-generic:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     needs: darwin-x64-python3
     steps:
@@ -116,7 +113,6 @@ jobs:
           artifacts: "darwin-x64-nextpnr-generic.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   darwin-x64-nextpnr-ice40:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     needs: darwin-x64-python3
     steps:
@@ -157,7 +153,6 @@ jobs:
           artifacts: "darwin-x64-nextpnr-ice40.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   darwin-x64-nextpnr-ecp5:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     needs: darwin-x64-python3
     steps:
@@ -198,7 +193,6 @@ jobs:
           artifacts: "darwin-x64-nextpnr-ecp5.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   darwin-x64-nextpnr-machxo2:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     needs: darwin-x64-python3
     steps:
@@ -239,7 +233,6 @@ jobs:
           artifacts: "darwin-x64-nextpnr-machxo2.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   darwin-x64-nextpnr-nexus:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     needs: darwin-x64-python3
     steps:
@@ -280,7 +273,6 @@ jobs:
           artifacts: "darwin-x64-nextpnr-nexus.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   darwin-x64-icestorm:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -314,7 +306,6 @@ jobs:
           artifacts: "darwin-x64-icestorm.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   darwin-x64-prjtrellis:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -348,7 +339,6 @@ jobs:
           artifacts: "darwin-x64-prjtrellis.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   darwin-x64-dfu-util:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -382,7 +372,6 @@ jobs:
           artifacts: "darwin-x64-dfu-util.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   darwin-x64-ecpprog:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -416,7 +405,6 @@ jobs:
           artifacts: "darwin-x64-ecpprog.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   darwin-x64-openfpgaloader:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -450,7 +438,6 @@ jobs:
           artifacts: "darwin-x64-openfpgaloader.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   darwin-x64-avy:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -484,7 +471,6 @@ jobs:
           artifacts: "darwin-x64-avy.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   darwin-x64-boolector:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -518,7 +504,6 @@ jobs:
           artifacts: "darwin-x64-boolector.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   darwin-x64-yices:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -552,7 +537,6 @@ jobs:
           artifacts: "darwin-x64-yices.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   darwin-x64-cvc4:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -586,7 +570,6 @@ jobs:
           artifacts: "darwin-x64-cvc4.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   darwin-x64-smt-switch:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     needs: [ darwin-x64-boolector, darwin-x64-cvc4 ]
     steps:
@@ -625,7 +608,6 @@ jobs:
           artifacts: "darwin-x64-smt-switch.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   darwin-x64-pono:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     needs: [ darwin-x64-boolector, darwin-x64-cvc4, darwin-x64-smt-switch ]
     steps:
@@ -666,7 +648,6 @@ jobs:
           artifacts: "darwin-x64-pono.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   darwin-x64-z3:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -700,7 +681,6 @@ jobs:
           artifacts: "darwin-x64-z3.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   darwin-x64-flask:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     needs: darwin-x64-python3
     steps:
@@ -737,7 +717,6 @@ jobs:
           artifacts: "darwin-x64-flask.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   darwin-x64-mcy:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -771,7 +750,6 @@ jobs:
           artifacts: "darwin-x64-mcy.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   darwin-x64-sby:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -805,7 +783,6 @@ jobs:
           artifacts: "darwin-x64-sby.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   darwin-x64-sby-gui:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -839,7 +816,6 @@ jobs:
           artifacts: "darwin-x64-sby-gui.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   darwin-x64-gtkwave:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -873,7 +849,6 @@ jobs:
           artifacts: "darwin-x64-gtkwave.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   darwin-x64-verilator:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -907,7 +882,6 @@ jobs:
           artifacts: "darwin-x64-verilator.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   darwin-x64-iverilog:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -941,7 +915,6 @@ jobs:
           artifacts: "darwin-x64-iverilog.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   darwin-x64-litex:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     needs: darwin-x64-python3
     steps:
@@ -978,7 +951,6 @@ jobs:
           artifacts: "darwin-x64-litex.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   darwin-x64-ecpdap:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -1012,7 +984,6 @@ jobs:
           artifacts: "darwin-x64-ecpdap.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   darwin-x64-fujprog:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -1046,7 +1017,6 @@ jobs:
           artifacts: "darwin-x64-fujprog.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   darwin-x64-python-programmers:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     needs: darwin-x64-python3
     steps:
@@ -1083,7 +1053,6 @@ jobs:
           artifacts: "darwin-x64-python-programmers.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   darwin-x64-openocd:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -1117,7 +1086,6 @@ jobs:
           artifacts: "darwin-x64-openocd.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   darwin-x64-icesprog:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -1151,7 +1119,6 @@ jobs:
           artifacts: "darwin-x64-icesprog.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   darwin-x64-system-resources:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -1185,7 +1152,6 @@ jobs:
           artifacts: "darwin-x64-system-resources.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   darwin-x64-default:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     needs: [ darwin-x64-avy, darwin-x64-boolector, darwin-x64-dfu-util, darwin-x64-ecpdap, darwin-x64-ecpprog, darwin-x64-flask, darwin-x64-fujprog, darwin-x64-gtkwave, darwin-x64-icesprog, darwin-x64-icestorm, darwin-x64-iverilog, darwin-x64-litex, darwin-x64-mcy, darwin-x64-nextpnr-ecp5, darwin-x64-nextpnr-generic, darwin-x64-nextpnr-ice40, darwin-x64-nextpnr-machxo2, darwin-x64-nextpnr-nexus, darwin-x64-openfpgaloader, darwin-x64-openocd, darwin-x64-pono, darwin-x64-prjtrellis, darwin-x64-python-programmers, darwin-x64-python3, darwin-x64-sby, darwin-x64-sby-gui, darwin-x64-system-resources, darwin-x64-verilator, darwin-x64-yices, darwin-x64-yosys, darwin-x64-z3 ]
     steps:

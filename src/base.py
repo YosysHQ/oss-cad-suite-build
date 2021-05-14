@@ -15,7 +15,7 @@ from libvcs.util import run
 
 sources = dict()
 targets = dict()
-architectures = [ 'linux-x64', 'darwin-x64', 'linux-arm', 'linux-arm64', 'linux-riscv64', 'windows-x64' ]
+architectures = [ 'linux-x64', 'darwin-x64', 'windows-x64', 'linux-arm', 'linux-arm64', 'linux-riscv64']
 SOURCES_ROOT = "_sources"
 BUILDS_ROOT  = "_builds"
 OUTPUTS_ROOT = "_outputs"
@@ -573,7 +573,7 @@ def buildCode(build_target, build_arch, nproc, no_clean, force, dry, pack_source
 			if os.path.exists(build_dir):
 				shutil.rmtree(build_dir, onerror=removeError)
 
-def generateYaml(target, build_arch, write_to_file):
+def generateYaml(target, build_arch, write_to_file, idx):
 	log_info_triple("Creating yml for ", target, " [ {} ] architecture ...".format(build_arch))
 
 	build_order = createBuildOrder(target, build_arch, getArchitecture(), True)
@@ -585,9 +585,9 @@ def generateYaml(target, build_arch, write_to_file):
     					"    - cron: '30 0 * * *'\n\n"
 	else:	
 		yaml_content += "  workflow_run:\n" \
-						"    workflows: [ linux-x64 ]\n" \
+						"    workflows: [ {} ]\n" \
 						"    types:\n" \
-						"      - completed\n\n"
+						"      - completed\n\n".format(architectures[idx-1])
 	yaml_content += "jobs:\n"
 
 	BUCKET_URL = "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket"
@@ -624,8 +624,8 @@ def generateYaml(target, build_arch, write_to_file):
 				needs_download.append(name)
 
 		yaml_content +="  {}-{}:\n".format(arch, target.name)
-		if build_arch!=getArchitecture():
-			yaml_content +="    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}\n"
+		#if build_arch!=getArchitecture():
+		#	yaml_content +="    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}\n"
 		yaml_content +="    runs-on: ubuntu-latest\n"
 		if len(needs)==1:
 			yaml_content +="    needs: {}\n".format(needs[0])
