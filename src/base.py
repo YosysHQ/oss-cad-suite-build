@@ -653,10 +653,11 @@ def generateYaml(target, build_arch):
 			yaml_content +="        if: hashFiles('{}-{}.tgz') != ''\n".format(arch, target.name)
 			yaml_content +="        with:\n"
 			yaml_content +="          allowUpdates: True\n"
+			yaml_content +="          prerelease: True\n"			
 			yaml_content +="          omitBody: True\n"
 			yaml_content +="          omitBodyDuringUpdate: True\n"
 			yaml_content +="          omitNameDuringUpdate: True\n"
-			yaml_content +="          tag: bucket\n"
+			yaml_content +="          tag: bucket-{}\n"..format(arch)
 			yaml_content +="          artifacts: \"{}-{}.tgz\"\n".format(arch, target.name)
 			yaml_content +="          token: ${{ secrets.GITHUB_TOKEN }}\n"
 		yaml_content +="\n"
