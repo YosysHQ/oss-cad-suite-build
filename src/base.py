@@ -559,10 +559,16 @@ def generateYaml(target, build_arch):
 	build_order = createBuildOrder(target, build_arch, getArchitecture(), True)
 	yaml_content =  "name: {}\n\n" \
 					"on:\n" \
-					"  workflow_dispatch:\n" \
-					"  schedule:\n" \
-    				"    - cron: '30 0 * * *'\n\n" \
-					"jobs:\n".format(build_arch)
+					"  workflow_dispatch:\n".format(build_arch)
+	if build_arch==getArchitecture():
+		yaml_content += "  schedule:\n" \
+    					"    - cron: '30 0 * * *'\n\n"
+	else:	
+		yaml_content += "  workflow_run:\n" \
+						"    workflows: [ linux-x64 ]\n" \
+						"    types:\n" \
+						"      - completed\n\n"
+	yaml_content += "jobs:\n"
 
 	BUCKET_URL = "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket"
 	for t in build_order:
@@ -598,6 +604,8 @@ def generateYaml(target, build_arch):
 				needs_download.append(name)
 
 		yaml_content +="  {}-{}:\n".format(arch, target.name)
+		if build_arch!=getArchitecture():
+			yaml_content +="    if: ${{ github.event.workflow_run.conclusion == 'success'  || github.event_name == 'workflow_dispatch' }}\n"
 		yaml_content +="    runs-on: ubuntu-latest\n"
 		if len(needs)==1:
 			yaml_content +="    needs: {}\n".format(needs[0])
