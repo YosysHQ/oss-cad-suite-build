@@ -5,9 +5,7 @@ mkdir -p libexec
 rm -rf ${OUTPUT_DIR}/dev
 rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/include
 
-cp /usr/local/bin/realpath libexec/.
-
-export DYLD_LIBRARY_PATH=/usr/local/opt/icu4c/lib:$DYLD_LIBRARY_PATH
+cp /opt/local/bin/realpath libexec/.
 
 for bindir in bin py3bin super_prove/bin share/verilator/bin; do
     for binfile in $(file -h $bindir/* | grep Mach-O | grep executable | cut -f1 -d:); do
@@ -147,7 +145,7 @@ EOT
     fi
 done
 
-for binfile in $(find -x lib | xargs file | grep Mach-O | grep bundle | cut -f1 -d:); do
+for binfile in $(find lib -type f | xargs file | grep Mach-O | grep bundle | cut -f1 -d:); do
     echo $binfile
     dylibbundler -of -b -x $binfile -p @executable_path/../lib -d ${OUTPUT_DIR}${INSTALL_PREFIX}/lib
 done
