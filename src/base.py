@@ -334,8 +334,6 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, nproc, pack_source
 
 	scriptfile = tempfile.NamedTemporaryFile()
 	scriptfile.write("set -e -x\n".encode())
-	#if (getBuildOS()=='darwin'):
-	#	scriptfile.write(str('export CMAKE_PREFIX_PATH=~/Qt5.15.2\n').encode())
 	if (not target.top_package):
 		scriptfile.write(open(os.path.join(target.group, SCRIPTS_ROOT, target.name + ".sh"), 'r').read().encode())
 	else:
@@ -368,11 +366,6 @@ def create_tar(tar_name, directory, cwd):
 		'--owner=root', '--group=root',
 		'-czf', tar_name, directory
 	]
-	if (getBuildOS()=='darwin'):
-		params= [
-			'tar',
-			'-czf', tar_name, directory
-		]
 	code = run_live(params, cwd=cwd)
 	if code!=0:
 		log_error("Script returned error code {}.".format(code))
