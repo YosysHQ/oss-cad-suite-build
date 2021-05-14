@@ -13,13 +13,8 @@ for bindir in bin py3bin; do
     done
 done
 
-for libdir in lib; do
-    for libfile in $(find $libdir -type f | xargs file | grep DLL | cut -f1 -d:); do
-        for lib in $(peldd --all $libfile --wlist uxtheme.dll --wlist userenv.dll --wlist opengl32.dll | grep sys-root | sed -e 's/.*=..//' | sed -e 's/ (0.*)//'); do
-            cp "${lib}" lib/.
-        done
-    done
-done
+cp /usr/x86_64-w64-mingw32/sys-root/mingw/bin/*.dll lib/.
+
 
 for script in bin/* py3bin/*; do
     if $(head -1 "${script}" | grep -q python); then
@@ -46,5 +41,8 @@ for script in bin/* py3bin/*; do
     fi
 done
 ${CC} -DGUI=0 -O -s -o bin/yosys-smtbmc.exe ${PATCHES_DIR}/win-launcher.c
-
+for f in $(find . -type l)
+do
+    cp --remove-destination $(readlink -e $f) $f
+done
 chmod -R u=rwX,go=rX *
