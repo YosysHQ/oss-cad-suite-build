@@ -651,7 +651,7 @@ def generateYaml(target, build_arch):
 			yaml_content +="          omitBody: True\n"
 			yaml_content +="          omitBodyDuringUpdate: True\n"
 			yaml_content +="          omitNameDuringUpdate: True\n"
-			yaml_content +="          tag: oss-cad-suite-${{ steps.date.outputs.date }}\n"
+			yaml_content +="          tag: ${{ steps.date.outputs.date }}\n"
 			yaml_content +="          artifacts: \"_outputs/{}/{}/*.tgz\"\n".format(arch, target.name)
 			yaml_content +="          token: ${{ secrets.GITHUB_TOKEN }}\n"
 		else:
