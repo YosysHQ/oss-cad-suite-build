@@ -668,7 +668,6 @@ def generateYaml(target, build_arch, write_to_file):
 			yaml_content +="          tag: bucket-{}\n".format(arch)
 			yaml_content +="          artifacts: \"{}-{}.tgz\"\n".format(arch, target.name)
 			yaml_content +="          token: ${{ secrets.GITHUB_TOKEN }}\n"
-		yaml_content +="\n"
 	
 	if write_to_file:
 		yaml_file = os.path.join(".github", "workflows", "{}.yml".format(arch))
