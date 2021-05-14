@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import click, signal, os, sys, shutil
-from src.base import loadRules, validateRules, pullCode, buildCode, validateTarget, validateArch, cleanBuild, getArchitecture, generateYaml
+from src.base import loadRules, validateRules, pullCode, buildCode, validateTarget, validateArch, cleanBuild, getArchitecture, generateYaml, architectures
 
 def force_shutdown(signum, frame):
 	if (os.name != 'nt' and signum != signal.SIGPIPE):
@@ -62,14 +62,19 @@ def source(target, arch, rules):
 @click.option('--target', default='default', show_default=True, help='Target project to build.')
 @click.option('--arch', default=getArchitecture(), show_default=True, help='Build architecture.')
 @click.option('--rules', default='default', show_default=True, help='Comma separated list of rules to use.')
-def ci(target, arch, rules):
+@click.option('--all', help='Single target package (for CI only)', is_flag=True)
+def ci(target, arch, rules, all):
 	"""Generate yaml for GitHub Actions"""
 	for rule in rules.split(","):
 		loadRules(rule)
 	validateRules()
 	validateTarget(target)
 	validateArch(arch)
-	generateYaml(target, arch)
+	if all:
+		for arch in architectures:
+			generateYaml("default", arch, all)
+	else:
+		generateYaml(target, arch, all)
 	
 if __name__ == '__main__':
 	if os.name == "posix":

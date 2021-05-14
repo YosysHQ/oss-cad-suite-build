@@ -553,8 +553,8 @@ def buildCode(build_target, build_arch, nproc, no_clean, force, dry, pack_source
 			if os.path.exists(build_dir):
 				shutil.rmtree(build_dir, onerror=removeError)
 
-def generateYaml(target, build_arch):
-	log_info_triple("Building ", target, " for {} architecture ...".format(build_arch))
+def generateYaml(target, build_arch, write_to_file):
+	log_info_triple("Creating yml for ", target, " [ {} ] architecture ...".format(build_arch))
 
 	build_order = createBuildOrder(target, build_arch, getArchitecture(), True)
 	yaml_content =  "name: {}\n\n" \
@@ -605,7 +605,7 @@ def generateYaml(target, build_arch):
 
 		yaml_content +="  {}-{}:\n".format(arch, target.name)
 		if build_arch!=getArchitecture():
-			yaml_content +="    if: ${{ github.event.workflow_run.conclusion == 'success'  || github.event_name == 'workflow_dispatch' }}\n"
+			yaml_content +="    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}\n"
 		yaml_content +="    runs-on: ubuntu-latest\n"
 		if len(needs)==1:
 			yaml_content +="    needs: {}\n".format(needs[0])
@@ -669,4 +669,10 @@ def generateYaml(target, build_arch):
 			yaml_content +="          artifacts: \"{}-{}.tgz\"\n".format(arch, target.name)
 			yaml_content +="          token: ${{ secrets.GITHUB_TOKEN }}\n"
 		yaml_content +="\n"
-	print(yaml_content)
+	
+	if write_to_file:
+		yaml_file = os.path.join(".github", "workflows", "{}.yml".format(arch))
+		with open(yaml_file, 'w') as f:
+			f.write(yaml_content)
+	else:
+		print(yaml_content)
