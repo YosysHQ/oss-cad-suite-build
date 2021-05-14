@@ -1,3 +1,11 @@
+FROM yosyshq/cross-linux-x64:1.0 AS builder
+
+RUN cd /tmp \
+    && git clone https://github.com/auriamg/macdylibbundler \
+    && cd macdylibbundler \
+    && sed -i "s,CXXFLAGS=-O2 -std=c++11,CXXFLAGS=-O2 -std=c++11 -static-libstdc++ -static-libgcc,g" Makefile \
+    && make 
+
 FROM yosyshq/cross-base:1.0
 
 RUN set -e -x ;\
@@ -86,34 +94,30 @@ ENV OSXCROSS_MP_INC=1
 
 ENV PKG_CONFIG_PATH /opt/local/lib/pkgconfig
 
-COPY dylibbundler /usr/local/bin/.
-RUN chmod +x /usr/local/bin/dylibbundler
-
-COPY optlocal.tgz  /tmp/
-
 RUN cd / \
-  && tar xvfz /tmp/optlocal.tgz \
-  && rm /tmp/optlocal.tgz
-
-RUN cp /usr/include/FlexLexer.h /opt/local/include/.
-
-RUN cp /opt/local/share/pkgconfig/* /opt/local/lib/pkgconfig/.
-RUN cp /opt/local/lib/pkgconfig/gtk-mac-integration-gtk2.pc /opt/local/lib/pkgconfig/gtk-mac-integration.pc
-
-RUN mkdir -p /usr/local/osxcross/target/macports/pkgs/opt \
-    && ln -s /opt/local /usr/local/osxcross/target/macports/pkgs/opt
-
-RUN cp /usr/local/osxcross/target/bin/x86_64-apple-darwin20.2-otool /usr/local/osxcross/target/bin/otool
-RUN cp /usr/local/osxcross/target/bin/x86_64-apple-darwin20.2-install_name_tool /usr/local/osxcross/target/bin/install_name_tool
-RUN cp /usr/local/osxcross/target/bin/x86_64-apple-darwin20.2-ar /usr/local/osxcross/target/bin/ar
-RUN cp /usr/local/osxcross/target/bin/x86_64-apple-darwin20.2-ranlib /usr/local/osxcross/target/bin/ranlib
-
-COPY Qt5.12.8.tar.gz  /tmp/
+  && wget https://github.com/mmicko/macos-resources/releases/download/v1/optlocal.tgz \   
+  && tar xvfz optlocal.tgz \
+  && rm optlocal.tgz \
+  && cp /usr/include/FlexLexer.h /opt/local/include/. \
+  && cp /opt/local/share/pkgconfig/* /opt/local/lib/pkgconfig/. \
+  && cp /opt/local/lib/pkgconfig/gtk-mac-integration-gtk2.pc /opt/local/lib/pkgconfig/gtk-mac-integration.pc \
+  && mkdir -p /usr/local/osxcross/target/macports/pkgs/opt \
+  && ln -s /opt/local /usr/local/osxcross/target/macports/pkgs/opt
 
 RUN cd /opt \
-  && tar xvfz /tmp/Qt5.12.8.tar.gz \
-  && rm /tmp/Qt5.12.8.tar.gz
-RUN rm -rf  /opt/Qt5.12.8/bin && \
-    ln -s /usr/lib/qt5/bin /opt/Qt5.12.8/bin
+  && wget https://github.com/mmicko/macos-resources/releases/download/v1/Qt5.12.8.tar.gz \   
+  && tar xvfz Qt5.12.8.tar.gz \
+  && rm Qt5.12.8.tar.gz \
+  && rm -rf  /opt/Qt5.12.8/bin \
+  && ln -s /usr/lib/qt5/bin /opt/Qt5.12.8/bin
+
+COPY --from=builder /tmp/macdylibbundler/dylibbundler /usr/local/bin/dylibbundler
+RUN chmod +x /usr/local/bin/dylibbundler
+
+RUN cp /usr/local/osxcross/target/bin/x86_64-apple-darwin20.2-otool /usr/local/osxcross/target/bin/otool \
+  && cp /usr/local/osxcross/target/bin/x86_64-apple-darwin20.2-install_name_tool /usr/local/osxcross/target/bin/install_name_tool \
+  && cp /usr/local/osxcross/target/bin/x86_64-apple-darwin20.2-ar /usr/local/osxcross/target/bin/ar \
+  && cp /usr/local/osxcross/target/bin/x86_64-apple-darwin20.2-ranlib /usr/local/osxcross/target/bin/ranlib
 
 COPY uname /usr/local/osxcross/target/bin/
+RUN chmod +x /usr/local/osxcross/target/bin/uname
