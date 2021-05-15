@@ -71,10 +71,10 @@ def ci(target, arch, rules, all):
 	validateTarget(target)
 	validateArch(arch)
 	if all:
-		for idx, val in enumerate(architectures):			
-			generateYaml("default", val, all, idx)
+		for val in architectures:
+			generateYaml("default", val, all)
 	else:
-		generateYaml(target, arch, all, 0)
+		generateYaml(target, arch, all)
 	
 if __name__ == '__main__':
 	if os.name == "posix":

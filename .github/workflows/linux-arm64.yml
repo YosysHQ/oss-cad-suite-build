@@ -3,7 +3,7 @@ name: linux-arm64
 on:
   workflow_dispatch:
   workflow_run:
-    workflows: [ linux-arm ]
+    workflows: [ windows-x64 ]
     types:
       - completed
 
