@@ -24,6 +24,8 @@ if [ ${ARCH_BASE} == 'linux' ]; then
 fi
 
 if [ ${ARCH_BASE} == 'darwin' ]; then
+    cp ${PATCHES_DIR}/environment ${OUTPUT_DIR}${INSTALL_PREFIX}/.
+
     mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/Frameworks
     cp -r /opt/Qt5.12.8/lib/*.framework ${OUTPUT_DIR}${INSTALL_PREFIX}/Frameworks/.
     cp -rv /opt/Qt5.12.8/plugins/* ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/qt5/plugins/.

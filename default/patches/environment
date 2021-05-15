@@ -42,8 +42,13 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-release_current_dir="$(dirname "${BASH_SOURCE[0]}")"
-release_topdir_abs="$(realpath "$release_current_dir")"
+if [[ "$(uname)" == "Darwin" ]]; then
+    release_current_dir="$(dirname "$0")"
+    release_topdir_abs="$("$release_current_dir"/libexec/realpath "$release_current_dir")"
+else
+    release_current_dir="$(dirname "${BASH_SOURCE[0]}")"
+    release_topdir_abs="$(realpath "$release_current_dir")"
+fi
 
 export VIRTUAL_ENV='OSS CAD Suite'
 
@@ -58,11 +63,7 @@ if ! [ -z "${PYTHONHOME+_}" ] ; then
 fi
 
 _OLD_ENVIRONMENT_PS1="${PS1-}"
-if [ "x" != x ] ; then
-    PS1="${PS1-}"
-else
-    PS1="\[$(tput bold)\]\[\033[38;5;11m\]($VIRTUAL_ENV)\[$(tput sgr0)\] ${PS1-}"
-fi
+PS1="[${VIRTUAL_ENV}] ${PS1-}"
 export PS1
 
 export VERILATOR_ROOT="$release_topdir_abs/share/verilator"
