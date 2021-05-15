@@ -1,0 +1,1 @@
+@cmd /k environment.bat
