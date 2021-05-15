@@ -21,11 +21,11 @@ elif [ ${ARCH} == 'windows-x64' ]; then
 		--with-computed-gotos \
 		--with-system-expat \
 		--with-system-ffi \
-		--with-system-libmpdec \
-		--without-ensurepip \
 		--without-c-locale-coercion \
 		--enable-loadable-sqlite-extensions
     sed -e "s|windres|x86_64-w64-mingw32-windres|g" -i Makefile
+	sed -e "s|#define HAVE_DECL_RTLD_LOCAL 1|#define HAVE_DECL_RTLD_LOCAL 0|g" -i pyconfig.h
+	sed -e "s|#define HAVE_DECL_RTLD_GLOBAL 1|#define HAVE_DECL_RTLD_GLOBAL 0|g" -i pyconfig.h	
 else
     echo "ac_cv_file__dev_ptmx=no" > config.site
     echo "ac_cv_file__dev_ptc=no" >> config.site
@@ -43,5 +43,6 @@ if [ ${ARCH_BASE} == 'darwin' ]; then
     install_name_tool -change ${INSTALL_PREFIX}/lib/libpython3.8.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libpython3.8.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/py3bin/python3.8
 elif [ ${ARCH} == 'windows-x64' ]; then
 	cp ${OUTPUT_DIR}${INSTALL_PREFIX}/py3bin/libpython3.8.dll ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/.
+	cp ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/python3.8/_sysconfigdata__win_.py ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/python3.8/_sysconfigdata__win32_.py
 fi
 find ${OUTPUT_DIR}${INSTALL_PREFIX} -name "libpython*.a" | xargs rm -rf

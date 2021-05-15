@@ -767,7 +767,7 @@ index 17a94bc428..7cbb0fd4a4 100644
      """
      if os.name == 'nt':
 +        if 'GCC' in sys.version:
-+            return 'mingw'
++            return 'mingw-amd64'
          if 'amd64' in sys.version.lower():
              return 'win-amd64'
          if '(arm)' in sys.version.lower():
@@ -1251,7 +1251,7 @@ index b9e2fafbc0..06d83aa735 100644
      """
      if os.name == 'nt':
 +        if 'GCC' in sys.version:
-+            return 'mingw'
++            return 'mingw-amd64'
          if 'amd64' in sys.version.lower():
              return 'win-amd64'
          if '(arm)' in sys.version.lower():
@@ -3394,7 +3394,7 @@ index 18a044629a..42620ce2e6 100644
 +	mingw*)
 +	# As sys.platform() return 'win32' to build python and extantions
 +	# we will use 'mingw' (in setup.py and etc.)
-+	_PYTHON_HOST_PLATFORM=mingw
++	_PYTHON_HOST_PLATFORM=mingw-amd64
 +	;;
 +	esac
  fi
@@ -4093,7 +4093,7 @@ index 6340669fff..c4a2ab878a 100644
  CROSS_COMPILING = ("_PYTHON_HOST_PLATFORM" in os.environ)
  HOST_PLATFORM = get_platform()
 -MS_WINDOWS = (HOST_PLATFORM == 'win32')
-+MS_WINDOWS = (HOST_PLATFORM == 'win32' or HOST_PLATFORM == 'mingw')
++MS_WINDOWS = (HOST_PLATFORM == 'win32' or HOST_PLATFORM.startswith('mingw'))
  CYGWIN = (HOST_PLATFORM == 'cygwin')
  MACOS = (HOST_PLATFORM == 'darwin')
  AIX = (HOST_PLATFORM.startswith('aix'))

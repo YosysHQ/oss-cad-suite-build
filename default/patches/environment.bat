@@ -6,7 +6,7 @@
 @set PATH=C:\Windows\System32;C:\Windows
 @set prompt=[OSS CAD Suite] $p$g
 
-@set PATH=%YOSYSHQ_ROOT%bin;%YOSYSHQ_ROOT%lib;%PATH%
+@set PATH=%YOSYSHQ_ROOT%bin;%YOSYSHQ_ROOT%lib;%YOSYSHQ_ROOT%py3bin;%PATH%
 @set PYTHON_EXECUTABLE=%YOSYSHQ_ROOT%p3bin\python3.exe
 @set QT_PLUGIN_PATH=%YOSYSHQ_ROOT%lib\qt5\plugins
 @set QT_LOGGING_RULES=*=false

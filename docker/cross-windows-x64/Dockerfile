@@ -84,7 +84,6 @@ RUN ln -s /usr/bin/python3 /usr/bin/python
 #    dnf localinstall -y /tmp/mingw64-gcc-gnat-10.2.1-2.fc33.x86_64.rpm && \ 
 #    rm -rf /tmp/*.rpm && \
 RUN cp /usr/x86_64-w64-mingw32/sys-root/mingw/lib/libLLVM* /usr/x86_64-w64-mingw32/lib/. && \
-    touch /usr/x86_64-w64-mingw32/sys-root/mingw/lib/librt.a && \
-    python3.8 -m ensurepip
+    touch /usr/x86_64-w64-mingw32/sys-root/mingw/lib/librt.a
 
 WORKDIR /work

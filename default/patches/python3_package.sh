@@ -13,7 +13,6 @@ function python3_package_setup {
         cp /usr/lib/python3.8/lib-dynload/* ${PYTHONHOME}/lib/python3.8/lib-dynload/.
     elif [ ${ARCH} == 'windows-x64' ]; then
         export DLLWRAP=x86_64-w64-mingw32-dllwrap 
-        export PYTHONPATH=${PYTHONPATH}:/usr/lib/python3.9/site-packages
         export HOME=/tmp
         cp /usr/lib64/python3.8/lib-dynload/* ${PYTHONHOME}/lib/python3.8/lib-dynload/.
         cp -r ${BUILD_DIR}/python3${INSTALL_PREFIX}/lib ${BUILD_DIR}/python3${INSTALL_PREFIX}/lib64
