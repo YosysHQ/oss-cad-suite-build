@@ -1113,12 +1113,12 @@ jobs:
       - name: Build
         run: ./builder.py build --arch=windows-x64 --target=default --single
       - uses: ncipollo/release-action@v1
-        if: hashFiles('_outputs/windows-x64/default/*.tgz') != ''
+        if: hashFiles('_outputs/windows-x64/default/*.exe') != ''
         with:
           allowUpdates: True
           omitBody: True
           omitBodyDuringUpdate: True
           omitNameDuringUpdate: True
           tag: ${{ steps.date.outputs.date }}
-          artifacts: "_outputs/windows-x64/default/*.tgz"
+          artifacts: "_outputs/windows-x64/default/*.exe"
           token: ${{ secrets.GITHUB_TOKEN }}
