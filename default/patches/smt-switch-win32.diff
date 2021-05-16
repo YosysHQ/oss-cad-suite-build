@@ -1,0 +1,39 @@
+diff --git a/btor/src/boolector_term.cpp b/btor/src/boolector_term.cpp
+index 19480e7..f40ae71 100644
+--- a/btor/src/boolector_term.cpp
++++ b/btor/src/boolector_term.cpp
+@@ -353,6 +353,26 @@ std::string BoolectorTerm::to_string()
+     // won't necessarily use symbol names (might use auxiliary variables)
+     char * cres;
+     size_t size;
++#ifdef _WIN32
++    FILE * stream = tmpfile();
++    boolector_dump_smt2_node(btor, stream, node);
++    int64_t status = fflush(stream);
++    if (status != 0)
++    {
++      throw InternalSolverException("Error flushing stream for btor to_string");
++    }
++    fseek(stream, 0, SEEK_END);
++    size = ftell(stream);
++    rewind(stream);
++    cres = (char *)malloc(size + 1);
++    fread(cres, 1, size, stream);
++    status = fclose(stream);
++    if (status != 0)
++    {
++      throw InternalSolverException("Error closing stream for btor to_string");
++    }
++    cres[size] = 0;
++#else
+     FILE * stream = open_memstream(&cres, &size);
+     boolector_dump_smt2_node(btor, stream, node);
+     int64_t status = fflush(stream);
+@@ -365,6 +385,7 @@ std::string BoolectorTerm::to_string()
+     {
+       throw InternalSolverException("Error closing stream for btor to_string");
+     }
++#endif
+     sres = cres;
+     free(cres);
+     return sres;

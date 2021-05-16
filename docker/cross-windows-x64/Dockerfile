@@ -86,4 +86,24 @@ RUN ln -s /usr/bin/python3 /usr/bin/python
 RUN cp /usr/x86_64-w64-mingw32/sys-root/mingw/lib/libLLVM* /usr/x86_64-w64-mingw32/lib/. && \
     touch /usr/x86_64-w64-mingw32/sys-root/mingw/lib/librt.a
 
+RUN dnf install -y java-11-openjdk-headless cpio xz \
+    && curl -L  https://download-ib01.fedoraproject.org/pub/fedora/linux/releases/33/Everything/source/tree/Packages/m/mingw-gmp-6.1.2-9.fc33.src.rpm --output mingw-gmp-6.1.2-9.fc33.src.rpm \
+    && rpm2cpio mingw-gmp-6.1.2-9.fc33.src.rpm | cpio -idmv \
+    && tar -xf gmp-6.1.2.tar.xz \
+    && cd gmp-6.1.2 \
+    && mingw64-configure --disable-shared --enable-cxx \
+    && mingw64-make -j9 \
+    && mingw64-make install \
+    && curl http://ftp.gnu.org/gnu/bison/bison-3.5.tar.gz --output /tmp/bison-3.5.tar.gz \
+    && curl -L https://raw.githubusercontent.com/reactos/RosBE/master/Patches/bison-3.5-reactos-fix-win32-build.patch --output /tmp/bison.patch \
+    && cd /tmp \
+    && tar -xzf bison-3.5.tar.gz \
+    && cd bison-3.5 \
+    && patch -p1 < /tmp/bison.patch \
+    && mingw64-configure \
+    && mingw64-make -j9 \
+    && mingw64-make install \
+    && rm -rf /tmp/* \
+    && true
+
 WORKDIR /work
