@@ -14,3 +14,4 @@ cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${INSTALL_PREFIX} -DCMAK
       -DARCH=generic \
       -DBUILD_GUI=${build_gui} -DUSE_IPO=${use_ipo} . -DBBA_IMPORT=${BUILD_DIR}/nextpnr-bba/nextpnr/bba/bba-export.cmake
 make DESTDIR=${OUTPUT_DIR} -j${NPROC} install
+${STRIP} ${OUTPUT_DIR}${INSTALL_PREFIX}/bin/nextpnr-generic${EXE}
