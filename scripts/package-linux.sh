@@ -85,6 +85,7 @@ export GTK_IM_MODULE_FILE="/dev/null"
 export GTK2_RC_FILES="\$release_topdir_abs/lib/gtk-2.0/gtkrc"
 export GTK_EXE_PREFIX="\$release_topdir_abs"
 export GTK_DATA_PREFIX="\$release_topdir_abs"
+export GDK_PIXBUF_MODULEDIR="\$release_topdir_abs/lib/gtk-2.0/loaders"
 export GDK_PIXBUF_MODULE_FILE="\$release_topdir_abs/lib/gtk-2.0/loaders.cache"
 unset XDG_DATA_DIRS
 unset XDG_CONFIG_DIRS
@@ -94,6 +95,7 @@ export XDG_DATA_HOME=\$HOME/.local/share/yosyshq
 export LC_ALL="C"
 export TCL_LIBRARY="\$release_topdir_abs/lib/tcl8.6"
 export TK_LIBRARY="\$release_topdir_abs/lib/tk8.6"
+"\$release_topdir_abs"/lib/$ldlinuxname --inhibit-cache --inhibit-rpath "" --library-path "\$release_topdir_abs"/lib "\$release_topdir_abs"/libexec/gdk-pixbuf-query-loaders --update-cache
 EOT
         fi
 
@@ -144,6 +146,7 @@ export GTK_IM_MODULE_FILE="/dev/null"
 export GTK2_RC_FILES="\$release_topdir_abs/lib/gtk-2.0/gtkrc"
 export GTK_EXE_PREFIX="\$release_topdir_abs"
 export GTK_DATA_PREFIX="\$release_topdir_abs"
+export GDK_PIXBUF_MODULEDIR="\$release_topdir_abs/lib/gtk-2.0/loaders"
 export GDK_PIXBUF_MODULE_FILE="\$release_topdir_abs/lib/gtk-2.0/loaders.cache"
 unset XDG_DATA_DIRS
 unset XDG_CONFIG_DIRS
@@ -152,6 +155,7 @@ export XDG_CACHE_HOME=\$HOME/.cache/yosyshq
 export XDG_DATA_HOME=\$HOME/.local/share/yosyshq
 export TCL_LIBRARY="\$release_topdir_abs/lib/tcl8.6"
 export TK_LIBRARY="\$release_topdir_abs/lib/tk8.6"
+"\$release_topdir_abs"/lib/$ldlinuxname --inhibit-cache --inhibit-rpath "" --library-path "\$release_topdir_abs"/lib "\$release_topdir_abs"/libexec/gdk-pixbuf-query-loaders --update-cache
 export LC_ALL="C"
 export GI_TYPELIB_PATH="\$release_topdir_abs/lib/girepository-1.0"
 EOT

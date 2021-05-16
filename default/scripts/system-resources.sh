@@ -16,10 +16,11 @@ if [ ${ARCH_BASE} == 'linux' ]; then
 
     cp -rv /usr/lib/${CROSS_NAME}/qt5/plugins/* ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/qt5/plugins/.
 
+    mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/libexec
+    cp -v `pkg-config --variable=gdk_pixbuf_binarydir gdk-pixbuf-2.0`/../gdk-pixbuf-query-loaders ${OUTPUT_DIR}${INSTALL_PREFIX}/libexec/.
     mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/gtk-2.0/modules
-    cp -v `pkg-config --variable=gdk_pixbuf_moduledir gdk-pixbuf-2.0`/* ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/.
+    cp -r `pkg-config --variable=gdk_pixbuf_binarydir gdk-pixbuf-2.0`/loaders ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/gtk-2.0/.
     cp -v `pkg-config --variable=gdk_pixbuf_cache_file gdk-pixbuf-2.0` ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/gtk-2.0/.
-    sed -i -re "s,$(pkg-config --variable=gdk_pixbuf_moduledir gdk-pixbuf-2.0)/,,g" ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/gtk-2.0/loaders.cache
     touch ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/gtk-2.0/gtkrc
 fi
 
