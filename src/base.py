@@ -407,6 +407,7 @@ def create_exe(exe_name, directory, cwd):
 		'-v', '{}:/pwd'.format(os.path.abspath(cwd)),
 		'nicolasalbert/7zip',
 		'a',
+		'-mx=3',
 		'-sfx7zConWin64.sfx',
 		exe_name,
 		directory
