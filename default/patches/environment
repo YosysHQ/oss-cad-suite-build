@@ -50,7 +50,7 @@ else
     release_topdir_abs="$(realpath "$release_current_dir")"
 fi
 
-export VIRTUAL_ENV='OSS CAD Suite'
+export VIRTUAL_ENV='___BRANDING___'
 
 _OLD_ENVIRONMENT_PATH="$PATH"
 PATH="$release_topdir_abs/bin:$release_topdir_abs/py3bin:$PATH"

@@ -37,6 +37,7 @@ Target(
         'openocd',
         'icesprog',
     ],
+    branding = 'OSS CAD Suite',
     patches = [ 'win-launcher.c' ],
     resources = [ 'system-resources' ],
 )
@@ -59,6 +60,7 @@ Target(
         'sby-gui',
         'gtkwave',
     ],
+    branding ='OSS CAD Formal',
     patches = [ 'win-launcher.c' ],
     resources = [ 'system-resources' ],
 )

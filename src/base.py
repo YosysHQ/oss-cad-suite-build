@@ -73,7 +73,7 @@ class SourceLocation:
 		sources[name] = self
 
 class Target:
-	def __init__(self, name, sources = [], dependencies = [], resources = [], patches = [], arch = [], license_url = None, license_file = None, top_package = False, build_native = False, release_name = None, gitrev = []):
+	def __init__(self, name, sources = [], dependencies = [], resources = [], patches = [], arch = [], license_url = None, license_file = None, top_package = False, build_native = False, release_name = None, gitrev = [], branding = None):
 		self.name = name
 		self.sources = sources
 		self.dependencies = dependencies
@@ -89,6 +89,7 @@ class Target:
 		self.arch = arch
 		self.build_native = build_native
 		self.gitrev = gitrev
+		self.branding = branding
 		if release_name:
 			self.release_name = release_name
 		else:
@@ -162,7 +163,9 @@ def validateRules():
 				log_error("Target {} does not have corresponding patch '{}'.".format(t.name, p))
 		script_name = os.path.join(t.group, SCRIPTS_ROOT, t.name + ".sh")
 		if not os.path.exists(script_name) and not t.top_package:
-			log_error("Target {} does not have script file '{}'.".format(t.name, script_name))		
+			log_error("Target {} does not have script file '{}'.".format(t.name, script_name))
+		if t.branding is None and t.top_package:
+			log_error("Target {} does not have branding.".format(t.name))
 	for s in sources.keys():
 		if s not in usedSources:
 			log_warning("Source {} not used in any target.".format(s))
@@ -360,6 +363,8 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, nproc, pack_source
 		env['SHARED_EXT'] = '.dylib'
 	env['LC_ALL'] = 'C'
 	env['INSTALL_PREFIX'] = prefix
+	if (target.branding):
+		env['BRANDING'] = str(target.branding)
 
 	scriptfile = tempfile.NamedTemporaryFile()
 	scriptfile.write("set -e -x\n".encode())

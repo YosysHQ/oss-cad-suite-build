@@ -4,7 +4,7 @@
 )
 
 @set PATH=C:\Windows\System32;C:\Windows
-@set prompt=[OSS CAD Suite] $p$g
+@set prompt=[___BRANDING___] $p$g
 
 @set PATH=%YOSYSHQ_ROOT%bin;%YOSYSHQ_ROOT%lib;%YOSYSHQ_ROOT%py3bin;%PATH%
 @set PYTHON_EXECUTABLE=%YOSYSHQ_ROOT%p3bin\python3.exe

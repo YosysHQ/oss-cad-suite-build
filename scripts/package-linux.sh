@@ -19,6 +19,8 @@ elif [ ${ARCH} == 'linux-riscv64' ]; then
     arch_prefix="riscv64-linux-gnu"
 fi
 
+sed "s|___BRANDING___|${BRANDING}|g" -i ${OUTPUT_DIR}${INSTALL_PREFIX}/environment
+
 for bindir in bin py2bin py3bin super_prove/bin share/verilator/bin; do
     for binfile in $(file $bindir/* | grep ELF | grep dynamically | cut -f1 -d:); do
         rel_path=$(realpath --relative-to=$bindir .)
