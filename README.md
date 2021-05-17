@@ -1,5 +1,12 @@
 # OSS CAD Suite
 
+[![linux-x64](https://github.com/YosysHQ/oss-cad-suite-build/actions/workflows/linux-x64.yml/badge.svg)](https://github.com/YosysHQ/oss-cad-suite-build/releases/latest)
+[![darwin-x64](https://github.com/YosysHQ/oss-cad-suite-build/actions/workflows/darwin-x64.yml/badge.svg)](https://github.com/YosysHQ/oss-cad-suite-build/releases/latest)
+[![windows-x64](https://github.com/YosysHQ/oss-cad-suite-build/actions/workflows/windows-x64.yml/badge.svg)](https://github.com/YosysHQ/oss-cad-suite-build/releases/latest)
+[![linux-arm](https://github.com/YosysHQ/oss-cad-suite-build/actions/workflows/linux-arm.yml/badge.svg)](https://github.com/YosysHQ/oss-cad-suite-build/releases/latest)
+[![linux-arm64](https://github.com/YosysHQ/oss-cad-suite-build/actions/workflows/linux-arm64.yml/badge.svg)](https://github.com/YosysHQ/oss-cad-suite-build/releases/latest)
+[![linux-riscv64](https://github.com/YosysHQ/oss-cad-suite-build/actions/workflows/linux-riscv64.yml/badge.svg)](https://github.com/YosysHQ/oss-cad-suite-build/releases/latest)
+
 Steps for building
 
 Install required python3 library
