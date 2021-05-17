@@ -55,6 +55,14 @@ Target(
 	license_file = 'nextpnr/COPYING',
 )
 
+Target(
+	name = 'nextpnr-mistral',
+	sources = [ 'nextpnr', 'mistral' ],
+	dependencies = [ 'python3', 'nextpnr-bba' ],
+	resources = [ 'python3' ],
+	license_file = 'nextpnr/COPYING',
+)
+
 # architecture specific
 SourceLocation(
 	name = 'icestorm',
@@ -74,6 +82,13 @@ SourceLocation(
 	name = 'prjoxide',
 	vcs = 'git',
 	location = 'https://github.com/gatecat/prjoxide',
+	revision = 'origin/master',
+)
+
+SourceLocation(
+	name = 'mistral',
+	vcs = 'git',
+	location = 'https://github.com/Ravenslofty/mistral',
 	revision = 'origin/master',
 )
 
