@@ -15,7 +15,7 @@ from libvcs.util import run
 
 sources = dict()
 targets = dict()
-architectures = [ 'linux-x64', 'darwin-x64', 'windows-x64', 'linux-arm', 'linux-arm64', 'linux-riscv64']
+architectures = [ 'linux-x64', 'darwin-x64', 'windows-x64', 'linux-arm', 'linux-arm64', 'linux-riscv64', 'darwin-arm64']
 arch_chain = dict({
 	'linux-x64' : None, 
 	'darwin-x64' : 'linux-x64', 
@@ -23,6 +23,7 @@ arch_chain = dict({
 	'linux-arm' : 'darwin-x64', 
 	'linux-arm64' : 'windows-x64', 
 	'linux-riscv64' : 'linux-arm64',
+	'darwin-arm64' : 'darwin-x64',
 })
 
 SOURCES_ROOT = "_sources"
