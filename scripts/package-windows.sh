@@ -7,16 +7,11 @@ rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/include
 
 sed "s|___BRANDING___|${BRANDING}|g" -i ${OUTPUT_DIR}${INSTALL_PREFIX}/environment.bat
 
-for bindir in bin py3bin; do
-    for binfile in $(file -h $bindir/* | grep PE32 | grep executable | cut -f1 -d:); do
-        for f in `peldd --all $binfile --wlist uxtheme.dll --wlist userenv.dll --wlist opengl32.dll | grep sys-root | sed -e 's/.*=..//' | sed -e 's/ (0.*)//'`; do
-            cp -v "$f" lib/.
-        done
-    done
-done
-
 cp /usr/x86_64-w64-mingw32/sys-root/mingw/bin/*.dll lib/.
-
+for f in $(find . -type l)
+do
+    cp --remove-destination $(readlink -e $f) $f
+done
 for script in bin/* py3bin/*; do
     if $(head -1 "${script}" | grep -q python); then
 		if [[ $script == *-script.py ]]; then
@@ -24,27 +19,12 @@ for script in bin/* py3bin/*; do
 		elif [[ $script == */icebox.py ]]; then
 			echo "Ignore icebox.py"
 		else
-			cp ${script} ${script/.py/}-script.py
+			mv ${script} ${script/.py/}-script.py
 			cp ${OUTPUT_DIR}${INSTALL_PREFIX}/win-launcher.exe ${script/.py/}.exe
 		fi
     fi
 done
 
-for script in bin/* py3bin/*; do
-    if $(head -1 "${script}" | grep -q python); then
-		if [[ $script == *-script.py ]]; then
-			echo "Ignore $script"
-		elif [[ $script == */icebox.py ]]; then
-			echo "Ignore icebox.py"
-		else
-			rm -rf ${script}
-		fi
-    fi
-done
-cp ${OUTPUT_DIR}${INSTALL_PREFIX}/win-launcher.exe bin/yosys-smtbmc.exe
 rm ${OUTPUT_DIR}${INSTALL_PREFIX}/win-launcher.exe
-for f in $(find . -type l)
-do
-    cp --remove-destination $(readlink -e $f) $f
-done
+
 chmod -R u=rwX,go=rX *
