@@ -1,5 +1,5 @@
 cd yosys
-if  [ ${ARCH} == 'darwin-x64' ]; then
+if  [ ${ARCH_BASE} == 'darwin' ]; then
 	make config-clang
 	sed -i -re "s,CXX = clang,CXX = ${CC},g" Makefile
 	sed -i -re "s,LD = clang\+\+,LD = ${CXX},g" Makefile
@@ -16,8 +16,8 @@ else
 fi
 make PREFIX=${INSTALL_PREFIX} DESTDIR=${OUTPUT_DIR} install -j${NPROC}
 pushd ${OUTPUT_DIR}${INSTALL_PREFIX} 
-mkdir -p lib
 if [ ${ARCH} != 'windows-x64' ]; then
+	mkdir -p lib
 	ln -s ../bin/yosys-abc lib/
 fi
 popd
