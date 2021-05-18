@@ -718,6 +718,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-riscv64-z3:
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v2
         with:
