@@ -26,6 +26,16 @@ arch_chain = dict({
 	'darwin-arm64' : 'darwin-x64',
 })
 
+cargo_target = dict({
+	'linux-x64' : 'x86_64-unknown-linux-gnu', 
+	'linux-arm' : 'arm-unknown-linux-gnueabihf', 
+	'linux-arm64' : 'aarch64-unknown-linux-gnu', 
+	'linux-riscv64' : 'riscv64gc-unknown-linux-gnu',
+	'windows-x64' : 'x86_64-pc-windows-gnu', 
+	'darwin-x64' : 'x86_64-apple-darwin', 
+	'darwin-arm64' : 'aarch64-apple-darwin',
+})
+
 SOURCES_ROOT = "_sources"
 BUILDS_ROOT  = "_builds"
 OUTPUTS_ROOT = "_outputs"
@@ -357,6 +367,8 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, nproc, pack_source
 	env['NPROC'] = str(nproc)
 	env['SHARED_EXT'] = '.so'
 	env['PACK_SOURCES'] = 'True' if pack_sources else 'False'
+	env['CARGO_HOME'] = "/tmp/" + arch
+	env['CARGO_TARGET'] = cargo_target[arch]
 	if (arch == 'windows-x64'):
 		env['EXE'] = '.exe'
 		env['SHARED_EXT'] = '.dll'
