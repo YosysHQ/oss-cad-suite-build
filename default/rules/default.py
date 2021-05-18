@@ -26,7 +26,6 @@ Target(
         'mcy',
         'sby',
         'sby-gui',
-        #'ghdl',
         'gtkwave',
         'verilator',
         'iverilog',
@@ -38,10 +37,8 @@ Target(
         'icesprog',
     ],
     branding = 'OSS CAD Suite',
-    patches = [ 'win-launcher.c' ],
     resources = [ 'system-resources' ],
 )
-
 
 Target(
     name = 'default-formal',
@@ -61,6 +58,5 @@ Target(
         'gtkwave',
     ],
     branding ='OSS CAD Formal',
-    patches = [ 'win-launcher.c' ],
     resources = [ 'system-resources' ],
 )

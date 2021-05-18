@@ -47,6 +47,8 @@ if [ ${ARCH_BASE} == 'darwin' ]; then
 
 fi
 if [ ${ARCH_BASE} == 'windows' ]; then
+    ${CC} -DGUI=0 -O -s -o ${OUTPUT_DIR}${INSTALL_PREFIX}/win-launcher.exe ${PATCHES_DIR}/win-launcher.c
+
     cp ${PATCHES_DIR}/environment.bat ${OUTPUT_DIR}${INSTALL_PREFIX}/.
     cp ${PATCHES_DIR}/start.bat ${OUTPUT_DIR}${INSTALL_PREFIX}/.
     mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/lib

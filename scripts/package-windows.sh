@@ -20,12 +20,12 @@ cp /usr/x86_64-w64-mingw32/sys-root/mingw/bin/*.dll lib/.
 for script in bin/* py3bin/*; do
     if $(head -1 "${script}" | grep -q python); then
 		if [[ $script == *-script.py ]]; then
-			${CC} -DGUI=0 -O -s -o ${script/-script.py/.exe} ${PATCHES_DIR}/win-launcher.c
+			cp ${OUTPUT_DIR}${INSTALL_PREFIX}/win-launcher.exe ${script/-script.py/.exe}
 		elif [[ $script == */icebox.py ]]; then
 			echo "Ignore icebox.py"
 		else
 			cp ${script} ${script/.py/}-script.py
-			${CC} -DGUI=0 -O -s -o ${script/.py/}.exe ${PATCHES_DIR}/win-launcher.c
+			cp ${OUTPUT_DIR}${INSTALL_PREFIX}/win-launcher.exe ${script/.py/}.exe
 		fi
     fi
 done
@@ -41,7 +41,8 @@ for script in bin/* py3bin/*; do
 		fi
     fi
 done
-${CC} -DGUI=0 -O -s -o bin/yosys-smtbmc.exe ${PATCHES_DIR}/win-launcher.c
+cp ${OUTPUT_DIR}${INSTALL_PREFIX}/win-launcher.exe bin/yosys-smtbmc.exe
+rm ${OUTPUT_DIR}${INSTALL_PREFIX}/win-launcher.exe
 for f in $(find . -type l)
 do
     cp --remove-destination $(readlink -e $f) $f
