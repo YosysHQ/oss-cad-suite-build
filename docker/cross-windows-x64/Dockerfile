@@ -1,4 +1,13 @@
-FROM fedora:33
+FROM yosyshq/cross-linux-x64:1.0 AS builder
+
+RUN cd /tmp && \
+    git clone --recursive https://github.com/gsauthof/pe-util && \
+    cd pe-util && \
+    sed "s|\")| -static\")\nset(Boost_USE_STATIC_LIBS ON)|g" -i CMakeLists.txt && \
+    cmake . && \
+    make -j9
+
+FROM fedora:32
 
 RUN dnf install -y  mingw64-libftdi \
                     mingw64-boost \
@@ -9,14 +18,11 @@ RUN dnf install -y  mingw64-libftdi \
                     mingw64-xz \
                     mingw64-gtk2 \
                     mingw64-qt5-qtbase \
-                    mingw64-gmp \
                     mingw64-eigen3 \
                     mingw64-dlfcn \
                     mingw64-hidapi \
                     mingw64-bzip2 \
                     mingw64-curl \
-                    mingw64-llvm \
-                    mingw64-llvm-static \
                     git \
                     cmake \
                     autoconf \
@@ -28,21 +34,17 @@ RUN dnf install -y  mingw64-libftdi \
                     binutils \
                     gcc \
                     g++ \
-                    boost-devel \
                     bc \
                     rsync \
                     python3 \
-                    python3.8 \
                     which \
                     libtool \
-                    diffutils
+                    diffutils \
+                    java-11-openjdk-headless \
+                    cpio \
+                    xz
 
 ENV CROSS_NAME x86_64-w64-mingw32
-
-RUN git clone --recursive https://github.com/gsauthof/pe-util && \
-    cd pe-util && \
-    cmake . && \
-    make install -j9 
 
 ENV AS=/usr/bin/${CROSS_NAME}-as \
     AR=/usr/bin/${CROSS_NAME}-ar \
@@ -78,20 +80,11 @@ RUN rustup target add x86_64-pc-windows-gnu && \
 
 RUN ln -s /usr/bin/python3 /usr/bin/python
 
-#RUN curl -L https://github.com/mmicko/fedora-ada/releases/download/v1/mingw64-gcc-10.2.1-2.fc33.x86_64.rpm --output /tmp/mingw64-gcc-10.2.1-2.fc33.x86_64.rpm && \
-#    curl -L https://github.com/mmicko/fedora-ada/releases/download/v1/mingw64-gcc-gnat-10.2.1-2.fc33.x86_64.rpm --output /tmp/mingw64-gcc-gnat-10.2.1-2.fc33.x86_64.rpm && \
-#    dnf reinstall -y /tmp/mingw64-gcc-10.2.1-2.fc33.x86_64.rpm && \
-#    dnf localinstall -y /tmp/mingw64-gcc-gnat-10.2.1-2.fc33.x86_64.rpm && \ 
-#    rm -rf /tmp/*.rpm && \
-RUN cp /usr/x86_64-w64-mingw32/sys-root/mingw/lib/libLLVM* /usr/x86_64-w64-mingw32/lib/. && \
-    touch /usr/x86_64-w64-mingw32/sys-root/mingw/lib/librt.a
-
-RUN dnf install -y java-11-openjdk-headless cpio xz \
-    && curl -L  https://download-ib01.fedoraproject.org/pub/fedora/linux/releases/33/Everything/source/tree/Packages/m/mingw-gmp-6.1.2-9.fc33.src.rpm --output mingw-gmp-6.1.2-9.fc33.src.rpm \
+RUN curl -L  https://download-ib01.fedoraproject.org/pub/fedora/linux/releases/33/Everything/source/tree/Packages/m/mingw-gmp-6.1.2-9.fc33.src.rpm --output mingw-gmp-6.1.2-9.fc33.src.rpm \
     && rpm2cpio mingw-gmp-6.1.2-9.fc33.src.rpm | cpio -idmv \
     && tar -xf gmp-6.1.2.tar.xz \
     && cd gmp-6.1.2 \
-    && mingw64-configure --disable-shared --enable-cxx \
+    && mingw64-configure --disable-shared --enable-cxx --enable-static \
     && mingw64-make -j9 \
     && mingw64-make install \
     && curl http://ftp.gnu.org/gnu/bison/bison-3.5.tar.gz --output /tmp/bison-3.5.tar.gz \
@@ -105,5 +98,8 @@ RUN dnf install -y java-11-openjdk-headless cpio xz \
     && mingw64-make install \
     && rm -rf /tmp/* \
     && true
+
+COPY --from=builder /tmp/pe-util/peldd /usr/bin/peldd
+RUN chmod +x /usr/bin/peldd
 
 WORKDIR /work
