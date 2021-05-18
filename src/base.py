@@ -84,7 +84,7 @@ class SourceLocation:
 		sources[name] = self
 
 class Target:
-	def __init__(self, name, sources = [], dependencies = [], resources = [], patches = [], arch = [], license_url = None, license_file = None, top_package = False, build_native = False, release_name = None, gitrev = [], branding = None):
+	def __init__(self, name, sources = [], dependencies = [], resources = [], patches = [], arch = [], license_url = None, license_file = None, top_package = False, build_native = False, release_name = None, gitrev = [], branding = None, continue_on_error = False):
 		self.name = name
 		self.sources = sources
 		self.dependencies = dependencies
@@ -101,6 +101,7 @@ class Target:
 		self.build_native = build_native
 		self.gitrev = gitrev
 		self.branding = branding
+		self.continue_on_error = continue_on_error
 		if release_name:
 			self.release_name = release_name
 		else:
@@ -675,6 +676,8 @@ def generateYaml(target, build_arch, write_to_file):
 
 		yaml_content +="  {}-{}:\n".format(arch, target.name)
 		yaml_content +="    runs-on: ubuntu-latest\n"
+		if target.continue_on_error:
+			yaml_content +="    continue-on-error: true\n"
 		if len(needs)==1:
 			yaml_content +="    needs: {}\n".format(needs[0])
 		elif len(needs)>1:

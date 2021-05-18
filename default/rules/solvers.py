@@ -142,4 +142,5 @@ Target(
 	name = 'z3',
 	sources = [ 'z3' ],
 	license_file = 'z3/LICENSE.txt',
+	continue_on_error = True
 )
