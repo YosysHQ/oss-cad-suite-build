@@ -1,9 +1,6 @@
 cd iverilog
 patch -p1 < ${PATCHES_DIR}/iverilog_fix.diff
 sh autoconf.sh
-if [ ${ARCH} == 'windows-x64' ]; then
-    sed -i "s/EXTRALIBS=/EXTRALIBS=-lssp/g" configure
-fi
 ./configure --prefix=${INSTALL_PREFIX} --host=${CROSS_NAME}
 make DESTDIR=${OUTPUT_DIR} -j${NPROC} install
 rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/include
