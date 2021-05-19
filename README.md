@@ -52,9 +52,16 @@ You will find tools for RTL synthesis, formal hardware verification, place & rou
  * [verilator](https://github.com/verilator/verilator) Verilog/SystemVerilog simulator
  * [iverilog](https://github.com/steveicarus/iverilog) Verilog compilation system
 
-### Support libraries
+### SoC
  * [LiteX](https://github.com/enjoy-digital/litex/) Migen/MiSoC based Core/SoC builder
 
+### Support libraries
+ * [Python 3](https://github.com/python/cpython) language interpretter is provided in all supported platforms.
+ * [Python 2](https://github.com/python/cpython) language interpretter is provided in Linux platforms in form of library only.
+ * [Ubuntu 20.04](https://ubuntu.com/) distribution development packages are used and shared libraries used are provided in package.
+ * [macports](https://www.macports.org/) distribution system for macOS is used to obtain all libraries used, and they are provided in package.
+ * [MinGW](https://sourceforge.net/projects/mingw) Minimalist GNU for Windows library packages from Fedora 32 are used in compilation and provided in package.
+ 
 # Installation
 
 1. Download an archive matching your OS from [the releases page](https://github.com/YosysHQ/oss-cad-suite-build/releases/latest).
