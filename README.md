@@ -85,6 +85,8 @@ to create new shell window:
 <extracted_location>\oss-cad-suite\start.bat
 ```
 
+**NOTE:** when environment is set, `python3` from package becomes available as well, this enables usage of *Migen* (*LiteX* libraries included) and *nMigen* scripts as usual, when OSS CAD Suite is just added in PATH to use packaged python3 use `packaged_py3` to start python environment. For Windows, there are no wrappers and using environment.bat is only choice.
+
 # Supported architectures
 
 ## linux-x64
