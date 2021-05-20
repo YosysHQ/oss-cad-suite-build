@@ -13,6 +13,10 @@
 OSS CAD Suite is software distribution for number of [open source software](https://en.wikipedia.org/wiki/Open-source_software) used in digital logic design. 
 You will find tools for RTL synthesis, formal hardware verification, place & route, FPGA programming, testing with support for HDL like Verilog, Migen and nMigen.
 
+OSS CAD Suite is a component YosysHQ's Tabby CAD Suite:  
+![image](https://user-images.githubusercontent.com/59544343/119006798-f8786100-b990-11eb-9535-cef67420ccfb.png)  
+See [Tabby CAD Datasheet](https://www.yosyshq.com/tabby-cad-datasheet) for details on Tabby CAD Suite; see [OSS CAD Suite GitHub](https://github.com/YosysHQ/oss-cad-suite-build/) (this page) for details on OSS CAD Suite.
+
 ### RTL Synthesis 
  * [Yosys](https://github.com/YosysHQ/yosys) RTL synthesis with extensive Verilog 2005 support
  * [nMigen](https://github.com/nmigen/nmigen) refreshed Python toolbox for building complex digital hardware
