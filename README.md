@@ -21,17 +21,18 @@ See [Tabby CAD Datasheet](https://www.yosyshq.com/tabby-cad-datasheet) for detai
  * [Yosys](https://github.com/YosysHQ/yosys) RTL synthesis with extensive Verilog 2005 support
  * [nMigen](https://github.com/nmigen/nmigen) refreshed Python toolbox for building complex digital hardware
  * [Migen](https://github.com/m-labs/migen) Python toolbox for building complex digital hardware
+ * [ABC](https://people.eecs.berkeley.edu/~alanmi/abc/) A System for Sequential Synthesis and Verification
  
 ### Formal Tools
  * [SymbiYosys](https://github.com/YosysHQ/SymbiYosys) a front-end driver program for Yosys-based formal hardware verification flows.
  * [mcy](https://github.com/YosysHQ/mcy) Mutation Cover with Yosys
  * [sby-gui](https://github.com/YosysHQ/sby-gui) GUI for SymbiYosys
  * [avy](https://bitbucket.org/arieg/extavy) Interpolating Property Directed Reachability tool
- * [Boolector](https://github.com/Boolector/boolector) SMT solver
- * [Yices 2](https://github.com/SRI-CSL/yices2) a solver for Satisfiability Modulo Theories (SMT) problems
- * [Super prove](https://github.com/sterin/super-prove-build) SMT solver
+ * [Boolector](https://github.com/Boolector/boolector) SMT solver and BTOR model checker
+ * [Yices 2](https://github.com/SRI-CSL/yices2) SMT solver
+ * [Super prove](https://github.com/sterin/super-prove-build) ABC-based AIGER hardware model checker
  * [Pono](https://github.com/upscale-project/pono) an SMT-based model checker built on [smt-switch](https://github.com/makaimann/smt-switch)
- * [Z3](https://github.com/Z3Prover/z3) Theorem Prover
+ * [Z3](https://github.com/Z3Prover/z3) SMT solver
 
 ### PnR
  * [nextpnr](https://github.com/YosysHQ/nextpnr) a portable FPGA place and route tool (generic, ice40, ecp5, machxo2, nexus)
