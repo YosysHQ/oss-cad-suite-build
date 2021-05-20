@@ -70,6 +70,7 @@ unset XDG_CONFIG_DIRS
 export XDG_CONFIG_HOME=\$HOME/.config/yosyshq
 export XDG_CACHE_HOME=\$HOME/.cache/yosyshq
 export XDG_DATA_HOME=\$HOME/.local/share/yosyshq
+export XDG_CURRENT_DESKTOP="KDE"
 export LC_ALL="C"
 EOT
         fi
@@ -95,6 +96,7 @@ export XDG_CONFIG_HOME=\$HOME/.config/yosyshq
 export XDG_CACHE_HOME=\$HOME/.cache/yosyshq
 export XDG_DATA_HOME=\$HOME/.local/share/yosyshq
 export LC_ALL="C"
+export XDG_CURRENT_DESKTOP="KDE"
 export TCL_LIBRARY="\$release_topdir_abs/lib/tcl8.6"
 export TK_LIBRARY="\$release_topdir_abs/lib/tk8.6"
 "\$release_topdir_abs"/lib/$ldlinuxname --inhibit-cache --inhibit-rpath "" --library-path "\$release_topdir_abs"/lib "\$release_topdir_abs"/libexec/gdk-pixbuf-query-loaders --update-cache
