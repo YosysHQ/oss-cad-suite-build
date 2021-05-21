@@ -7,6 +7,13 @@ SourceLocation(
 	revision = 'origin/master'
 )
 
+SourceLocation(
+	name = 'graphviz',
+	vcs = 'git',
+	location = 'https://gitlab.com/graphviz/graphviz',
+	revision = 'tags/2.42.2'
+)
+
 Target(
 	name = 'yosys',
 	sources = [ 'yosys' ],
@@ -20,4 +27,10 @@ Target(
 	resources = [ 'python3' ],
 	patches = [ 'python3_package.sh' ],
 	sources = [ ],
+)
+
+Target(
+	name = 'graphviz',
+	#patches = [ 'graphviz_fix.diff' ],
+	sources = [ 'graphviz' ],
 )
