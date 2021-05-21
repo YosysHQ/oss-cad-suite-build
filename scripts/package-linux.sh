@@ -39,7 +39,7 @@ EOT
 
         if [ $bindir == 'py3bin' ]; then
             cat >> $binfile << EOT
-export PYTHONEXECUTABLE="\$release_topdir_abs/bin/packaged_py3"
+export PYTHONEXECUTABLE="\$release_topdir_abs/bin/yshqpy3"
 EOT
         fi
         if [ ! -z "$(basename $binfile | grep verilator)" ]; then
@@ -120,7 +120,7 @@ done
 
 if [ -f "py3bin/python3" ]; then
     mkdir -p bin
-    cp py3bin/python3 bin/packaged_py3
+    cp py3bin/python3 bin/yshqpy3
 fi
 
 for script in bin/* py3bin/*; do
@@ -133,7 +133,7 @@ release_bindir="\$(dirname "\${BASH_SOURCE[0]}")"
 release_bindir_abs="\$(readlink -f "\$release_bindir/../bin")"
 release_topdir_abs="\$(readlink -f "\$release_bindir/$rel_path")"
 export PATH="\$release_bindir_abs:\$PATH"
-export PYTHONEXECUTABLE="\$release_bindir_abs/packaged_py3"
+export PYTHONEXECUTABLE="\$release_bindir_abs/yshqpy3"
 EOT
         is_using_fonts=false
         if [ $script == 'bin/xdot' ]; then
@@ -174,7 +174,7 @@ sed "s|TARGET_DIR|\$release_topdir_abs|g" "\$release_topdir_abs/etc/fonts/fonts.
 EOT
         fi
         cat >> "${script}" <<EOT
-exec \$release_bindir_abs/packaged_py3 "\$release_topdir_abs"/libexec/$(basename $script) "\$@"
+exec \$release_bindir_abs/yshqpy3 "\$release_topdir_abs"/libexec/$(basename $script) "\$@"
 EOT
         chmod +x "${script}"
     fi
