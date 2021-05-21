@@ -39,6 +39,8 @@ fi
 cd build
 make DESTDIR=${OUTPUT_DIR} -j${NPROC}
 make DESTDIR=${OUTPUT_DIR} -j${NPROC} install
+cp ../../btor2tools/build/bin/btorsim${EXE} ${OUTPUT_DIR}${INSTALL_PREFIX}/bin/
+${STRIP} ${OUTPUT_DIR}${INSTALL_PREFIX}/bin/btorsim${EXE}
 cd ..
 mkdir -p ${OUTPUT_DIR}/dev
 mkdir -p ${OUTPUT_DIR}/dev/build/lib
