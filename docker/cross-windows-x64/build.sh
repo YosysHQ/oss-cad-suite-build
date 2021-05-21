@@ -1,1 +1,1 @@
-docker build -t="yosyshq/cross-windows-x64:1.0" .
+docker build -t="yosyshq/cross-windows-x64:1.1" .

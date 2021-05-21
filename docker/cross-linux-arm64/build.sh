@@ -1,1 +1,1 @@
-docker build -t="yosyshq/cross-linux-arm64:1.0" .
+docker build -t="yosyshq/cross-linux-arm64:1.1" .

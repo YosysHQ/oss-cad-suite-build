@@ -81,7 +81,7 @@ EOT
             is_using_fonts=true
             cat >> $binfile << EOT
 unset GTK_MODULES
-unset GTK2_MODULES
+unset GTK3_MODULES
 export GTK_PATH="\$release_topdir_abs/lib/gtk-2.0"
 export GTK_IM_MODULE=""
 export GTK_IM_MODULE_FILE="/dev/null"
@@ -90,13 +90,14 @@ export GTK_EXE_PREFIX="\$release_topdir_abs"
 export GTK_DATA_PREFIX="\$release_topdir_abs"
 export GDK_PIXBUF_MODULEDIR="\$release_topdir_abs/lib/gtk-2.0/loaders"
 export GDK_PIXBUF_MODULE_FILE="\$release_topdir_abs/lib/gtk-2.0/loaders.cache"
-unset XDG_DATA_DIRS
-unset XDG_CONFIG_DIRS
+export GTK_THEME="Adwaita"
+export XDG_DATA_DIRS="\$release_topdir_abs"/share
+export XDG_CONFIG_DIRS="\$release_topdir_abs"
 export XDG_CONFIG_HOME=\$HOME/.config/yosyshq
 export XDG_CACHE_HOME=\$HOME/.cache/yosyshq
 export XDG_DATA_HOME=\$HOME/.local/share/yosyshq
-export LC_ALL="C"
 export XDG_CURRENT_DESKTOP="KDE"
+export LC_ALL="C"
 export TCL_LIBRARY="\$release_topdir_abs/lib/tcl8.6"
 export TK_LIBRARY="\$release_topdir_abs/lib/tk8.6"
 "\$release_topdir_abs"/lib/$ldlinuxname --inhibit-cache --inhibit-rpath "" --library-path "\$release_topdir_abs"/lib "\$release_topdir_abs"/libexec/gdk-pixbuf-query-loaders --update-cache
@@ -143,7 +144,7 @@ EOT
             is_using_fonts=true
             cat >> "${script}" <<EOT
 unset GTK_MODULES
-unset GTK2_MODULES
+unset GTK3_MODULES
 export GTK_PATH="\$release_topdir_abs/lib/gtk-2.0"
 export GTK_IM_MODULE=""
 export GTK_IM_MODULE_FILE="/dev/null"
@@ -152,8 +153,9 @@ export GTK_EXE_PREFIX="\$release_topdir_abs"
 export GTK_DATA_PREFIX="\$release_topdir_abs"
 export GDK_PIXBUF_MODULEDIR="\$release_topdir_abs/lib/gtk-2.0/loaders"
 export GDK_PIXBUF_MODULE_FILE="\$release_topdir_abs/lib/gtk-2.0/loaders.cache"
-unset XDG_DATA_DIRS
-unset XDG_CONFIG_DIRS
+export GTK_THEME="Adwaita"
+export XDG_DATA_DIRS="\$release_topdir_abs"/share
+export XDG_CONFIG_DIRS="\$release_topdir_abs"
 export XDG_CONFIG_HOME=\$HOME/.config/yosyshq
 export XDG_CACHE_HOME=\$HOME/.cache/yosyshq
 export XDG_DATA_HOME=\$HOME/.local/share/yosyshq

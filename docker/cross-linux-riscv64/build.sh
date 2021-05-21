@@ -1,1 +1,1 @@
-docker build -t="yosyshq/cross-linux-riscv64:1.0" .
+docker build -t="yosyshq/cross-linux-riscv64:1.1" .

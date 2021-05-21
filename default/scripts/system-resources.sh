@@ -22,6 +22,17 @@ if [ ${ARCH_BASE} == 'linux' ]; then
     cp -r `pkg-config --variable=gdk_pixbuf_binarydir gdk-pixbuf-2.0`/loaders ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/gtk-2.0/.
     touch ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/gtk-2.0/loaders.cache
     touch ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/gtk-2.0/gtkrc
+
+    mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/share/glib-2.0
+    mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/share/mime
+    mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/share/icons
+    cp -rv /usr/share/glib-2.0/schemas ${OUTPUT_DIR}${INSTALL_PREFIX}/share/glib-2.0/.
+    cp -v /usr/share/mime/magic ${OUTPUT_DIR}${INSTALL_PREFIX}/share/mime/.
+    cp -rv /usr/share/icons/Adwaita ${OUTPUT_DIR}${INSTALL_PREFIX}/share/icons/.
+    rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/share/icons/Adwaita/256x256
+    rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/share/icons/Adwaita/512x512
+    rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/share/icons/Adwaita/cursors
+    rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/share/icons/Adwaita/icon-theme.cache
 fi
 
 if [ ${ARCH_BASE} == 'darwin' ]; then
@@ -63,4 +74,12 @@ if [ ${ARCH_BASE} == 'windows' ]; then
 
 	mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/lib
     cp -rf /usr/x86_64-w64-mingw32/sys-root/mingw/lib/gdk-pixbuf-2.0 ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/.
+
+    mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/share/glib-2.0
+    mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/share/icons
+    cp -rv /usr/x86_64-w64-mingw32/sys-root/mingw/share/glib-2.0/schemas ${OUTPUT_DIR}${INSTALL_PREFIX}/share/glib-2.0/.
+    cp -rv /usr/x86_64-w64-mingw32/sys-root/mingw/share/icons/Adwaita ${OUTPUT_DIR}${INSTALL_PREFIX}/share/icons/.
+    rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/share/icons/Adwaita/256x256
+    rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/share/icons/Adwaita/512x512
+    rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/share/icons/Adwaita/cursors
 fi

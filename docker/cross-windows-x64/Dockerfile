@@ -7,7 +7,7 @@ RUN dnf install -y  mingw64-libftdi \
                     mingw64-readline \
                     mingw64-tk \
                     mingw64-xz \
-                    mingw64-gtk2 \
+                    mingw64-gtk3 \
                     mingw64-qt5-qtbase \
                     mingw64-eigen3 \
                     mingw64-dlfcn \
@@ -71,7 +71,8 @@ RUN rustup target add x86_64-pc-windows-gnu && \
 
 RUN ln -s /usr/bin/python3 /usr/bin/python
 
-RUN curl -L  https://download-ib01.fedoraproject.org/pub/fedora/linux/releases/33/Everything/source/tree/Packages/m/mingw-gmp-6.1.2-9.fc33.src.rpm --output mingw-gmp-6.1.2-9.fc33.src.rpm \
+RUN cd /tmp \
+    && curl -L  https://download-ib01.fedoraproject.org/pub/fedora/linux/releases/33/Everything/source/tree/Packages/m/mingw-gmp-6.1.2-9.fc33.src.rpm --output mingw-gmp-6.1.2-9.fc33.src.rpm \
     && rpm2cpio mingw-gmp-6.1.2-9.fc33.src.rpm | cpio -idmv \
     && tar -xf gmp-6.1.2.tar.xz \
     && cd gmp-6.1.2 \
@@ -93,3 +94,5 @@ RUN curl -L  https://download-ib01.fedoraproject.org/pub/fedora/linux/releases/3
 COPY winsock2.h /usr/x86_64-w64-mingw32/sys-root/mingw/include/
 
 WORKDIR /work
+
+RUN dnf install -y python3-cairo python3-cairo-devel

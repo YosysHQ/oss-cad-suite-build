@@ -5,16 +5,21 @@ function python3_package_setup {
 
     if [ ${ARCH} == 'linux-arm' ]; then
         cp /usr/lib/python3.8/lib-dynload/* ${PYTHONHOME}/lib/python3.8/lib-dynload/.
+        cp -r /usr/lib/python3/dist-packages/cairo ${PYTHONHOME}/lib/python3.8/lib-dynload/.
     elif [ ${ARCH} == 'linux-arm64' ]; then
         cp /usr/lib/python3.8/lib-dynload/* ${PYTHONHOME}/lib/python3.8/lib-dynload/.
+        cp -r /usr/lib/python3/dist-packages/cairo ${PYTHONHOME}/lib/python3.8/lib-dynload/.
     elif [ ${ARCH} == 'linux-riscv64' ]; then
         cp /usr/lib/python3.8/lib-dynload/* ${PYTHONHOME}/lib/python3.8/lib-dynload/.
+        cp -r /usr/lib/python3/dist-packages/cairo ${PYTHONHOME}/lib/python3.8/lib-dynload/.
     elif [ ${ARCH} == 'darwin-x64' ]; then
         cp /usr/lib/python3.8/lib-dynload/* ${PYTHONHOME}/lib/python3.8/lib-dynload/.
+        cp -r /usr/lib/python3/dist-packages/cairo ${PYTHONHOME}/lib/python3.8/lib-dynload/.
     elif [ ${ARCH} == 'windows-x64' ]; then
         export DLLWRAP=x86_64-w64-mingw32-dllwrap 
         export HOME=/tmp
         cp /usr/lib64/python3.8/lib-dynload/* ${PYTHONHOME}/lib/python3.8/lib-dynload/.
+        cp -r /usr/lib64/python3.8/site-packages/cairo ${PYTHONHOME}/lib/python3.8/lib-dynload/.
         cp -r ${BUILD_DIR}/python3${INSTALL_PREFIX}/lib ${BUILD_DIR}/python3${INSTALL_PREFIX}/lib64
     fi
 }

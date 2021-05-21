@@ -403,7 +403,7 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, nproc, pack_source
 		else:
 			params += ['-e', '{}={}'.format(i, j)]
 	params += [
-		'yosyshq/cross-'+ arch + ':1.0',
+		'yosyshq/cross-'+ arch + ':1.1',
 		'bash', scriptfile.name
 	]
 	return run_live(params, cwd=build_dir)

@@ -1,4 +1,4 @@
-FROM yosyshq/cross-base:1.0
+FROM yosyshq/cross-base:1.1
 
 ENV CROSS_NAME aarch64-linux-gnu
 
@@ -31,7 +31,7 @@ RUN set -e -x ;\
         libffi-dev:arm64 \
         libftdi1-dev:arm64 \
         libgmp-dev:arm64 \
-        libgtk2.0-dev:arm64 \
+        libgtk-3-dev:arm64 \
         liblzma-dev:arm64 \
         libreadline-dev:arm64 \
         libsqlite3-dev:arm64 \
@@ -43,7 +43,8 @@ RUN set -e -x ;\
         libhidapi-dev:arm64 \
         libcurl4-openssl-dev:arm64 \
         libbz2-dev:arm64 \
-        libllvm10:arm64; \
+        libllvm10:arm64 \
+        libltdl-dev:arm64; \
     apt -y autoremove ;\
     rm -rf /var/lib/apt/lists/*
 
