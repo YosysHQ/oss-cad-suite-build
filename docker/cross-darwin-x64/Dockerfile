@@ -1,4 +1,4 @@
-FROM yosyshq/cross-linux-x64:1.0 AS builder
+FROM yosyshq/cross-linux-x64:1.1 AS builder
 
 RUN cd /tmp \
     && git clone https://github.com/auriamg/macdylibbundler \
@@ -6,7 +6,7 @@ RUN cd /tmp \
     && sed -i "s,CXXFLAGS=-O2 -std=c++11,CXXFLAGS=-O2 -std=c++11 -static-libstdc++ -static-libgcc,g" Makefile \
     && make 
 
-FROM yosyshq/cross-base:1.0
+FROM yosyshq/cross-base:1.1
 
 RUN set -e -x ;\
     apt -y update ;\
@@ -14,6 +14,8 @@ RUN set -e -x ;\
     apt -y install \
         clang \
         pkgconf \
+        libtool \
+        python3-distutils \
         libxml2-dev \
         libz-dev \
         liblzma-dev \
@@ -82,14 +84,6 @@ ENV MACOSX_DEPLOYMENT_TARGET=10.14
 
 ENV CMAKE_TOOLCHAIN_FILE ${CROSS_PREFIX}/Toolchain.cmake
 
-RUN set -e -x ;\
-    apt -y update ;\
-    apt -y install \
-        libtool \
-        python3-distutils; \
-    apt -y autoremove ;\
-    rm -rf /var/lib/apt/lists/*
-
 ENV OSXCROSS_MP_INC=1 
 
 ENV PKG_CONFIG_PATH /opt/local/lib/pkgconfig
@@ -101,7 +95,7 @@ RUN cd /opt \
   && rm -rf /opt/Qt5.12.8/bin \
   && ln -s /usr/lib/qt5/bin /opt/Qt5.12.8/bin \
   && cd /tmp \
-  && wget https://github.com/mmicko/macos-resources/releases/download/v1/macports-darwin-x64.tar \
+  && wget https://github.com/mmicko/macos-resources/releases/download/v2/macports-darwin-x64.tar \
   && tar xf macports-darwin-x64.tar \
   && cd / \
   && echo "Unpack atk-2.36.0_2.darwin_18.x86_64.tbz2" \
@@ -136,20 +130,26 @@ RUN cd /opt \
   && tar xfj /tmp/glib2/glib2-2.58.3_1+quartz.darwin_18.x86_64.tbz2 \
   && echo "Unpack gmp-6.2.1_0.darwin_18.x86_64.tbz2" \
   && tar xfj /tmp/gmp/gmp-6.2.1_0.darwin_18.x86_64.tbz2 \
+  && echo "Unpack gobject-introspection-1.60.2_6.darwin_18.x86_64.tbz2" \
+  && tar xfj /tmp/gobject-introspection/gobject-introspection-1.60.2_6.darwin_18.x86_64.tbz2 \
   && echo "Unpack graphite2-1.3.13_1.darwin_18.x86_64.tbz2" \
   && tar xfj /tmp/graphite2/graphite2-1.3.13_1.darwin_18.x86_64.tbz2 \
-  && echo "Unpack gtk2-2.24.32_0+quartz.darwin_18.x86_64.tbz2" \
-  && tar xfj /tmp/gtk2/gtk2-2.24.32_0+quartz.darwin_18.x86_64.tbz2 \
-  && echo "Unpack gtk-osx-application-common-gtk2-2.0.8_0.darwin_18.x86_64.tbz2" \
-  && tar xfj /tmp/gtk-osx-application-common-gtk2/gtk-osx-application-common-gtk2-2.0.8_0.darwin_18.x86_64.tbz2 \
-  && echo "Unpack gtk-osx-application-gtk2-2.0.8_0.darwin_18.x86_64.tbz2" \
-  && tar xfj /tmp/gtk-osx-application-gtk2/gtk-osx-application-gtk2-2.0.8_0.darwin_18.x86_64.tbz2 \
+  && echo "Unpack graphviz-2.40.1_4+pangocairo.darwin_18.x86_64.tbz2" \
+  && tar xfj /tmp/graphviz/graphviz-2.40.1_4+pangocairo.darwin_18.x86_64.tbz2 \
+  && echo "Unpack gtk3-3.24.23_0+quartz.darwin_18.x86_64.tbz2" \
+  && tar xfj /tmp/gtk3/gtk3-3.24.23_0+quartz.darwin_18.x86_64.tbz2 \
+  && echo "Unpack gtk-osx-application-common-gtk3-2.0.8_0.darwin_18.x86_64.tbz2" \
+  && tar xfj /tmp/gtk-osx-application-common-gtk3/gtk-osx-application-common-gtk3-2.0.8_0.darwin_18.x86_64.tbz2 \
+  && echo "Unpack gtk-osx-application-gtk3-2.0.8_0.darwin_18.x86_64.tbz2" \
+  && tar xfj /tmp/gtk-osx-application-gtk3/gtk-osx-application-gtk3-2.0.8_0.darwin_18.x86_64.tbz2 \
   && echo "Unpack harfbuzz-2.8.0_0.darwin_18.x86_64.tbz2" \
   && tar xfj /tmp/harfbuzz/harfbuzz-2.8.0_0.darwin_18.x86_64.tbz2 \
   && echo "Unpack hidapi-0.9.0_0.darwin_18.x86_64.tbz2" \
   && tar xfj /tmp/hidapi/hidapi-0.9.0_0.darwin_18.x86_64.tbz2 \
   && echo "Unpack icu-67.1_4.darwin_18.x86_64.tbz2" \
   && tar xfj /tmp/icu/icu-67.1_4.darwin_18.x86_64.tbz2 \
+  && echo "Unpack libepoxy-1.5.4_1+python38.darwin_18.x86_64.tbz2" \
+  && tar xfj /tmp/libepoxy/libepoxy-1.5.4_1+python38.darwin_18.x86_64.tbz2 \
   && echo "Unpack libffi-3.3_1.darwin_18.x86_64.tbz2" \
   && tar xfj /tmp/libffi/libffi-3.3_1.darwin_18.x86_64.tbz2 \
   && echo "Unpack libftdi1-1.5_0.darwin_18.x86_64.tbz2" \
@@ -162,8 +162,12 @@ RUN cd /opt \
   && tar xfj /tmp/libpixman/libpixman-0.38.4_0.darwin_18.x86_64.tbz2 \
   && echo "Unpack libpng-1.6.37_0.darwin_18.x86_64.tbz2" \
   && tar xfj /tmp/libpng/libpng-1.6.37_0.darwin_18.x86_64.tbz2 \
+  && echo "Unpack libtool-2.4.6_11.darwin_18.x86_64.tbz2" \
+  && tar xfj /tmp/libtool/libtool-2.4.6_11.darwin_18.x86_64.tbz2 \
   && echo "Unpack libusb-1.0.24_0.darwin_18.x86_64.tbz2" \
   && tar xfj /tmp/libusb/libusb-1.0.24_0.darwin_18.x86_64.tbz2 \
+  && echo "Unpack mesa-19.0.8_1+osmesa+python27.darwin_18.x86_64.tbz2" \
+  && tar xfj /tmp/mesa/mesa-19.0.8_1+osmesa+python27.darwin_18.x86_64.tbz2 \
   && echo "Unpack ncurses-6.2_1.darwin_18.x86_64.tbz2" \
   && tar xfj /tmp/ncurses/ncurses-6.2_1.darwin_18.x86_64.tbz2 \
   && echo "Unpack openssl-1.1.1k_0.darwin_18.x86_64.tbz2" \
@@ -186,6 +190,26 @@ RUN cd /opt \
   && tar xfj /tmp/tiff/tiff-4.3.0_0.darwin_18.x86_64.tbz2 \
   && echo "Unpack tk-8.6.11_0+quartz.darwin_18.x86_64.tbz2" \
   && tar xfj /tmp/tk/tk-8.6.11_0+quartz.darwin_18.x86_64.tbz2 \
+  && echo "Unpack xorg-libX11-1.7.0_0.darwin_18.x86_64.tbz2" \
+  && tar xfj /tmp/xorg-libX11/xorg-libX11-1.7.0_0.darwin_18.x86_64.tbz2 \
+  && echo "Unpack xorg-libxcb-1.14_0+python39.darwin_18.x86_64.tbz2" \
+  && tar xfj /tmp/xorg-libxcb/xorg-libxcb-1.14_0+python39.darwin_18.x86_64.tbz2 \
+  && echo "Unpack xorg-libXdamage-1.1.5_0.darwin_18.x86_64.tbz2" \
+  && tar xfj /tmp/xorg-libXdamage/xorg-libXdamage-1.1.5_0.darwin_18.x86_64.tbz2 \
+  && echo "Unpack xorg-libXext-1.3.4_0.darwin_18.x86_64.tbz2" \
+  && tar xfj /tmp/xorg-libXext/xorg-libXext-1.3.4_0.darwin_18.x86_64.tbz2 \ 
+  && echo "Unpack xorg-libXfixes-5.0.3_1.darwin_18.x86_64.tbz2" \
+  && tar xfj /tmp/xorg-libXfixes/xorg-libXfixes-5.0.3_1.darwin_18.x86_64.tbz2 \
+  && echo "Unpack xorg-libpthread-stubs-0.4_0.darwin_18.noarch.tbz2" \
+  && tar xfj /tmp/xorg-libpthread-stubs/xorg-libpthread-stubs-0.4_0.darwin_18.noarch.tbz2 \
+  && echo "Unpack xorg-libXdmcp-1.1.3_0.darwin_18.x86_64.tbz2" \
+  && tar xfj /tmp/xorg-libXdmcp/xorg-libXdmcp-1.1.3_0.darwin_18.x86_64.tbz2 \
+  && echo "Unpack xorg-libXau-1.0.9_0.darwin_18.x86_64.tbz2" \
+  && tar xfj /tmp/xorg-libXau/xorg-libXau-1.0.9_0.darwin_18.x86_64.tbz2 \
+  && echo "Unpack xorg-xcb-proto-1.14.1_0+python39.darwin_18.noarch.tbz2" \
+  && tar xfj /tmp/xorg-xcb-proto/xorg-xcb-proto-1.14.1_0+python39.darwin_18.noarch.tbz2 \
+  && echo "Unpack xorg-xorgproto-2021.4_0.darwin_18.noarch.tbz2" \
+  && tar xfj /tmp/xorg-xorgproto/xorg-xorgproto-2021.4_0.darwin_18.noarch.tbz2 \
   && echo "Unpack xz-5.2.5_0.darwin_18.x86_64.tbz2" \
   && tar xfj /tmp/xz/xz-5.2.5_0.darwin_18.x86_64.tbz2 \
   && echo "Unpack zlib-1.2.11_0.darwin_18.x86_64.tbz2" \
@@ -195,7 +219,8 @@ RUN cd /opt \
   && echo "Cleanup" \
   && cp /usr/include/FlexLexer.h /opt/local/include/. \
   && cp /opt/local/share/pkgconfig/* /opt/local/lib/pkgconfig/. \
-  && cp /opt/local/lib/pkgconfig/gtk-mac-integration-gtk2.pc /opt/local/lib/pkgconfig/gtk-mac-integration.pc \
+  && sed "s|2.0.8|3.0.8|g" -i /opt/local/lib/pkgconfig/gtk-mac-integration-gtk3.pc \
+  && cp /opt/local/lib/pkgconfig/gtk-mac-integration-gtk3.pc /opt/local/lib/pkgconfig/gtk-mac-integration.pc \
   && cp -r /opt/local/share/cmake /tmp \
   && cp -r /opt/local/share/eigen3 /tmp \
   && rm -rf /opt/local/etc \
