@@ -1,12 +1,3 @@
-FROM yosyshq/cross-linux-x64:1.0 AS builder
-
-RUN cd /tmp && \
-    git clone --recursive https://github.com/gsauthof/pe-util && \
-    cd pe-util && \
-    sed "s|\")| -static\")\nset(Boost_USE_STATIC_LIBS ON)|g" -i CMakeLists.txt && \
-    cmake . && \
-    make -j9
-
 FROM fedora:32
 
 RUN dnf install -y  mingw64-libftdi \
@@ -99,7 +90,6 @@ RUN curl -L  https://download-ib01.fedoraproject.org/pub/fedora/linux/releases/3
     && rm -rf /tmp/* \
     && true
 
-COPY --from=builder /tmp/pe-util/peldd /usr/bin/peldd
-RUN chmod +x /usr/bin/peldd
+COPY winsock2.h /usr/x86_64-w64-mingw32/sys-root/mingw/include/
 
 WORKDIR /work
