@@ -31,6 +31,6 @@ Target(
 
 Target(
 	name = 'graphviz',
-	#patches = [ 'graphviz_fix.diff' ],
+	patches = [ 'graphviz_fix.diff' ],
 	sources = [ 'graphviz' ],
 )
