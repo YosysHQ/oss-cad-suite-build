@@ -27,10 +27,12 @@ Target(
 	resources = [ 'python3' ],
 	patches = [ 'python3_package.sh' ],
 	sources = [ ],
+	arch = [ 'linux-x64', 'linux-arm', 'linux-arm64', 'linux-riscv64', 'darwin-x64', 'darwin-arm64' ],
 )
 
 Target(
 	name = 'graphviz',
 	patches = [ 'graphviz_fix.diff' ],
 	sources = [ 'graphviz' ],
+	arch = [ 'linux-x64', 'linux-arm', 'linux-arm64', 'linux-riscv64', 'darwin-x64', 'darwin-arm64' ],
 )
