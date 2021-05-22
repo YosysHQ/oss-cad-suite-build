@@ -89,7 +89,7 @@ ENV OSXCROSS_MP_INC=1
 ENV PKG_CONFIG_PATH /opt/local/lib/pkgconfig
 
 RUN cd /opt \
-  && wget https://github.com/mmicko/macos-resources/releases/download/v1/Qt5.12.8.tar.gz \   
+  && wget https://github.com/mmicko/macos-resources/releases/download/v1/Qt5.12.8.tar.gz \
   && tar xfz Qt5.12.8.tar.gz \
   && rm Qt5.12.8.tar.gz \
   && rm -rf /opt/Qt5.12.8/bin \
@@ -100,8 +100,8 @@ RUN cd /opt \
   && cd / \
   && echo "Unpack atk-2.36.0_2.darwin_18.x86_64.tbz2" \
   && tar xfj /tmp/atk/atk-2.36.0_2.darwin_18.x86_64.tbz2 \
-  && echo "Unpack boost-1.71.0_3+no_single.darwin_18.x86_64.tbz2" \
-  && tar xfj /tmp/boost/boost-1.71.0_3+no_single.darwin_18.x86_64.tbz2 \
+  && echo "Unpack boost-1.71.0_4+no_single.darwin_18.x86_64.tbz2" \
+  && tar xfj /tmp/boost/boost-1.71.0_4+no_single.darwin_18.x86_64.tbz2 \
   && echo "Unpack brotli-1.0.9_2.darwin_18.x86_64.tbz2" \
   && tar xfj /tmp/brotli/brotli-1.0.9_2.darwin_18.x86_64.tbz2 \
   && echo "Unpack bzip2-1.0.8_0.darwin_18.x86_64.tbz2" \
@@ -134,16 +134,10 @@ RUN cd /opt \
   && tar xfj /tmp/gobject-introspection/gobject-introspection-1.60.2_6.darwin_18.x86_64.tbz2 \
   && echo "Unpack graphite2-1.3.13_1.darwin_18.x86_64.tbz2" \
   && tar xfj /tmp/graphite2/graphite2-1.3.13_1.darwin_18.x86_64.tbz2 \
-  && echo "Unpack graphviz-2.40.1_4+pangocairo.darwin_18.x86_64.tbz2" \
-  && tar xfj /tmp/graphviz/graphviz-2.40.1_4+pangocairo.darwin_18.x86_64.tbz2 \
   && echo "Unpack gtk3-3.24.23_0+quartz.darwin_18.x86_64.tbz2" \
   && tar xfj /tmp/gtk3/gtk3-3.24.23_0+quartz.darwin_18.x86_64.tbz2 \
-  && echo "Unpack gtk-osx-application-common-gtk3-2.0.8_0.darwin_18.x86_64.tbz2" \
-  && tar xfj /tmp/gtk-osx-application-common-gtk3/gtk-osx-application-common-gtk3-2.0.8_0.darwin_18.x86_64.tbz2 \
-  && echo "Unpack gtk-osx-application-gtk3-2.0.8_0.darwin_18.x86_64.tbz2" \
-  && tar xfj /tmp/gtk-osx-application-gtk3/gtk-osx-application-gtk3-2.0.8_0.darwin_18.x86_64.tbz2 \
-  && echo "Unpack harfbuzz-2.8.0_0.darwin_18.x86_64.tbz2" \
-  && tar xfj /tmp/harfbuzz/harfbuzz-2.8.0_0.darwin_18.x86_64.tbz2 \
+  && echo "Unpack harfbuzz-2.8.1_0.darwin_18.x86_64.tbz2" \
+  && tar xfj /tmp/harfbuzz/harfbuzz-2.8.1_0.darwin_18.x86_64.tbz2 \
   && echo "Unpack hidapi-0.9.0_0.darwin_18.x86_64.tbz2" \
   && tar xfj /tmp/hidapi/hidapi-0.9.0_0.darwin_18.x86_64.tbz2 \
   && echo "Unpack icu-67.1_4.darwin_18.x86_64.tbz2" \
@@ -190,16 +184,16 @@ RUN cd /opt \
   && tar xfj /tmp/tiff/tiff-4.3.0_0.darwin_18.x86_64.tbz2 \
   && echo "Unpack tk-8.6.11_0+quartz.darwin_18.x86_64.tbz2" \
   && tar xfj /tmp/tk/tk-8.6.11_0+quartz.darwin_18.x86_64.tbz2 \
-  && echo "Unpack xorg-libX11-1.7.0_0.darwin_18.x86_64.tbz2" \
-  && tar xfj /tmp/xorg-libX11/xorg-libX11-1.7.0_0.darwin_18.x86_64.tbz2 \
+  && echo "Unpack xorg-libX11-1.7.1_0.darwin_18.x86_64.tbz2" \
+  && tar xfj /tmp/xorg-libX11/xorg-libX11-1.7.1_0.darwin_18.x86_64.tbz2 \
   && echo "Unpack xorg-libxcb-1.14_0+python39.darwin_18.x86_64.tbz2" \
   && tar xfj /tmp/xorg-libxcb/xorg-libxcb-1.14_0+python39.darwin_18.x86_64.tbz2 \
   && echo "Unpack xorg-libXdamage-1.1.5_0.darwin_18.x86_64.tbz2" \
   && tar xfj /tmp/xorg-libXdamage/xorg-libXdamage-1.1.5_0.darwin_18.x86_64.tbz2 \
   && echo "Unpack xorg-libXext-1.3.4_0.darwin_18.x86_64.tbz2" \
   && tar xfj /tmp/xorg-libXext/xorg-libXext-1.3.4_0.darwin_18.x86_64.tbz2 \ 
-  && echo "Unpack xorg-libXfixes-5.0.3_1.darwin_18.x86_64.tbz2" \
-  && tar xfj /tmp/xorg-libXfixes/xorg-libXfixes-5.0.3_1.darwin_18.x86_64.tbz2 \
+  && echo "Unpack xorg-libXfixes-6.0.0_0.darwin_18.x86_64.tbz2" \
+  && tar xfj /tmp/xorg-libXfixes/xorg-libXfixes-6.0.0_0.darwin_18.x86_64.tbz2 \
   && echo "Unpack xorg-libpthread-stubs-0.4_0.darwin_18.noarch.tbz2" \
   && tar xfj /tmp/xorg-libpthread-stubs/xorg-libpthread-stubs-0.4_0.darwin_18.noarch.tbz2 \
   && echo "Unpack xorg-libXdmcp-1.1.3_0.darwin_18.x86_64.tbz2" \
@@ -214,13 +208,13 @@ RUN cd /opt \
   && tar xfj /tmp/xz/xz-5.2.5_0.darwin_18.x86_64.tbz2 \
   && echo "Unpack zlib-1.2.11_0.darwin_18.x86_64.tbz2" \
   && tar xfj /tmp/zlib/zlib-1.2.11_0.darwin_18.x86_64.tbz2 \
-  && echo "Unpack zstd-1.4.9_0.darwin_18.x86_64.tbz2" \
-  && tar xfj /tmp/zstd/zstd-1.4.9_0.darwin_18.x86_64.tbz2 \
+  && echo "Unpack zstd-1.5.0_0.darwin_18.x86_64.tbz2" \
+  && tar xfj /tmp/zstd/zstd-1.5.0_0.darwin_18.x86_64.tbz2 \
+  && echo "Unpack gtk2-2.24.32_0+quartz.darwin_18.x86_64.tbz2" \
+  && tar xfj /tmp/gtk2/gtk2-2.24.32_0+quartz.darwin_18.x86_64.tbz2 \
   && echo "Cleanup" \
   && cp /usr/include/FlexLexer.h /opt/local/include/. \
-  && cp /opt/local/share/pkgconfig/* /opt/local/lib/pkgconfig/. \
-  && sed "s|2.0.8|3.0.8|g" -i /opt/local/lib/pkgconfig/gtk-mac-integration-gtk3.pc \
-  && cp /opt/local/lib/pkgconfig/gtk-mac-integration-gtk3.pc /opt/local/lib/pkgconfig/gtk-mac-integration.pc \
+  && cp /opt/local/share/pkgconfig/* /opt/local/lib/pkgconfig/. \  
   && cp -r /opt/local/share/cmake /tmp \
   && cp -r /opt/local/share/eigen3 /tmp \
   && rm -rf /opt/local/etc \
@@ -233,15 +227,19 @@ RUN cd /opt \
   && mv /tmp/eigen3 /opt/local/share \
   && rm -rf /tmp/* \
   && mkdir -p /usr/local/osxcross/target/macports/pkgs/opt \
-  && ln -s /opt/local /usr/local/osxcross/target/macports/pkgs/opt
+  && ln -s /opt/local /usr/local/osxcross/target/macports/pkgs/opt \
+  && cd /opt/local/ \
+  && wget https://github.com/mmicko/macos-resources/releases/download/v2/gtk-osx-application-darwin-x64.tgz \
+  && tar xfz gtk-osx-application-darwin-x64.tgz \
+  && rm gtk-osx-application-darwin-x64.tgz
 
 COPY --from=builder /tmp/macdylibbundler/dylibbundler /usr/local/bin/dylibbundler
 RUN chmod +x /usr/local/bin/dylibbundler
 
-RUN cp /usr/local/osxcross/target/bin/x86_64-apple-darwin20.2-otool /usr/local/osxcross/target/bin/otool \
-  && cp /usr/local/osxcross/target/bin/x86_64-apple-darwin20.2-install_name_tool /usr/local/osxcross/target/bin/install_name_tool \
-  && cp /usr/local/osxcross/target/bin/x86_64-apple-darwin20.2-ar /usr/local/osxcross/target/bin/ar \
-  && cp /usr/local/osxcross/target/bin/x86_64-apple-darwin20.2-ranlib /usr/local/osxcross/target/bin/ranlib
+RUN cp /usr/local/osxcross/target/bin/${CROSS_NAME}-otool /usr/local/osxcross/target/bin/otool \
+  && cp /usr/local/osxcross/target/bin/${CROSS_NAME}-install_name_tool /usr/local/osxcross/target/bin/install_name_tool \
+  && cp /usr/local/osxcross/target/bin/${CROSS_NAME}-ar /usr/local/osxcross/target/bin/ar \
+  && cp /usr/local/osxcross/target/bin/${CROSS_NAME}-ranlib /usr/local/osxcross/target/bin/ranlib
 
 COPY uname /usr/local/osxcross/target/bin/
 RUN chmod +x /usr/local/osxcross/target/bin/uname
