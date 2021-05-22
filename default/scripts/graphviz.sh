@@ -9,7 +9,6 @@ cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${INSTALL_PREFIX} -DCMAK
 if [ ${ARCH} == 'windows-x64' ]; then
     echo $'\n#define GVDLL 1\n' >> config.h
 fi
-make DESTDIR=${OUTPUT_DIR} -j${NPROC}
 make DESTDIR=${OUTPUT_DIR} install
 find ${OUTPUT_DIR}${INSTALL_PREFIX}/bin  -type l -delete
 find ${OUTPUT_DIR}${INSTALL_PREFIX}/bin  -type f ! -name 'dot' -delete
