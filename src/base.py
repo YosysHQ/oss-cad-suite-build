@@ -373,7 +373,7 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, nproc, pack_source
 	if (arch == 'windows-x64'):
 		env['EXE'] = '.exe'
 		env['SHARED_EXT'] = '.dll'
-	if (arch == 'darwin-x64'):
+	if (arch == 'darwin-x64') or (arch == 'darwin-arm64'):
 		env['SHARED_EXT'] = '.dylib'
 	env['LC_ALL'] = 'C'
 	env['INSTALL_PREFIX'] = prefix
