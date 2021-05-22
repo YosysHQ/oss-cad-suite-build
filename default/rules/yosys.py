@@ -17,7 +17,7 @@ SourceLocation(
 Target(
 	name = 'yosys',
 	sources = [ 'yosys' ],
-	resources = [ 'xdot' ],
+	resources = [ 'xdot', 'graphviz' ],
 	license_file = 'yosys/COPYING',
 )
 
