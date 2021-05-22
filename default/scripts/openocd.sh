@@ -7,7 +7,7 @@ mv tcl/target/к1879xб1я.cfg tcl/target/k1879x61r.cfg
 
 patch -p1 < ${PATCHES_DIR}/openocd.diff
 
-if [ ${ARCH} == 'darwin-x64' ]; then
+if [ ${ARCH_BASE} == 'darwin' ]; then
   sed -i 's,glibtoolize,libtoolize,g' src/jtag/drivers/libjaylink/autogen.sh
 fi
 

@@ -3,16 +3,10 @@ function python3_package_setup {
     export PYTHONHOME=${BUILD_DIR}/python3${INSTALL_PREFIX}
     export PYTHONPATH=${OUTPUT_DIR}${INSTALL_PREFIX}/lib/python3.8/site-packages:${BUILD_DIR}/python3${INSTALL_PREFIX}/lib/python3.8:${BUILD_DIR}/python3${INSTALL_PREFIX}/lib/python3.8/site-packages
 
-    if [ ${ARCH} == 'linux-arm' ]; then
+    if [ ${ARCH_BASE} == 'linux' ]; then
         cp /usr/lib/python3.8/lib-dynload/* ${PYTHONHOME}/lib/python3.8/lib-dynload/.
         cp -r /usr/lib/python3/dist-packages/cairo ${PYTHONHOME}/lib/python3.8/lib-dynload/.
-    elif [ ${ARCH} == 'linux-arm64' ]; then
-        cp /usr/lib/python3.8/lib-dynload/* ${PYTHONHOME}/lib/python3.8/lib-dynload/.
-        cp -r /usr/lib/python3/dist-packages/cairo ${PYTHONHOME}/lib/python3.8/lib-dynload/.
-    elif [ ${ARCH} == 'linux-riscv64' ]; then
-        cp /usr/lib/python3.8/lib-dynload/* ${PYTHONHOME}/lib/python3.8/lib-dynload/.
-        cp -r /usr/lib/python3/dist-packages/cairo ${PYTHONHOME}/lib/python3.8/lib-dynload/.
-    elif [ ${ARCH} == 'darwin-x64' ]; then
+    elif [ ${ARCH_BASE} == 'darwin' ]; then
         cp /usr/lib/python3.8/lib-dynload/* ${PYTHONHOME}/lib/python3.8/lib-dynload/.
         cp -r /usr/lib/python3/dist-packages/cairo ${PYTHONHOME}/lib/python3.8/lib-dynload/.
     elif [ ${ARCH} == 'windows-x64' ]; then
@@ -38,6 +32,8 @@ function python3_package_install {
         _PYTHON_HOST_PLATFORM=mingw-x64 _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__win_ python3.8 ${install_cmd}
     elif [ ${ARCH} == 'darwin-x64' ]; then        
         _PYTHON_HOST_PLATFORM=darwin-x64 _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__darwin_darwin python3.8 ${install_cmd}
+    elif [ ${ARCH} == 'darwin-arm64' ]; then        
+        _PYTHON_HOST_PLATFORM=darwin-aarch64 _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__darwin_darwin python3.8 ${install_cmd}
     fi
 }
 
@@ -55,6 +51,8 @@ function python3_package_develop {
         _PYTHON_HOST_PLATFORM=mingw-x64 _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__win_ python3.8 ${install_cmd}
     elif [ ${ARCH} == 'darwin-x64' ]; then
         _PYTHON_HOST_PLATFORM=darwin-x64 _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__darwin_darwin python3.8 ${install_cmd}
+    elif [ ${ARCH} == 'darwin-arm64' ]; then
+        _PYTHON_HOST_PLATFORM=darwin-aarch64 _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__darwin_darwin python3.8 ${install_cmd}
     fi
 }
 
@@ -72,6 +70,8 @@ function python3_package_pip_install {
         _PYTHON_HOST_PLATFORM=mingw-x64 _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__win_ python3.8 ${install_cmd}
     elif [ ${ARCH} == 'darwin-x64' ]; then
         _PYTHON_HOST_PLATFORM=darwin-x64 _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__darwin_darwin python3.8 ${install_cmd}
+    elif [ ${ARCH} == 'darwin-arm64' ]; then
+        _PYTHON_HOST_PLATFORM=darwin-aarch64 _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__darwin_darwin python3.8 ${install_cmd}
     fi
 }
 function python3_package_pth {
