@@ -1,40 +1,38 @@
 cd graphviz
 patch -p1 < ${PATCHES_DIR}/graphviz_fix.diff
-pushd lib/gvpr
-gcc mkdefs.c -o mkdefs
-popd 
-cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${INSTALL_PREFIX} -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE} \
-    -Denable_ltdl=OFF -Dwith_digcola=OFF -Dwith_ortho=OFF -Dwith_sfdp=OFF -Dwith_smyrna=OFF \
-    .
-if [ ${ARCH} == 'windows-x64' ]; then
-    echo $'\n#define GVDLL 1\n' >> config.h
-fi
-make DESTDIR=${OUTPUT_DIR} install
-find ${OUTPUT_DIR}${INSTALL_PREFIX}/bin  -type l -delete
-find ${OUTPUT_DIR}${INSTALL_PREFIX}/bin  -type f ! -name 'dot' -delete
-if [ ${ARCH_BASE} == 'darwin' ]; then
-    install_name_tool -id ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libcdt.5.0.0.dylib  ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libcdt.5.0.0.dylib 
-    install_name_tool -id ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libcgraph.6.0.0.dylib  ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libcgraph.6.0.0.dylib
-    install_name_tool -id ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libgvc.6.0.0.dylib  ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libgvc.6.0.0.dylib
-    install_name_tool -id ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libpathplan.4.0.0.dylib  ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libpathplan.4.0.0.dylib
-    install_name_tool -id ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libxdot.4.0.0.dylib  ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libxdot.4.0.0.dylib 
+#if [ ${ARCH} == 'windows-x64' ]; then
+#    echo $'\n#define GVDLL 1\n' >> config.h
+#fi
+./autogen.sh NOCONFIG
+./configure --prefix=${INSTALL_PREFIX} --host=${CROSS_NAME} --build=`gcc -dumpmachine` --enable-shared=no --enable-static=yes --with-qt=no
+pushd lib/gvpr && gcc mkdefs.c -o mkdefs && popd 
+pushd lib/dotgen && make && popd
+pushd lib/cdt && make && popd
+pushd lib/xdot && make && popd
+pushd lib/cgraph && make && popd
+pushd lib/pathplan && make && popd
+pushd lib/pack && make && popd
+pushd lib/label && make && popd
+pushd lib/common && make && popd
+pushd lib/ortho && make && popd
+pushd lib/gvc && make && popd
 
-    install_name_tool -change libcdt.5.dylib  ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libcdt.5.0.0.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/bin/dot
-    install_name_tool -change libcgraph.6.dylib  ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libcgraph.6.0.0.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/bin/dot
-    install_name_tool -change libgvc.6.dylib  ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libgvc.6.0.0.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/bin/dot
-    install_name_tool -change libpathplan.4.dylib  ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libpathplan.4.0.0.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/bin/dot
-    install_name_tool -change libxdot.4.dylib  ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libxdot.4.0.0.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/bin/dot
+pushd plugin/core && make && popd
+pushd lib/neatogen && make && popd
+pushd lib/twopigen && make && popd
+pushd lib/patchwork && make && popd
+pushd lib/osage && make && popd
+pushd lib/fdpgen && make && popd
+pushd lib/sparse && make && popd
+pushd lib/rbtree && make && popd
+pushd lib/circogen && make && popd
+pushd lib/sfdpgen && make && popd
+pushd lib/vpsc && make && popd
+pushd plugin/neato_layout && make && popd
+pushd plugin/dot_layout && make && popd
+pushd plugin/pango && make && popd
+pushd cmd/dot && make dot_static${EXE} && popd
 
+mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/bin
+cp cmd/dot/dot_static${EXE} ${OUTPUT_DIR}${INSTALL_PREFIX}/bin/dot${EXE}
 
-    install_name_tool -change libcdt.5.dylib  ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libcdt.5.0.0.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libcgraph.6.0.0.dylib
-
-    install_name_tool -change libcgraph.6.dylib  ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libcgraph.6.0.0.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libgvc.6.0.0.dylib
-    install_name_tool -change libpathplan.4.dylib  ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libpathplan.4.0.0.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libgvc.6.0.0.dylib
-    install_name_tool -change libxdot.4.dylib  ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libxdot.4.0.0.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libgvc.6.0.0.dylib
-    install_name_tool -change libcdt.5.dylib  ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libcdt.5.0.0.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libgvc.6.0.0.dylib
-
-    install_name_tool -id ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/graphviz/libgvplugin_core.6.0.0.dylib  ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/graphviz/libgvplugin_core.6.0.0.dylib
-    install_name_tool -id ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/graphviz/libgvplugin_dot_layout.6.0.0.dylib  ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/graphviz/libgvplugin_dot_layout.6.0.0.dylib
-    install_name_tool -id ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/graphviz/libgvplugin_neato_layout.6.0.0.dylib  ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/graphviz/libgvplugin_neato_layout.6.0.0.dylib
-    install_name_tool -id ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/graphviz/libgvplugin_pango.6.0.0.dylib  ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/graphviz/libgvplugin_pango.6.0.0.dylib
-fi
