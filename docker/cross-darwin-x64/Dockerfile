@@ -1,4 +1,4 @@
-FROM yosyshq/cross-linux-x64:1.1 AS builder
+FROM yosyshq/cross-linux-x64:1.0 AS builder
 
 RUN cd /tmp \
     && git clone https://github.com/auriamg/macdylibbundler \
@@ -6,7 +6,7 @@ RUN cd /tmp \
     && sed -i "s,CXXFLAGS=-O2 -std=c++11,CXXFLAGS=-O2 -std=c++11 -static-libstdc++ -static-libgcc,g" Makefile \
     && make 
 
-FROM yosyshq/cross-base:1.1
+FROM yosyshq/cross-base:1.0
 
 RUN set -e -x ;\
     apt -y update ;\

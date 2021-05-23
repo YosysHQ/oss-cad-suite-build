@@ -1,4 +1,4 @@
-FROM yosyshq/cross-base:1.1
+FROM yosyshq/cross-base:1.0
 
 ENV CROSS_NAME riscv64-linux-gnu
 
