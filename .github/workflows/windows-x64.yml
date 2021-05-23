@@ -2,10 +2,6 @@ name: windows-x64
 
 on:
   workflow_dispatch:
-  workflow_run:
-    workflows: [ linux-x64 ]
-    types:
-      - completed
 
 jobs:
   windows-x64-yosys:

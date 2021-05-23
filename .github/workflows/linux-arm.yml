@@ -2,10 +2,6 @@ name: linux-arm
 
 on:
   workflow_dispatch:
-  workflow_run:
-    workflows: [ darwin-x64 ]
-    types:
-      - completed
 
 jobs:
   linux-arm-python3:
