@@ -1,10 +1,18 @@
 cd graphviz
+if [ ${ARCH} == 'windows-x64' ]; then
+    git clone https://github.com/garyhouston/rxspencer
+    pushd rxspencer 
+    cmake .  -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}
+    make
+    cp *.h ../lib/gvc/.
+    popd
+fi
 patch -p1 < ${PATCHES_DIR}/graphviz_fix.diff
-#if [ ${ARCH} == 'windows-x64' ]; then
-#    echo $'\n#define GVDLL 1\n' >> config.h
-#fi
 ./autogen.sh NOCONFIG
-./configure --prefix=${INSTALL_PREFIX} --host=${CROSS_NAME} --build=`gcc -dumpmachine` --enable-shared=no --enable-static=yes --with-qt=no
+./configure --prefix=${INSTALL_PREFIX} --host=${CROSS_NAME} --build=`gcc -dumpmachine` --enable-shared=no --enable-static=yes --enable-ltdl=no --with-qt=no
+if [ ${ARCH} == 'windows-x64' ]; then
+    echo $'\n#undef GVDLL\n' >> config.h
+fi
 pushd lib/gvpr && gcc mkdefs.c -o mkdefs && popd 
 pushd lib/dotgen && make && popd
 pushd lib/cdt && make && popd
