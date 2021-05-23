@@ -2,6 +2,10 @@ name: darwin-x64
 
 on:
   workflow_dispatch:
+  workflow_run:
+    workflows: [ linux-x64 ]
+    types:
+      - completed
 
 jobs:
   darwin-x64-python3:

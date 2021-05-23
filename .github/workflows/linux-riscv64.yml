@@ -2,6 +2,10 @@ name: linux-riscv64
 
 on:
   workflow_dispatch:
+  workflow_run:
+    workflows: [ linux-arm64 ]
+    types:
+      - completed
 
 jobs:
   linux-riscv64-python3:

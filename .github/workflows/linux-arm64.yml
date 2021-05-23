@@ -2,6 +2,10 @@ name: linux-arm64
 
 on:
   workflow_dispatch:
+  workflow_run:
+    workflows: [ windows-x64 ]
+    types:
+      - completed
 
 jobs:
   linux-arm64-python3:
