@@ -42,11 +42,15 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-if [[ "$(uname)" == "Darwin" ]]; then
+if [ -n "${ZSH_VERSION-}" ] ; then
     release_current_dir="$(dirname "$0")"
-    release_topdir_abs="$("$release_current_dir"/libexec/realpath "$release_current_dir")"
 else
     release_current_dir="$(dirname "${BASH_SOURCE[0]}")"
+fi
+
+if [[ "$(uname)" == "Darwin" ]]; then
+    release_topdir_abs="$("$release_current_dir"/libexec/realpath "$release_current_dir")"
+else
     release_topdir_abs="$(realpath "$release_current_dir")"
 fi
 
