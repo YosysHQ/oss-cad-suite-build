@@ -65,8 +65,8 @@ export QT_PLUGIN_PATH="\$release_topdir_abs/lib/qt5/plugins"
 export QT_LOGGING_RULES="*=false"
 unset QT_QPA_PLATFORMTHEME
 unset QT_STYLE_OVERRIDE
-unset XDG_DATA_DIRS
-unset XDG_CONFIG_DIRS
+export XDG_DATA_DIRS="\$release_topdir_abs"/share
+export XDG_CONFIG_DIRS="\$release_topdir_abs"
 export XDG_CONFIG_HOME=\$HOME/.config/yosyshq
 export XDG_CACHE_HOME=\$HOME/.cache/yosyshq
 export XDG_DATA_HOME=\$HOME/.local/share/yosyshq
@@ -82,14 +82,13 @@ EOT
             cat >> $binfile << EOT
 unset GTK_MODULES
 unset GTK3_MODULES
-export GTK_PATH="\$release_topdir_abs/lib/gtk-2.0"
+export GTK_PATH="\$release_topdir_abs/lib"
 export GTK_IM_MODULE=""
 export GTK_IM_MODULE_FILE="/dev/null"
-export GTK2_RC_FILES="\$release_topdir_abs/lib/gtk-2.0/gtkrc"
 export GTK_EXE_PREFIX="\$release_topdir_abs"
 export GTK_DATA_PREFIX="\$release_topdir_abs"
-export GDK_PIXBUF_MODULEDIR="\$release_topdir_abs/lib/gtk-2.0/loaders"
-export GDK_PIXBUF_MODULE_FILE="\$release_topdir_abs/lib/gtk-2.0/loaders.cache"
+export GDK_PIXBUF_MODULEDIR="\$release_topdir_abs/lib/gdk-pixbuf-2.0/loaders"
+export GDK_PIXBUF_MODULE_FILE="\$release_topdir_abs/lib/gdk-pixbuf-2.0/loaders.cache"
 export GTK_THEME="Adwaita"
 export XDG_DATA_DIRS="\$release_topdir_abs"/share
 export XDG_CONFIG_DIRS="\$release_topdir_abs"
@@ -145,14 +144,13 @@ EOT
             cat >> "${script}" <<EOT
 unset GTK_MODULES
 unset GTK3_MODULES
-export GTK_PATH="\$release_topdir_abs/lib/gtk-2.0"
+export GTK_PATH="\$release_topdir_abs/lib"
 export GTK_IM_MODULE=""
 export GTK_IM_MODULE_FILE="/dev/null"
-export GTK2_RC_FILES="\$release_topdir_abs/lib/gtk-2.0/gtkrc"
 export GTK_EXE_PREFIX="\$release_topdir_abs"
 export GTK_DATA_PREFIX="\$release_topdir_abs"
-export GDK_PIXBUF_MODULEDIR="\$release_topdir_abs/lib/gtk-2.0/loaders"
-export GDK_PIXBUF_MODULE_FILE="\$release_topdir_abs/lib/gtk-2.0/loaders.cache"
+export GDK_PIXBUF_MODULEDIR="\$release_topdir_abs/lib/gdk-pixbuf-2.0/loaders"
+export GDK_PIXBUF_MODULE_FILE="\$release_topdir_abs/lib/gdk-pixbuf-2.0/loaders.cache"
 export GTK_THEME="Adwaita"
 export XDG_DATA_DIRS="\$release_topdir_abs"/share
 export XDG_CONFIG_DIRS="\$release_topdir_abs"
