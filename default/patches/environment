@@ -68,8 +68,8 @@ fi
 
 _OLD_ENVIRONMENT_PS1="${PS1-}"
 if [ -n "${ZSH_VERSION-}" ] ; then
-    open=$'\U2997' closed=$'\U2998'
-    PS1="%{$fg[magenta]%}${open}${VIRTUAL_ENV}${closed}%{$reset_color%} ${PS1-}"
+    autoload -U colors && colors
+    PS1="%{$fg[magenta]%}(${VIRTUAL_ENV})%{$reset_color%} ${PS1-}"
 else
     PS1="\033[1;35m\342\246\227${VIRTUAL_ENV}\342\246\230\033[0m ${PS1-}"
 fi
