@@ -1,0 +1,60 @@
+diff --git a/lib/cgraph/cgraph.h b/lib/cgraph/cgraph.h
+index adc58d750..cb1df2bfe 100644
+--- a/lib/cgraph/cgraph.h
++++ b/lib/cgraph/cgraph.h
+@@ -21,15 +21,7 @@
+ extern "C" {
+ #endif
+ 
+-#ifdef _WIN32
+-#   ifdef EXPORT_CGRAPH
+-#       define CGRAPH_API __declspec(dllexport)
+-#   else
+-#       define CGRAPH_API __declspec(dllimport)
+-#   endif
+-#else
+-#   define CGRAPH_API extern
+-#endif
++#define CGRAPH_API extern
+ 
+ #ifndef FALSE
+ #define FALSE (0)
+diff --git a/lib/gvpr/Makefile.am b/lib/gvpr/Makefile.am
+index ac3c0980f..260b975c5 100644
+--- a/lib/gvpr/Makefile.am
++++ b/lib/gvpr/Makefile.am
+@@ -21,7 +21,6 @@ AM_CPPFLAGS = \
+ 	-DDFLT_GVPRPATH="\".$(PATH_SEPARATOR)$(pkgdatadir)/gvpr\""
+ 
+ pkginclude_HEADERS = gvpr.h
+-noinst_PROGRAMS = mkdefs
+ noinst_HEADERS = actions.h compile.h gprstate.h parse.h queue.h trieFA.h trie.c
+ noinst_LTLIBRARIES = libgvpr_C.la
+ lib_LTLIBRARIES = libgvpr.la
+@@ -54,11 +53,10 @@ if WITH_WIN32
+ libgvpr_la_LDFLAGS += -export-symbols-regex gvpr
+ endif
+ 
+-mkdefs_SOURCES = mkdefs.c
+ 
+-gdefs.h: $(top_srcdir)/lib/gvpr/gprdata mkdefs$(EXEEXT)
++gdefs.h: $(top_srcdir)/lib/gvpr/gprdata
+ 	./mkdefs$(EXEEXT) gdefs.h < $(top_srcdir)/lib/gvpr/gprdata
+ 
+-EXTRA_DIST = $(man_MANS) $(pdf_DATA) gprdata mkdefs.c gdefs.h trie.c gvprlib.vcxproj*
++EXTRA_DIST = $(man_MANS) $(pdf_DATA) gprdata gdefs.h trie.c gvprlib.vcxproj*
+ 
+-DISTCLEANFILES = $(pdf_DATA) gdefs.h mkdefs$(EXEEXT)
++DISTCLEANFILES = $(pdf_DATA) gdefs.h
+diff --git a/plugin/neato_layout/Makefile.am b/plugin/neato_layout/Makefile.am
+index 3f642b128..66a6f6882 100644
+--- a/plugin/neato_layout/Makefile.am
++++ b/plugin/neato_layout/Makefile.am
+@@ -45,7 +45,6 @@ libgvplugin_neato_layout_C_la_LIBADD += $(top_builddir)/lib/sfdpgen/libsfdpgen_C
+ endif
+ 
+ if WITH_WIN32
+-libgvplugin_neato_layout_la_LDFLAGS += -no-undefined -export-symbols $(top_srcdir)/plugin/neato_layout/gvplugin_neato_layout.def
+ libgvplugin_neato_layout_la_LIBADD += $(top_builddir)/lib/cgraph/libcgraph.la $(top_builddir)/lib/cdt/libcdt.la
+ endif
+ 

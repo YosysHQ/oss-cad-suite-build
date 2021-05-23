@@ -7,10 +7,17 @@ SourceLocation(
 	revision = 'origin/master'
 )
 
+SourceLocation(
+	name = 'graphviz',
+	vcs = 'git',
+	location = 'https://gitlab.com/graphviz/graphviz',
+	revision = 'tags/2.42.2'
+)
+
 Target(
 	name = 'yosys',
 	sources = [ 'yosys' ],
-	resources = [ 'xdot' ],
+	resources = [ 'xdot', 'graphviz' ],
 	license_file = 'yosys/COPYING',
 )
 
@@ -19,6 +26,13 @@ Target(
 	dependencies = [ 'python3' ],
 	resources = [ 'python3' ],
 	patches = [ 'python3_package.sh' ],
-	arch = [ 'linux-x64' ],
 	sources = [ ],
+	arch = [ 'linux-x64', 'linux-arm', 'linux-arm64', 'linux-riscv64', 'darwin-x64', 'darwin-arm64' ],
+)
+
+Target(
+	name = 'graphviz',
+	patches = [ 'graphviz_fix.diff' ],
+	sources = [ 'graphviz' ],
+	arch = [ 'linux-x64', 'linux-arm', 'linux-arm64', 'linux-riscv64', 'darwin-x64', 'darwin-arm64' ],
 )

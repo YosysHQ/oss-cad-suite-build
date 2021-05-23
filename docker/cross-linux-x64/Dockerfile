@@ -12,7 +12,6 @@ RUN set -e -x ;\
         g++ \
         clang \
         gnat \
-        graphviz \
         python3-dev \
         libboost-dev \
         libboost-filesystem-dev \
@@ -23,7 +22,7 @@ RUN set -e -x ;\
         libffi-dev \
         libftdi1-dev \
         libgmp-dev \
-        libgtk2.0-dev \
+        libgtk-3-dev \
         liblzma-dev \
         libreadline-dev \
         libsqlite3-dev \
@@ -34,7 +33,8 @@ RUN set -e -x ;\
         libbison-dev \
         libhidapi-dev \
         libcurl4-openssl-dev \
-        libbz2-dev; \
+        libbz2-dev \
+        libltdl-dev; \
     apt -y autoremove ;\
     rm -rf /var/lib/apt/lists/*
 

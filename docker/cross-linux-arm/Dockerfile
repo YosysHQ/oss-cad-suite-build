@@ -31,7 +31,7 @@ RUN set -e -x ;\
         libffi-dev:armhf \
         libftdi1-dev:armhf \
         libgmp-dev:armhf \
-        libgtk2.0-dev:armhf \
+        libgtk-3-dev:armhf \
         liblzma-dev:armhf \
         libreadline-dev:armhf \
         libsqlite3-dev:armhf \
@@ -43,7 +43,8 @@ RUN set -e -x ;\
         libhidapi-dev:armhf \
         libcurl4-openssl-dev:armhf \
         libbz2-dev:armhf \
-        libllvm10:armhf; \
+        libllvm10:armhf \
+        libltdl-dev:armhf; \
     apt -y autoremove ;\
     rm -rf /var/lib/apt/lists/*
 

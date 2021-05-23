@@ -31,7 +31,7 @@ RUN set -e -x ;\
         libffi-dev:riscv64 \
         libftdi1-dev:riscv64 \
         libgmp-dev:riscv64 \
-        libgtk2.0-dev:riscv64 \
+        libgtk-3-dev:riscv64 \
         liblzma-dev:riscv64 \
         libreadline-dev:riscv64 \
         libsqlite3-dev:riscv64 \
@@ -43,7 +43,8 @@ RUN set -e -x ;\
         libhidapi-dev:riscv64 \
         libcurl4-openssl-dev:riscv64 \
         libbz2-dev:riscv64 \
-        libllvm10:riscv64; \
+        libllvm10:riscv64 \
+        libltdl-dev:riscv64; \
     apt -y autoremove ;\
     rm -rf /var/lib/apt/lists/*
 

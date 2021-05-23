@@ -18,10 +18,21 @@ if [ ${ARCH_BASE} == 'linux' ]; then
 
     mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/libexec
     cp -v `pkg-config --variable=gdk_pixbuf_binarydir gdk-pixbuf-2.0`/../gdk-pixbuf-query-loaders ${OUTPUT_DIR}${INSTALL_PREFIX}/libexec/.
-    mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/gtk-2.0/modules
-    cp -r `pkg-config --variable=gdk_pixbuf_binarydir gdk-pixbuf-2.0`/loaders ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/gtk-2.0/.
-    touch ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/gtk-2.0/loaders.cache
-    touch ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/gtk-2.0/gtkrc
+    mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/gdk-pixbuf-2.0
+    cp -r `pkg-config --variable=gdk_pixbuf_binarydir gdk-pixbuf-2.0`/loaders ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/gdk-pixbuf-2.0/.
+    touch ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/gdk-pixbuf-2.0/loaders.cache
+
+    # GTK3 resources
+    mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/share/glib-2.0
+    mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/share/mime
+    mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/share/icons
+    cp -rv /usr/share/glib-2.0/schemas ${OUTPUT_DIR}${INSTALL_PREFIX}/share/glib-2.0/.
+    cp -v /usr/share/mime/magic ${OUTPUT_DIR}${INSTALL_PREFIX}/share/mime/.
+    cp -rv /usr/share/icons/Adwaita ${OUTPUT_DIR}${INSTALL_PREFIX}/share/icons/.
+    rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/share/icons/Adwaita/256x256
+    rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/share/icons/Adwaita/512x512
+    rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/share/icons/Adwaita/cursors
+    rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/share/icons/Adwaita/icon-theme.cache
 fi
 
 if [ ${ARCH_BASE} == 'darwin' ]; then
@@ -39,13 +50,30 @@ if [ ${ARCH_BASE} == 'darwin' ]; then
     mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/libexec
     cp /opt/local/bin/gdk-pixbuf-query-loaders ${OUTPUT_DIR}${INSTALL_PREFIX}/libexec/.
     chmod 755 ${OUTPUT_DIR}${INSTALL_PREFIX}/libexec/gdk-pixbuf-query-loaders
-    mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/gtk-2.0/modules
-    cp -r -L /opt/local/lib/gdk-pixbuf-2.0/2.10.0/loaders ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/gtk-2.0/.
-    touch ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/gtk-2.0/loaders.cache
-    touch ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/gtk-2.0/gtkrc
-    chmod 644 ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/gtk-2.0/loaders/*
+    mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/gdk-pixbuf-2.0
+    cp -r -L /opt/local/lib/gdk-pixbuf-2.0/2.10.0/loaders ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/gdk-pixbuf-2.0/.
+    touch ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/gdk-pixbuf-2.0/loaders.cache
+    touch ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/gtkrc
+    chmod 644 ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/gdk-pixbuf-2.0/loaders/*
     dylibbundler -of -b -x ${OUTPUT_DIR}${INSTALL_PREFIX}/libexec/gdk-pixbuf-query-loaders -p @executable_path/../lib -d ${OUTPUT_DIR}${INSTALL_PREFIX}/lib
 
+    # GTK3 resources
+    cp /opt/local/lib/libgtk-3.0.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/.
+    cp /opt/local/lib/libgdk-3.0.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/.
+    dylibbundler -of -b -x ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libgtk-3.0.dylib -p @executable_path/../lib -d ${OUTPUT_DIR}${INSTALL_PREFIX}/lib
+    install_name_tool -id @executable_path/../lib/libgtk-3.0.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libgtk-3.0.dylib
+    dylibbundler -of -b -x ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libgdk-3.0.dylib -p @executable_path/../lib -d ${OUTPUT_DIR}${INSTALL_PREFIX}/lib
+    install_name_tool -id @executable_path/../lib/libgdk-3.0.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libgdk-3.0.dylib
+    mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/share/glib-2.0
+    mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/share/mime
+    mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/share/icons
+    cp -rv /opt/local/share/glib-2.0/schemas ${OUTPUT_DIR}${INSTALL_PREFIX}/share/glib-2.0/.
+    cp -v /usr/share/mime/magic ${OUTPUT_DIR}${INSTALL_PREFIX}/share/mime/.
+    cp -rv /usr/share/icons/Adwaita ${OUTPUT_DIR}${INSTALL_PREFIX}/share/icons/.
+    rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/share/icons/Adwaita/256x256
+    rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/share/icons/Adwaita/512x512
+    rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/share/icons/Adwaita/cursors
+    rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/share/icons/Adwaita/icon-theme.cache
 fi
 if [ ${ARCH_BASE} == 'windows' ]; then
     ${CC} -DGUI=0 -O -s -o ${OUTPUT_DIR}${INSTALL_PREFIX}/win-launcher.exe ${PATCHES_DIR}/win-launcher.c
@@ -63,4 +91,13 @@ if [ ${ARCH_BASE} == 'windows' ]; then
 
 	mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/lib
     cp -rf /usr/x86_64-w64-mingw32/sys-root/mingw/lib/gdk-pixbuf-2.0 ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/.
+
+    # GTK3 resources
+    mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/share/glib-2.0
+    mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/share/icons
+    cp -rv /usr/x86_64-w64-mingw32/sys-root/mingw/share/glib-2.0/schemas ${OUTPUT_DIR}${INSTALL_PREFIX}/share/glib-2.0/.
+    cp -rv /usr/x86_64-w64-mingw32/sys-root/mingw/share/icons/Adwaita ${OUTPUT_DIR}${INSTALL_PREFIX}/share/icons/.
+    rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/share/icons/Adwaita/256x256
+    rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/share/icons/Adwaita/512x512
+    rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/share/icons/Adwaita/cursors
 fi

@@ -14,6 +14,8 @@ RUN set -e -x ;\
     apt -y install \
         clang \
         pkgconf \
+        libtool \
+        python3-distutils \
         libxml2-dev \
         libz-dev \
         liblzma-dev \
@@ -82,32 +84,24 @@ ENV MACOSX_DEPLOYMENT_TARGET=10.14
 
 ENV CMAKE_TOOLCHAIN_FILE ${CROSS_PREFIX}/Toolchain.cmake
 
-RUN set -e -x ;\
-    apt -y update ;\
-    apt -y install \
-        libtool \
-        python3-distutils; \
-    apt -y autoremove ;\
-    rm -rf /var/lib/apt/lists/*
-
 ENV OSXCROSS_MP_INC=1 
 
 ENV PKG_CONFIG_PATH /opt/local/lib/pkgconfig
 
 RUN cd /opt \
-  && wget https://github.com/mmicko/macos-resources/releases/download/v1/Qt5.12.8.tar.gz \   
+  && wget https://github.com/mmicko/macos-resources/releases/download/v1/Qt5.12.8.tar.gz \
   && tar xfz Qt5.12.8.tar.gz \
   && rm Qt5.12.8.tar.gz \
   && rm -rf /opt/Qt5.12.8/bin \
   && ln -s /usr/lib/qt5/bin /opt/Qt5.12.8/bin \
   && cd /tmp \
-  && wget https://github.com/mmicko/macos-resources/releases/download/v1/macports-darwin-x64.tar \
+  && wget https://github.com/mmicko/macos-resources/releases/download/v2/macports-darwin-x64.tar \
   && tar xf macports-darwin-x64.tar \
   && cd / \
   && echo "Unpack atk-2.36.0_2.darwin_18.x86_64.tbz2" \
   && tar xfj /tmp/atk/atk-2.36.0_2.darwin_18.x86_64.tbz2 \
-  && echo "Unpack boost-1.71.0_3+no_single.darwin_18.x86_64.tbz2" \
-  && tar xfj /tmp/boost/boost-1.71.0_3+no_single.darwin_18.x86_64.tbz2 \
+  && echo "Unpack boost-1.71.0_4+no_single.darwin_18.x86_64.tbz2" \
+  && tar xfj /tmp/boost/boost-1.71.0_4+no_single.darwin_18.x86_64.tbz2 \
   && echo "Unpack brotli-1.0.9_2.darwin_18.x86_64.tbz2" \
   && tar xfj /tmp/brotli/brotli-1.0.9_2.darwin_18.x86_64.tbz2 \
   && echo "Unpack bzip2-1.0.8_0.darwin_18.x86_64.tbz2" \
@@ -136,20 +130,20 @@ RUN cd /opt \
   && tar xfj /tmp/glib2/glib2-2.58.3_1+quartz.darwin_18.x86_64.tbz2 \
   && echo "Unpack gmp-6.2.1_0.darwin_18.x86_64.tbz2" \
   && tar xfj /tmp/gmp/gmp-6.2.1_0.darwin_18.x86_64.tbz2 \
+  && echo "Unpack gobject-introspection-1.60.2_6.darwin_18.x86_64.tbz2" \
+  && tar xfj /tmp/gobject-introspection/gobject-introspection-1.60.2_6.darwin_18.x86_64.tbz2 \
   && echo "Unpack graphite2-1.3.13_1.darwin_18.x86_64.tbz2" \
   && tar xfj /tmp/graphite2/graphite2-1.3.13_1.darwin_18.x86_64.tbz2 \
-  && echo "Unpack gtk2-2.24.32_0+quartz.darwin_18.x86_64.tbz2" \
-  && tar xfj /tmp/gtk2/gtk2-2.24.32_0+quartz.darwin_18.x86_64.tbz2 \
-  && echo "Unpack gtk-osx-application-common-gtk2-2.0.8_0.darwin_18.x86_64.tbz2" \
-  && tar xfj /tmp/gtk-osx-application-common-gtk2/gtk-osx-application-common-gtk2-2.0.8_0.darwin_18.x86_64.tbz2 \
-  && echo "Unpack gtk-osx-application-gtk2-2.0.8_0.darwin_18.x86_64.tbz2" \
-  && tar xfj /tmp/gtk-osx-application-gtk2/gtk-osx-application-gtk2-2.0.8_0.darwin_18.x86_64.tbz2 \
-  && echo "Unpack harfbuzz-2.8.0_0.darwin_18.x86_64.tbz2" \
-  && tar xfj /tmp/harfbuzz/harfbuzz-2.8.0_0.darwin_18.x86_64.tbz2 \
+  && echo "Unpack gtk3-3.24.23_0+quartz.darwin_18.x86_64.tbz2" \
+  && tar xfj /tmp/gtk3/gtk3-3.24.23_0+quartz.darwin_18.x86_64.tbz2 \
+  && echo "Unpack harfbuzz-2.8.1_0.darwin_18.x86_64.tbz2" \
+  && tar xfj /tmp/harfbuzz/harfbuzz-2.8.1_0.darwin_18.x86_64.tbz2 \
   && echo "Unpack hidapi-0.9.0_0.darwin_18.x86_64.tbz2" \
   && tar xfj /tmp/hidapi/hidapi-0.9.0_0.darwin_18.x86_64.tbz2 \
   && echo "Unpack icu-67.1_4.darwin_18.x86_64.tbz2" \
   && tar xfj /tmp/icu/icu-67.1_4.darwin_18.x86_64.tbz2 \
+  && echo "Unpack libepoxy-1.5.4_1+python38.darwin_18.x86_64.tbz2" \
+  && tar xfj /tmp/libepoxy/libepoxy-1.5.4_1+python38.darwin_18.x86_64.tbz2 \
   && echo "Unpack libffi-3.3_1.darwin_18.x86_64.tbz2" \
   && tar xfj /tmp/libffi/libffi-3.3_1.darwin_18.x86_64.tbz2 \
   && echo "Unpack libftdi1-1.5_0.darwin_18.x86_64.tbz2" \
@@ -162,8 +156,12 @@ RUN cd /opt \
   && tar xfj /tmp/libpixman/libpixman-0.38.4_0.darwin_18.x86_64.tbz2 \
   && echo "Unpack libpng-1.6.37_0.darwin_18.x86_64.tbz2" \
   && tar xfj /tmp/libpng/libpng-1.6.37_0.darwin_18.x86_64.tbz2 \
+  && echo "Unpack libtool-2.4.6_11.darwin_18.x86_64.tbz2" \
+  && tar xfj /tmp/libtool/libtool-2.4.6_11.darwin_18.x86_64.tbz2 \
   && echo "Unpack libusb-1.0.24_0.darwin_18.x86_64.tbz2" \
   && tar xfj /tmp/libusb/libusb-1.0.24_0.darwin_18.x86_64.tbz2 \
+  && echo "Unpack mesa-19.0.8_1+osmesa+python27.darwin_18.x86_64.tbz2" \
+  && tar xfj /tmp/mesa/mesa-19.0.8_1+osmesa+python27.darwin_18.x86_64.tbz2 \
   && echo "Unpack ncurses-6.2_1.darwin_18.x86_64.tbz2" \
   && tar xfj /tmp/ncurses/ncurses-6.2_1.darwin_18.x86_64.tbz2 \
   && echo "Unpack openssl-1.1.1k_0.darwin_18.x86_64.tbz2" \
@@ -186,18 +184,41 @@ RUN cd /opt \
   && tar xfj /tmp/tiff/tiff-4.3.0_0.darwin_18.x86_64.tbz2 \
   && echo "Unpack tk-8.6.11_0+quartz.darwin_18.x86_64.tbz2" \
   && tar xfj /tmp/tk/tk-8.6.11_0+quartz.darwin_18.x86_64.tbz2 \
+  && echo "Unpack xorg-libX11-1.7.1_0.darwin_18.x86_64.tbz2" \
+  && tar xfj /tmp/xorg-libX11/xorg-libX11-1.7.1_0.darwin_18.x86_64.tbz2 \
+  && echo "Unpack xorg-libxcb-1.14_0+python39.darwin_18.x86_64.tbz2" \
+  && tar xfj /tmp/xorg-libxcb/xorg-libxcb-1.14_0+python39.darwin_18.x86_64.tbz2 \
+  && echo "Unpack xorg-libXdamage-1.1.5_0.darwin_18.x86_64.tbz2" \
+  && tar xfj /tmp/xorg-libXdamage/xorg-libXdamage-1.1.5_0.darwin_18.x86_64.tbz2 \
+  && echo "Unpack xorg-libXext-1.3.4_0.darwin_18.x86_64.tbz2" \
+  && tar xfj /tmp/xorg-libXext/xorg-libXext-1.3.4_0.darwin_18.x86_64.tbz2 \ 
+  && echo "Unpack xorg-libXfixes-6.0.0_0.darwin_18.x86_64.tbz2" \
+  && tar xfj /tmp/xorg-libXfixes/xorg-libXfixes-6.0.0_0.darwin_18.x86_64.tbz2 \
+  && echo "Unpack xorg-libpthread-stubs-0.4_0.darwin_18.noarch.tbz2" \
+  && tar xfj /tmp/xorg-libpthread-stubs/xorg-libpthread-stubs-0.4_0.darwin_18.noarch.tbz2 \
+  && echo "Unpack xorg-libXdmcp-1.1.3_0.darwin_18.x86_64.tbz2" \
+  && tar xfj /tmp/xorg-libXdmcp/xorg-libXdmcp-1.1.3_0.darwin_18.x86_64.tbz2 \
+  && echo "Unpack xorg-libXau-1.0.9_0.darwin_18.x86_64.tbz2" \
+  && tar xfj /tmp/xorg-libXau/xorg-libXau-1.0.9_0.darwin_18.x86_64.tbz2 \
+  && echo "Unpack xorg-xcb-proto-1.14.1_0+python39.darwin_18.noarch.tbz2" \
+  && tar xfj /tmp/xorg-xcb-proto/xorg-xcb-proto-1.14.1_0+python39.darwin_18.noarch.tbz2 \
+  && echo "Unpack xorg-xorgproto-2021.4_0.darwin_18.noarch.tbz2" \
+  && tar xfj /tmp/xorg-xorgproto/xorg-xorgproto-2021.4_0.darwin_18.noarch.tbz2 \
   && echo "Unpack xz-5.2.5_0.darwin_18.x86_64.tbz2" \
   && tar xfj /tmp/xz/xz-5.2.5_0.darwin_18.x86_64.tbz2 \
   && echo "Unpack zlib-1.2.11_0.darwin_18.x86_64.tbz2" \
   && tar xfj /tmp/zlib/zlib-1.2.11_0.darwin_18.x86_64.tbz2 \
-  && echo "Unpack zstd-1.4.9_0.darwin_18.x86_64.tbz2" \
-  && tar xfj /tmp/zstd/zstd-1.4.9_0.darwin_18.x86_64.tbz2 \
+  && echo "Unpack zstd-1.5.0_0.darwin_18.x86_64.tbz2" \
+  && tar xfj /tmp/zstd/zstd-1.5.0_0.darwin_18.x86_64.tbz2 \
+  && echo "Unpack gtk2-2.24.32_0+quartz.darwin_18.x86_64.tbz2" \
+  && tar xfj /tmp/gtk2/gtk2-2.24.32_0+quartz.darwin_18.x86_64.tbz2 \
   && echo "Cleanup" \
   && cp /usr/include/FlexLexer.h /opt/local/include/. \
-  && cp /opt/local/share/pkgconfig/* /opt/local/lib/pkgconfig/. \
-  && cp /opt/local/lib/pkgconfig/gtk-mac-integration-gtk2.pc /opt/local/lib/pkgconfig/gtk-mac-integration.pc \
+  && cp /opt/local/share/pkgconfig/* /opt/local/lib/pkgconfig/. \  
   && cp -r /opt/local/share/cmake /tmp \
   && cp -r /opt/local/share/eigen3 /tmp \
+  && cp -r /opt/local/share/gir-1.0 /tmp \
+  && cp -r /opt/local/share/glib-2.0 /tmp \
   && rm -rf /opt/local/etc \
   && rm -rf /opt/local/libexec \
   && rm -rf /opt/local/sbin \
@@ -206,17 +227,44 @@ RUN cd /opt \
   && rm -rf /tmp/*.tbz2 \
   && mv /tmp/cmake /opt/local/share \
   && mv /tmp/eigen3 /opt/local/share \
+  && mv /tmp/gir-1.0 /opt/local/share \
+  && mv /tmp/glib-2.0 /opt/local/share \
   && rm -rf /tmp/* \
   && mkdir -p /usr/local/osxcross/target/macports/pkgs/opt \
-  && ln -s /opt/local /usr/local/osxcross/target/macports/pkgs/opt
+  && ln -s /opt/local /usr/local/osxcross/target/macports/pkgs/opt \
+  && cd /opt/local/ \
+  && wget https://github.com/mmicko/macos-resources/releases/download/v2/gtk-osx-application-darwin-x64.tgz \
+  && tar xfz gtk-osx-application-darwin-x64.tgz \
+  && rm gtk-osx-application-darwin-x64.tgz
 
 COPY --from=builder /tmp/macdylibbundler/dylibbundler /usr/local/bin/dylibbundler
 RUN chmod +x /usr/local/bin/dylibbundler
 
-RUN cp /usr/local/osxcross/target/bin/x86_64-apple-darwin20.2-otool /usr/local/osxcross/target/bin/otool \
-  && cp /usr/local/osxcross/target/bin/x86_64-apple-darwin20.2-install_name_tool /usr/local/osxcross/target/bin/install_name_tool \
-  && cp /usr/local/osxcross/target/bin/x86_64-apple-darwin20.2-ar /usr/local/osxcross/target/bin/ar \
-  && cp /usr/local/osxcross/target/bin/x86_64-apple-darwin20.2-ranlib /usr/local/osxcross/target/bin/ranlib
+RUN cp /usr/local/osxcross/target/bin/${CROSS_NAME}-otool /usr/local/osxcross/target/bin/otool \
+  && cp /usr/local/osxcross/target/bin/${CROSS_NAME}-install_name_tool /usr/local/osxcross/target/bin/install_name_tool \
+  && cp /usr/local/osxcross/target/bin/${CROSS_NAME}-ar /usr/local/osxcross/target/bin/ar \
+  && cp /usr/local/osxcross/target/bin/${CROSS_NAME}-ranlib /usr/local/osxcross/target/bin/ranlib
 
 COPY uname /usr/local/osxcross/target/bin/
 RUN chmod +x /usr/local/osxcross/target/bin/uname
+
+# Install just g-ir-compiler, not using apt since it adds lots more
+RUN wget http://archive.ubuntu.com/ubuntu/pool/main/g/gobject-introspection/libgirepository-1.0-1_1.64.1-1~ubuntu20.04.1_amd64.deb && \
+    dpkg-deb -xv libgirepository-1.0-1_1.64.1-1~ubuntu20.04.1_amd64.deb / && \
+    rm -rf libgirepository-1.0-1_1.64.1-1~ubuntu20.04.1_amd64.deb && \
+    wget http://archive.ubuntu.com/ubuntu/pool/main/g/gobject-introspection/gobject-introspection_1.64.1-1~ubuntu20.04.1_amd64.deb && \
+    dpkg-deb -xv gobject-introspection_1.64.1-1~ubuntu20.04.1_amd64.deb / && \
+    rm -rf gobject-introspection_1.64.1-1~ubuntu20.04.1_amd64.deb
+
+RUN cd /opt/local/share/gir-1.0 &&\
+    for i in *.gir; do  \
+        sed -i 's|/opt/local/lib/||g' $i ; \
+        sed -i 's|./gdk-pixbuf/||g' $i ; \
+    done && \
+    for i in *.gir; do  \
+        echo $i ; \ 
+        filename="${i%.*}" ; \
+        g-ir-compiler $i -o /opt/local/lib/girepository-1.0/$filename.typelib --includedir /opt/local/share/gir-1.0 ; \
+    done
+
+COPY gschemas.compiled /opt/local/share/glib-2.0/schemas/

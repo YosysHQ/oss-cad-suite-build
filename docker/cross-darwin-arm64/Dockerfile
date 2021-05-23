@@ -80,26 +80,191 @@ RUN rustup target add aarch64-apple-darwin && \
 
 COPY Toolchain.cmake ${CROSS_PREFIX}/
 
+ENV MACOSX_DEPLOYMENT_TARGET=11.0
+
 ENV CMAKE_TOOLCHAIN_FILE ${CROSS_PREFIX}/Toolchain.cmake
 
 ENV OSXCROSS_MP_INC=1 
 
 ENV PKG_CONFIG_PATH /opt/local/lib/pkgconfig
 
+RUN cd /opt \
+  && wget https://github.com/mmicko/macos-resources/releases/download/v2/Qt5.12.8-arm64.tar.gz \
+  && tar xfz Qt5.12.8-arm64.tar.gz \
+  && rm Qt5.12.8-arm64.tar.gz \
+  && rm -rf /opt/Qt5.12.8/bin \
+  && ln -s /usr/lib/qt5/bin /opt/Qt5.12.8/bin \
+  && cd /tmp \
+  && wget https://github.com/mmicko/macos-resources/releases/download/v2/macports-darwin-arm64.tar \
+  && tar xf macports-darwin-arm64.tar \
+  && cd / \
+  && echo "Unpack atk-2.36.0_2.darwin_20.arm64.tbz2" \
+  && tar xfj /tmp/atk/atk-2.36.0_2.darwin_20.arm64.tbz2 \
+  && echo "Unpack boost-1.71.0_4+no_single.darwin_20.arm64.tbz2" \
+  && tar xfj /tmp/boost/boost-1.71.0_4+no_single.darwin_20.arm64.tbz2 \
+  && echo "Unpack brotli-1.0.9_2.darwin_20.arm64.tbz2" \
+  && tar xfj /tmp/brotli/brotli-1.0.9_2.darwin_20.arm64.tbz2 \
+  && echo "Unpack bzip2-1.0.8_0.darwin_20.arm64.tbz2" \
+  && tar xfj /tmp/bzip2/bzip2-1.0.8_0.darwin_20.arm64.tbz2 \
+  && echo "Unpack cairo-1.16.0_2+quartz.darwin_20.arm64.tbz2" \
+  && tar xfj /tmp/cairo/cairo-1.16.0_2+quartz.darwin_20.arm64.tbz2 \
+  && echo "Unpack curl-7.76.1_0+ssl.darwin_20.arm64.tbz2" \
+  && tar xfj /tmp/curl/curl-7.76.1_0+ssl.darwin_20.arm64.tbz2 \
+  && echo "Unpack eigen3-3.3.9_0.darwin_20.noarch.tbz2" \
+  && tar xfj /tmp/eigen3/eigen3-3.3.9_0.darwin_20.noarch.tbz2 \
+  && echo "Unpack expat-2.3.0_0.darwin_20.arm64.tbz2" \
+  && tar xfj /tmp/expat/expat-2.3.0_0.darwin_20.arm64.tbz2 \
+  && echo "Unpack fontconfig-2.13.1_1.darwin_20.arm64.tbz2" \
+  && tar xfj /tmp/fontconfig/fontconfig-2.13.1_1.darwin_20.arm64.tbz2 \
+  && echo "Unpack freetype-2.10.4_0.darwin_20.arm64.tbz2" \
+  && tar xfj /tmp/freetype/freetype-2.10.4_0.darwin_20.arm64.tbz2 \
+  && echo "Unpack fribidi-1.0.10_0.darwin_20.arm64.tbz2" \
+  && tar xfj /tmp/fribidi/fribidi-1.0.10_0.darwin_20.arm64.tbz2 \
+  && echo "Unpack gdbm-1.19_0.darwin_20.arm64.tbz2" \
+  && tar xfj /tmp/gdbm/gdbm-1.19_0.darwin_20.arm64.tbz2 \
+  && echo "Unpack gdk-pixbuf2-2.42.2_2.darwin_20.arm64.tbz2" \
+  && tar xfj /tmp/gdk-pixbuf2/gdk-pixbuf2-2.42.2_2.darwin_20.arm64.tbz2 \
+  && echo "Unpack gettext-0.19.8.1_2.darwin_20.arm64.tbz2" \
+  && tar xfj /tmp/gettext/gettext-0.19.8.1_2.darwin_20.arm64.tbz2 \
+  && echo "Unpack glib2-2.58.3_1+quartz.darwin_20.arm64.tbz2" \
+  && tar xfj /tmp/glib2/glib2-2.58.3_1+quartz.darwin_20.arm64.tbz2 \
+  && echo "Unpack gmp-6.2.1_0.darwin_20.arm64.tbz2" \
+  && tar xfj /tmp/gmp/gmp-6.2.1_0.darwin_20.arm64.tbz2 \
+  && echo "Unpack gobject-introspection-1.60.2_6.darwin_20.arm64.tbz2" \
+  && tar xfj /tmp/gobject-introspection/gobject-introspection-1.60.2_6.darwin_20.arm64.tbz2 \
+  && echo "Unpack graphite2-1.3.13_1.darwin_20.arm64.tbz2" \
+  && tar xfj /tmp/graphite2/graphite2-1.3.13_1.darwin_20.arm64.tbz2 \
+  && echo "Unpack gtk3-3.24.23_0+quartz.darwin_20.arm64.tbz2" \
+  && tar xfj /tmp/gtk3/gtk3-3.24.23_0+quartz.darwin_20.arm64.tbz2 \
+  && echo "Unpack harfbuzz-2.8.1_0.darwin_20.arm64.tbz2" \
+  && tar xfj /tmp/harfbuzz/harfbuzz-2.8.1_0.darwin_20.arm64.tbz2 \
+  && echo "Unpack hidapi-0.9.0_0.darwin_20.arm64.tbz2" \
+  && tar xfj /tmp/hidapi/hidapi-0.9.0_0.darwin_20.arm64.tbz2 \
+  && echo "Unpack icu-67.1_4.darwin_20.arm64.tbz2" \
+  && tar xfj /tmp/icu/icu-67.1_4.darwin_20.arm64.tbz2 \
+  && echo "Unpack libepoxy-1.5.4_1+python38.darwin_20.arm64.tbz2" \
+  && tar xfj /tmp/libepoxy/libepoxy-1.5.4_1+python38.darwin_20.arm64.tbz2 \
+  && echo "Unpack libffi-3.3_1.darwin_20.arm64.tbz2" \
+  && tar xfj /tmp/libffi/libffi-3.3_1.darwin_20.arm64.tbz2 \
+  && echo "Unpack libftdi1-1.5_0.darwin_20.arm64.tbz2" \
+  && tar xfj /tmp/libftdi1/libftdi1-1.5_0.darwin_20.arm64.tbz2 \
+  && echo "Unpack libiconv-1.16_1.darwin_20.arm64.tbz2" \
+  && tar xfj /tmp/libiconv/libiconv-1.16_1.darwin_20.arm64.tbz2 \
+  && echo "Unpack libjpeg-turbo-2.0.6_0.darwin_20.arm64.tbz2" \
+  && tar xfj /tmp/libjpeg-turbo/libjpeg-turbo-2.0.6_0.darwin_20.arm64.tbz2 \
+  && echo "Unpack libpixman-0.38.4_0.darwin_20.arm64.tbz2" \
+  && tar xfj /tmp/libpixman/libpixman-0.38.4_0.darwin_20.arm64.tbz2 \
+  && echo "Unpack libpng-1.6.37_0.darwin_20.arm64.tbz2" \
+  && tar xfj /tmp/libpng/libpng-1.6.37_0.darwin_20.arm64.tbz2 \
+  && echo "Unpack libtool-2.4.6_11.darwin_20.arm64.tbz2" \
+  && tar xfj /tmp/libtool/libtool-2.4.6_11.darwin_20.arm64.tbz2 \
+  && echo "Unpack libusb-1.0.24_0.darwin_20.arm64.tbz2" \
+  && tar xfj /tmp/libusb/libusb-1.0.24_0.darwin_20.arm64.tbz2 \
+  && echo "Unpack mesa-19.0.8_1+osmesa+python27.darwin_20.arm64.tbz2" \
+  && tar xfj /tmp/mesa/mesa-19.0.8_1+osmesa+python27.darwin_20.arm64.tbz2 \
+  && echo "Unpack ncurses-6.2_1.darwin_20.arm64.tbz2" \
+  && tar xfj /tmp/ncurses/ncurses-6.2_1.darwin_20.arm64.tbz2 \
+  && echo "Unpack openssl-1.1.1k_0.darwin_20.arm64.tbz2" \
+  && tar xfj /tmp/openssl/openssl-1.1.1k_0.darwin_20.arm64.tbz2 \
+  && echo "Unpack ossp-uuid-1.6.2_12+perl5_28.darwin_20.arm64.tbz2" \
+  && tar xfj /tmp/ossp-uuid/ossp-uuid-1.6.2_12+perl5_28.darwin_20.arm64.tbz2 \
+  && echo "Unpack pango-1.42.4_3+quartz.darwin_20.arm64.tbz2" \
+  && tar xfj /tmp/pango/pango-1.42.4_3+quartz.darwin_20.arm64.tbz2 \
+  && echo "Unpack pcre-8.44_1.darwin_20.arm64.tbz2" \
+  && tar xfj /tmp/pcre/pcre-8.44_1.darwin_20.arm64.tbz2 \
+  && echo "Unpack readline-8.1.000_0.darwin_20.arm64.tbz2" \
+  && tar xfj /tmp/readline/readline-8.1.000_0.darwin_20.arm64.tbz2 \
+  && echo "Unpack realpath-1.0.1_1.darwin_20.arm64.tbz2" \
+  && tar xfj /tmp/realpath/realpath-1.0.1_1.darwin_20.arm64.tbz2 \
+  && echo "Unpack sqlite3-3.35.5_0.darwin_20.arm64.tbz2" \
+  && tar xfj /tmp/sqlite3/sqlite3-3.35.5_0.darwin_20.arm64.tbz2 \
+  && echo "Unpack tcl-8.6.11_0+corefoundation+threads.darwin_20.arm64.tbz2" \
+  && tar xfj /tmp/tcl/tcl-8.6.11_0+corefoundation+threads.darwin_20.arm64.tbz2 \
+  && echo "Unpack tiff-4.3.0_0.darwin_20.arm64.tbz2" \
+  && tar xfj /tmp/tiff/tiff-4.3.0_0.darwin_20.arm64.tbz2 \
+  && echo "Unpack tk-8.6.11_0+quartz.darwin_20.arm64.tbz2" \
+  && tar xfj /tmp/tk/tk-8.6.11_0+quartz.darwin_20.arm64.tbz2 \
+  && echo "Unpack xorg-libX11-1.7.1_0.darwin_20.arm64.tbz2" \
+  && tar xfj /tmp/xorg-libX11/xorg-libX11-1.7.1_0.darwin_20.arm64.tbz2 \
+  && echo "Unpack xorg-libxcb-1.14_0+python39.darwin_20.arm64.tbz2" \
+  && tar xfj /tmp/xorg-libxcb/xorg-libxcb-1.14_0+python39.darwin_20.arm64.tbz2 \
+  && echo "Unpack xorg-libXdamage-1.1.5_0.darwin_20.arm64.tbz2" \
+  && tar xfj /tmp/xorg-libXdamage/xorg-libXdamage-1.1.5_0.darwin_20.arm64.tbz2 \
+  && echo "Unpack xorg-libXext-1.3.4_0.darwin_20.arm64.tbz2" \
+  && tar xfj /tmp/xorg-libXext/xorg-libXext-1.3.4_0.darwin_20.arm64.tbz2 \ 
+  && echo "Unpack xorg-libXfixes-6.0.0_0.darwin_20.arm64.tbz2" \
+  && tar xfj /tmp/xorg-libXfixes/xorg-libXfixes-6.0.0_0.darwin_20.arm64.tbz2 \
+  && echo "Unpack xorg-libpthread-stubs-0.4_0.darwin_20.noarch.tbz2" \
+  && tar xfj /tmp/xorg-libpthread-stubs/xorg-libpthread-stubs-0.4_0.darwin_20.noarch.tbz2 \
+  && echo "Unpack xorg-libXdmcp-1.1.3_0.darwin_20.arm64.tbz2" \
+  && tar xfj /tmp/xorg-libXdmcp/xorg-libXdmcp-1.1.3_0.darwin_20.arm64.tbz2 \
+  && echo "Unpack xorg-libXau-1.0.9_0.darwin_20.arm64.tbz2" \
+  && tar xfj /tmp/xorg-libXau/xorg-libXau-1.0.9_0.darwin_20.arm64.tbz2 \
+  && echo "Unpack xorg-xcb-proto-1.14.1_0+python39.darwin_20.noarch.tbz2" \
+  && tar xfj /tmp/xorg-xcb-proto/xorg-xcb-proto-1.14.1_0+python39.darwin_20.noarch.tbz2 \
+  && echo "Unpack xorg-xorgproto-2021.4_0.darwin_20.noarch.tbz2" \
+  && tar xfj /tmp/xorg-xorgproto/xorg-xorgproto-2021.4_0.darwin_20.noarch.tbz2 \
+  && echo "Unpack xz-5.2.5_0.darwin_20.arm64.tbz2" \
+  && tar xfj /tmp/xz/xz-5.2.5_0.darwin_20.arm64.tbz2 \
+  && echo "Unpack zlib-1.2.11_0.darwin_20.arm64.tbz2" \
+  && tar xfj /tmp/zlib/zlib-1.2.11_0.darwin_20.arm64.tbz2 \
+  && echo "Unpack zstd-1.5.0_0.darwin_20.arm64.tbz2" \
+  && tar xfj /tmp/zstd/zstd-1.5.0_0.darwin_20.arm64.tbz2 \
+  && echo "Unpack gtk2-2.24.32_0+quartz.darwin_20.arm64.tbz2" \
+  && tar xfj /tmp/gtk2/gtk2-2.24.32_0+quartz.darwin_20.arm64.tbz2 \
+  && echo "Cleanup" \
+  && cp /usr/include/FlexLexer.h /opt/local/include/. \
+  && cp /opt/local/share/pkgconfig/* /opt/local/lib/pkgconfig/. \  
+  && cp -r /opt/local/share/cmake /tmp \
+  && cp -r /opt/local/share/eigen3 /tmp \
+  && cp -r /opt/local/share/gir-1.0 /tmp \
+  && cp -r /opt/local/share/glib-2.0 /tmp \
+  && rm -rf /opt/local/etc \
+  && rm -rf /opt/local/libexec \
+  && rm -rf /opt/local/sbin \
+  && rm -rf /opt/local/share \
+  && mkdir -p /opt/local/share \
+  && rm -rf /tmp/*.tbz2 \
+  && mv /tmp/cmake /opt/local/share \
+  && mv /tmp/eigen3 /opt/local/share \
+  && mv /tmp/gir-1.0 /opt/local/share \
+  && mv /tmp/glib-2.0 /opt/local/share \
+  && rm -rf /tmp/* \
+  && mkdir -p /usr/local/osxcross/target/macports/pkgs/opt \
+  && ln -s /opt/local /usr/local/osxcross/target/macports/pkgs/opt \
+  && cd /opt/local/ \
+  && wget https://github.com/mmicko/macos-resources/releases/download/v2/gtk-osx-application-darwin-arm64.tgz \
+  && tar xfz gtk-osx-application-darwin-arm64.tgz \
+  && rm gtk-osx-application-darwin-arm64.tgz
+
 COPY --from=builder /tmp/macdylibbundler/dylibbundler /usr/local/bin/dylibbundler
 RUN chmod +x /usr/local/bin/dylibbundler
 
-RUN cp /usr/local/osxcross/target/bin/x86_64-apple-darwin20.2-otool /usr/local/osxcross/target/bin/otool \
-  && cp /usr/local/osxcross/target/bin/x86_64-apple-darwin20.2-install_name_tool /usr/local/osxcross/target/bin/install_name_tool \
-  && cp /usr/local/osxcross/target/bin/x86_64-apple-darwin20.2-ar /usr/local/osxcross/target/bin/ar \
-  && cp /usr/local/osxcross/target/bin/x86_64-apple-darwin20.2-ranlib /usr/local/osxcross/target/bin/ranlib
+RUN cp /usr/local/osxcross/target/bin/${CROSS_NAME}-otool /usr/local/osxcross/target/bin/otool \
+  && cp /usr/local/osxcross/target/bin/${CROSS_NAME}-install_name_tool /usr/local/osxcross/target/bin/install_name_tool \
+  && cp /usr/local/osxcross/target/bin/${CROSS_NAME}-ar /usr/local/osxcross/target/bin/ar \
+  && cp /usr/local/osxcross/target/bin/${CROSS_NAME}-ranlib /usr/local/osxcross/target/bin/ranlib
 
 COPY uname /usr/local/osxcross/target/bin/
 RUN chmod +x /usr/local/osxcross/target/bin/uname
 
-ENV MACOSX_DEPLOYMENT_TARGET=11.0
+# Install just g-ir-compiler, not using apt since it adds lots more
+RUN wget http://archive.ubuntu.com/ubuntu/pool/main/g/gobject-introspection/libgirepository-1.0-1_1.64.1-1~ubuntu20.04.1_amd64.deb && \
+    dpkg-deb -xv libgirepository-1.0-1_1.64.1-1~ubuntu20.04.1_amd64.deb / && \
+    rm -rf libgirepository-1.0-1_1.64.1-1~ubuntu20.04.1_amd64.deb && \
+    wget http://archive.ubuntu.com/ubuntu/pool/main/g/gobject-introspection/gobject-introspection_1.64.1-1~ubuntu20.04.1_amd64.deb && \
+    dpkg-deb -xv gobject-introspection_1.64.1-1~ubuntu20.04.1_amd64.deb / && \
+    rm -rf gobject-introspection_1.64.1-1~ubuntu20.04.1_amd64.deb
 
-RUN sed 's|ARCH="x86_64"|ARCH="arm64"|g' -i /usr/local/osxcross/target/bin/osxcross-macports &&\
-    yes 1 | osxcross-macports --select-mirror && \
-    osxcross-macports install libusb gmp && \
-    ln -s /usr/local/osxcross/target/macports/pkgs/opt/local /opt/local
+RUN cd /opt/local/share/gir-1.0 &&\
+    for i in *.gir; do  \
+        sed -i 's|/opt/local/lib/||g' $i ; \
+        sed -i 's|./gdk-pixbuf/||g' $i ; \
+    done && \
+    for i in *.gir; do  \
+        echo $i ; \ 
+        filename="${i%.*}" ; \
+        g-ir-compiler $i -o /opt/local/lib/girepository-1.0/$filename.typelib --includedir /opt/local/share/gir-1.0 ; \
+    done
+
+COPY gschemas.compiled /opt/local/share/glib-2.0/schemas/
