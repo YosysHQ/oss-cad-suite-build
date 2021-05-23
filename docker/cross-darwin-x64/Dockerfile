@@ -266,3 +266,5 @@ RUN cd /opt/local/share/gir-1.0 &&\
         filename="${i%.*}" ; \
         g-ir-compiler $i -o /opt/local/lib/girepository-1.0/$filename.typelib --includedir /opt/local/share/gir-1.0 ; \
     done
+
+COPY gschemas.compiled /opt/local/share/glib-2.0/schemas/
