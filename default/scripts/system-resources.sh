@@ -58,10 +58,16 @@ if [ ${ARCH_BASE} == 'darwin' ]; then
     dylibbundler -of -b -x ${OUTPUT_DIR}${INSTALL_PREFIX}/libexec/gdk-pixbuf-query-loaders -p @executable_path/../lib -d ${OUTPUT_DIR}${INSTALL_PREFIX}/lib
 
     # GTK3 resources
+    cp /opt/local/lib/libgtk-3.0.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/.
+    cp /opt/local/lib/libgdk-3.0.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/.
+    dylibbundler -of -b -x ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libgtk-3.0.dylib -p @executable_path/../lib -d ${OUTPUT_DIR}${INSTALL_PREFIX}/lib
+    install_name_tool -id @executable_path/../lib/libgtk-3.0.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libgtk-3.0.dylib
+    dylibbundler -of -b -x ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libgdk-3.0.dylib -p @executable_path/../lib -d ${OUTPUT_DIR}${INSTALL_PREFIX}/lib
+    install_name_tool -id @executable_path/../lib/libgdk-3.0.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libgdk-3.0.dylib
     mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/share/glib-2.0
     mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/share/mime
     mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/share/icons
-    cp -rv /usr/share/glib-2.0/schemas ${OUTPUT_DIR}${INSTALL_PREFIX}/share/glib-2.0/.
+    cp -rv /opt/local/share/glib-2.0/schemas ${OUTPUT_DIR}${INSTALL_PREFIX}/share/glib-2.0/.
     cp -v /usr/share/mime/magic ${OUTPUT_DIR}${INSTALL_PREFIX}/share/mime/.
     cp -rv /usr/share/icons/Adwaita ${OUTPUT_DIR}${INSTALL_PREFIX}/share/icons/.
     rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/share/icons/Adwaita/256x256

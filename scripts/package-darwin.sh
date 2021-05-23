@@ -138,13 +138,18 @@ export TCL_LIBRARY="\$release_topdir_abs/lib/tcl8.6"
 export TK_LIBRARY="\$release_topdir_abs/lib/tk8.6"
 export LC_ALL="C"
 export GI_TYPELIB_PATH="\$release_topdir_abs/lib/girepository-1.0"
+export LD_LIBRARY_PATH="\$release_topdir_abs/lib"
+export PYTHONHOME="\$release_topdir_abs"
+export PYTHONNOUSERSITE=1
 "\$release_topdir_abs"/libexec/gdk-pixbuf-query-loaders --update-cache
 mkdir -p \$HOME/.config/yosyshq \$HOME/.local/share/yosyshq
+exec "\$release_topdir_abs"/libexec/python3.8 "\$release_topdir_abs"/libexec/$(basename $script) "$@"
 EOT
-        fi
+        else
         cat >> "${script}" <<EOT
 exec \$release_bindir_abs/yshqpy3 "\$release_topdir_abs"/libexec/$(basename $script) "\$@"
 EOT
+        fi
         chmod +x "${script}"
     fi
 done

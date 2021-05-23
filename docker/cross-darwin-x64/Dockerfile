@@ -217,6 +217,8 @@ RUN cd /opt \
   && cp /opt/local/share/pkgconfig/* /opt/local/lib/pkgconfig/. \  
   && cp -r /opt/local/share/cmake /tmp \
   && cp -r /opt/local/share/eigen3 /tmp \
+  && cp -r /opt/local/share/gir-1.0 /tmp \
+  && cp -r /opt/local/share/glib-2.0 /tmp \
   && rm -rf /opt/local/etc \
   && rm -rf /opt/local/libexec \
   && rm -rf /opt/local/sbin \
@@ -225,6 +227,8 @@ RUN cd /opt \
   && rm -rf /tmp/*.tbz2 \
   && mv /tmp/cmake /opt/local/share \
   && mv /tmp/eigen3 /opt/local/share \
+  && mv /tmp/gir-1.0 /opt/local/share \
+  && mv /tmp/glib-2.0 /opt/local/share \
   && rm -rf /tmp/* \
   && mkdir -p /usr/local/osxcross/target/macports/pkgs/opt \
   && ln -s /opt/local /usr/local/osxcross/target/macports/pkgs/opt \
@@ -243,3 +247,22 @@ RUN cp /usr/local/osxcross/target/bin/${CROSS_NAME}-otool /usr/local/osxcross/ta
 
 COPY uname /usr/local/osxcross/target/bin/
 RUN chmod +x /usr/local/osxcross/target/bin/uname
+
+# Install just g-ir-compiler, not using apt since it adds lots more
+RUN wget http://archive.ubuntu.com/ubuntu/pool/main/g/gobject-introspection/libgirepository-1.0-1_1.64.1-1~ubuntu20.04.1_amd64.deb && \
+    dpkg-deb -xv libgirepository-1.0-1_1.64.1-1~ubuntu20.04.1_amd64.deb / && \
+    rm -rf libgirepository-1.0-1_1.64.1-1~ubuntu20.04.1_amd64.deb && \
+    wget http://archive.ubuntu.com/ubuntu/pool/main/g/gobject-introspection/gobject-introspection_1.64.1-1~ubuntu20.04.1_amd64.deb && \
+    dpkg-deb -xv gobject-introspection_1.64.1-1~ubuntu20.04.1_amd64.deb / && \
+    rm -rf gobject-introspection_1.64.1-1~ubuntu20.04.1_amd64.deb
+
+RUN cd /opt/local/share/gir-1.0 &&\
+    for i in *.gir; do  \
+        sed -i 's|/opt/local/lib/||g' $i ; \
+        sed -i 's|./gdk-pixbuf/||g' $i ; \
+    done && \
+    for i in *.gir; do  \
+        echo $i ; \ 
+        filename="${i%.*}" ; \
+        g-ir-compiler $i -o /opt/local/lib/girepository-1.0/$filename.typelib --includedir /opt/local/share/gir-1.0 ; \
+    done
