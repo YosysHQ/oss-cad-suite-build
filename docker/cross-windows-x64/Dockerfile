@@ -95,4 +95,5 @@ COPY winsock2.h /usr/x86_64-w64-mingw32/sys-root/mingw/include/
 
 WORKDIR /work
 
-#RUN dnf install -y python3-cairo python3-cairo-devel mingw64-libltdl
+#RUN dnf install -y python3-cairo python3-cairo-devel
+RUN dnf install -y libtool-ltdl-devel
