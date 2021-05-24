@@ -34,3 +34,4 @@ fi
 mkdir -p ${OUTPUT_DIR}/dev
 mv ${OUTPUT_DIR}${INSTALL_PREFIX}/include ${OUTPUT_DIR}/dev/.
 rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/pkgconfig
+rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/python2.7/config/libpython2.7.a
