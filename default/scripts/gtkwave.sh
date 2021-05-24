@@ -9,3 +9,5 @@ else
     ./configure --prefix=${INSTALL_PREFIX} --host=${CROSS_NAME} --enable-gtk3
 fi
 make DESTDIR=${OUTPUT_DIR} UPDATE_DESKTOP_DATABASE=/bin/true -j${NPROC} install
+rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/share/gtkwave 
+rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/share/gtkwave-gtk3 
