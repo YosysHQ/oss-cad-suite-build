@@ -678,6 +678,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   darwin-x64-pono:
     runs-on: ubuntu-latest
+    continue-on-error: true
     needs: [ darwin-x64-boolector, darwin-x64-cvc4, darwin-x64-smt-switch ]
     steps:
       - uses: actions/checkout@v2

@@ -747,6 +747,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-riscv64-pono:
     runs-on: ubuntu-latest
+    continue-on-error: true
     needs: [ linux-riscv64-boolector, linux-riscv64-cvc4, linux-riscv64-smt-switch ]
     steps:
       - uses: actions/checkout@v2

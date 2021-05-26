@@ -747,6 +747,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-arm64-pono:
     runs-on: ubuntu-latest
+    continue-on-error: true
     needs: [ linux-arm64-boolector, linux-arm64-cvc4, linux-arm64-smt-switch ]
     steps:
       - uses: actions/checkout@v2

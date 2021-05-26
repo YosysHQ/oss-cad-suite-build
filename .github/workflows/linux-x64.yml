@@ -916,6 +916,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-pono:
     runs-on: ubuntu-latest
+    continue-on-error: true
     needs: [ linux-x64-boolector, linux-x64-cvc4, linux-x64-smt-switch ]
     steps:
       - uses: actions/checkout@v2

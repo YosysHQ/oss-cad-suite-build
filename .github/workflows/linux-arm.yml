@@ -747,6 +747,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-arm-pono:
     runs-on: ubuntu-latest
+    continue-on-error: true
     needs: [ linux-arm-boolector, linux-arm-cvc4, linux-arm-smt-switch ]
     steps:
       - uses: actions/checkout@v2

@@ -58,7 +58,7 @@ SourceLocation(
 	name = 'smt-switch',
 	vcs = 'git',
 	location = 'https://github.com/makaimann/smt-switch',
-	revision = 'c3957b2e7fec8af4fab24df089230c88e523c0e6'
+	revision = 'a2af6ea75b994d666c9c175793a70c8945208ba5'
 )
 
 SourceLocation(
@@ -72,7 +72,7 @@ SourceLocation(
 	name = 'cvc4',
 	vcs = 'git',
 	location = 'https://github.com/CVC4/CVC4.git',
-	revision = '35d080bfb56ff96fd41b31ce7025c019193f6abc'
+	revision = '3dda54ba7e6952060766775c56969ab920430a8a'
 )
 
 Target(
@@ -93,6 +93,7 @@ Target(
 	sources = [ 'pono' ],
 	dependencies = [ 'smt-switch', 'cvc4', 'boolector' ],
 	license_file = 'pono/LICENSE',
+	continue_on_error = True,
 )
 
 # suprove
@@ -142,5 +143,5 @@ Target(
 	name = 'z3',
 	sources = [ 'z3' ],
 	license_file = 'z3/LICENSE.txt',
-	continue_on_error = True
+	continue_on_error = True,
 )
