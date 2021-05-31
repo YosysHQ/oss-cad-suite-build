@@ -57,9 +57,6 @@ See [Tabby CAD Datasheet](https://www.yosyshq.com/tabby-cad-datasheet) for detai
  * [verilator](https://github.com/verilator/verilator) Verilog/SystemVerilog simulator
  * [iverilog](https://github.com/steveicarus/iverilog) Verilog compilation system
 
-### SoC
- * [LiteX](https://github.com/enjoy-digital/litex/) Migen/MiSoC based Core/SoC builder
-
 ### Support libraries
  * [Python 3](https://github.com/python/cpython) language interpretter is provided in all supported platforms.
  * [Python 2](https://github.com/python/cpython) language interpretter is provided in Linux platforms in form of library only.
