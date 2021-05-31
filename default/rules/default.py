@@ -29,7 +29,6 @@ Target(
         'gtkwave',
         'verilator',
         'iverilog',
-        'litex',
         'ecpdap',
         'fujprog',
         'python-programmers',
