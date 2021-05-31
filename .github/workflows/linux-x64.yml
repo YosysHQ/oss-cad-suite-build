@@ -1427,6 +1427,39 @@ jobs:
           tag: bucket-linux-x64
           artifacts: "linux-x64-icesprog.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
+  linux-x64-utils:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/oss-cad-suite-build'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-utils
+      - name: Download previous build
+        run: |
+          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-utils.tgz"
+          if wget --spider "${URL}" 2>/dev/null; then
+              wget -qO- "${URL}" | tar xvfz -
+          else
+              echo "Previous version not found in bucket"
+          fi
+      - name: Build
+        run: ./builder.py build --arch=linux-x64 --target=utils --single --tar
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('linux-x64-utils.tgz') != ''
+        with:
+          allowUpdates: True
+          prerelease: True
+          omitBody: True
+          omitBodyDuringUpdate: True
+          omitNameDuringUpdate: True
+          tag: bucket-linux-x64
+          artifacts: "linux-x64-utils.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-system-resources:
     runs-on: ubuntu-latest
     steps:
@@ -1462,7 +1495,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-default:
     runs-on: ubuntu-latest
-    needs: [ linux-x64-avy, linux-x64-boolector, linux-x64-dfu-util, linux-x64-ecpdap, linux-x64-ecpprog, linux-x64-flask, linux-x64-fujprog, linux-x64-graphviz, linux-x64-gtkwave, linux-x64-icesprog, linux-x64-icestorm, linux-x64-iverilog, linux-x64-litex, linux-x64-mcy, linux-x64-nextpnr-ecp5, linux-x64-nextpnr-generic, linux-x64-nextpnr-ice40, linux-x64-nextpnr-machxo2, linux-x64-nextpnr-nexus, linux-x64-openfpgaloader, linux-x64-openocd, linux-x64-pono, linux-x64-prjtrellis, linux-x64-python-programmers, linux-x64-python2, linux-x64-python3, linux-x64-sby, linux-x64-sby-gui, linux-x64-suprove, linux-x64-system-resources, linux-x64-verilator, linux-x64-xdot, linux-x64-yices, linux-x64-yosys, linux-x64-z3 ]
+    needs: [ linux-x64-avy, linux-x64-boolector, linux-x64-dfu-util, linux-x64-ecpdap, linux-x64-ecpprog, linux-x64-flask, linux-x64-fujprog, linux-x64-graphviz, linux-x64-gtkwave, linux-x64-icesprog, linux-x64-icestorm, linux-x64-iverilog, linux-x64-litex, linux-x64-mcy, linux-x64-nextpnr-ecp5, linux-x64-nextpnr-generic, linux-x64-nextpnr-ice40, linux-x64-nextpnr-machxo2, linux-x64-nextpnr-nexus, linux-x64-openfpgaloader, linux-x64-openocd, linux-x64-pono, linux-x64-prjtrellis, linux-x64-python-programmers, linux-x64-python2, linux-x64-python3, linux-x64-sby, linux-x64-sby-gui, linux-x64-suprove, linux-x64-system-resources, linux-x64-utils, linux-x64-verilator, linux-x64-xdot, linux-x64-yices, linux-x64-yosys, linux-x64-z3 ]
     steps:
       - name: Get current date
         id: date
@@ -1530,6 +1563,8 @@ jobs:
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-suprove.tgz" | tar xvfz -
       - name: Download linux-x64-system-resources
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-system-resources.tgz" | tar xvfz -
+      - name: Download linux-x64-utils
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-utils.tgz" | tar xvfz -
       - name: Download linux-x64-verilator
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-verilator.tgz" | tar xvfz -
       - name: Download linux-x64-xdot
