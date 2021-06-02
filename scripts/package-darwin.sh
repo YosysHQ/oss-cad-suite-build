@@ -33,6 +33,12 @@ EOT
 export VERILATOR_ROOT="\$release_topdir_abs/share/verilator"
 EOT
         fi
+        if [ ! -z "$(basename $binfile | grep iverilog)" ]; then
+            cat >> $binfile << EOT
+sed -i -re 's|^flag:VVP_EXECUTABLE=.*$|flag:VVP_EXECUTABLE='\$release_topdir_abs'/bin/vvp|g' \$release_topdir_abs/lib/ivl/vvp.conf
+sed -i -re 's|^flag:VVP_EXECUTABLE=.*$|flag:VVP_EXECUTABLE='\$release_topdir_abs'/bin/vvp|g' \$release_topdir_abs/lib/ivl/vvp-s.conf
+EOT
+        fi
         if [ ! -z "$(basename $binfile | grep ghdl)" ]; then
             cat >> $binfile << EOT
 export GHDL_PREFIX="\$release_topdir_abs/lib/ghdl"
@@ -160,5 +166,21 @@ for binfile in $(find lib -type f | xargs file | grep Mach-O | grep bundle | cut
     echo $binfile
     dylibbundler -of -b -x $binfile -p @executable_path/../lib -d ${OUTPUT_DIR}${INSTALL_PREFIX}/lib
 done
+
+if [ -f "bin/yosys-config" ]; then
+    mv bin/yosys-config bin/yosys-config.orig
+    cat > bin/yosys-config << EOT
+#!/usr/bin/env bash
+release_bindir="\$(dirname "\${BASH_SOURCE[0]}")"
+release_bindir_abs="\$("\$release_bindir"/../libexec/realpath "\$release_bindir")"
+release_topdir_abs="\$("\$release_bindir"/../libexec/realpath "\$release_bindir/$rel_path")"
+EOT
+    cat bin/yosys-config.orig >> bin/yosys-config
+    rm bin/yosys-config.orig
+    sed -i "s,\"/yosyshq,\${release_topdir_abs}\",g" bin/yosys-config
+    sed -i "s,'/yosyshq,\${release_topdir_abs}',g" bin/yosys-config
+    sed -i "s,/yosyshq,\${release_topdir_abs},g" bin/yosys-config
+    chmod +x bin/yosys-config
+fi
 
 chmod -R u=rwX,go=rX *
