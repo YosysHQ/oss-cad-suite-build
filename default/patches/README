@@ -1,0 +1,29 @@
+OSS CAD Suite
+=============
+
+Installation
+------------
+
+1. Download an archive matching your OS from the releases page at https://github.com/YosysHQ/oss-cad-suite-build/releases/latest.
+2. Extract the archive to a location of your choice (for Windows it is recommended that path does not contain spaces)
+3. To use OSS CAD Suite 
+
+Linux and macOS
+---------------
+export PATH="<extracted_location>/oss-cad-suite/bin:$PATH"
+
+or
+
+source <extracted_location>/oss-cad-suite/environment
+
+Windows
+-------
+from existing shell:
+<extracted_location>\oss-cad-suite\environment.bat
+
+to create new shell window:
+<extracted_location>\oss-cad-suite\start.bat
+
+**NOTE:** when environment is set, `python3` from package becomes available as well, this enables usage of *nMigen* and *nMigen* 
+HDL and *LiteX* libraries scripts as usual, when OSS CAD Suite is just added in PATH to use packaged python3 use `tabbypy3` to 
+start python environment. For Windows, there are no wrappers and using environment.bat is only choice.

@@ -84,7 +84,7 @@ class SourceLocation:
 		sources[name] = self
 
 class Target:
-	def __init__(self, name, sources = [], dependencies = [], resources = [], patches = [], arch = [], license_url = None, license_file = None, top_package = False, build_native = False, release_name = None, gitrev = [], branding = None, continue_on_error = False):
+	def __init__(self, name, sources = [], dependencies = [], resources = [], patches = [], arch = [], license_url = None, license_file = None, top_package = False, build_native = False, release_name = None, gitrev = [], branding = None, continue_on_error = False, readme = None):
 		self.name = name
 		self.sources = sources
 		self.dependencies = dependencies
@@ -102,6 +102,7 @@ class Target:
 		self.gitrev = gitrev
 		self.branding = branding
 		self.continue_on_error = continue_on_error
+		self.readme = readme
 		if release_name:
 			self.release_name = release_name
 		else:
@@ -178,6 +179,10 @@ def validateRules():
 			log_error("Target {} does not have script file '{}'.".format(t.name, script_name))
 		if t.branding is None and t.top_package:
 			log_error("Target {} does not have branding.".format(t.name))
+		if t.readme is None and t.top_package:
+			log_error("Target {} does not have README file defined.".format(t.name))
+		if (t.readme is not None) and (not os.path.exists(os.path.join(t.group, PATCHES_ROOT, t.readme))):
+			log_error("Target {} file for README ( '{}' ) does not exist in patch directory.".format(t.name, t.readme))
 	for s in sources.keys():
 		if s not in usedSources:
 			log_warning("Source {} not used in any target.".format(s))
@@ -379,6 +384,8 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, nproc, pack_source
 	env['INSTALL_PREFIX'] = prefix
 	if (target.branding):
 		env['BRANDING'] = str(target.branding)
+	if (target.readme):
+		env['README'] = str(target.readme)
 
 	scriptfile = tempfile.NamedTemporaryFile()
 	scriptfile.write("set -e -x\n".encode())

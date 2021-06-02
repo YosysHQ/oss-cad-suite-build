@@ -38,6 +38,7 @@ Target(
         'pyhdl',
     ],
     branding = 'OSS CAD Suite',
+    readme = 'README',
     resources = [ 'system-resources' ],
 )
 
@@ -59,5 +60,6 @@ Target(
         'gtkwave',
     ],
     branding ='OSS CAD Formal',
+    readme = 'README',
     resources = [ 'system-resources' ],
 )
