@@ -42,6 +42,7 @@ EOT
             cat >> $binfile << EOT
 export PYTHONHOME="\$release_topdir_abs"
 export PYTHONNOUSERSITE=1
+export SSL_CERT_FILE="\$release_topdir_abs"/etc/cacert.pem
 EOT
         fi
         if [ ! -z "$(otool -L libexec/$(basename $binfile) | grep QtCore)" ]; then

@@ -9,6 +9,7 @@ if [ ${ARCH_BASE} == 'linux' ]; then
     cp -r /etc/fonts/.   ${OUTPUT_DIR}${INSTALL_PREFIX}/etc/fonts
     rm ${OUTPUT_DIR}${INSTALL_PREFIX}/etc/fonts/fonts.conf
     cp ${PATCHES_DIR}/fonts.conf.template ${OUTPUT_DIR}${INSTALL_PREFIX}/etc/fonts/.
+    cp ${PATCHES_DIR}/cacert.pem ${OUTPUT_DIR}${INSTALL_PREFIX}/etc/.
 
     mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/lib
     cp -r /usr/share/tcltk/tcl8.6/. ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/tcl8.6
@@ -37,6 +38,9 @@ fi
 
 if [ ${ARCH_BASE} == 'darwin' ]; then
     cp ${PATCHES_DIR}/environment ${OUTPUT_DIR}${INSTALL_PREFIX}/.
+
+    mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/etc
+    cp ${PATCHES_DIR}/cacert.pem ${OUTPUT_DIR}${INSTALL_PREFIX}/etc/.
 
     mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/Frameworks
     cp -r /opt/Qt5.12.8/lib/*.framework ${OUTPUT_DIR}${INSTALL_PREFIX}/Frameworks/.
@@ -80,6 +84,10 @@ if [ ${ARCH_BASE} == 'windows' ]; then
 
     cp ${PATCHES_DIR}/environment.bat ${OUTPUT_DIR}${INSTALL_PREFIX}/.
     cp ${PATCHES_DIR}/start.bat ${OUTPUT_DIR}${INSTALL_PREFIX}/.
+
+    mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/etc
+    cp ${PATCHES_DIR}/cacert.pem ${OUTPUT_DIR}${INSTALL_PREFIX}/etc/.
+
     mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/lib
     cp /usr/x86_64-w64-mingw32/sys-root/mingw/bin/gdk-pixbuf-query-loaders.exe ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/.
     cp -r /usr/x86_64-w64-mingw32/sys-root/mingw/lib/tcl8.6/. ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/tcl8.6

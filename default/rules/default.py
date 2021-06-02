@@ -35,6 +35,7 @@ Target(
         'openocd',
         'icesprog',
         'utils',
+        'pyhdl',
     ],
     branding = 'OSS CAD Suite',
     resources = [ 'system-resources' ],

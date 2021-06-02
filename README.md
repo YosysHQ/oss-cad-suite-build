@@ -89,6 +89,18 @@ to create new shell window:
 
 **NOTE:** when environment is set, `python3` from package becomes available as well, this enables usage of *Migen* (*LiteX* libraries included) and *nMigen* scripts as usual, when OSS CAD Suite is just added in PATH to use packaged python3 use `yshqpy3` to start python environment. For Windows, there are no wrappers and using environment.bat is only choice.
 
+# Using LiteX
+
+We provide you with Python 3.8 and all required software to be able to use LiteX. After activating `environment` it is possible to perform installation same as usual:
+
+```
+mkdir -p litex
+cd litex
+wget https://raw.githubusercontent.com/enjoy-digital/litex/master/litex_setup.py
+python3 litex_setup.py init
+python3 litex_setup.py install
+```
+
 # Supported architectures
 
 ## linux-x64
