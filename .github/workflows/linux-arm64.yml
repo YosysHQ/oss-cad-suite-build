@@ -1054,42 +1054,6 @@ jobs:
           tag: bucket-linux-arm64
           artifacts: "linux-arm64-iverilog.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
-  linux-arm64-litex:
-    runs-on: ubuntu-latest
-    needs: linux-arm64-python3
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          repository: 'yosyshq/oss-cad-suite-build'
-      - name: Cache sources
-        id: cache-sources
-        uses: actions/cache@v2
-        with:
-          path: _sources
-          key: cache-sources-litex
-      - name: Download previous build
-        run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-litex.tgz"
-          if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
-          else
-              echo "Previous version not found in bucket"
-          fi
-      - name: Download linux-arm64-python3
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-python3.tgz" | tar xvfz -
-      - name: Build
-        run: ./builder.py build --arch=linux-arm64 --target=litex --single --tar
-      - uses: ncipollo/release-action@v1
-        if: hashFiles('linux-arm64-litex.tgz') != ''
-        with:
-          allowUpdates: True
-          prerelease: True
-          omitBody: True
-          omitBodyDuringUpdate: True
-          omitNameDuringUpdate: True
-          tag: bucket-linux-arm64
-          artifacts: "linux-arm64-litex.tgz"
-          token: ${{ secrets.GITHUB_TOKEN }}
   linux-arm64-ecpdap:
     runs-on: ubuntu-latest
     steps:
@@ -1291,6 +1255,42 @@ jobs:
           tag: bucket-linux-arm64
           artifacts: "linux-arm64-utils.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
+  linux-arm64-pyhdl:
+    runs-on: ubuntu-latest
+    needs: linux-arm64-python3
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/oss-cad-suite-build'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-pyhdl
+      - name: Download previous build
+        run: |
+          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-pyhdl.tgz"
+          if wget --spider "${URL}" 2>/dev/null; then
+              wget -qO- "${URL}" | tar xvfz -
+          else
+              echo "Previous version not found in bucket"
+          fi
+      - name: Download linux-arm64-python3
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-python3.tgz" | tar xvfz -
+      - name: Build
+        run: ./builder.py build --arch=linux-arm64 --target=pyhdl --single --tar
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('linux-arm64-pyhdl.tgz') != ''
+        with:
+          allowUpdates: True
+          prerelease: True
+          omitBody: True
+          omitBodyDuringUpdate: True
+          omitNameDuringUpdate: True
+          tag: bucket-linux-arm64
+          artifacts: "linux-arm64-pyhdl.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
   linux-arm64-system-resources:
     runs-on: ubuntu-latest
     steps:
@@ -1326,7 +1326,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-arm64-default:
     runs-on: ubuntu-latest
-    needs: [ linux-arm64-avy, linux-arm64-boolector, linux-arm64-dfu-util, linux-arm64-ecpdap, linux-arm64-ecpprog, linux-arm64-flask, linux-arm64-fujprog, linux-arm64-graphviz, linux-arm64-gtkwave, linux-arm64-icesprog, linux-arm64-icestorm, linux-arm64-iverilog, linux-arm64-litex, linux-arm64-mcy, linux-arm64-nextpnr-ecp5, linux-arm64-nextpnr-generic, linux-arm64-nextpnr-ice40, linux-arm64-nextpnr-machxo2, linux-arm64-nextpnr-nexus, linux-arm64-openfpgaloader, linux-arm64-openocd, linux-arm64-pono, linux-arm64-prjtrellis, linux-arm64-python-programmers, linux-arm64-python2, linux-arm64-python3, linux-arm64-sby, linux-arm64-sby-gui, linux-arm64-suprove, linux-arm64-system-resources, linux-arm64-utils, linux-arm64-verilator, linux-arm64-xdot, linux-arm64-yices, linux-arm64-yosys, linux-arm64-z3 ]
+    needs: [ linux-arm64-avy, linux-arm64-boolector, linux-arm64-dfu-util, linux-arm64-ecpdap, linux-arm64-ecpprog, linux-arm64-flask, linux-arm64-fujprog, linux-arm64-graphviz, linux-arm64-gtkwave, linux-arm64-icesprog, linux-arm64-icestorm, linux-arm64-iverilog, linux-arm64-mcy, linux-arm64-nextpnr-ecp5, linux-arm64-nextpnr-generic, linux-arm64-nextpnr-ice40, linux-arm64-nextpnr-machxo2, linux-arm64-nextpnr-nexus, linux-arm64-openfpgaloader, linux-arm64-openocd, linux-arm64-pono, linux-arm64-prjtrellis, linux-arm64-pyhdl, linux-arm64-python-programmers, linux-arm64-python2, linux-arm64-python3, linux-arm64-sby, linux-arm64-sby-gui, linux-arm64-suprove, linux-arm64-system-resources, linux-arm64-utils, linux-arm64-verilator, linux-arm64-xdot, linux-arm64-yices, linux-arm64-yosys, linux-arm64-z3 ]
     steps:
       - name: Get current date
         id: date
@@ -1358,8 +1358,6 @@ jobs:
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-icestorm.tgz" | tar xvfz -
       - name: Download linux-arm64-iverilog
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-iverilog.tgz" | tar xvfz -
-      - name: Download linux-arm64-litex
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-litex.tgz" | tar xvfz -
       - name: Download linux-arm64-mcy
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-mcy.tgz" | tar xvfz -
       - name: Download linux-arm64-nextpnr-ecp5
@@ -1380,6 +1378,8 @@ jobs:
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-pono.tgz" | tar xvfz -
       - name: Download linux-arm64-prjtrellis
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-prjtrellis.tgz" | tar xvfz -
+      - name: Download linux-arm64-pyhdl
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-pyhdl.tgz" | tar xvfz -
       - name: Download linux-arm64-python-programmers
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-python-programmers.tgz" | tar xvfz -
       - name: Download linux-arm64-python2

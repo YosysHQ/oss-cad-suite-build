@@ -1054,42 +1054,6 @@ jobs:
           tag: bucket-linux-riscv64
           artifacts: "linux-riscv64-iverilog.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
-  linux-riscv64-litex:
-    runs-on: ubuntu-latest
-    needs: linux-riscv64-python3
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          repository: 'yosyshq/oss-cad-suite-build'
-      - name: Cache sources
-        id: cache-sources
-        uses: actions/cache@v2
-        with:
-          path: _sources
-          key: cache-sources-litex
-      - name: Download previous build
-        run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-riscv64/linux-riscv64-litex.tgz"
-          if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
-          else
-              echo "Previous version not found in bucket"
-          fi
-      - name: Download linux-riscv64-python3
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-riscv64/linux-riscv64-python3.tgz" | tar xvfz -
-      - name: Build
-        run: ./builder.py build --arch=linux-riscv64 --target=litex --single --tar
-      - uses: ncipollo/release-action@v1
-        if: hashFiles('linux-riscv64-litex.tgz') != ''
-        with:
-          allowUpdates: True
-          prerelease: True
-          omitBody: True
-          omitBodyDuringUpdate: True
-          omitNameDuringUpdate: True
-          tag: bucket-linux-riscv64
-          artifacts: "linux-riscv64-litex.tgz"
-          token: ${{ secrets.GITHUB_TOKEN }}
   linux-riscv64-ecpdap:
     runs-on: ubuntu-latest
     steps:
@@ -1291,6 +1255,42 @@ jobs:
           tag: bucket-linux-riscv64
           artifacts: "linux-riscv64-utils.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
+  linux-riscv64-pyhdl:
+    runs-on: ubuntu-latest
+    needs: linux-riscv64-python3
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/oss-cad-suite-build'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-pyhdl
+      - name: Download previous build
+        run: |
+          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-riscv64/linux-riscv64-pyhdl.tgz"
+          if wget --spider "${URL}" 2>/dev/null; then
+              wget -qO- "${URL}" | tar xvfz -
+          else
+              echo "Previous version not found in bucket"
+          fi
+      - name: Download linux-riscv64-python3
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-riscv64/linux-riscv64-python3.tgz" | tar xvfz -
+      - name: Build
+        run: ./builder.py build --arch=linux-riscv64 --target=pyhdl --single --tar
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('linux-riscv64-pyhdl.tgz') != ''
+        with:
+          allowUpdates: True
+          prerelease: True
+          omitBody: True
+          omitBodyDuringUpdate: True
+          omitNameDuringUpdate: True
+          tag: bucket-linux-riscv64
+          artifacts: "linux-riscv64-pyhdl.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
   linux-riscv64-system-resources:
     runs-on: ubuntu-latest
     steps:
@@ -1326,7 +1326,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-riscv64-default:
     runs-on: ubuntu-latest
-    needs: [ linux-riscv64-avy, linux-riscv64-boolector, linux-riscv64-dfu-util, linux-riscv64-ecpdap, linux-riscv64-ecpprog, linux-riscv64-flask, linux-riscv64-fujprog, linux-riscv64-graphviz, linux-riscv64-gtkwave, linux-riscv64-icesprog, linux-riscv64-icestorm, linux-riscv64-iverilog, linux-riscv64-litex, linux-riscv64-mcy, linux-riscv64-nextpnr-ecp5, linux-riscv64-nextpnr-generic, linux-riscv64-nextpnr-ice40, linux-riscv64-nextpnr-machxo2, linux-riscv64-nextpnr-nexus, linux-riscv64-openfpgaloader, linux-riscv64-openocd, linux-riscv64-pono, linux-riscv64-prjtrellis, linux-riscv64-python-programmers, linux-riscv64-python2, linux-riscv64-python3, linux-riscv64-sby, linux-riscv64-sby-gui, linux-riscv64-suprove, linux-riscv64-system-resources, linux-riscv64-utils, linux-riscv64-verilator, linux-riscv64-xdot, linux-riscv64-yices, linux-riscv64-yosys, linux-riscv64-z3 ]
+    needs: [ linux-riscv64-avy, linux-riscv64-boolector, linux-riscv64-dfu-util, linux-riscv64-ecpdap, linux-riscv64-ecpprog, linux-riscv64-flask, linux-riscv64-fujprog, linux-riscv64-graphviz, linux-riscv64-gtkwave, linux-riscv64-icesprog, linux-riscv64-icestorm, linux-riscv64-iverilog, linux-riscv64-mcy, linux-riscv64-nextpnr-ecp5, linux-riscv64-nextpnr-generic, linux-riscv64-nextpnr-ice40, linux-riscv64-nextpnr-machxo2, linux-riscv64-nextpnr-nexus, linux-riscv64-openfpgaloader, linux-riscv64-openocd, linux-riscv64-pono, linux-riscv64-prjtrellis, linux-riscv64-pyhdl, linux-riscv64-python-programmers, linux-riscv64-python2, linux-riscv64-python3, linux-riscv64-sby, linux-riscv64-sby-gui, linux-riscv64-suprove, linux-riscv64-system-resources, linux-riscv64-utils, linux-riscv64-verilator, linux-riscv64-xdot, linux-riscv64-yices, linux-riscv64-yosys, linux-riscv64-z3 ]
     steps:
       - name: Get current date
         id: date
@@ -1358,8 +1358,6 @@ jobs:
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-riscv64/linux-riscv64-icestorm.tgz" | tar xvfz -
       - name: Download linux-riscv64-iverilog
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-riscv64/linux-riscv64-iverilog.tgz" | tar xvfz -
-      - name: Download linux-riscv64-litex
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-riscv64/linux-riscv64-litex.tgz" | tar xvfz -
       - name: Download linux-riscv64-mcy
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-riscv64/linux-riscv64-mcy.tgz" | tar xvfz -
       - name: Download linux-riscv64-nextpnr-ecp5
@@ -1380,6 +1378,8 @@ jobs:
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-riscv64/linux-riscv64-pono.tgz" | tar xvfz -
       - name: Download linux-riscv64-prjtrellis
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-riscv64/linux-riscv64-prjtrellis.tgz" | tar xvfz -
+      - name: Download linux-riscv64-pyhdl
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-riscv64/linux-riscv64-pyhdl.tgz" | tar xvfz -
       - name: Download linux-riscv64-python-programmers
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-riscv64/linux-riscv64-python-programmers.tgz" | tar xvfz -
       - name: Download linux-riscv64-python2
