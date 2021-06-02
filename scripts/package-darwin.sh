@@ -25,7 +25,7 @@ export PATH="\$release_bindir_abs:\$PATH"
 EOT
         if [ $bindir == 'py3bin' ]; then
             cat >> $binfile << EOT
-export PYTHONEXECUTABLE="\$release_topdir_abs/bin/yshqpy3"
+export PYTHONEXECUTABLE="\$release_topdir_abs/bin/tabbypy3"
 EOT
         fi
         if [ ! -z "$(basename $binfile | grep verilator)" ]; then
@@ -100,7 +100,8 @@ done
 
 if [ -f "py3bin/python3" ]; then
     mkdir -p bin
-    cp py3bin/python3 bin/yshqpy3
+    cp py3bin/python3 bin/tabbypy3
+    cp py3bin/pip3 bin/tabbypip
 fi
 
 for script in bin/* py3bin/*; do
@@ -113,7 +114,7 @@ release_bindir="\$(dirname "\${BASH_SOURCE[0]}")"
 release_bindir_abs="\$("\$release_bindir"/../libexec/realpath "\$release_bindir/../bin")"
 release_topdir_abs="\$("\$release_bindir"/../libexec/realpath "\$release_bindir/$rel_path")"
 export PATH="\$release_bindir_abs:\$PATH"
-export PYTHONEXECUTABLE="\$release_bindir_abs/yshqpy3"
+export PYTHONEXECUTABLE="\$release_bindir_abs/tabbypy3"
 EOT
         if [ $script == 'bin/xdot' ]; then
 # Set and unset variables according to:
@@ -148,7 +149,7 @@ exec "\$release_topdir_abs"/libexec/python3.8 "\$release_topdir_abs"/libexec/$(b
 EOT
         else
         cat >> "${script}" <<EOT
-exec \$release_bindir_abs/yshqpy3 "\$release_topdir_abs"/libexec/$(basename $script) "\$@"
+exec \$release_bindir_abs/tabbypy3 "\$release_topdir_abs"/libexec/$(basename $script) "\$@"
 EOT
         fi
         chmod +x "${script}"
