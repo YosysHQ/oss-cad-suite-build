@@ -22,7 +22,7 @@ index 524ed18a..398d8788 100755
 -install_lib build/libbtor2parser.a
 +cd ..
 +install_lib build/lib/libbtor2parser.a
- install_include src/btor2parser/btor2parser.h btor2parser
+ install_include src/btor2parser/btor2parser.h
 diff --git a/contrib/setup-cadical.sh b/contrib/setup-cadical.sh
 index 23e82418..6e5a87ab 100755
 --- a/contrib/setup-cadical.sh
