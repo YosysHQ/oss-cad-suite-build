@@ -30,3 +30,20 @@ index e8a944f6..3dbd57b2 100644
  	./draw_tt$(BUILDEXT) > tables.cc
  	rm draw_tt$(BUILDEXT)
  
+diff --git a/driver/main.c b/driver/main.c
+index bce40319..34caf745 100644
+--- a/driver/main.c
++++ b/driver/main.c
+@@ -1053,7 +1053,12 @@ static void find_ivl_root(void)
+ 	/* Convert to a short name to remove any embedded spaces. */
+       len = GetShortPathName(tmppath, ivl_root, sizeof ivl_root);
+ #else
++	#ifdef __APPLE__
++	  uint32_t size = sizeof ivl_root;
++	  len = _NSGetExecutablePath(ivl_root, &size) + 1;
++	#else
+       len = readlink("/proc/self/exe", ivl_root, sizeof ivl_root);
++	#endif
+ #endif
+       if (len >= (ssize_t) sizeof ivl_root) {
+ 	    find_ivl_root_failed("command path exceeds size of string buffer.");
