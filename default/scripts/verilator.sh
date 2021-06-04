@@ -1,7 +1,4 @@
 cd verilator
-if [ ${ARCH_BASE} == 'windows' ]; then
-    patch -p1 < ${PATCHES_DIR}/verilator.diff
-fi
 if [ ${ARCH_BASE} == 'darwin' ]; then
     cp ${PATCHES_DIR}/verilated.mk.in include/.
 fi

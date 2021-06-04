@@ -10,6 +10,6 @@ SourceLocation(
 Target(
 	name = 'verilator',
 	sources = [ 'verilator' ],
-	patches = [ 'verilator.diff', 'verilated.mk.in' ],
+	patches = [ 'verilated.mk.in' ],
 	license_file = 'verilator/LICENSE',
 )
