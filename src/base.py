@@ -683,7 +683,7 @@ def generateYaml(target, build_arch, write_to_file):
 
 		yaml_content +="  {}-{}:\n".format(arch, target.name)
 		yaml_content +="    runs-on: ubuntu-latest\n"
-		if target.continue_on_error:
+		if not target.top_package:
 			yaml_content +="    continue-on-error: true\n"
 		if len(needs)==1:
 			yaml_content +="    needs: {}\n".format(needs[0])

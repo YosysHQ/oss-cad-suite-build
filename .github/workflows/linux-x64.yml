@@ -8,6 +8,7 @@ on:
 jobs:
   linux-x64-python3:
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v2
         with:
@@ -41,6 +42,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-xdot:
     runs-on: ubuntu-latest
+    continue-on-error: true
     needs: linux-x64-python3
     steps:
       - uses: actions/checkout@v2
@@ -77,6 +79,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-graphviz:
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v2
         with:
@@ -110,6 +113,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-yosys:
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v2
         with:
@@ -143,6 +147,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-nextpnr-bba:
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v2
         with:
@@ -176,6 +181,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-nextpnr-generic:
     runs-on: ubuntu-latest
+    continue-on-error: true
     needs: [ linux-x64-nextpnr-bba, linux-x64-python3 ]
     steps:
       - uses: actions/checkout@v2
@@ -214,6 +220,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-icestorm:
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v2
         with:
@@ -247,6 +254,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-icestorm-bba:
     runs-on: ubuntu-latest
+    continue-on-error: true
     needs: linux-x64-icestorm
     steps:
       - uses: actions/checkout@v2
@@ -283,6 +291,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-nextpnr-ice40:
     runs-on: ubuntu-latest
+    continue-on-error: true
     needs: [ linux-x64-icestorm-bba, linux-x64-nextpnr-bba, linux-x64-python3 ]
     steps:
       - uses: actions/checkout@v2
@@ -323,6 +332,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-prjtrellis-bba:
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v2
         with:
@@ -356,6 +366,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-nextpnr-ecp5:
     runs-on: ubuntu-latest
+    continue-on-error: true
     needs: [ linux-x64-nextpnr-bba, linux-x64-prjtrellis-bba, linux-x64-python3 ]
     steps:
       - uses: actions/checkout@v2
@@ -396,6 +407,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-nextpnr-machxo2:
     runs-on: ubuntu-latest
+    continue-on-error: true
     needs: [ linux-x64-nextpnr-bba, linux-x64-prjtrellis-bba, linux-x64-python3 ]
     steps:
       - uses: actions/checkout@v2
@@ -436,6 +448,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-prjoxide:
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v2
         with:
@@ -469,6 +482,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-prjoxide-bba:
     runs-on: ubuntu-latest
+    continue-on-error: true
     needs: linux-x64-prjoxide
     steps:
       - uses: actions/checkout@v2
@@ -505,6 +519,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-nextpnr-nexus:
     runs-on: ubuntu-latest
+    continue-on-error: true
     needs: [ linux-x64-nextpnr-bba, linux-x64-prjoxide-bba, linux-x64-python3 ]
     steps:
       - uses: actions/checkout@v2
@@ -545,6 +560,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-prjtrellis:
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v2
         with:
@@ -578,6 +594,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-dfu-util:
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v2
         with:
@@ -611,6 +628,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-ecpprog:
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v2
         with:
@@ -644,6 +662,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-openfpgaloader:
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v2
         with:
@@ -677,6 +696,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-avy:
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v2
         with:
@@ -710,6 +730,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-boolector:
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v2
         with:
@@ -743,6 +764,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-yices:
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v2
         with:
@@ -776,6 +798,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-python2:
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v2
         with:
@@ -809,6 +832,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-suprove:
     runs-on: ubuntu-latest
+    continue-on-error: true
     needs: linux-x64-python2
     steps:
       - uses: actions/checkout@v2
@@ -845,6 +869,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-cvc4:
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v2
         with:
@@ -878,6 +903,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-smt-switch:
     runs-on: ubuntu-latest
+    continue-on-error: true
     needs: [ linux-x64-boolector, linux-x64-cvc4 ]
     steps:
       - uses: actions/checkout@v2
@@ -991,6 +1017,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-flask:
     runs-on: ubuntu-latest
+    continue-on-error: true
     needs: linux-x64-python3
     steps:
       - uses: actions/checkout@v2
@@ -1027,6 +1054,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-mcy:
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v2
         with:
@@ -1060,6 +1088,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-sby:
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v2
         with:
@@ -1093,6 +1122,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-sby-gui:
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v2
         with:
@@ -1126,6 +1156,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-gtkwave:
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v2
         with:
@@ -1159,6 +1190,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-verilator:
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v2
         with:
@@ -1192,6 +1224,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-iverilog:
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v2
         with:
@@ -1225,6 +1258,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-ecpdap:
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v2
         with:
@@ -1258,6 +1292,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-fujprog:
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v2
         with:
@@ -1291,6 +1326,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-python-programmers:
     runs-on: ubuntu-latest
+    continue-on-error: true
     needs: linux-x64-python3
     steps:
       - uses: actions/checkout@v2
@@ -1327,6 +1363,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-openocd:
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v2
         with:
@@ -1360,6 +1397,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-icesprog:
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v2
         with:
@@ -1393,6 +1431,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-utils:
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v2
         with:
@@ -1426,6 +1465,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-pyhdl:
     runs-on: ubuntu-latest
+    continue-on-error: true
     needs: linux-x64-python3
     steps:
       - uses: actions/checkout@v2
@@ -1462,6 +1502,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-system-resources:
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v2
         with:
