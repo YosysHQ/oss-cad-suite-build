@@ -10,10 +10,10 @@ cp /opt/local/bin/realpath libexec/.
 cp ${PATCHES_DIR}/${README} ${OUTPUT_DIR}${INSTALL_PREFIX}/README
 sed "s|___BRANDING___|${BRANDING}|g" -i ${OUTPUT_DIR}${INSTALL_PREFIX}/environment
 
-for bindir in bin py3bin super_prove/bin share/verilator/bin; do
+for bindir in bin py3bin super_prove/bin share/verilator/bin lib/ivl; do
     for binfile in $(file -h $bindir/* | grep Mach-O | grep executable | cut -f1 -d:); do
         rel_path=$(realpath --relative-to=$bindir .)
-        dylibbundler -of -b -x $binfile -p @executable_path/../lib -d lib
+        dylibbundler -of -b -x $binfile -p @executable_path/$rel_path/lib -d lib
 
         mv $binfile libexec
         is_using_fonts=false
@@ -36,8 +36,8 @@ EOT
         fi
         if [ ! -z "$(basename $binfile | grep iverilog)" ]; then
             cat >> $binfile << EOT
-sed -i -re 's|^flag:VVP_EXECUTABLE=.*$|flag:VVP_EXECUTABLE='\$release_topdir_abs'/bin/vvp|g' \$release_topdir_abs/lib/ivl/vvp.conf
-sed -i -re 's|^flag:VVP_EXECUTABLE=.*$|flag:VVP_EXECUTABLE='\$release_topdir_abs'/bin/vvp|g' \$release_topdir_abs/lib/ivl/vvp-s.conf
+sed -i 'bak' 's|^flag:VVP_EXECUTABLE=.*$|flag:VVP_EXECUTABLE=/usr/bin/env '\$release_topdir_abs'/bin/vvp|g' \$release_topdir_abs/lib/ivl/vvp.conf
+sed -i 'bak' 's|^flag:VVP_EXECUTABLE=.*$|flag:VVP_EXECUTABLE=/usr/bin/env '\$release_topdir_abs'/bin/vvp|g' \$release_topdir_abs/lib/ivl/vvp-s.conf
 EOT
         fi
         if [ ! -z "$(basename $binfile | grep ghdl)" ]; then
