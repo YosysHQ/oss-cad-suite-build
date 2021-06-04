@@ -20,8 +20,8 @@ for bindir in bin py3bin super_prove/bin share/verilator/bin; do
         cat > $binfile << EOT
 #!/usr/bin/env bash
 release_bindir="\$(dirname "\${BASH_SOURCE[0]}")"
-release_bindir_abs="\$("\$release_bindir"/../libexec/realpath "\$release_bindir")"
-release_topdir_abs="\$("\$release_bindir"/../libexec/realpath "\$release_bindir/$rel_path")"
+release_bindir_abs="\$("\$release_bindir"/$rel_path/libexec/realpath "\$release_bindir")"
+release_topdir_abs="\$("\$release_bindir"/$rel_path/libexec/realpath "\$release_bindir/$rel_path")"
 export PATH="\$release_bindir_abs:\$PATH"
 EOT
         if [ $bindir == 'py3bin' ]; then
