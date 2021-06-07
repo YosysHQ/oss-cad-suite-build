@@ -1,0 +1,80 @@
+#!/usr/bin/env python3
+
+import click, signal, os, sys, shutil
+import json
+
+top_dir =  os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
+manifest = os.path.join(top_dir, "share", "manifest.json")
+
+def log_warning(msg):
+	click.secho("==> WARNING : ", fg="yellow", nl=False, bold=True)
+	click.secho(msg, fg="white", bold=True)
+
+def log_error(msg):
+	click.secho("==> ERROR : ", fg="red", nl=False, bold=True)
+	click.secho(msg, fg="white", bold=True)
+	sys.exit(-1)
+
+def log_info(msg):
+	click.secho("==> ", fg="green", nl=False, bold=True)
+	click.secho(msg, fg="white", bold=True)
+
+def force_shutdown(signum, frame):
+	if (os.name != 'nt' and signum != signal.SIGPIPE):
+		click.secho("\n==> Keyboard interrupt or external termination signal", fg="red", nl=True, bold=True)
+	sys.exit(1)
+
+def filesize(size: int) -> str:
+	for unit in ("B", "K", "M", "G"):
+		if size < 1024:
+			break
+		size /= 1024
+	return f"{size:.1f}{unit}"
+
+@click.group(help="""___BRANDING___ Administration Utility\n""", context_settings=dict(help_option_names=["-h", "--help"]), invoke_without_command=True)
+@click.pass_context
+def cli(ctx):
+	ctx.ensure_object(dict)
+	if ctx.invoked_subcommand is None:
+		click.secho(ctx.get_help())
+	pass
+
+@cli.command()
+def list():
+	"""List all packages"""
+	log_info("List all packages")
+	with open(manifest, "r") as f:
+		data = json.load(f)
+		print("Package".ljust(30) + "Size".rjust(20) + "Installed".rjust(15) )
+		print("=" * 65)
+		for key in data:
+			print(key.ljust(30) + filesize(data[key]['size']).rjust(20)+ ('Y' if data[key]['installed'] else 'N').rjust(15))
+
+@cli.command()
+@click.argument('package')
+def uninstall(package):
+	"""Uninstall package"""
+	with open(manifest, "r") as f:
+		data = json.load(f)
+		if (package not in data):
+			log_error("Package '" + package + "' does not exist.")
+		log_info("Uninstalling package '" + package + "' ...")
+		with click.progressbar(data[package]["files"], label="Deleting") as bar:
+			for x in bar:
+				if (os.path.exists(os.path.join(top_dir, x))):
+					try:
+						os.remove(x)
+					except Exception as e:
+						log_error(str(e))
+		data[package]["installed"] = False
+		with open(manifest, "w") as manifest_file:
+			json.dump(data, manifest_file)
+	
+if __name__ == '__main__':
+	if os.name == "posix":
+		signal.signal(signal.SIGHUP, force_shutdown)
+		signal.signal(signal.SIGPIPE, force_shutdown)
+	signal.signal(signal.SIGINT, force_shutdown)
+	signal.signal(signal.SIGTERM, force_shutdown)
+
+	cli(None)

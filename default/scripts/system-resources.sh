@@ -1,4 +1,6 @@
+mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/bin
 mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/qt5/plugins
+cp ${PATCHES_DIR}/tabbyadm ${OUTPUT_DIR}${INSTALL_PREFIX}/bin/.
 
 if [ ${ARCH_BASE} == 'linux' ]; then
     # Linux section

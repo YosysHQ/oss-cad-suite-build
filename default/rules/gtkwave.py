@@ -11,4 +11,5 @@ Target(
 	name = 'gtkwave',
 	sources = [ 'gtkwave' ],
 	license_file = 'gtkwave/LICENSE',
+	package = 'gtkwave',
 )

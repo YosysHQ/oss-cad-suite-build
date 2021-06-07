@@ -47,6 +47,7 @@ Target(
 	dependencies = [ 'python3', 'nextpnr-bba', 'prjtrellis-bba'],
 	resources = [ 'python3' ],
 	license_file = 'nextpnr/COPYING',
+	package = 'ecp5', # using same prjtrellis base
 )
 
 Target(

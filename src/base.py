@@ -576,7 +576,7 @@ def buildCode(build_target, build_arch, nproc, force, dry, pack_sources, single,
 		if target.top_package:
 			package_meta = dict.fromkeys(sorted(list(packages)))
 			for key in package_meta:
-				package_meta[key] = dict({'size': 0, 'files' : []})
+				package_meta[key] = dict({'size': 0, 'files' : [], 'installed' : True })
 			for d in deps:
 				dep = targets[d]
 				needed = True

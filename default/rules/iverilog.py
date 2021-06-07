@@ -12,4 +12,5 @@ Target(
 	sources = [ 'iverilog' ],
 	patches = [ 'iverilog_fix.diff' ],
 	license_file = 'iverilog/COPYING',
+	package = 'iverilog',
 )

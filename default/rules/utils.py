@@ -17,4 +17,5 @@ SourceLocation(
 Target(
 	name = 'utils',
 	sources = [ 'libusb', 'libftdi' ],
+	package = 'programmers',
 )
