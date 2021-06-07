@@ -8,10 +8,12 @@ import tempfile
 import asyncio
 import hashlib
 import platform
+import json
 from datetime import datetime
 from collections import OrderedDict
 from libvcs.shortcuts import create_repo
 from libvcs.util import run
+from pathlib import Path
 
 sources = dict()
 targets = dict()
@@ -73,6 +75,9 @@ def log_step_triple(msg1, msg2, msg3 = " ..."):
 	click.secho(msg2, nl=False, fg="green", bold=True)
 	click.secho(msg3, fg="white", bold=True)
 
+def get_size(path: str) -> int:
+    return sum(p.stat().st_size for p in Path(path).rglob('*'))
+
 class SourceLocation:
 	def __init__(self, name, vcs, location, revision, no_submodules = False):
 		self.name = name
@@ -84,7 +89,7 @@ class SourceLocation:
 		sources[name] = self
 
 class Target:
-	def __init__(self, name, sources = [], dependencies = [], resources = [], patches = [], arch = [], license_url = None, license_file = None, top_package = False, build_native = False, release_name = None, gitrev = [], branding = None, readme = None):
+	def __init__(self, name, sources = [], dependencies = [], resources = [], patches = [], arch = [], license_url = None, license_file = None, top_package = False, build_native = False, release_name = None, gitrev = [], branding = None, readme = None, package = None):
 		self.name = name
 		self.sources = sources
 		self.dependencies = dependencies
@@ -102,6 +107,7 @@ class Target:
 		self.gitrev = gitrev
 		self.branding = branding
 		self.readme = readme
+		self.package = package
 		if release_name:
 			self.release_name = release_name
 		else:
@@ -541,6 +547,9 @@ def buildCode(build_target, build_arch, nproc, force, dry, pack_sources, single,
 						res.add(r)
 			deps += list(res)
 
+		prefix = "/yosyshq"
+
+		packages = set()
 		for d in deps:
 			dep = targets[d]
 			needed = True
@@ -559,11 +568,38 @@ def buildCode(build_target, build_arch, nproc, force, dry, pack_sources, single,
 					log_step_triple("Copy '", d + dep_build_info, "' output to build dir ...")
 					run(['rsync','-a', dep_dir, build_dir])
 				else:
+					if (dep.package):
+						packages.add(dep.package)
 					log_step_triple("Copy '", d + dep_build_info, "' output to package dir ...")
 					run(['rsync','-a', dep_dir+"/", output_dir])
 
+		if target.top_package:
+			package_meta = dict.fromkeys(sorted(list(packages)))
+			for key in package_meta:
+				package_meta[key] = dict({'size': 0, 'files' : []})
+			for d in deps:
+				dep = targets[d]
+				needed = True
+				if dep.arch and arch not in dep.arch:
+					needed = False
+				if needed and dep.package:
+					if (dep.build_native and build_arch != getArchitecture()):
+						dep_dir = os.path.join(OUTPUTS_ROOT, getArchitecture(), d)
+					else:
+						dep_dir = os.path.join(OUTPUTS_ROOT, arch, d)
+					package_meta[dep.package]['size'] += get_size(dep_dir + prefix)
+					for root, _, files in sorted(os.walk(dep_dir)):
+						for filename in sorted(files):
+							fpath = os.path.join(root, filename).replace(dep_dir,"")
+							if fpath.startswith(prefix):
+								name = fpath.replace("/yosyshq/","")
+								package_meta[dep.package]['files'].append(name)
+								if name.startswith("bin/") and arch != 'windows-x64':
+									package_meta[dep.package]['files'].append("libexec" + name[3:])
+		
+			with open(os.path.join(output_dir, "yosyshq", "share", "manifest.json"), "w") as manifest_file:
+				json.dump(package_meta, manifest_file)
 
-		prefix = "/yosyshq"
 		code = executeBuild(target, arch, prefix, build_dir if not target.top_package else output_dir, output_dir, nproc, pack_sources)
 		if code!=0:
 			log_error("Script returned error code {}.".format(code))

@@ -13,6 +13,7 @@ Target(
 	name = 'dfu-util',
 	sources = [ 'dfu-util' ],
 	license_file = 'dfu-util/COPYING',
+	package = 'programmers',
 )
 
 # ecpdap
@@ -28,6 +29,7 @@ Target(
 	name = 'ecpdap',
 	sources = [ 'ecpdap' ],
 	license_file = 'ecpdap/LICENSE-MIT',
+	package = 'programmers',
 )
 
 # ecpprog
@@ -43,6 +45,7 @@ Target(
 	name = 'ecpprog',
 	sources = [ 'ecpprog' ],
 	license_file = 'ecpprog/COPYING',
+	package = 'programmers',
 )
 
 # fujprog
@@ -59,6 +62,7 @@ Target(
 	sources = [ 'fujprog' ],
 	patches = [ 'Toolchain-mingw64.cmake' ],
 	license_file = 'fujprog/LICENSE',
+	package = 'programmers',
 )
 
 # openfpgaloader
@@ -74,6 +78,7 @@ Target(
 	name = 'openfpgaloader',
 	sources = [ 'openfpgaloader' ],
 	license_file = 'openfpgaloader/LICENSE',
+	package = 'programmers',
 )
 
 # python based programmers
@@ -128,6 +133,7 @@ Target(
 	sources = [ 'openocd' ],
 	patches = [ 'openocd.diff' ],
 	license_file = 'openocd/COPYING',
+	package = 'programmers',
 )
 
 # icesprog
@@ -143,4 +149,5 @@ SourceLocation(
 Target(
 	name = 'icesprog',
 	sources = [ 'icesprog' ],
+	package = 'programmers',
 )

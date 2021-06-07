@@ -29,6 +29,7 @@ Target(
 	dependencies = [ 'python3', 'nextpnr-bba', 'icestorm-bba'],
 	resources = [ 'python3' ],
 	license_file = 'nextpnr/COPYING',
+	package = 'ice40',
 )
 
 Target(
@@ -37,6 +38,7 @@ Target(
 	dependencies = [ 'python3', 'nextpnr-bba', 'prjtrellis-bba'],
 	resources = [ 'python3' ],
 	license_file = 'nextpnr/COPYING',
+	package = 'ecp5',
 )
 
 Target(
@@ -53,6 +55,7 @@ Target(
 	dependencies = [ 'python3', 'nextpnr-bba', 'prjoxide-bba' ],
 	resources = [ 'python3' ],
 	license_file = 'nextpnr/COPYING',
+	package = 'nexus',
 )
 
 Target(
@@ -96,18 +99,21 @@ Target(
 	name = 'icestorm',
 	sources = [ 'icestorm' ],
 	license_file = 'icestorm/COPYING',
+	package = 'ice40',
 )
 
 Target(
 	name = 'prjtrellis',
 	sources = [ 'prjtrellis' ],
 	license_file = 'prjtrellis/COPYING',
+	package = 'ecp5',
 )
 
 Target(
 	name = 'prjoxide',
 	sources = [ 'prjoxide' ],
 	license_file = 'prjoxide/COPYING',
+	package = 'nexus',
 )
 
 # chip databases

@@ -12,4 +12,5 @@ Target(
 	sources = [ 'verilator' ],
 	patches = [ 'verilated.mk.in' ],
 	license_file = 'verilator/LICENSE',
+	package = 'verilator',
 )
