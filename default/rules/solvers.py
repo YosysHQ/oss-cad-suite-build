@@ -93,7 +93,6 @@ Target(
 	sources = [ 'pono' ],
 	dependencies = [ 'smt-switch', 'cvc4', 'boolector' ],
 	license_file = 'pono/LICENSE',
-	continue_on_error = True,
 )
 
 # suprove
@@ -143,5 +142,4 @@ Target(
 	name = 'z3',
 	sources = [ 'z3' ],
 	license_file = 'z3/LICENSE.txt',
-	continue_on_error = True,
 )
