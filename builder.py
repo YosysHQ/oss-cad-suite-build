@@ -18,7 +18,6 @@ def cli(ctx):
 
 @cli.command()
 @click.option('--no-update', help='Do not update source files.', is_flag=True)
-@click.option('--no-clean', help='Do not clean last build before build.', is_flag=True)
 @click.option('--force', help='Force build of specified target.', is_flag=True)
 @click.option('--target', default='default', show_default=True, help='Target project to build.')
 @click.option('--arch', default=getArchitecture(), show_default=True, help='Build architecture.')
@@ -28,7 +27,7 @@ def cli(ctx):
 @click.option('--single', help='Single target build (for CI only)', is_flag=True)
 @click.option('--tar', help='Single target package (for CI only)', is_flag=True)
 @click.option('-j', '--nproc', default=os.cpu_count(), show_default=True, help='Number of build process.')
-def build(no_update, no_clean, force, target, arch, rules, dry, src, single, tar, nproc):
+def build(no_update, force, target, arch, rules, dry, src, single, tar, nproc):
 	"""Build tools"""
 	for rule in rules.split(","):
 		loadRules(rule)
@@ -36,7 +35,7 @@ def build(no_update, no_clean, force, target, arch, rules, dry, src, single, tar
 	validateTarget(target)
 	validateArch(arch)
 	pullCode(target, arch, getArchitecture(), no_update, single)
-	buildCode(target, arch, nproc, no_clean, force, dry, src, single, tar)
+	buildCode(target, arch, nproc, force, dry, src, single, tar)
 
 @cli.command()
 @click.option('--arch', default=getArchitecture(), show_default=True, help='Build architecture.')

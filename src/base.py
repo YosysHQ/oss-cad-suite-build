@@ -441,7 +441,7 @@ def create_exe(exe_name, directory, cwd):
 	if code!=0:
 		log_error("Script returned error code {}.".format(code))
 
-def buildCode(build_target, build_arch, nproc, no_clean, force, dry, pack_sources, single, tar):
+def buildCode(build_target, build_arch, nproc, force, dry, pack_sources, single, tar):
 	log_info_triple("Building ", build_target, " for {} architecture ...".format(build_arch))
 
 	build_order = createBuildOrder(build_target, build_arch, getArchitecture(), True)
@@ -520,50 +520,47 @@ def buildCode(build_target, build_arch, nproc, no_clean, force, dry, pack_source
 		os.makedirs(output_dir)
 
 		build_dir = os.path.join(BUILDS_ROOT, arch, target.name)
-		if no_clean and os.path.exists(build_dir):
-			log_step("Skipping clean of build dir ...")
-		else:
-			if not target.top_package:
-				log_step("Remove old build dir ...")
-				if os.path.exists(build_dir):
-					shutil.rmtree(build_dir, onerror=removeError)
-				log_step("Creating build dir ...")
-				os.makedirs(build_dir)
-				for s in target.sources:
-					src_dir = os.path.join(SOURCES_ROOT, s)
-					log_step_triple("Copy '", s, "' source to build dir ...")
-					run(['rsync','-a', src_dir, build_dir])
+		if not target.top_package:
+			log_step("Remove old build dir ...")
+			if os.path.exists(build_dir):
+				shutil.rmtree(build_dir, onerror=removeError)
+			log_step("Creating build dir ...")
+			os.makedirs(build_dir)
+			for s in target.sources:
+				src_dir = os.path.join(SOURCES_ROOT, s)
+				log_step_triple("Copy '", s, "' source to build dir ...")
+				run(['rsync','-a', src_dir, build_dir])
 
-			deps = target.dependencies
-			if t[1] == target.name and target.top_package:
-				res = set()
-				for d in build_order:
-					dep = targets[d[1]]
-					if (dep and dep.resources):
-						for r in dep.resources:
-							res.add(r)
-				deps += list(res)
+		deps = target.dependencies
+		if t[1] == target.name and target.top_package:
+			res = set()
+			for d in build_order:
+				dep = targets[d[1]]
+				if (dep and dep.resources):
+					for r in dep.resources:
+						res.add(r)
+			deps += list(res)
 
-			for d in deps:
-				dep = targets[d]
-				needed = True
-				if dep.arch and arch not in dep.arch:
-					needed = False
-				if needed:
-					dep_build_info = ""
-					if (dep.build_native and build_arch != getArchitecture()):
-						dep_build_info = " [" + getArchitecture() + "]"
-						dep_dir = os.path.join(OUTPUTS_ROOT, getArchitecture(), d)
-					else:
-						dep_dir = os.path.join(OUTPUTS_ROOT, arch, d)
-					if not os.path.exists(dep_dir):
-						log_error("Dependency output directory for {} does not exist.".format(d + dep_build_info))
-					if not target.top_package:
-						log_step_triple("Copy '", d + dep_build_info, "' output to build dir ...")
-						run(['rsync','-a', dep_dir, build_dir])
-					else:
-						log_step_triple("Copy '", d + dep_build_info, "' output to package dir ...")
-						run(['rsync','-a', dep_dir+"/", output_dir])
+		for d in deps:
+			dep = targets[d]
+			needed = True
+			if dep.arch and arch not in dep.arch:
+				needed = False
+			if needed:
+				dep_build_info = ""
+				if (dep.build_native and build_arch != getArchitecture()):
+					dep_build_info = " [" + getArchitecture() + "]"
+					dep_dir = os.path.join(OUTPUTS_ROOT, getArchitecture(), d)
+				else:
+					dep_dir = os.path.join(OUTPUTS_ROOT, arch, d)
+				if not os.path.exists(dep_dir):
+					log_error("Dependency output directory for {} does not exist.".format(d + dep_build_info))
+				if not target.top_package:
+					log_step_triple("Copy '", d + dep_build_info, "' output to build dir ...")
+					run(['rsync','-a', dep_dir, build_dir])
+				else:
+					log_step_triple("Copy '", d + dep_build_info, "' output to package dir ...")
+					run(['rsync','-a', dep_dir+"/", output_dir])
 
 
 		prefix = "/yosyshq"
@@ -625,7 +622,7 @@ def buildCode(build_target, build_arch, nproc, no_clean, force, dry, pack_source
 			log_step("Packing {} ...".format(package_name))
 			create_tar(package_name, output_dir, ".")
 
-		if not no_clean and not target.top_package:
+		if not target.top_package:
 			log_step("Remove build dir ...")
 			if os.path.exists(build_dir):
 				shutil.rmtree(build_dir, onerror=removeError)
