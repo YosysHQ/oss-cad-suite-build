@@ -19,6 +19,10 @@ def log_info(msg):
 	click.secho("==> ", fg="green", nl=False, bold=True)
 	click.secho(msg, fg="white", bold=True)
 
+def log_step(msg):
+	click.secho("  -> ", fg="blue", nl=False, bold=True)
+	click.secho(msg, fg="white", bold=True)
+
 def force_shutdown(signum, frame):
 	if (os.name != 'nt' and signum != signal.SIGPIPE):
 		click.secho("\n==> Keyboard interrupt or external termination signal", fg="red", nl=True, bold=True)
@@ -58,16 +62,30 @@ def uninstall(package):
 	with open(manifest, "r") as f:
 		filedata = json.load(f)
 		data = filedata['packages']
+		version = filedata['version']['version']
 		if (package not in data):
 			log_error("Package '" + package + "' does not exist.")
+		if not data[package]['installed']:
+			log_error("Package '" + package + "' is already uninstalled.")
 		log_info("Uninstalling package '" + package + "' ...")
 		with click.progressbar(data[package]["files"], label="Deleting") as bar:
 			for x in bar:
-				if (os.path.exists(os.path.join(top_dir, x))):
+				path = os.path.join(top_dir, x)
+				if os.path.exists(path):
 					try:
-						os.remove(x)
+						if os.path.islink(path):
+							os.unlink(path)
+						else:
+							os.remove(path)
 					except Exception as e:
 						log_error(str(e))
+				# remove deactivated wrappers for tools in package
+				if (x.startswith("bin/")):
+					newname = os.path.join(top_dir, "bin", "tabby-" + version + "-" + x[4:])
+					try:
+						os.remove(newname)
+					except Exception as e:
+						pass
 		data[package]["installed"] = False
 		with open(manifest, "w") as manifest_file:
 			json.dump(filedata, manifest_file)
@@ -80,6 +98,7 @@ def tools():
 		filedata = json.load(f)
 		data = filedata['tools']
 		packages = filedata['packages']
+		version = filedata['version']['version']
 		print("Tool".ljust(30) + "Active".rjust(15) )
 		print("=" * 45)
 		for key in sorted(data):
@@ -107,6 +126,129 @@ def version():
 		click.secho(version['version'], fg="white", bold=False)
 		click.secho("Package: ", fg="white", nl=False, bold=True)
 		click.secho(version['package_name'], fg="white", bold=False)
+
+@cli.command()
+@click.argument('tool')
+def enable(tool):
+	"""Enable specified tool"""
+	with open(manifest, "r") as f:
+		filedata = json.load(f)
+		data = filedata['tools']
+		version = filedata['version']['version']
+		if (tool not in data):
+			log_error("Tool '" + tool + "' does not exist.")
+		if data[tool]['active']:
+			log_error("Tool '" + tool + "' is already enabled.")
+		
+		log_info("Enabling tool '" + tool + "' ...")
+
+		for name in data[tool]['files']:
+			path = os.path.join(top_dir, "bin", name)
+			newname = "tabby-" + version + "-" + name
+			newpath = os.path.abspath(os.path.join(top_dir, "bin", newname))
+			if (os.path.exists(newpath)):
+				if (os.path.islink(path)):
+					if os.path.abspath(os.path.realpath(path))==newpath:
+						log_warning("Proper link from '{}' to '{}' already exists".format(name,newname))
+						continue
+					else:
+						log_warning("File '{}' is link but does not point to '{}', removing it.".format(name,newname))
+						os.unlink(path)
+				if (os.path.isfile(path)):
+					log_step("File '{}' already exist in binary directory, just removing '{}'.".format(newname,name))
+					os.remove(path)
+
+				log_step("Creating link '{}' to '{}' ".format(name,newname))
+				os.symlink(newpath, path)
+			else:
+				log_warning("File '{}' does not exist in binary directory".format(newname))
+
+		# Update status
+		data[tool]['active'] = True
+		# Write manifest
+		with open(manifest, "w") as manifest_file:
+			json.dump(filedata, manifest_file)
+
+@cli.command()
+@click.argument('tool')
+def disable(tool):
+	"""Disable specified tool"""
+	with open(manifest, "r") as f:
+		filedata = json.load(f)
+		data = filedata['tools']
+		version = filedata['version']['version']
+		if (tool not in data):
+			log_error("Tool '" + tool + "' does not exist.")
+		if not data[tool]['active']:
+			log_error("Tool '" + tool + "' is already disabled.")
+
+		log_info("Disabling tool '" + tool + "' ...")
+
+		for name in data[tool]['files']:
+			path = os.path.join(top_dir, "bin", name)
+			if (os.path.exists(path)):
+				newname = "tabby-" + version + "-" + name
+				newpath = os.path.abspath(os.path.join(top_dir, "bin", newname))
+				if (os.path.islink(path)):
+					if os.path.abspath(os.path.realpath(path))==newpath:
+						log_step("Removing existing link from '{}' to '{}'.".format(name,newname))
+						os.unlink(path)
+					else:
+						log_warning("File '{}' is link but does not point to '{}', removing it.".format(name,newname))
+						os.unlink(path)
+				if (os.path.isfile(path)):
+					if (os.path.isfile(newpath)):
+						log_step("File '{}' already exist in binary directory, just removing '{}'.".format(newname,name))
+						os.remove(path)
+					else:
+						log_step("Renaming '{}' to '{}' ".format(name,newname))
+						os.rename(path,newpath)
+			else:
+				log_warning("File '{}' does not exist in binary directory".format(name))
+
+		# Update status
+		data[tool]['active'] = False
+		# Write manifest
+		with open(manifest, "w") as manifest_file:
+			json.dump(filedata, manifest_file)
+
+@cli.command()
+@click.argument('tool')
+def repair(tool):
+	"""Repair specified tool"""
+	with open(manifest, "r") as f:
+		filedata = json.load(f)
+		data = filedata['tools']
+		version = filedata['version']['version']
+		if (tool not in data):
+			log_error("Tool '" + tool + "' does not exist.")
+		
+		log_info("Repairing tool '" + tool + "' ...")
+
+		for name in data[tool]['files']:
+			path = os.path.join(top_dir, "bin", name)
+			newname = "tabby-" + version + "-" + name
+			newpath = os.path.abspath(os.path.join(top_dir, "bin", newname))
+			if (os.path.exists(newpath)):
+				if (os.path.islink(path)):
+					if os.path.abspath(os.path.realpath(path))==newpath:
+						log_step("Proper link from '{}' to '{}' already exists".format(name,newname))
+						continue
+					else:
+						log_warning("File '{}' is link but does not point to '{}', removing it.".format(name,newname))
+						os.unlink(path)
+				if (os.path.isfile(path)):
+					log_step("File '{}' already exist in binary directory, just removing '{}'.".format(newname,name))
+					os.remove(path)
+
+				log_step("Creating link '{}' to '{}' ".format(name,newname))
+				os.symlink(newpath, path)
+			else:
+				if (os.path.exists(path)):
+					log_step("Proper executable '{}' already exists".format(name))
+				else:
+					log_warning("File '{}' does not exist in binary directory, unable to fix".format(name))
+
 
 if __name__ == '__main__':
 	if os.name == "posix":
