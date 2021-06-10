@@ -117,6 +117,14 @@ Target(
     dependencies = [ 'python3' ],
 	patches = [ 'python3_package.sh' ],
 	resources = [ 'python3' ],
+	tools = { 
+		'black-iceprog': ['black-iceprog'], 
+		'icefunprog': ['icefunprog'],
+		'tinyfpgab': ['tinyfpgab'],
+		'tinyprog': ['tinyprog'],
+		'bin2hex': ['bin2hex', 'hex2bin', 'hex2dump', 'hexdiff', 'hexinfo', 'hexmerge'],
+		'pyserial': ['pyserial-miniterm', 'pyserial-ports'],
+	},
 )
 
 # openocd

@@ -44,10 +44,11 @@ def list():
 	"""List all packages"""
 	log_info("List all packages")
 	with open(manifest, "r") as f:
-		data = json.load(f)
+		filedata = json.load(f)
+		data = filedata['packages']
 		print("Package".ljust(30) + "Size".rjust(20) + "Installed".rjust(15) )
 		print("=" * 65)
-		for key in data:
+		for key in sorted(data):
 			print(key.ljust(30) + filesize(data[key]['size']).rjust(20)+ ('Y' if data[key]['installed'] else 'N').rjust(15))
 
 @cli.command()
@@ -55,7 +56,8 @@ def list():
 def uninstall(package):
 	"""Uninstall package"""
 	with open(manifest, "r") as f:
-		data = json.load(f)
+		filedata = json.load(f)
+		data = filedata['packages']
 		if (package not in data):
 			log_error("Package '" + package + "' does not exist.")
 		log_info("Uninstalling package '" + package + "' ...")
@@ -68,8 +70,25 @@ def uninstall(package):
 						log_error(str(e))
 		data[package]["installed"] = False
 		with open(manifest, "w") as manifest_file:
-			json.dump(data, manifest_file)
-	
+			json.dump(filedata, manifest_file)
+
+@cli.command()
+def tools():
+	"""List all tools"""
+	log_info("List all tools")
+	with open(manifest, "r") as f:
+		filedata = json.load(f)
+		data = filedata['tools']
+		packages = filedata['packages']
+		print("Tool".ljust(30) + "Active".rjust(15) )
+		print("=" * 45)
+		for key in sorted(data):
+			package = data[key]['package']
+			if package and not(packages[package]['installed']):
+				continue
+			if (len(data[key]['files']) > 0):
+				print(key.ljust(30) + ('Y' if data[key]['active'] else 'N').rjust(15))
+
 if __name__ == '__main__':
 	if os.name == "posix":
 		signal.signal(signal.SIGHUP, force_shutdown)

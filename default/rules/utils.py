@@ -18,4 +18,5 @@ Target(
 	name = 'utils',
 	sources = [ 'libusb', 'libftdi' ],
 	package = 'programmers',
+	tools = { 'libusb': ['libusb'], 'libftdi': ['libftdi'] },
 )
