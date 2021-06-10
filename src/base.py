@@ -457,6 +457,7 @@ def create_exe(exe_name, directory, cwd):
 def buildCode(build_target, build_arch, nproc, force, dry, pack_sources, single, tar):
 	log_info_triple("Building ", build_target, " for {} architecture ...".format(build_arch))
 
+	version_string = datetime.now().strftime("%Y%m%d")
 	build_order = createBuildOrder(build_target, build_arch, getArchitecture(), True)
 	pos = 0
 	if single:
@@ -581,6 +582,7 @@ def buildCode(build_target, build_arch, nproc, force, dry, pack_sources, single,
 					run(['rsync','-a', dep_dir+"/", output_dir])
 
 		if target.top_package:
+			version_meta = dict({ 'branding': target.branding, 'product':  target.release_name, 'arch': arch, 'version': version_string, 'package_name': target.release_name + "-" + arch + "-" + version_string})
 			package_meta = dict.fromkeys(sorted(list(packages)))
 			tools_meta = dict.fromkeys(sorted(list(deps)))
 			for key in package_meta:
@@ -616,7 +618,7 @@ def buildCode(build_target, build_arch, nproc, force, dry, pack_sources, single,
 									if name.startswith("bin/") and arch != 'windows-x64':
 										package_meta[dep.package]['files'].append("libexec" + name[3:])
 			
-			metadata = dict({'packages' : package_meta, 'tools' : tools_meta })
+			metadata = dict({'version' : version_meta, 'packages' : package_meta, 'tools' : tools_meta })
 			with open(os.path.join(output_dir, "yosyshq", "share", "manifest.json"), "w") as manifest_file:
 				json.dump(metadata, manifest_file)
 
@@ -658,12 +660,12 @@ def buildCode(build_target, build_arch, nproc, force, dry, pack_sources, single,
 
 		if target.top_package:
 			if arch == 'windows-x64':
-				package_name = target.release_name + "-" + arch + "-" + datetime.now().strftime("%Y%m%d") +".exe"
+				package_name = target.release_name + "-" + arch + "-" + version_string +".exe"
 				log_step("Packing {} ...".format(package_name))
 				os.replace(os.path.join(output_dir, "yosyshq"), os.path.join(output_dir, target.release_name))
 				create_exe(package_name, target.release_name, output_dir)
 			else:
-				package_name = target.release_name + "-" + arch + "-" + datetime.now().strftime("%Y%m%d") +".tgz"
+				package_name = target.release_name + "-" + arch + "-" + version_string +".tgz"
 				log_step("Packing {} ...".format(package_name))
 				os.replace(os.path.join(output_dir, "yosyshq"), os.path.join(output_dir, target.release_name))
 				create_tar(package_name, target.release_name, output_dir)

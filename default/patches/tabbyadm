@@ -89,6 +89,25 @@ def tools():
 			if (len(data[key]['files']) > 0):
 				print(key.ljust(30) + ('Y' if data[key]['active'] else 'N').rjust(15))
 
+@cli.command()
+def version():
+	"""Version info"""
+	with open(manifest, "r") as f:
+		filedata = json.load(f)
+		data = filedata['tools']
+		version = filedata['version']
+		click.secho(version['branding'], fg="white", nl=False, bold=True)
+		click.secho(" info", fg="white", bold=False)
+		click.secho("")
+		click.secho("Product: ", fg="white", nl=False, bold=True)
+		click.secho(version['product'], fg="white", bold=False)
+		click.secho("Architecture: ", fg="white", nl=False, bold=True)
+		click.secho(version['arch'], fg="white", bold=False)
+		click.secho("Version: ", fg="white", nl=False, bold=True)
+		click.secho(version['version'], fg="white", bold=False)
+		click.secho("Package: ", fg="white", nl=False, bold=True)
+		click.secho(version['package_name'], fg="white", bold=False)
+
 if __name__ == '__main__':
 	if os.name == "posix":
 		signal.signal(signal.SIGHUP, force_shutdown)
