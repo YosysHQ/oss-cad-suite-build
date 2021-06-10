@@ -222,7 +222,9 @@ def repair(tool):
 		version = filedata['version']['version']
 		if (tool not in data):
 			log_error("Tool '" + tool + "' does not exist.")
-		
+		if not data[tool]['active']:
+			log_error("Tool '" + tool + "' is disabled.")
+
 		log_info("Repairing tool '" + tool + "' ...")
 
 		for name in data[tool]['files']:
