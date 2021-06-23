@@ -9,10 +9,10 @@ fi
 cd boolector
 patch -p1 < ${PATCHES_DIR}/boolector.diff
 if [ ${ARCH} == 'linux-arm' ] || [ ${ARCH} == 'linux-arm64' ] || [ ${ARCH} == 'linux-riscv64' ]; then
-    sed -i '295,419d' ../cadical/configure
+    sed -i '306,389d' ../cadical/configure
 fi
 if [ ${ARCH_BASE} == 'darwin' ]; then
-    sed -i '295,419d' ../cadical/configure
+    sed -i '306,389d' ../cadical/configure
     sed -i -re "s,cmake ..,cmake .. -DCMAKE_TOOLCHAIN_FILE=\${CMAKE_TOOLCHAIN_FILE},g" ../btor2tools/configure.sh
     sed -i -re "s,cmake ..,cmake .. -DCMAKE_TOOLCHAIN_FILE=\${CMAKE_TOOLCHAIN_FILE},g" ./configure.sh
 fi
