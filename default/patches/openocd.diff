@@ -54,35 +54,6 @@ index 00000000..317e7d26
 +
 +source [find cpld/xilinx-xc7.cfg]
 +source [find cpld/jtagspi.cfg]
-diff --git a/tcl/board/digilent_nexys_video.cfg b/tcl/board/digilent_nexys_video.cfg
-new file mode 100644
-index 00000000..317e7d26
---- /dev/null
-+++ tcl/board/digilent_nexys_video.cfg
-@@ -0,0 +1,23 @@
-+#
-+# Digilent Nexys Video with Xilinx Artix-7 FPGA
-+#
-+# https://store.digilentinc.com/nexys-video-artix-7-fpga-trainer-board-for-multimedia-applications/
-+#
-+
-+# iManufacturer           1 Digilent
-+# iProduct                2 Digilent USB Device
-+# iSerial                 3 210276690190
-+
-+interface ftdi
-+ftdi_device_desc "Digilent USB Device"
-+ftdi_vid_pid 0x0403 0x6010
-+# channel 0 is dedicated for Digilent's DPTI Interface
-+# channel 1 is used for JTAG
-+ftdi_channel 1
-+# just TCK TDI TDO TMS, no reset
-+ftdi_layout_init 0x0088 0x008b
-+reset_config none
-+adapter_khz 10000
-+
-+source [find cpld/xilinx-xc7.cfg]
-+source [find cpld/jtagspi.cfg]
 diff --git a/tcl/cpld/xilinx-xc6s.cfg b/tcl/cpld/xilinx-xc6s.cfg
 index 9ce7ad49..cba7cb0f 100644
 --- a/tcl/cpld/xilinx-xc6s.cfg
