@@ -212,6 +212,12 @@ RUN cd /opt \
   && tar xfj /tmp/zstd/zstd-1.5.0_0.darwin_18.x86_64.tbz2 \
   && echo "Unpack gtk2-2.24.32_0+quartz.darwin_18.x86_64.tbz2" \
   && tar xfj /tmp/gtk2/gtk2-2.24.32_0+quartz.darwin_18.x86_64.tbz2 \
+  && echo "Unpack libidn2-2.3.1_0.darwin_18.x86_64.tbz2" \
+  && tar xfj /tmp/libidn2/libidn2-2.3.1_0.darwin_18.x86_64.tbz2 \
+  && echo "Unpack libpsl-0.21.1-20200817_1.darwin_18.x86_64.tbz2" \
+  && tar xfj /tmp/libpsl/libpsl-0.21.1-20200817_1.darwin_18.x86_64.tbz2 \
+  && echo "Unpack libunistring-0.9.10_0.darwin_18.x86_64.tbz2" \
+  && tar xfj /tmp/libunistring/libunistring-0.9.10_0.darwin_18.x86_64.tbz2 \
   && echo "Cleanup" \
   && cp /usr/include/FlexLexer.h /opt/local/include/. \
   && cp /opt/local/share/pkgconfig/* /opt/local/lib/pkgconfig/. \  
