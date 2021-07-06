@@ -13,7 +13,7 @@ Target(
         'nextpnr-nexus',
         'icestorm',
         'prjtrellis',
-        #'prjoxide',
+        'prjoxide',
         'dfu-util',
         'ecpprog',
         'openfpgaloader',
