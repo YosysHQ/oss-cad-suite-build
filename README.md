@@ -23,6 +23,9 @@ See [Tabby CAD Datasheet](https://www.yosyshq.com/tabby-cad-datasheet) for detai
  * [Migen](https://github.com/m-labs/migen) Python toolbox for building complex digital hardware
  * [ABC](https://people.eecs.berkeley.edu/~alanmi/abc/) A System for Sequential Synthesis and Verification
  
+Did you know that the Tabby CAD version of yosys supports industry standard SystemVerilog, VHDL and SVA? 
+Contact us at contact@yosyshq.com to arrange a free evaluation license.
+
 ### Formal Tools
  * [SymbiYosys](https://github.com/YosysHQ/SymbiYosys) a front-end driver program for Yosys-based formal hardware verification flows.
  * [mcy](https://github.com/YosysHQ/mcy) Mutation Cover with Yosys
