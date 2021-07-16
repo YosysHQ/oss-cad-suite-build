@@ -15,6 +15,23 @@ Target(
 	license_url = 'https://bitbucket.org/arieg/avy/raw/a9685b8ba660e46fc3325797ef059cbe95adaf10/LICENSE',
 )
 
+# bitwuzla
+
+SourceLocation(
+	name = 'bitwuzla',
+	vcs = 'git',
+	location = 'https://github.com/bitwuzla/bitwuzla',
+	revision = 'origin/main'
+)
+
+Target(
+	name = 'bitwuzla',
+	sources = [ 'bitwuzla' ],
+	dependencies = [ 'lingeling', 'cadical', 'btor2tools' ],
+	patches = [ 'Toolchain-mingw64.cmake' ],
+	license_file = 'bitwuzla/COPYING',
+)
+
 # boolector
 
 SourceLocation(
@@ -24,6 +41,13 @@ SourceLocation(
 	revision = 'origin/master'
 )
 
+Target(
+	name = 'lingeling',
+	sources = [ 'lingeling' ],
+	patches = [ 'Lingeling_20190110.patch' ],
+	license_file = 'lingeling/COPYING',
+)
+
 SourceLocation(
 	name = 'cadical',
 	vcs = 'git',
@@ -31,11 +55,24 @@ SourceLocation(
 	revision = 'origin/master'
 )
 
+Target(
+	name = 'cadical',
+	sources = [ 'cadical' ],
+	patches = [ 'CaDiCaL_20190730.patch' ],
+	license_file = 'cadical/LICENSE',
+)
+
 SourceLocation(
 	name = 'btor2tools',
 	vcs = 'git',
 	location = 'https://github.com/Boolector/btor2tools',
 	revision = 'origin/master'
+)
+
+Target(
+	name = 'btor2tools',
+	sources = [ 'btor2tools' ],
+	license_file = 'btor2tools/LICENSE.txt',
 )
 
 SourceLocation(
@@ -47,8 +84,9 @@ SourceLocation(
 
 Target(
 	name = 'boolector',
-	sources = [ 'lingeling', 'cadical', 'btor2tools', 'boolector' ],
-	patches = [ 'boolector.diff', 'Toolchain-mingw64.cmake' ],
+	sources = [ 'boolector' ],
+	dependencies = [ 'lingeling', 'cadical', 'btor2tools' ],
+	patches = [ 'Toolchain-mingw64.cmake' ],
 	license_file = 'boolector/COPYING',
 )
 

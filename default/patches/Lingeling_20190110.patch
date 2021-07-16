@@ -1,0 +1,130 @@
+diff --git a/lglib.c b/lglib.c
+--- a/lglib.c
++++ b/lglib.c
+@@ -20,7 +20,9 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
++#ifdef NWINDOWS
+ #include <sys/resource.h>
++#endif
+ #include <sys/time.h>
+ #include <unistd.h>
+ #include <stddef.h>
+@@ -1289,12 +1291,15 @@ static void lglogstart (LGL * lgl, int level, const char * msg, ...) {
+ /*------------------------------------------------------------------------*/
+ 
+ double lglprocesstime (void) {
++#ifdef NWINDOWS
+   struct rusage u;
+   double res;
+   if (getrusage (RUSAGE_SELF, &u)) return 0;
+   res = u.ru_utime.tv_sec + 1e-6 * u.ru_utime.tv_usec;
+   res += u.ru_stime.tv_sec + 1e-6 * u.ru_stime.tv_usec;
+   return res;
++#endif
++  return 0;
+ }
+ 
+ static double lglgetime (LGL * lgl) {
+diff --git a/lglib.h b/lglib.h
+index c5c89cc..b034334 100644
+--- a/lglib.h
++++ b/lglib.h
+@@ -6,7 +6,8 @@
+ #define lglib_h_INCLUDED
+ 
+ #include <stdio.h>				// for 'FILE'
+-#include <stdlib.h>				// for 'int64_t'
++#include <stdlib.h>
++#include <stdint.h>				// for 'int64_t'
+ 
+ //--------------------------------------------------------------------------
+ 
+diff --git a/lglmain.c b/lglmain.c
+index 2dc2b67..36c61d2 100644
+--- a/lglmain.c
++++ b/lglmain.c
+@@ -31,7 +31,9 @@ static void resetsighandlers (void) {
+   (void) signal (SIGSEGV, sig_segv_handler);
+   (void) signal (SIGABRT, sig_abrt_handler);
+   (void) signal (SIGTERM, sig_term_handler);
++#ifdef NWINDOWS
+   (void) signal (SIGBUS, sig_bus_handler);
++#endif
+ }
+ 
+ static void caughtsigmsg (int sig) {
+@@ -42,8 +44,10 @@ static void caughtsigmsg (int sig) {
+     case SIGSEGV: printf (" SIGSEGV"); break;
+     case SIGABRT: printf (" SIGABRT"); break;
+     case SIGTERM: printf (" SIGTERM"); break;
++#ifdef NWINDOWS
+     case SIGBUS: printf (" SIGBUS"); break;
+     case SIGALRM: printf (" SIGALRM"); break;
++#endif
+     default: break;
+   }
+   printf ("\nc\n");
+@@ -71,12 +75,15 @@ static void setsighandlers (void) {
+   sig_segv_handler = signal (SIGSEGV, catchsig);
+   sig_abrt_handler = signal (SIGABRT, catchsig);
+   sig_term_handler = signal (SIGTERM, catchsig);
++#ifdef NWINDOWS
+   sig_bus_handler = signal (SIGBUS, catchsig);
++#endif
+ }
+ 
+ static int timelimit = -1, caughtalarm = 0;
+ 
+ static void catchalrm (int sig) {
++#ifdef NWINDOWS
+   assert (sig == SIGALRM);
+   if (!caughtalarm) {
+     caughtalarm = 1;
+@@ -87,6 +94,7 @@ static void catchalrm (int sig) {
+       fflush (stdout);
+     }
+   }
++#endif
+ }
+ 
+ static int checkalarm (void * ptr) {
+@@ -513,8 +521,10 @@ ERR:
+       fflush (stdout);
+     }
+     lglseterm (lgl, checkalarm, &caughtalarm);
++#ifdef NWINDOWS
+     sig_alrm_handler = signal (SIGALRM, catchalrm);
+     alarm (timelimit);
++#endif
+   }
+   for (i = 0; i < ntargets; i++) lglassume (lgl, targets[i]);
+   if (simplevel > 0) {
+@@ -532,7 +542,9 @@ ERR:
+   res = lglsat (lgl);
+   if (timelimit >= 0) {
+     caughtalarm = 0;
++#ifdef NWINDOWS
+     (void) signal (SIGALRM, sig_alrm_handler);
++#endif
+   }
+   if (oname) {
+     double start = lglsec (lgl), delta;
+diff --git a/makefile.in b/makefile.in
+index 4914087..7148dea 100644
+--- a/makefile.in
++++ b/makefile.in
+@@ -15,8 +15,10 @@ all: targets
+ -include makefile.other
+ 
+ targets: liblgl.a
+-targets: lingeling plingeling ilingeling treengeling
+-targets: lglmbt lgluntrace lglddtrace
++targets: lingeling
++# targets: plingeling ilingeling treengeling
++# targets: lglmbt
++# targets: lgluntrace lglddtrace
+ targets: @AIGERTARGETS@
+ 
+ analyze:

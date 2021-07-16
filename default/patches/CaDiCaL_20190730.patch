@@ -1,0 +1,287 @@
+diff --git a/src/mobical.cpp b/src/mobical.cpp
+index 52f3b83..217f359 100644
+--- a/src/mobical.cpp
++++ b/src/mobical.cpp
+@@ -693,8 +693,12 @@ public:
+   SIGNAL(SIGSEGV) \
+   SIGNAL(SIGABRT) \
+   SIGNAL(SIGTERM) \
++
++#ifdef NWINDOWS
+   SIGNAL(SIGBUS) \
+ 
++#endif
++
+ #define SIGNAL(SIG) \
+   static void (*old_ ## SIG ## _handler) (int);
+   SIGNALS
+@@ -1414,8 +1418,10 @@ extern "C" {
+ #include <fcntl.h>
+ #include <sys/stat.h>
+ #include <sys/types.h>
++#ifdef NWINDOWS
+ #include <sys/wait.h>
+ #include <sys/resource.h>
++#endif
+ #include <sys/time.h>
+ }
+ 
+@@ -1437,6 +1443,7 @@ void Trace::reset_child_signal_handlers () {
+ }
+ 
+ void Trace::child_signal_handler (int sig) {
++#ifdef NWINDOWS
+   struct rusage u;
+   if (!getrusage (RUSAGE_SELF, &u)) {
+     if ((int64_t) u.ru_maxrss >> 10 >= mobical.space_limit) {
+@@ -1455,6 +1462,7 @@ void Trace::child_signal_handler (int sig) {
+   }
+   reset_child_signal_handlers ();
+   raise (sig);
++#endif
+ }
+ 
+ void Trace::init_child_signal_handlers () {
+@@ -1467,11 +1475,16 @@ void Trace::init_child_signal_handlers () {
+ int Trace::fork_and_execute () {
+ 
+   cerr << flush;
+-  pid_t child = mobical.donot.fork ? 0 : fork ();
++  pid_t child = 
++#ifdef NWINDOWS
++      mobical.donot.fork ? 0 : fork ();
++#else
++      0;
++#endif
+   int res = 0;
+ 
+   if (child) {
+-
++#ifdef NWINDOWS
+     executed++;
+ 
+     int status, other = wait (&status);
+@@ -1480,23 +1493,28 @@ int Trace::fork_and_execute () {
+     else if (!WIFSIGNALED (status)) res = 0;
+     else if (mobical.donot.ignore_resource_limits) res = 1;
+     else res = (WTERMSIG (status) != SIGXCPU);
++#endif
+ 
+   } else {
+ 
+     if (!mobical.donot.fork && mobical.time_limit) {
++#ifdef NWINDOWS
+       struct rlimit rlim;
+       if (!getrlimit (RLIMIT_CPU, &rlim)) {
+         rlim.rlim_cur = mobical.time_limit;
+         setrlimit (RLIMIT_CPU, &rlim);
+       }
++#endif
+     }
+ 
+     if (!mobical.donot.fork && mobical.space_limit) {
++#ifdef NWINDOWS
+       struct rlimit rlim;
+       if (!getrlimit (RLIMIT_AS, &rlim)) {
+         rlim.rlim_cur = mobical.space_limit * (1l << 20);
+         setrlimit (RLIMIT_AS, &rlim);
+       }
++#endif
+     }
+ 
+     init_child_signal_handlers ();
+@@ -2480,7 +2498,9 @@ void Mobical::header () {
+ /*------------------------------------------------------------------------*/
+ 
+ extern "C" {
++#ifdef NWINDOWS
+ #include <sys/mman.h>
++#endif
+ }
+ 
+ Mobical::Mobical ()
+@@ -2504,13 +2524,17 @@ Mobical::Mobical ()
+   traces (0),
+   spurious (0)
+ {
++#ifdef NWINDOWS
+   const int prot = PROT_READ | PROT_WRITE;
+   const int flags = MAP_ANONYMOUS | MAP_SHARED;
+   shared = (Shared*) mmap (0, sizeof *shared, prot, flags, 0, 0);
++#endif
+ }
+ 
+ Mobical::~Mobical () {
++#ifdef NWINDOWS
+   if (shared) munmap (shared, sizeof *shared);
++#endif
+ }
+ 
+ void Mobical::catch_signal (int) {
+@@ -2534,6 +2558,10 @@ int Mobical::main (int argc, char ** argv) {
+ 
+   int64_t limit = -1;
+ 
++#ifndef NWINDOWS
++  donot.fork = true;
++#endif
++
+   // Error message in 'die' also uses colors.
+   //
+   for (int i = 1; i < argc; i++)
+diff --git a/src/resources.cpp b/src/resources.cpp
+index b21416d..d0b91c6 100644
+--- a/src/resources.cpp
++++ b/src/resources.cpp
+@@ -7,7 +7,9 @@
+ 
+ extern "C" {
+ #include <sys/time.h>
++#ifdef NWINDOWS
+ #include <sys/resource.h>
++#endif
+ #include <sys/types.h>
+ #include <unistd.h>
+ #include <string.h>
+@@ -32,12 +34,16 @@ double Internal::real_time () {
+ // etc.  For different variants of Unix not all fields are meaningful.
+ 
+ double absolute_process_time () {
++#ifdef NWINDOWS
+   struct rusage u;
+   double res;
+   if (getrusage (RUSAGE_SELF, &u)) return 0;
+   res = u.ru_utime.tv_sec + 1e-6 * u.ru_utime.tv_usec;  // user time
+   res += u.ru_stime.tv_sec + 1e-6 * u.ru_stime.tv_usec; // + system time
+   return res;
++#else
++  return 0;
++#endif
+ }
+ 
+ double Internal::process_time () {
+@@ -49,9 +55,13 @@ double Internal::process_time () {
+ // This seems to work on Linux (man page says since Linux 2.6.32).
+ 
+ size_t maximum_resident_set_size () {
++#ifdef NWINDOWS
+   struct rusage u;
+   if (getrusage (RUSAGE_SELF, &u)) return 0;
+   return ((size_t) u.ru_maxrss) << 10;
++#else
++  return 0;
++#endif
+ }
+ 
+ // Unfortunately 'getrusage' on Linux does not support current resident set
+@@ -62,6 +72,7 @@ size_t maximum_resident_set_size () {
+ // '_SC_PAGESIZE' are available).
+ 
+ size_t current_resident_set_size () {
++#ifdef NWINDOWS
+   char path[40];
+   sprintf (path, "/proc/%" PRId64 "/statm", (int64_t) getpid ());
+   FILE * file = fopen (path, "r");
+@@ -70,6 +81,9 @@ size_t current_resident_set_size () {
+   int scanned = fscanf (file, "%" PRId64 " %" PRId64 "", &dummy, &rss);
+   fclose (file);
+   return scanned == 2 ? rss * sysconf (_SC_PAGESIZE) : 0;
++#else
++  return 0;
++#endif
+ }
+ 
+ }
+diff --git a/src/signal.cpp b/src/signal.cpp
+index 2b435a3..df255e0 100644
+--- a/src/signal.cpp
++++ b/src/signal.cpp
+@@ -25,15 +25,23 @@ static bool alarm_set = false;
+ static int alarm_time = -1;
+ static Handler * signal_handler;
+ 
++#ifdef NWINDOWS
+ void Handler::catch_alarm () { catch_signal (SIGALRM); }
++#else
++void Handler::catch_alarm () { }
++#endif
+ 
+ #define SIGNALS \
+ SIGNAL(SIGABRT) \
+-SIGNAL(SIGBUS) \
+ SIGNAL(SIGINT) \
+ SIGNAL(SIGSEGV) \
+ SIGNAL(SIGTERM) \
+ 
++#ifdef NWINDOWS
++SIGNAL(SIGBUS) \
++
++#endif
++
+ #define SIGNAL(SIG) \
+ static void (*SIG ## _handler)(int);
+ SIGNALS
+@@ -42,7 +50,9 @@ static void (*SIGALRM_handler)(int);
+ 
+ void Signal::reset_alarm () {
+   if (!alarm_set) return;
++#ifdef NWINDOWS
+   (void) signal (SIGALRM, SIGALRM_handler);
++#endif
+   SIGALRM_handler = 0;
+   caught_alarm = false;
+   alarm_set = false;
+@@ -65,7 +75,9 @@ const char * Signal::name (int sig) {
+   if (sig == SIG) return # SIG;
+   SIGNALS
+ #undef SIGNAL
++#ifdef NWINDOWS
+   if (sig == SIGALRM) return "SIGALRM";
++#endif
+   return "UNKNOWN";
+ }
+ 
+@@ -76,6 +88,7 @@ const char * Signal::name (int sig) {
+ // exclusive access to.  All these solutions are painful and not elegant.
+ 
+ static void catch_signal (int sig) {
++#ifdef NWINDOWS
+   if (sig == SIGALRM && absolute_real_time () >= alarm_time) {
+     if (!caught_alarm) {
+       caught_alarm = true;
+@@ -83,6 +96,9 @@ static void catch_signal (int sig) {
+     }
+     Signal::reset_alarm ();
+   } else {
++#else
++  {
++#endif
+     if (!caught_signal) {
+       caught_signal = true;
+       if (signal_handler) signal_handler->catch_signal (sig);
+@@ -101,6 +117,7 @@ SIGNALS
+ }
+ 
+ void Signal::alarm (int seconds) {
++#ifdef NWINDOWS
+   assert (seconds >= 0);
+   assert (!alarm_set);
+   assert (alarm_time < 0);
+@@ -108,6 +125,7 @@ void Signal::alarm (int seconds) {
+   alarm_set = true;
+   alarm_time = absolute_real_time () + seconds;
+   ::alarm (seconds);
++#endif
+ }
+ 
+ }
+diff --git a/test/makefile b/test/makefile
+index b45d063..8bf2c14 100644
+--- a/test/makefile
++++ b/test/makefile
+@@ -1,4 +1,4 @@
+-test: usage trace api cnf mbt
++test: usage cnf trace # api mbt
+ api:
+ 	@api/run.sh
+ cnf:

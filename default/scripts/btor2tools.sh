@@ -1,0 +1,16 @@
+cd btor2tools
+
+if [ ${ARCH_BASE} == 'windows' ]; then
+    export CXXFLAGS="-D__STDC_FORMAT_MACROS=1"
+fi
+
+mkdir build
+cd build
+
+cmake .. \
+  -DBUILD_SHARED_LIBS=OFF \
+  -DCMAKE_INSTALL_PREFIX=${INSTALL_PREFIX} \
+  -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE} \
+  -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+
+make DESTDIR=${OUTPUT_DIR} -j${NPROC} install

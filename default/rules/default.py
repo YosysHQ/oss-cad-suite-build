@@ -18,6 +18,7 @@ Target(
         'ecpprog',
         'openfpgaloader',
         'avy',
+        'bitwuzla',
         'boolector',
         'yices',
         'suprove',
@@ -49,6 +50,7 @@ Target(
     dependencies = [
         'yosys',
         'avy',
+        'bitwuzla',
         'boolector',
         'yices',
         'suprove',
