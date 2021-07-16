@@ -588,9 +588,153 @@ jobs:
           tag: bucket-linux-riscv64
           artifacts: "linux-riscv64-avy.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
+  linux-riscv64-lingeling:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/oss-cad-suite-build'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-lingeling
+      - name: Download previous build
+        run: |
+          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-riscv64/linux-riscv64-lingeling.tgz"
+          if wget --spider "${URL}" 2>/dev/null; then
+              wget -qO- "${URL}" | tar xvfz -
+          else
+              echo "Previous version not found in bucket"
+          fi
+      - name: Build
+        run: ./builder.py build --arch=linux-riscv64 --target=lingeling --single --tar
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('linux-riscv64-lingeling.tgz') != ''
+        with:
+          allowUpdates: True
+          prerelease: True
+          omitBody: True
+          omitBodyDuringUpdate: True
+          omitNameDuringUpdate: True
+          tag: bucket-linux-riscv64
+          artifacts: "linux-riscv64-lingeling.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
+  linux-riscv64-cadical:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/oss-cad-suite-build'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-cadical
+      - name: Download previous build
+        run: |
+          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-riscv64/linux-riscv64-cadical.tgz"
+          if wget --spider "${URL}" 2>/dev/null; then
+              wget -qO- "${URL}" | tar xvfz -
+          else
+              echo "Previous version not found in bucket"
+          fi
+      - name: Build
+        run: ./builder.py build --arch=linux-riscv64 --target=cadical --single --tar
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('linux-riscv64-cadical.tgz') != ''
+        with:
+          allowUpdates: True
+          prerelease: True
+          omitBody: True
+          omitBodyDuringUpdate: True
+          omitNameDuringUpdate: True
+          tag: bucket-linux-riscv64
+          artifacts: "linux-riscv64-cadical.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
+  linux-riscv64-btor2tools:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/oss-cad-suite-build'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-btor2tools
+      - name: Download previous build
+        run: |
+          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-riscv64/linux-riscv64-btor2tools.tgz"
+          if wget --spider "${URL}" 2>/dev/null; then
+              wget -qO- "${URL}" | tar xvfz -
+          else
+              echo "Previous version not found in bucket"
+          fi
+      - name: Build
+        run: ./builder.py build --arch=linux-riscv64 --target=btor2tools --single --tar
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('linux-riscv64-btor2tools.tgz') != ''
+        with:
+          allowUpdates: True
+          prerelease: True
+          omitBody: True
+          omitBodyDuringUpdate: True
+          omitNameDuringUpdate: True
+          tag: bucket-linux-riscv64
+          artifacts: "linux-riscv64-btor2tools.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
+  linux-riscv64-bitwuzla:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    needs: [ linux-riscv64-btor2tools, linux-riscv64-cadical, linux-riscv64-lingeling ]
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/oss-cad-suite-build'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-bitwuzla
+      - name: Download previous build
+        run: |
+          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-riscv64/linux-riscv64-bitwuzla.tgz"
+          if wget --spider "${URL}" 2>/dev/null; then
+              wget -qO- "${URL}" | tar xvfz -
+          else
+              echo "Previous version not found in bucket"
+          fi
+      - name: Download linux-riscv64-btor2tools
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-riscv64/linux-riscv64-btor2tools.tgz" | tar xvfz -
+      - name: Download linux-riscv64-cadical
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-riscv64/linux-riscv64-cadical.tgz" | tar xvfz -
+      - name: Download linux-riscv64-lingeling
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-riscv64/linux-riscv64-lingeling.tgz" | tar xvfz -
+      - name: Build
+        run: ./builder.py build --arch=linux-riscv64 --target=bitwuzla --single --tar
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('linux-riscv64-bitwuzla.tgz') != ''
+        with:
+          allowUpdates: True
+          prerelease: True
+          omitBody: True
+          omitBodyDuringUpdate: True
+          omitNameDuringUpdate: True
+          tag: bucket-linux-riscv64
+          artifacts: "linux-riscv64-bitwuzla.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
   linux-riscv64-boolector:
     runs-on: ubuntu-latest
     continue-on-error: true
+    needs: [ linux-riscv64-btor2tools, linux-riscv64-cadical, linux-riscv64-lingeling ]
     steps:
       - uses: actions/checkout@v2
         with:
@@ -609,6 +753,12 @@ jobs:
           else
               echo "Previous version not found in bucket"
           fi
+      - name: Download linux-riscv64-btor2tools
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-riscv64/linux-riscv64-btor2tools.tgz" | tar xvfz -
+      - name: Download linux-riscv64-cadical
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-riscv64/linux-riscv64-cadical.tgz" | tar xvfz -
+      - name: Download linux-riscv64-lingeling
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-riscv64/linux-riscv64-lingeling.tgz" | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-riscv64 --target=boolector --single --tar
       - uses: ncipollo/release-action@v1
@@ -1396,7 +1546,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-riscv64-default:
     runs-on: ubuntu-latest
-    needs: [ linux-riscv64-avy, linux-riscv64-boolector, linux-riscv64-dfu-util, linux-riscv64-ecpdap, linux-riscv64-ecpprog, linux-riscv64-flask, linux-riscv64-fujprog, linux-riscv64-graphviz, linux-riscv64-gtkwave, linux-riscv64-icesprog, linux-riscv64-icestorm, linux-riscv64-iverilog, linux-riscv64-mcy, linux-riscv64-nextpnr-ecp5, linux-riscv64-nextpnr-generic, linux-riscv64-nextpnr-ice40, linux-riscv64-nextpnr-machxo2, linux-riscv64-nextpnr-nexus, linux-riscv64-openfpgaloader, linux-riscv64-openocd, linux-riscv64-pono, linux-riscv64-prjoxide, linux-riscv64-prjtrellis, linux-riscv64-pyhdl, linux-riscv64-python-programmers, linux-riscv64-python2, linux-riscv64-python3, linux-riscv64-sby, linux-riscv64-sby-gui, linux-riscv64-suprove, linux-riscv64-system-resources, linux-riscv64-utils, linux-riscv64-verilator, linux-riscv64-xdot, linux-riscv64-yices, linux-riscv64-yosys, linux-riscv64-z3 ]
+    needs: [ linux-riscv64-avy, linux-riscv64-bitwuzla, linux-riscv64-boolector, linux-riscv64-dfu-util, linux-riscv64-ecpdap, linux-riscv64-ecpprog, linux-riscv64-flask, linux-riscv64-fujprog, linux-riscv64-graphviz, linux-riscv64-gtkwave, linux-riscv64-icesprog, linux-riscv64-icestorm, linux-riscv64-iverilog, linux-riscv64-mcy, linux-riscv64-nextpnr-ecp5, linux-riscv64-nextpnr-generic, linux-riscv64-nextpnr-ice40, linux-riscv64-nextpnr-machxo2, linux-riscv64-nextpnr-nexus, linux-riscv64-openfpgaloader, linux-riscv64-openocd, linux-riscv64-pono, linux-riscv64-prjoxide, linux-riscv64-prjtrellis, linux-riscv64-pyhdl, linux-riscv64-python-programmers, linux-riscv64-python2, linux-riscv64-python3, linux-riscv64-sby, linux-riscv64-sby-gui, linux-riscv64-suprove, linux-riscv64-system-resources, linux-riscv64-utils, linux-riscv64-verilator, linux-riscv64-xdot, linux-riscv64-yices, linux-riscv64-yosys, linux-riscv64-z3 ]
     steps:
       - name: Get current date
         id: date
@@ -1406,6 +1556,8 @@ jobs:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Download linux-riscv64-avy
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-riscv64/linux-riscv64-avy.tgz" | tar xvfz -
+      - name: Download linux-riscv64-bitwuzla
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-riscv64/linux-riscv64-bitwuzla.tgz" | tar xvfz -
       - name: Download linux-riscv64-boolector
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-riscv64/linux-riscv64-boolector.tgz" | tar xvfz -
       - name: Download linux-riscv64-dfu-util

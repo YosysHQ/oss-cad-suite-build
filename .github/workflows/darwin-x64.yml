@@ -588,9 +588,153 @@ jobs:
           tag: bucket-darwin-x64
           artifacts: "darwin-x64-avy.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
+  darwin-x64-lingeling:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/oss-cad-suite-build'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-lingeling
+      - name: Download previous build
+        run: |
+          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-darwin-x64/darwin-x64-lingeling.tgz"
+          if wget --spider "${URL}" 2>/dev/null; then
+              wget -qO- "${URL}" | tar xvfz -
+          else
+              echo "Previous version not found in bucket"
+          fi
+      - name: Build
+        run: ./builder.py build --arch=darwin-x64 --target=lingeling --single --tar
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('darwin-x64-lingeling.tgz') != ''
+        with:
+          allowUpdates: True
+          prerelease: True
+          omitBody: True
+          omitBodyDuringUpdate: True
+          omitNameDuringUpdate: True
+          tag: bucket-darwin-x64
+          artifacts: "darwin-x64-lingeling.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
+  darwin-x64-cadical:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/oss-cad-suite-build'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-cadical
+      - name: Download previous build
+        run: |
+          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-darwin-x64/darwin-x64-cadical.tgz"
+          if wget --spider "${URL}" 2>/dev/null; then
+              wget -qO- "${URL}" | tar xvfz -
+          else
+              echo "Previous version not found in bucket"
+          fi
+      - name: Build
+        run: ./builder.py build --arch=darwin-x64 --target=cadical --single --tar
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('darwin-x64-cadical.tgz') != ''
+        with:
+          allowUpdates: True
+          prerelease: True
+          omitBody: True
+          omitBodyDuringUpdate: True
+          omitNameDuringUpdate: True
+          tag: bucket-darwin-x64
+          artifacts: "darwin-x64-cadical.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
+  darwin-x64-btor2tools:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/oss-cad-suite-build'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-btor2tools
+      - name: Download previous build
+        run: |
+          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-darwin-x64/darwin-x64-btor2tools.tgz"
+          if wget --spider "${URL}" 2>/dev/null; then
+              wget -qO- "${URL}" | tar xvfz -
+          else
+              echo "Previous version not found in bucket"
+          fi
+      - name: Build
+        run: ./builder.py build --arch=darwin-x64 --target=btor2tools --single --tar
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('darwin-x64-btor2tools.tgz') != ''
+        with:
+          allowUpdates: True
+          prerelease: True
+          omitBody: True
+          omitBodyDuringUpdate: True
+          omitNameDuringUpdate: True
+          tag: bucket-darwin-x64
+          artifacts: "darwin-x64-btor2tools.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
+  darwin-x64-bitwuzla:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    needs: [ darwin-x64-btor2tools, darwin-x64-cadical, darwin-x64-lingeling ]
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/oss-cad-suite-build'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-bitwuzla
+      - name: Download previous build
+        run: |
+          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-darwin-x64/darwin-x64-bitwuzla.tgz"
+          if wget --spider "${URL}" 2>/dev/null; then
+              wget -qO- "${URL}" | tar xvfz -
+          else
+              echo "Previous version not found in bucket"
+          fi
+      - name: Download darwin-x64-btor2tools
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-darwin-x64/darwin-x64-btor2tools.tgz" | tar xvfz -
+      - name: Download darwin-x64-cadical
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-darwin-x64/darwin-x64-cadical.tgz" | tar xvfz -
+      - name: Download darwin-x64-lingeling
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-darwin-x64/darwin-x64-lingeling.tgz" | tar xvfz -
+      - name: Build
+        run: ./builder.py build --arch=darwin-x64 --target=bitwuzla --single --tar
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('darwin-x64-bitwuzla.tgz') != ''
+        with:
+          allowUpdates: True
+          prerelease: True
+          omitBody: True
+          omitBodyDuringUpdate: True
+          omitNameDuringUpdate: True
+          tag: bucket-darwin-x64
+          artifacts: "darwin-x64-bitwuzla.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
   darwin-x64-boolector:
     runs-on: ubuntu-latest
     continue-on-error: true
+    needs: [ darwin-x64-btor2tools, darwin-x64-cadical, darwin-x64-lingeling ]
     steps:
       - uses: actions/checkout@v2
         with:
@@ -609,6 +753,12 @@ jobs:
           else
               echo "Previous version not found in bucket"
           fi
+      - name: Download darwin-x64-btor2tools
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-darwin-x64/darwin-x64-btor2tools.tgz" | tar xvfz -
+      - name: Download darwin-x64-cadical
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-darwin-x64/darwin-x64-cadical.tgz" | tar xvfz -
+      - name: Download darwin-x64-lingeling
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-darwin-x64/darwin-x64-lingeling.tgz" | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=darwin-x64 --target=boolector --single --tar
       - uses: ncipollo/release-action@v1
@@ -1325,7 +1475,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   darwin-x64-default:
     runs-on: ubuntu-latest
-    needs: [ darwin-x64-avy, darwin-x64-boolector, darwin-x64-dfu-util, darwin-x64-ecpdap, darwin-x64-ecpprog, darwin-x64-flask, darwin-x64-fujprog, darwin-x64-graphviz, darwin-x64-gtkwave, darwin-x64-icesprog, darwin-x64-icestorm, darwin-x64-iverilog, darwin-x64-mcy, darwin-x64-nextpnr-ecp5, darwin-x64-nextpnr-generic, darwin-x64-nextpnr-ice40, darwin-x64-nextpnr-machxo2, darwin-x64-nextpnr-nexus, darwin-x64-openfpgaloader, darwin-x64-openocd, darwin-x64-pono, darwin-x64-prjoxide, darwin-x64-prjtrellis, darwin-x64-pyhdl, darwin-x64-python-programmers, darwin-x64-python3, darwin-x64-sby, darwin-x64-sby-gui, darwin-x64-system-resources, darwin-x64-utils, darwin-x64-verilator, darwin-x64-xdot, darwin-x64-yices, darwin-x64-yosys, darwin-x64-z3 ]
+    needs: [ darwin-x64-avy, darwin-x64-bitwuzla, darwin-x64-boolector, darwin-x64-dfu-util, darwin-x64-ecpdap, darwin-x64-ecpprog, darwin-x64-flask, darwin-x64-fujprog, darwin-x64-graphviz, darwin-x64-gtkwave, darwin-x64-icesprog, darwin-x64-icestorm, darwin-x64-iverilog, darwin-x64-mcy, darwin-x64-nextpnr-ecp5, darwin-x64-nextpnr-generic, darwin-x64-nextpnr-ice40, darwin-x64-nextpnr-machxo2, darwin-x64-nextpnr-nexus, darwin-x64-openfpgaloader, darwin-x64-openocd, darwin-x64-pono, darwin-x64-prjoxide, darwin-x64-prjtrellis, darwin-x64-pyhdl, darwin-x64-python-programmers, darwin-x64-python3, darwin-x64-sby, darwin-x64-sby-gui, darwin-x64-system-resources, darwin-x64-utils, darwin-x64-verilator, darwin-x64-xdot, darwin-x64-yices, darwin-x64-yosys, darwin-x64-z3 ]
     steps:
       - name: Get current date
         id: date
@@ -1335,6 +1485,8 @@ jobs:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Download darwin-x64-avy
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-darwin-x64/darwin-x64-avy.tgz" | tar xvfz -
+      - name: Download darwin-x64-bitwuzla
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-darwin-x64/darwin-x64-bitwuzla.tgz" | tar xvfz -
       - name: Download darwin-x64-boolector
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-darwin-x64/darwin-x64-boolector.tgz" | tar xvfz -
       - name: Download darwin-x64-dfu-util

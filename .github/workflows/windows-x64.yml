@@ -517,9 +517,153 @@ jobs:
           tag: bucket-windows-x64
           artifacts: "windows-x64-avy.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
+  windows-x64-lingeling:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/oss-cad-suite-build'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-lingeling
+      - name: Download previous build
+        run: |
+          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-windows-x64/windows-x64-lingeling.tgz"
+          if wget --spider "${URL}" 2>/dev/null; then
+              wget -qO- "${URL}" | tar xvfz -
+          else
+              echo "Previous version not found in bucket"
+          fi
+      - name: Build
+        run: ./builder.py build --arch=windows-x64 --target=lingeling --single --tar
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('windows-x64-lingeling.tgz') != ''
+        with:
+          allowUpdates: True
+          prerelease: True
+          omitBody: True
+          omitBodyDuringUpdate: True
+          omitNameDuringUpdate: True
+          tag: bucket-windows-x64
+          artifacts: "windows-x64-lingeling.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
+  windows-x64-cadical:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/oss-cad-suite-build'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-cadical
+      - name: Download previous build
+        run: |
+          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-windows-x64/windows-x64-cadical.tgz"
+          if wget --spider "${URL}" 2>/dev/null; then
+              wget -qO- "${URL}" | tar xvfz -
+          else
+              echo "Previous version not found in bucket"
+          fi
+      - name: Build
+        run: ./builder.py build --arch=windows-x64 --target=cadical --single --tar
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('windows-x64-cadical.tgz') != ''
+        with:
+          allowUpdates: True
+          prerelease: True
+          omitBody: True
+          omitBodyDuringUpdate: True
+          omitNameDuringUpdate: True
+          tag: bucket-windows-x64
+          artifacts: "windows-x64-cadical.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
+  windows-x64-btor2tools:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/oss-cad-suite-build'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-btor2tools
+      - name: Download previous build
+        run: |
+          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-windows-x64/windows-x64-btor2tools.tgz"
+          if wget --spider "${URL}" 2>/dev/null; then
+              wget -qO- "${URL}" | tar xvfz -
+          else
+              echo "Previous version not found in bucket"
+          fi
+      - name: Build
+        run: ./builder.py build --arch=windows-x64 --target=btor2tools --single --tar
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('windows-x64-btor2tools.tgz') != ''
+        with:
+          allowUpdates: True
+          prerelease: True
+          omitBody: True
+          omitBodyDuringUpdate: True
+          omitNameDuringUpdate: True
+          tag: bucket-windows-x64
+          artifacts: "windows-x64-btor2tools.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
+  windows-x64-bitwuzla:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    needs: [ windows-x64-btor2tools, windows-x64-cadical, windows-x64-lingeling ]
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/oss-cad-suite-build'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-bitwuzla
+      - name: Download previous build
+        run: |
+          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-windows-x64/windows-x64-bitwuzla.tgz"
+          if wget --spider "${URL}" 2>/dev/null; then
+              wget -qO- "${URL}" | tar xvfz -
+          else
+              echo "Previous version not found in bucket"
+          fi
+      - name: Download windows-x64-btor2tools
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-windows-x64/windows-x64-btor2tools.tgz" | tar xvfz -
+      - name: Download windows-x64-cadical
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-windows-x64/windows-x64-cadical.tgz" | tar xvfz -
+      - name: Download windows-x64-lingeling
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-windows-x64/windows-x64-lingeling.tgz" | tar xvfz -
+      - name: Build
+        run: ./builder.py build --arch=windows-x64 --target=bitwuzla --single --tar
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('windows-x64-bitwuzla.tgz') != ''
+        with:
+          allowUpdates: True
+          prerelease: True
+          omitBody: True
+          omitBodyDuringUpdate: True
+          omitNameDuringUpdate: True
+          tag: bucket-windows-x64
+          artifacts: "windows-x64-bitwuzla.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
   windows-x64-boolector:
     runs-on: ubuntu-latest
     continue-on-error: true
+    needs: [ windows-x64-btor2tools, windows-x64-cadical, windows-x64-lingeling ]
     steps:
       - uses: actions/checkout@v2
         with:
@@ -538,6 +682,12 @@ jobs:
           else
               echo "Previous version not found in bucket"
           fi
+      - name: Download windows-x64-btor2tools
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-windows-x64/windows-x64-btor2tools.tgz" | tar xvfz -
+      - name: Download windows-x64-cadical
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-windows-x64/windows-x64-cadical.tgz" | tar xvfz -
+      - name: Download windows-x64-lingeling
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-windows-x64/windows-x64-lingeling.tgz" | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=windows-x64 --target=boolector --single --tar
       - uses: ncipollo/release-action@v1
@@ -1254,7 +1404,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   windows-x64-default:
     runs-on: ubuntu-latest
-    needs: [ windows-x64-avy, windows-x64-boolector, windows-x64-dfu-util, windows-x64-ecpdap, windows-x64-ecpprog, windows-x64-flask, windows-x64-fujprog, windows-x64-gtkwave, windows-x64-icesprog, windows-x64-icestorm, windows-x64-iverilog, windows-x64-mcy, windows-x64-nextpnr-ecp5, windows-x64-nextpnr-generic, windows-x64-nextpnr-ice40, windows-x64-nextpnr-machxo2, windows-x64-nextpnr-nexus, windows-x64-openfpgaloader, windows-x64-openocd, windows-x64-pono, windows-x64-prjoxide, windows-x64-prjtrellis, windows-x64-pyhdl, windows-x64-python-programmers, windows-x64-python3, windows-x64-sby, windows-x64-sby-gui, windows-x64-system-resources, windows-x64-utils, windows-x64-verilator, windows-x64-yices, windows-x64-yosys, windows-x64-z3 ]
+    needs: [ windows-x64-avy, windows-x64-bitwuzla, windows-x64-boolector, windows-x64-dfu-util, windows-x64-ecpdap, windows-x64-ecpprog, windows-x64-flask, windows-x64-fujprog, windows-x64-gtkwave, windows-x64-icesprog, windows-x64-icestorm, windows-x64-iverilog, windows-x64-mcy, windows-x64-nextpnr-ecp5, windows-x64-nextpnr-generic, windows-x64-nextpnr-ice40, windows-x64-nextpnr-machxo2, windows-x64-nextpnr-nexus, windows-x64-openfpgaloader, windows-x64-openocd, windows-x64-pono, windows-x64-prjoxide, windows-x64-prjtrellis, windows-x64-pyhdl, windows-x64-python-programmers, windows-x64-python3, windows-x64-sby, windows-x64-sby-gui, windows-x64-system-resources, windows-x64-utils, windows-x64-verilator, windows-x64-yices, windows-x64-yosys, windows-x64-z3 ]
     steps:
       - name: Get current date
         id: date
@@ -1264,6 +1414,8 @@ jobs:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Download windows-x64-avy
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-windows-x64/windows-x64-avy.tgz" | tar xvfz -
+      - name: Download windows-x64-bitwuzla
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-windows-x64/windows-x64-bitwuzla.tgz" | tar xvfz -
       - name: Download windows-x64-boolector
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-windows-x64/windows-x64-boolector.tgz" | tar xvfz -
       - name: Download windows-x64-dfu-util
