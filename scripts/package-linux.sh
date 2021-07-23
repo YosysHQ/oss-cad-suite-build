@@ -120,6 +120,18 @@ mkdir -p \$HOME/.config/yosyshq \$HOME/.local/share/yosyshq
 sed "s|TARGET_DIR|\$release_topdir_abs|g" "\$release_topdir_abs/etc/fonts/fonts.conf.template" > \$FONTCONFIG_FILE
 EOT
         fi
+
+if [ ${PRELOAD} == 'True' ]; then
+    if [ $binfile == "bin/yosys" ] || [ $binfile == "bin/tabbylic" ]; then
+        echo "Skipping"
+    else
+        cat >> $binfile << EOT
+exec "\$release_topdir_abs"/lib/$ldlinuxname --inhibit-cache --inhibit-rpath "" --library-path "\$release_topdir_abs"/lib --preload "\$release_topdir_abs"/lib/preload.o "\$release_topdir_abs"/libexec/$(basename $binfile) "\$@"
+EOT
+        chmod +x $binfile
+        continue
+    fi
+fi
         cat >> $binfile << EOT
 exec "\$release_topdir_abs"/lib/$ldlinuxname --inhibit-cache --inhibit-rpath "" --library-path "\$release_topdir_abs"/lib "\$release_topdir_abs"/libexec/$(basename $binfile) "\$@"
 EOT

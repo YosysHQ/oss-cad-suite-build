@@ -89,7 +89,7 @@ class SourceLocation:
 		sources[name] = self
 
 class Target:
-	def __init__(self, name, sources = [], dependencies = [], resources = [], patches = [], arch = [], license_url = None, license_file = None, top_package = False, build_native = False, release_name = None, gitrev = [], branding = None, readme = None, package = None, tools = None):
+	def __init__(self, name, sources = [], dependencies = [], resources = [], patches = [], arch = [], license_url = None, license_file = None, top_package = False, build_native = False, release_name = None, gitrev = [], branding = None, readme = None, package = None, tools = None, preload = None):
 		self.name = name
 		self.sources = sources
 		self.dependencies = dependencies
@@ -109,6 +109,7 @@ class Target:
 		self.readme = readme
 		self.package = package
 		self.tools = tools
+		self.preload = preload
 		if release_name:
 			self.release_name = release_name
 		else:
@@ -398,6 +399,8 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, nproc, pack_source
 		env['BRANDING'] = str(target.branding)
 	if (target.readme):
 		env['README'] = str(target.readme)
+	if (target.preload):
+		env['PRELOAD'] = 'True'
 
 	scriptfile = tempfile.NamedTemporaryFile()
 	scriptfile.write("set -e -x\n".encode())

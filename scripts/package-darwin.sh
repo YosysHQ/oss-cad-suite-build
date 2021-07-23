@@ -99,6 +99,17 @@ mkdir -p \$HOME/.config/yosyshq \$HOME/.local/share/yosyshq
 EOT
         fi
 
+if [ ${PRELOAD} == 'True' ]; then
+    if [ $binfile == "bin/yosys" ] || [ $binfile == "bin/tabbylic" ]; then
+        echo "Skipping"
+    else
+        cat >> $binfile << EOT
+DYLD_INSERT_LIBRARIES="\$release_topdir_abs"/lib/preload.o exec "\$release_topdir_abs"/libexec/$(basename $binfile) "\$@"
+EOT
+        chmod +x $binfile
+        continue
+    fi
+fi
         cat >> $binfile << EOT
 exec "\$release_topdir_abs"/libexec/$(basename $binfile) "\$@"
 EOT
@@ -168,6 +179,9 @@ for binfile in $(find lib -type f | xargs file | grep Mach-O | grep bundle | cut
     echo $binfile
     dylibbundler -of -b -x $binfile -p @executable_path/../lib -d ${OUTPUT_DIR}${INSTALL_PREFIX}/lib
 done
+if [ ${PRELOAD} == 'True' ]; then
+    dylibbundler -of -b -x lib/libtabby.dylib -p @executable_path/../lib -d ${OUTPUT_DIR}${INSTALL_PREFIX}/lib
+fi
 
 if [ -f "bin/yosys-config" ]; then
     mv bin/yosys-config bin/yosys-config.orig
