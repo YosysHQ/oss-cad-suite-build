@@ -7,8 +7,12 @@ autoconf
 make DESTDIR=${OUTPUT_DIR} -j${NPROC}
 make DESTDIR=${OUTPUT_DIR} prefix=${INSTALL_PREFIX} -j${NPROC} install
 
+sed -i 's,AR = '${AR}',AR = ar,g' ${OUTPUT_DIR}${INSTALL_PREFIX}/share/verilator/include/verilated.mk
 sed -i 's,CXX = '${CXX}',CXX = g++,g' ${OUTPUT_DIR}${INSTALL_PREFIX}/share/verilator/include/verilated.mk
 sed -i 's,LINK = '${CXX}',LINK = g++,g' ${OUTPUT_DIR}${INSTALL_PREFIX}/share/verilator/include/verilated.mk
+sed -i 's,PERL = /usr/bin/perl,PERL = perl,g' ${OUTPUT_DIR}${INSTALL_PREFIX}/share/verilator/include/verilated.mk
+sed -i 's,PYTHON3 = /usr/bin/python3,PYTHON3 = python3,g' ${OUTPUT_DIR}${INSTALL_PREFIX}/share/verilator/include/verilated.mk
+
 if [ ${ARCH_BASE} == 'darwin' ]; then
     # Support older compiler then we compiling on
     sed -i 's,-Wno-bool-operation,,g' ${OUTPUT_DIR}${INSTALL_PREFIX}/share/verilator/include/verilated.mk
