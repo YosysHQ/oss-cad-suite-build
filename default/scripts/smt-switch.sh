@@ -10,7 +10,7 @@ if [ ${ARCH_BASE} == 'windows' ]; then
     sed -i -re 's,\*.o,\*.obj,g' btor/CMakeLists.txt
     echo > contrib/memstream-0.1/memstream.c
 fi
-./configure.sh --cvc4 --cvc4-home=${BUILD_DIR}/cvc4/dev --btor-home=${BUILD_DIR}/boolector/dev --prefix=${INSTALL_PREFIX} --static
+./configure.sh --cvc4 --cvc4-home=${BUILD_DIR}/cvc4/dev --btor-home=${BUILD_DIR}/boolector/dev --prefix=${INSTALL_PREFIX} --static --smtlib-reader --bison-dir=${BUILD_DIR}/bison/deps/bison/bison-install
 cd build
 make DESTDIR=${OUTPUT_DIR} -j${NPROC}
 make DESTDIR=${OUTPUT_DIR} install

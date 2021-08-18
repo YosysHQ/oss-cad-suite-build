@@ -96,7 +96,7 @@ SourceLocation(
 	name = 'smt-switch',
 	vcs = 'git',
 	location = 'https://github.com/makaimann/smt-switch',
-	revision = 'a2af6ea75b994d666c9c175793a70c8945208ba5'
+	revision = '0574042d56ad98d2373a1eba81493ca0c075a649'
 )
 
 SourceLocation(
@@ -114,6 +114,12 @@ SourceLocation(
 )
 
 Target(
+	name = 'bison',
+	sources = [ 'smt-switch' ],
+	build_native = True,
+)
+
+Target(
 	name = 'cvc4',
 	sources = [ 'cvc4' ],
 )
@@ -121,7 +127,7 @@ Target(
 Target(
 	name = 'smt-switch',
 	sources = [ 'smt-switch' ],
-	dependencies = [ 'cvc4', 'boolector' ],
+	dependencies = [ 'cvc4', 'boolector', 'bison' ],
 	patches = [ 'smt-switch-win32.diff' ],
 	license_file = 'smt-switch/LICENSE',
 )
