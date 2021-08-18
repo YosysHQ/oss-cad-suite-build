@@ -937,6 +937,8 @@ jobs:
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-boolector.tgz" | tar xvfz -
       - name: Download linux-arm64-cvc4
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-cvc4.tgz" | tar xvfz -
+      - name: Download linux-x64-bison
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-bison.tgz" | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-arm64 --target=smt-switch --single --tar
       - uses: ncipollo/release-action@v1

@@ -866,6 +866,8 @@ jobs:
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-darwin-x64/darwin-x64-boolector.tgz" | tar xvfz -
       - name: Download darwin-x64-cvc4
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-darwin-x64/darwin-x64-cvc4.tgz" | tar xvfz -
+      - name: Download linux-x64-bison
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-bison.tgz" | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=darwin-x64 --target=smt-switch --single --tar
       - uses: ncipollo/release-action@v1
