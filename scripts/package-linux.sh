@@ -216,6 +216,11 @@ for libdir in lib; do
     done
 done
 
+# Fix for WSL (Windows Subsystem for Linux)
+if [ ${ARCH} == 'linux-x64' ]; then
+    ${STRIP} --remove-section=.note.ABI-tag lib/libQt5Core.so.5
+fi
+
 if [ -f "bin/yosys-config" ]; then
     mv bin/yosys-config bin/yosys-config.orig
     cat > bin/yosys-config << EOT
