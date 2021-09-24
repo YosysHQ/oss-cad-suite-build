@@ -8,6 +8,13 @@ SourceLocation(
 )
 
 SourceLocation(
+	name = 'ghdl-yosys-plugin',
+	vcs = 'git',
+	location = 'https://github.com/ghdl/ghdl-yosys-plugin',
+	revision = 'origin/master'
+)
+
+SourceLocation(
 	name = 'graphviz',
 	vcs = 'git',
 	location = 'https://gitlab.com/graphviz/graphviz',
@@ -16,7 +23,8 @@ SourceLocation(
 
 Target(
 	name = 'yosys',
-	sources = [ 'yosys' ],
+	sources = [ 'yosys', 'ghdl-yosys-plugin' ],
+	dependencies = [ 'ghdl' ],
 	resources = [ 'xdot', 'graphviz' ],
 	license_file = 'yosys/COPYING',
 )

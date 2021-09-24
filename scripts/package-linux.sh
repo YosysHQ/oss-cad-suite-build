@@ -55,7 +55,7 @@ sed -i -re 's|^flag:VVP_EXECUTABLE=.*$|flag:VVP_EXECUTABLE='\$release_topdir_abs
 sed -i -re 's|^flag:VVP_EXECUTABLE=.*$|flag:VVP_EXECUTABLE='\$release_topdir_abs'/bin/vvp|g' \$release_topdir_abs/lib/ivl/vvp-s.conf
 EOT
         fi
-        if [ ! -z "$(basename $binfile | grep ghdl)" ]; then
+        if [ ! -z "$(strings libexec/$(basename $binfile) | grep ghdl)" ]; then
             cat >> $binfile << EOT
 export GHDL_PREFIX="\$release_topdir_abs/lib/ghdl"
 EOT

@@ -11,4 +11,5 @@ Target(
 	name = 'ghdl',
 	sources = [ 'ghdl' ],
 	license_file = 'ghdl/COPYING.md',
+	arch = [ 'linux-x64' ],
 )

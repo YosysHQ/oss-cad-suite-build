@@ -6,6 +6,7 @@ Target(
     top_package = True,
     dependencies = [
         'yosys',
+        'ghdl',
         'nextpnr-generic',
         'nextpnr-ice40',
         'nextpnr-ecp5',
