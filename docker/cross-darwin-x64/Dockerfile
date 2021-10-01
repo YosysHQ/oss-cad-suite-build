@@ -225,6 +225,7 @@ RUN cd /opt \
   && cp -r /opt/local/share/eigen3 /tmp \
   && cp -r /opt/local/share/gir-1.0 /tmp \
   && cp -r /opt/local/share/glib-2.0 /tmp \
+  && cp -r /opt/local/share/terminfo /tmp \
   && rm -rf /opt/local/etc \
   && rm -rf /opt/local/libexec \
   && rm -rf /opt/local/sbin \
@@ -235,6 +236,7 @@ RUN cd /opt \
   && mv /tmp/eigen3 /opt/local/share \
   && mv /tmp/gir-1.0 /opt/local/share \
   && mv /tmp/glib-2.0 /opt/local/share \
+  && mv /tmp/terminfo /opt/local/share \
   && rm -rf /tmp/* \
   && mkdir -p /usr/local/osxcross/target/macports/pkgs/opt \
   && ln -s /opt/local /usr/local/osxcross/target/macports/pkgs/opt \

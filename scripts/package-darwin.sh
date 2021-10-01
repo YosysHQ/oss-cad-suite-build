@@ -99,6 +99,12 @@ mkdir -p \$HOME/.config/yosyshq \$HOME/.local/share/yosyshq
 EOT
         fi
 
+if [ $binfile == "bin/yosys" ]; then
+        cat >> $binfile << EOT
+export TERMINFO="\$release_topdir_abs/share/terminfo"
+EOT
+fi
+
 if [ ${PRELOAD} == 'True' ]; then
     if [ $binfile == "bin/yosys" ] || [ $binfile == "bin/tabbylic" ]; then
         echo "Skipping"

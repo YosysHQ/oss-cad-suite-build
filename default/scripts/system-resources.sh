@@ -73,9 +73,11 @@ if [ ${ARCH_BASE} == 'darwin' ]; then
     mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/share/glib-2.0
     mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/share/mime
     mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/share/icons
+    mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/share/terminfo
     cp -rv /opt/local/share/glib-2.0/schemas ${OUTPUT_DIR}${INSTALL_PREFIX}/share/glib-2.0/.
     cp -v /usr/share/mime/magic ${OUTPUT_DIR}${INSTALL_PREFIX}/share/mime/.
     cp -rv /usr/share/icons/Adwaita ${OUTPUT_DIR}${INSTALL_PREFIX}/share/icons/.
+    cp -rv /opt/local/share/terminfo/* ${OUTPUT_DIR}${INSTALL_PREFIX}/share/terminfo/.
     rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/share/icons/Adwaita/256x256
     rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/share/icons/Adwaita/512x512
     rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/share/icons/Adwaita/cursors
