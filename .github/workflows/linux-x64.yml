@@ -6,40 +6,6 @@ on:
     - cron: '30 0 * * *'
 
 jobs:
-  linux-x64-ghdl:
-    runs-on: ubuntu-latest
-    continue-on-error: true
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          repository: 'yosyshq/oss-cad-suite-build'
-      - name: Cache sources
-        id: cache-sources
-        uses: actions/cache@v2
-        with:
-          path: _sources
-          key: cache-sources-ghdl
-      - name: Download previous build
-        run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-ghdl.tgz"
-          if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
-          else
-              echo "Previous version not found in bucket"
-          fi
-      - name: Build
-        run: ./builder.py build --arch=linux-x64 --target=ghdl --single --tar
-      - uses: ncipollo/release-action@v1
-        if: hashFiles('linux-x64-ghdl.tgz') != ''
-        with:
-          allowUpdates: True
-          prerelease: True
-          omitBody: True
-          omitBodyDuringUpdate: True
-          omitNameDuringUpdate: True
-          tag: bucket-linux-x64
-          artifacts: "linux-x64-ghdl.tgz"
-          token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-python3:
     runs-on: ubuntu-latest
     continue-on-error: true
@@ -148,7 +114,6 @@ jobs:
   linux-x64-yosys:
     runs-on: ubuntu-latest
     continue-on-error: true
-    needs: linux-x64-ghdl
     steps:
       - uses: actions/checkout@v2
         with:
@@ -167,8 +132,6 @@ jobs:
           else
               echo "Previous version not found in bucket"
           fi
-      - name: Download linux-x64-ghdl
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-ghdl.tgz" | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-x64 --target=yosys --single --tar
       - uses: ncipollo/release-action@v1
@@ -181,6 +144,79 @@ jobs:
           omitNameDuringUpdate: True
           tag: bucket-linux-x64
           artifacts: "linux-x64-yosys.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
+  linux-x64-ghdl:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/oss-cad-suite-build'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-ghdl
+      - name: Download previous build
+        run: |
+          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-ghdl.tgz"
+          if wget --spider "${URL}" 2>/dev/null; then
+              wget -qO- "${URL}" | tar xvfz -
+          else
+              echo "Previous version not found in bucket"
+          fi
+      - name: Build
+        run: ./builder.py build --arch=linux-x64 --target=ghdl --single --tar
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('linux-x64-ghdl.tgz') != ''
+        with:
+          allowUpdates: True
+          prerelease: True
+          omitBody: True
+          omitBodyDuringUpdate: True
+          omitNameDuringUpdate: True
+          tag: bucket-linux-x64
+          artifacts: "linux-x64-ghdl.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
+  linux-x64-ghdl-yosys-plugin:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    needs: [ linux-x64-ghdl, linux-x64-yosys ]
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/oss-cad-suite-build'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-ghdl-yosys-plugin
+      - name: Download previous build
+        run: |
+          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-ghdl-yosys-plugin.tgz"
+          if wget --spider "${URL}" 2>/dev/null; then
+              wget -qO- "${URL}" | tar xvfz -
+          else
+              echo "Previous version not found in bucket"
+          fi
+      - name: Download linux-x64-ghdl
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-ghdl.tgz" | tar xvfz -
+      - name: Download linux-x64-yosys
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-yosys.tgz" | tar xvfz -
+      - name: Build
+        run: ./builder.py build --arch=linux-x64 --target=ghdl-yosys-plugin --single --tar
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('linux-x64-ghdl-yosys-plugin.tgz') != ''
+        with:
+          allowUpdates: True
+          prerelease: True
+          omitBody: True
+          omitBodyDuringUpdate: True
+          omitNameDuringUpdate: True
+          tag: bucket-linux-x64
+          artifacts: "linux-x64-ghdl-yosys-plugin.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-nextpnr-bba:
     runs-on: ubuntu-latest
@@ -1759,7 +1795,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-default:
     runs-on: ubuntu-latest
-    needs: [ linux-x64-avy, linux-x64-bitwuzla, linux-x64-boolector, linux-x64-dfu-util, linux-x64-ecpdap, linux-x64-ecpprog, linux-x64-flask, linux-x64-fujprog, linux-x64-ghdl, linux-x64-graphviz, linux-x64-gtkwave, linux-x64-icesprog, linux-x64-icestorm, linux-x64-iverilog, linux-x64-mcy, linux-x64-nextpnr-ecp5, linux-x64-nextpnr-generic, linux-x64-nextpnr-ice40, linux-x64-nextpnr-machxo2, linux-x64-nextpnr-nexus, linux-x64-openfpgaloader, linux-x64-openocd, linux-x64-pono, linux-x64-prjoxide, linux-x64-prjtrellis, linux-x64-pyhdl, linux-x64-python-programmers, linux-x64-python2, linux-x64-python3, linux-x64-sby, linux-x64-sby-gui, linux-x64-suprove, linux-x64-system-resources, linux-x64-utils, linux-x64-verilator, linux-x64-xdot, linux-x64-yices, linux-x64-yosys, linux-x64-z3 ]
+    needs: [ linux-x64-avy, linux-x64-bitwuzla, linux-x64-boolector, linux-x64-dfu-util, linux-x64-ecpdap, linux-x64-ecpprog, linux-x64-flask, linux-x64-fujprog, linux-x64-ghdl, linux-x64-ghdl-yosys-plugin, linux-x64-graphviz, linux-x64-gtkwave, linux-x64-icesprog, linux-x64-icestorm, linux-x64-iverilog, linux-x64-mcy, linux-x64-nextpnr-ecp5, linux-x64-nextpnr-generic, linux-x64-nextpnr-ice40, linux-x64-nextpnr-machxo2, linux-x64-nextpnr-nexus, linux-x64-openfpgaloader, linux-x64-openocd, linux-x64-pono, linux-x64-prjoxide, linux-x64-prjtrellis, linux-x64-pyhdl, linux-x64-python-programmers, linux-x64-python2, linux-x64-python3, linux-x64-sby, linux-x64-sby-gui, linux-x64-suprove, linux-x64-system-resources, linux-x64-utils, linux-x64-verilator, linux-x64-xdot, linux-x64-yices, linux-x64-yosys, linux-x64-z3 ]
     steps:
       - name: Get current date
         id: date
@@ -1785,6 +1821,8 @@ jobs:
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-fujprog.tgz" | tar xvfz -
       - name: Download linux-x64-ghdl
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-ghdl.tgz" | tar xvfz -
+      - name: Download linux-x64-ghdl-yosys-plugin
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-ghdl-yosys-plugin.tgz" | tar xvfz -
       - name: Download linux-x64-graphviz
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-graphviz.tgz" | tar xvfz -
       - name: Download linux-x64-gtkwave
