@@ -7,6 +7,7 @@ Target(
     dependencies = [
         'yosys',
         'ghdl',
+        'ghdl-yosys-plugin',
         'nextpnr-generic',
         'nextpnr-ice40',
         'nextpnr-ecp5',

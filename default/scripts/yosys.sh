@@ -4,11 +4,7 @@ if  [ ${ARCH_BASE} == 'darwin' ]; then
 	sed -i -re "s,CXX = clang,CXX = ${CC},g" Makefile
 	sed -i -re "s,LD = clang\+\+,LD = ${CXX},g" Makefile
 elif [ ${ARCH} == 'linux-x64' ]; then
-	mkdir -p frontends/ghdl
-	cp -R ../ghdl-yosys-plugin/src/* frontends/ghdl
 	make config-clang
-	echo 'ENABLE_GHDL := 1' > Makefile.conf
-	echo "GHDL_PREFIX := $(pwd)/../ghdl${INSTALL_PREFIX}" >> Makefile.conf
 elif [ ${ARCH} == 'windows-x64' ]; then
 	echo 'CONFIG := msys2-64' > Makefile.conf
 	echo 'ENABLE_PLUGINS := 0' >> Makefile.conf

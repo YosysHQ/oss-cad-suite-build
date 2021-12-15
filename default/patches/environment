@@ -33,6 +33,7 @@ deactivate () {
 
     unset VIRTUAL_ENV
     unset VERILATOR_ROOT
+    unset GHDL_PREFIX
     if [ ! "${1-}" = "nondestructive" ] ; then
     # Self destruct!
         unset -f deactivate
@@ -76,6 +77,7 @@ fi
 export PS1
 
 export VERILATOR_ROOT="$release_topdir_abs/share/verilator"
+export GHDL_PREFIX="$release_topdir_abs/lib/ghdl"
 
 # This should detect bash and zsh, which have a hash command that must
 # be called to get it to forget past commands.  Without forgetting

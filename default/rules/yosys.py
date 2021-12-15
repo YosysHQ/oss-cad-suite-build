@@ -23,10 +23,17 @@ SourceLocation(
 
 Target(
 	name = 'yosys',
-	sources = [ 'yosys', 'ghdl-yosys-plugin' ],
-	dependencies = [ 'ghdl' ],
+	sources = [ 'yosys'],
 	resources = [ 'xdot', 'graphviz' ],
 	license_file = 'yosys/COPYING',
+)
+
+Target(
+	name = 'ghdl-yosys-plugin',
+	sources = [ 'ghdl-yosys-plugin' ],
+	dependencies = [ 'ghdl', 'yosys' ],
+	license_file = 'ghdl-yosys-plugin/LICENSE',
+	arch = [ 'linux-x64' ],
 )
 
 Target(
