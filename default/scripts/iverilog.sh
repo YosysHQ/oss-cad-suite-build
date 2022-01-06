@@ -1,5 +1,4 @@
 cd iverilog
-patch -p1 < ${PATCHES_DIR}/iverilog_fix.diff
 sh autoconf.sh
 ./configure --prefix=${INSTALL_PREFIX} --host=${CROSS_NAME}
 make DESTDIR=${OUTPUT_DIR} -j${NPROC} install
