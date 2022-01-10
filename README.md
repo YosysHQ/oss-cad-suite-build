@@ -19,7 +19,7 @@ See [Tabby CAD Datasheet](https://www.yosyshq.com/tabby-cad-datasheet) for detai
 
 ### RTL Synthesis 
  * [Yosys](https://github.com/YosysHQ/yosys) RTL synthesis with extensive Verilog 2005 support
- * [nMigen](https://github.com/nmigen/nmigen) refreshed Python toolbox for building complex digital hardware
+ * [Amaranth](https://github.com/amaranth-lang/amaranth) refreshed Python toolbox for building complex digital hardware
  * [Migen](https://github.com/m-labs/migen) Python toolbox for building complex digital hardware
  * [ABC](https://people.eecs.berkeley.edu/~alanmi/abc/) A System for Sequential Synthesis and Verification
  
@@ -27,7 +27,7 @@ Did you know that the Tabby CAD version of yosys supports industry standard Syst
 Contact us at contact@yosyshq.com to arrange a free evaluation license.
 
 ### Formal Tools
- * [SymbiYosys](https://github.com/YosysHQ/SymbiYosys) a front-end driver program for Yosys-based formal hardware verification flows.
+ * [sby](https://github.com/YosysHQ/sby) a front-end driver program for Yosys-based formal hardware verification flows.
  * [mcy](https://github.com/YosysHQ/mcy) Mutation Cover with Yosys
  * [sby-gui](https://github.com/YosysHQ/sby-gui) GUI for SymbiYosys
  * [avy](https://bitbucket.org/arieg/extavy) Interpolating Property Directed Reachability tool
