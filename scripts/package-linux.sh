@@ -55,7 +55,8 @@ sed -i -re 's|^flag:VVP_EXECUTABLE=.*$|flag:VVP_EXECUTABLE='\$release_topdir_abs
 sed -i -re 's|^flag:VVP_EXECUTABLE=.*$|flag:VVP_EXECUTABLE='\$release_topdir_abs'/bin/vvp|g' \$release_topdir_abs/lib/ivl/vvp-s.conf
 EOT
         fi
-        if [ ! -z "$(strings libexec/$(basename $binfile) | grep ghdl)" ]; then
+        # yosys ghdl plugin requires GHDL_PREFIX too
+        if [ ! -z "$(strings libexec/$(basename $binfile) | grep ghdl)" ] || [ $binfile == "bin/yosys" ]; then
             cat >> $binfile << EOT
 export GHDL_PREFIX="\$release_topdir_abs/lib/ghdl"
 EOT
