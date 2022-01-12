@@ -38,7 +38,7 @@ SourceLocation(
 	name = 'ecpprog',
 	vcs = 'git',
 	location = 'https://github.com/gregdavill/ecpprog',
-	revision = 'origin/master'
+	revision = 'origin/main'
 )
 
 Target(
