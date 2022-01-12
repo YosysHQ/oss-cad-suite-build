@@ -60,6 +60,11 @@ EOT
 export GHDL_PREFIX="\$release_topdir_abs/lib/ghdl"
 EOT
         fi
+        if [ $binfile == "bin/yosys" ] && [ -f "share/yosys/plugins/ghdl.so" ]; then
+            cat >> $binfile << EOT
+export GHDL_PREFIX="\$release_topdir_abs/lib/ghdl"
+EOT
+        fi
         if [ ! -z "$(lddtree -l libexec/$(basename $binfile) | grep python)" ]; then
             cat >> $binfile << EOT
 export PYTHONHOME="\$release_topdir_abs"
