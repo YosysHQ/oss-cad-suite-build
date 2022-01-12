@@ -2,17 +2,17 @@ from src.base import SourceLocation, Target
 
 # HDL
 SourceLocation(
-	name = 'nmigen',
+	name = 'amaranth',
 	vcs = 'git',
-	location = 'https://github.com/nmigen/nmigen',
-	revision = 'origin/master',
+	location = 'https://github.com/amaranth-lang/amaranth',
+	revision = 'origin/main',
 )
 
 SourceLocation(
-	name = 'nmigen-boards',
+	name = 'amaranth-boards',
 	vcs = 'git',
-	location = 'https://github.com/nmigen/nmigen-boards',
-	revision = 'origin/master',
+	location = 'https://github.com/amaranth-lang/amaranth-boards',
+	revision = 'origin/main',
 )
 
 SourceLocation(
@@ -24,7 +24,7 @@ SourceLocation(
 
 Target(
 	name = 'pyhdl',
-	sources = [ 'nmigen', 'nmigen-boards', 'migen' ],
+	sources = [ 'amaranth', 'amaranth-boards', 'migen' ],
 	dependencies = [ 'python3' ],
 	resources = [ 'python3' ],
 	patches = [ 'python3_package.sh' ],
