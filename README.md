@@ -10,8 +10,8 @@
 
 # Introduction
 
-OSS CAD Suite is software distribution for number of [open source software](https://en.wikipedia.org/wiki/Open-source_software) used in digital logic design. 
-You will find tools for RTL synthesis, formal hardware verification, place & route, FPGA programming, testing with support for HDL like Verilog, Migen and nMigen.
+OSS CAD Suite is a binary software distribution for a number of [open source software](https://en.wikipedia.org/wiki/Open-source_software) used in digital logic design. 
+You will find tools for RTL synthesis, formal hardware verification, place & route, FPGA programming, and testing with support for HDLs like Verilog, Migen and Amaranth.
 
 OSS CAD Suite is a component of YosysHQ's Tabby CAD Suite:  
 ![image](https://user-images.githubusercontent.com/59544343/119006798-f8786100-b990-11eb-9535-cef67420ccfb.png)  
@@ -29,7 +29,7 @@ Contact us at contact@yosyshq.com to arrange a free evaluation license.
 ### Formal Tools
  * [sby](https://github.com/YosysHQ/sby) a front-end driver program for Yosys-based formal hardware verification flows.
  * [mcy](https://github.com/YosysHQ/mcy) Mutation Cover with Yosys
- * [sby-gui](https://github.com/YosysHQ/sby-gui) GUI for SymbiYosys
+ * [sby-gui](https://github.com/YosysHQ/sby-gui) GUI for sby
  * [avy](https://bitbucket.org/arieg/extavy) Interpolating Property Directed Reachability tool
  * [Boolector](https://github.com/Boolector/boolector) SMT solver and BTOR model checker
  * [Yices 2](https://github.com/SRI-CSL/yices2) SMT solver
@@ -40,8 +40,8 @@ Contact us at contact@yosyshq.com to arrange a free evaluation license.
 
 ### PnR
  * [nextpnr](https://github.com/YosysHQ/nextpnr) a portable FPGA place and route tool (generic, ice40, ecp5, machxo2, nexus)
- * [Project IceStorm](https://github.com/cliffordwolf/icestorm) tools for working with Lattice ICE40 bitstreams
- * [Project Trellis](https://github.com/SymbiFlow/prjtrellis) tools for working with Lattice ECP5 bitstreams
+ * [Project IceStorm](https://github.com/YosysHQ/icestorm) tools for working with Lattice ICE40 bitstreams
+ * [Project Trellis](https://github.com/YosysHQ/prjtrellis) tools for working with Lattice ECP5 bitstreams
  * [Project Oxide](https://github.com/gatecat/prjoxide) tools for working with Lattice Nexus bitstreams
  
 ### FPGA board programming tools
@@ -62,8 +62,8 @@ Contact us at contact@yosyshq.com to arrange a free evaluation license.
  * [iverilog](https://github.com/steveicarus/iverilog) Verilog compilation system
 
 ### Support libraries
- * [Python 3](https://github.com/python/cpython) language interpretter is provided in all supported platforms.
- * [Python 2](https://github.com/python/cpython) language interpretter is provided in Linux platforms in form of library only.
+ * [Python 3](https://github.com/python/cpython) language interpreter is provided in all supported platforms.
+ * [Python 2](https://github.com/python/cpython) language interpreter is provided in Linux platforms in form of library only.
  * [Ubuntu 20.04](https://ubuntu.com/) distribution development packages are used and shared libraries used are provided in package.
  * [macports](https://www.macports.org/) distribution system for macOS is used to obtain all libraries used, and they are provided in package.
  * [MinGW](https://sourceforge.net/projects/mingw) Minimalist GNU for Windows library packages from Fedora 32 are used in compilation and provided in package.
@@ -91,7 +91,7 @@ to create new shell window:
 <extracted_location>\oss-cad-suite\start.bat
 ```
 
-**NOTE:** when environment is set, `python3` from package becomes available as well, this enables usage of *nMigen* and *nMigen* HDL and *LiteX* libraries scripts as usual, when OSS CAD Suite is just added in PATH to use packaged python3 use `tabbypy3` to start python environment. For Windows, there are no wrappers and using environment.bat is only choice.
+**NOTE:** when environment is set, `python3` from package becomes available as well, this enables usage of *Migen* and *Amaranth* HDL and *LiteX* libraries scripts as usual. When OSS CAD Suite is just added in PATH to use packaged python3 use `tabbypy3` to start python environment. For Windows, there are no wrappers and using environment.bat is only choice.
 
 # Using LiteX
 
@@ -121,7 +121,7 @@ This architecture is supported for Windows 10, but older 64-bit version of Windo
 ARM based Linux devices such as Raspberry Pi 3, 4 or 400 can use this distribution package.
 
 ## linux-arm64
-ARM64 based Linux devices using 64bit CPU as in Raspberry Pi 4 and 400 (with 64bit version of OS installed), and also laptops as MNT Reform 2 can use this distribution package.
+ARM64 based Linux devices using 64bit CPU as in Raspberry Pi 4 and 400 (with 64bit version of OS installed), and also laptops like the MNT Reform 2 can use this distribution package.
 
 ## linux-riscv64
 RiscV-64 based Linux devices should use this distribtuion package, but please note that this is currently **untested**
