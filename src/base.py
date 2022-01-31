@@ -266,7 +266,7 @@ def pullCode(target, build_arch, arch, no_update, single):
 			try:
 				repo.obtain()
 			except Exception as ex:
-				log_error("Error while cloning repository {}.")
+				log_error("Error while cloning repository {}.".format(s.location))
 		else:
 			if not no_update:
 				log_step_triple("[{}] Updating ".format(s.name), s.location)
