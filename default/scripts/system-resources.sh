@@ -112,4 +112,8 @@ if [ ${ARCH_BASE} == 'windows' ]; then
     rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/share/icons/Adwaita/256x256
     rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/share/icons/Adwaita/512x512
     rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/share/icons/Adwaita/cursors
+
+    # Python3 ssl libary fixes
+    cp ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libcrypto-1_1-x64.dll ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/python3.8/lib-dynload/libcrypto-1_1-x64.dll
+    cp ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libssl-1_1-x64.dll  ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/python3.8/lib-dynload/libssl-1_1-x64.dll 
 fi
