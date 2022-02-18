@@ -3,7 +3,7 @@ from src.base import SourceLocation, Target
 SourceLocation(
 	name = 'sby',
 	vcs = 'git',
-	location = 'https://github.com/YosysHQ/SymbiYosys',
+	location = 'https://github.com/YosysHQ/sby',
 	revision = 'origin/master'
 )
 
