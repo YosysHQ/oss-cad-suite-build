@@ -102,7 +102,6 @@ export GTK_IM_MODULE_FILE="/dev/null"
 export GTK_EXE_PREFIX="\$release_topdir_abs"
 export GTK_DATA_PREFIX="\$release_topdir_abs"
 export GDK_PIXBUF_MODULEDIR="\$release_topdir_abs/lib/gdk-pixbuf-2.0/loaders"
-export GDK_PIXBUF_MODULE_FILE="\$release_topdir_abs/lib/gdk-pixbuf-2.0/loaders.cache"
 export GTK_THEME="Adwaita"
 export XDG_DATA_DIRS="\$release_topdir_abs"/share
 export XDG_CONFIG_DIRS="\$release_topdir_abs"
@@ -113,6 +112,8 @@ export XDG_CURRENT_DESKTOP="KDE"
 export LC_ALL="C"
 export TCL_LIBRARY="\$release_topdir_abs/lib/tcl8.6"
 export TK_LIBRARY="\$release_topdir_abs/lib/tk8.6"
+export GDK_PIXBUF_MODULE_FILE="\$XDG_CACHE_HOME/loaders.cache"
+mkdir -p \$XDG_CONFIG_HOME \$XDG_CACHE_HOME \$XDG_DATA_HOME
 "\$release_topdir_abs"/lib/$ldlinuxname --inhibit-cache --inhibit-rpath "" --library-path "\$release_topdir_abs"/lib "\$release_topdir_abs"/libexec/gdk-pixbuf-query-loaders --update-cache
 EOT
         fi
@@ -121,7 +122,6 @@ EOT
             cat >> $binfile << EOT
 export FONTCONFIG_FILE="\$XDG_CONFIG_HOME/fonts.conf"
 export FONTCONFIG_PATH="\$release_topdir_abs/etc/fonts"
-mkdir -p \$HOME/.config/yosyshq \$HOME/.local/share/yosyshq
 sed "s|TARGET_DIR|\$release_topdir_abs|g" "\$release_topdir_abs/etc/fonts/fonts.conf.template" > \$FONTCONFIG_FILE
 EOT
         fi
@@ -177,7 +177,6 @@ export GTK_IM_MODULE_FILE="/dev/null"
 export GTK_EXE_PREFIX="\$release_topdir_abs"
 export GTK_DATA_PREFIX="\$release_topdir_abs"
 export GDK_PIXBUF_MODULEDIR="\$release_topdir_abs/lib/gdk-pixbuf-2.0/loaders"
-export GDK_PIXBUF_MODULE_FILE="\$release_topdir_abs/lib/gdk-pixbuf-2.0/loaders.cache"
 export GTK_THEME="Adwaita"
 export XDG_DATA_DIRS="\$release_topdir_abs"/share
 export XDG_CONFIG_DIRS="\$release_topdir_abs"
@@ -187,6 +186,8 @@ export XDG_DATA_HOME=\$HOME/.local/share/yosyshq
 export XDG_CURRENT_DESKTOP="KDE"
 export TCL_LIBRARY="\$release_topdir_abs/lib/tcl8.6"
 export TK_LIBRARY="\$release_topdir_abs/lib/tk8.6"
+export GDK_PIXBUF_MODULE_FILE="\$XDG_CACHE_HOME/loaders.cache"
+mkdir -p \$XDG_CONFIG_HOME \$XDG_CACHE_HOME \$XDG_DATA_HOME
 "\$release_topdir_abs"/lib/$ldlinuxname --inhibit-cache --inhibit-rpath "" --library-path "\$release_topdir_abs"/lib "\$release_topdir_abs"/libexec/gdk-pixbuf-query-loaders --update-cache
 export LC_ALL="C"
 export GI_TYPELIB_PATH="\$release_topdir_abs/lib/girepository-1.0"
@@ -196,7 +197,6 @@ EOT
             cat >> "${script}" <<EOT
 export FONTCONFIG_FILE="\$XDG_CONFIG_HOME/fonts.conf"
 export FONTCONFIG_PATH="\$release_topdir_abs/etc/fonts"
-mkdir -p \$HOME/.config/yosyshq \$HOME/.local/share/yosyshq
 sed "s|TARGET_DIR|\$release_topdir_abs|g" "\$release_topdir_abs/etc/fonts/fonts.conf.template" > \$FONTCONFIG_FILE
 EOT
         fi
