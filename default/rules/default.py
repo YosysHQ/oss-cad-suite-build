@@ -19,6 +19,7 @@ Target(
         'dfu-util',
         'ecpprog',
         'openfpgaloader',
+        'aiger',
         'avy',
         'bitwuzla',
         'boolector',

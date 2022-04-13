@@ -187,3 +187,26 @@ Target(
 	sources = [ 'z3' ],
 	license_file = 'z3/LICENSE.txt',
 )
+
+# aiger
+
+SourceLocation(
+	name = 'aiger',
+	vcs = 'git',
+	location = 'https://github.com/arminbiere/aiger',
+	revision = 'origin/master'
+)
+
+SourceLocation(
+	name = 'picosat',
+	vcs = 'git',
+	location = 'https://github.com/mmicko/picosat',
+	revision = 'origin/main'
+)
+
+Target(
+	name = 'aiger',
+	sources = [ 'picosat', 'lingeling', 'aiger' ],
+	arch = [ 'linux-x64', 'linux-arm', 'linux-arm64', 'linux-riscv64', 'darwin-x64', 'darwin-arm64' ],
+	license_file = 'aiger/LICENSE',
+)
