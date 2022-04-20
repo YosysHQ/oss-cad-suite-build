@@ -85,10 +85,10 @@ source <extracted_location>/oss-cad-suite/environment
 ```
 Windows
 ```
-from existing shell:
+from existing CMD prompt:
 <extracted_location>\oss-cad-suite\environment.bat
 
-to create new shell window:
+to create new CMD prompt:
 <extracted_location>\oss-cad-suite\start.bat
 ```
 
