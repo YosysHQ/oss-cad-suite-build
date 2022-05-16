@@ -37,8 +37,7 @@ EOT
         fi
         if [ ! -z "$(basename $binfile | grep iverilog)" ]; then
             cat >> $binfile << EOT
-sed -i 'bak' 's|^flag:VVP_EXECUTABLE=.*$|flag:VVP_EXECUTABLE=/usr/bin/env '\$release_topdir_abs'/bin/vvp|g' \$release_topdir_abs/lib/ivl/vvp.conf
-sed -i 'bak' 's|^flag:VVP_EXECUTABLE=.*$|flag:VVP_EXECUTABLE=/usr/bin/env '\$release_topdir_abs'/bin/vvp|g' \$release_topdir_abs/lib/ivl/vvp-s.conf
+set -- "-p" "VVP_EXECUTABLE=\$release_topdir_abs/bin/vvp" "\$@"
 EOT
         fi
         if [ ! -z "$(basename $binfile | grep ghdl)" ]; then
