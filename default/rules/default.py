@@ -40,6 +40,7 @@ Target(
         'icesprog',
         'utils',
         'pyhdl',
+        'cocotb',
     ],
     branding = 'OSS CAD Suite',
     readme = 'README',
