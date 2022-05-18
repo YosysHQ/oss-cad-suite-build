@@ -61,6 +61,9 @@ Contact us at contact@yosyshq.com to arrange a free evaluation license.
  * [GTK Wave](https://github.com/gtkwave/gtkwave) fully featured GTK+ based wave viewer
  * [verilator](https://github.com/verilator/verilator) Verilog/SystemVerilog simulator
  * [iverilog](https://github.com/steveicarus/iverilog) Verilog compilation system
+ * [cocotb](https://github.com/cocotb/cocotb) coroutine based cosimulation library for writing VHDL and Verilog testbenches in Python
+   
+   **NOTE**: Verilator integration does not work since specific version is required
 
 ### Support libraries
  * [Python 3](https://github.com/python/cpython) language interpreter is provided in all supported platforms.
