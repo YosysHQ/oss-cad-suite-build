@@ -1546,6 +1546,43 @@ jobs:
           tag: bucket-linux-arm
           artifacts: "linux-arm-pyhdl.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
+  linux-arm-cocotb:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    needs: linux-arm-python3
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/oss-cad-suite-build'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-cocotb
+      - name: Download previous build
+        run: |
+          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm/linux-arm-cocotb.tgz"
+          if wget --spider "${URL}" 2>/dev/null; then
+              wget -qO- "${URL}" | tar xvfz -
+          else
+              echo "Previous version not found in bucket"
+          fi
+      - name: Download linux-arm-python3
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm/linux-arm-python3.tgz" | tar xvfz -
+      - name: Build
+        run: ./builder.py build --arch=linux-arm --target=cocotb --single --tar
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('linux-arm-cocotb.tgz') != ''
+        with:
+          allowUpdates: True
+          prerelease: True
+          omitBody: True
+          omitBodyDuringUpdate: True
+          omitNameDuringUpdate: True
+          tag: bucket-linux-arm
+          artifacts: "linux-arm-cocotb.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
   linux-arm-system-resources:
     runs-on: ubuntu-latest
     continue-on-error: true
@@ -1582,7 +1619,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-arm-default:
     runs-on: ubuntu-latest
-    needs: [ linux-arm-aiger, linux-arm-avy, linux-arm-bitwuzla, linux-arm-boolector, linux-arm-dfu-util, linux-arm-ecpdap, linux-arm-ecpprog, linux-arm-flask, linux-arm-fujprog, linux-arm-graphviz, linux-arm-gtkwave, linux-arm-icesprog, linux-arm-icestorm, linux-arm-iverilog, linux-arm-mcy, linux-arm-nextpnr-ecp5, linux-arm-nextpnr-generic, linux-arm-nextpnr-ice40, linux-arm-nextpnr-machxo2, linux-arm-nextpnr-nexus, linux-arm-openfpgaloader, linux-arm-openocd, linux-arm-pono, linux-arm-prjoxide, linux-arm-prjtrellis, linux-arm-pyhdl, linux-arm-python-programmers, linux-arm-python2, linux-arm-python3, linux-arm-sby, linux-arm-sby-gui, linux-arm-suprove, linux-arm-system-resources, linux-arm-utils, linux-arm-verilator, linux-arm-xdot, linux-arm-yices, linux-arm-yosys, linux-arm-z3 ]
+    needs: [ linux-arm-aiger, linux-arm-avy, linux-arm-bitwuzla, linux-arm-boolector, linux-arm-cocotb, linux-arm-dfu-util, linux-arm-ecpdap, linux-arm-ecpprog, linux-arm-flask, linux-arm-fujprog, linux-arm-graphviz, linux-arm-gtkwave, linux-arm-icesprog, linux-arm-icestorm, linux-arm-iverilog, linux-arm-mcy, linux-arm-nextpnr-ecp5, linux-arm-nextpnr-generic, linux-arm-nextpnr-ice40, linux-arm-nextpnr-machxo2, linux-arm-nextpnr-nexus, linux-arm-openfpgaloader, linux-arm-openocd, linux-arm-pono, linux-arm-prjoxide, linux-arm-prjtrellis, linux-arm-pyhdl, linux-arm-python-programmers, linux-arm-python2, linux-arm-python3, linux-arm-sby, linux-arm-sby-gui, linux-arm-suprove, linux-arm-system-resources, linux-arm-utils, linux-arm-verilator, linux-arm-xdot, linux-arm-yices, linux-arm-yosys, linux-arm-z3 ]
     steps:
       - name: Get current date
         id: date
@@ -1598,6 +1635,8 @@ jobs:
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm/linux-arm-bitwuzla.tgz" | tar xvfz -
       - name: Download linux-arm-boolector
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm/linux-arm-boolector.tgz" | tar xvfz -
+      - name: Download linux-arm-cocotb
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm/linux-arm-cocotb.tgz" | tar xvfz -
       - name: Download linux-arm-dfu-util
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm/linux-arm-dfu-util.tgz" | tar xvfz -
       - name: Download linux-arm-ecpdap
