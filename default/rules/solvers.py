@@ -96,7 +96,7 @@ SourceLocation(
 	name = 'smt-switch',
 	vcs = 'git',
 	location = 'https://github.com/makaimann/smt-switch',
-	revision = '0574042d56ad98d2373a1eba81493ca0c075a649'
+	revision = 'e64c261faa826beb51f22ff6d5e74f581362ab47'
 )
 
 SourceLocation(
@@ -113,10 +113,23 @@ SourceLocation(
 	revision = '3dda54ba7e6952060766775c56969ab920430a8a'
 )
 
+SourceLocation(
+	name = 'cvc5',
+	vcs = 'git',
+	location = 'https://github.com/cvc5/cvc5',
+	revision = '77d0bec48a745e3c4acd65085f9c59bdfceed6c0'
+)
+
 Target(
 	name = 'bison',
 	sources = [ 'smt-switch' ],
 	build_native = True,
+)
+
+Target(
+	name = 'cvc5',
+	sources = [ 'cvc5' ],
+	patches = [ 'get-antlr-3.4' ],
 )
 
 Target(

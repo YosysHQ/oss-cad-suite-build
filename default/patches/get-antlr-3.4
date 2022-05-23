@@ -1,0 +1,103 @@
+#!/usr/bin/env bash
+#
+source "$(dirname "$0")/get-script-header.sh"
+ANTLR_HOME_DIR="$DEPS_DIR/antlr-3.4"
+rm -rf "$ANTLR_HOME_DIR"
+
+while :; do
+  case $1 in
+    --host=?*)
+      host=${1#*=}
+      ANTLR_CONFIGURE_ARGS="--host=$host"
+      MACHINE_TYPE="$(echo "$host" | cut -d '-' -f 1)"
+      echo "Using MACHINE_TYPE=$MACHINE_TYPE for --host=$host"
+      ;;
+    --host=)
+      echo "Error: empty --host="
+      exit 1
+      ;;
+    *)
+      break
+  esac
+  shift
+done
+
+[ -z "${BUILD_TYPE}" ] && BUILD_TYPE="--disable-shared --enable-static"
+[ -z "${MACHINE_TYPE}" ] && MACHINE_TYPE="$(uname -m)"
+
+mkdir -p "$INSTALL_DIR/share/java"
+webget \
+  "https://www.antlr3.org/download/antlr-3.4-complete.jar" \
+  "$INSTALL_DIR/share/java/antlr-3.4-complete.jar"
+
+mkdir -p "$ANTLR_HOME_DIR/bin"
+tee "$ANTLR_HOME_DIR/bin/antlr3" <<EOF
+#!/usr/bin/env bash
+JAR_FILE="$INSTALL_DIR/share/java/antlr-3.4-complete.jar"
+exec java -cp "\$JAR_FILE" org.antlr.Tool "\$@"
+EOF
+chmod a+x "$ANTLR_HOME_DIR/bin/antlr3"
+install_bin "$ANTLR_HOME_DIR/bin/antlr3"
+
+setup_dep \
+  "https://www.antlr3.org/download/C/libantlr3c-3.4.tar.gz" \
+  "$ANTLR_HOME_DIR/libantlr3c-3.4"
+cd "$ANTLR_HOME_DIR/libantlr3c-3.4" || exit 1
+
+# Update config.guess for libantlr3c
+webget 'http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD' config.guess.new
+[ -f "config.guess.new" ] && mv config.guess.new config.guess
+
+# Add aarch64 architecture
+sed 's/avr32 \\$/avr32 | aarch64 \\/' config.sub > config.sub.new
+mv  config.sub.new config.sub
+
+# Make antlr3debughandlers.c empty to avoid unreferenced symbols
+rm -rf src/antlr3debughandlers.c && touch src/antlr3debughandlers.c
+
+# Enable 64-bit build
+if [[ "${MACHINE_TYPE}" == *"64" ]]; then
+  ANTLR_CONFIGURE_ARGS="$ANTLR_CONFIGURE_ARGS --enable-64bit"
+  echo "============== WARNING ===================="
+  echo "The script guessed that this machine is 64 bit."
+  echo "If ANTLR should be built as 32 bit \(i.e. -m32\),"
+  echo "please rerun the script as"
+  echo "    MACHINE_TYPE=\"x86\" ./get-antlr-3.4"
+else
+  echo "============== WARNING ===================="
+  echo "The script guessed that this machine is 32 bit."
+  echo "If ANTLR should be built as 64 bit \(i.e. -m64\),"
+  echo "please rerun the script as"
+  echo "    MACHINE_TYPE=\"x86_64\" ./get-antlr-3.4"
+fi
+
+# Build static ANTLR library
+
+./configure --disable-antlrdebug --prefix="$INSTALL_DIR" $ANTLR_CONFIGURE_ARGS $BUILD_TYPE
+
+cp Makefile Makefile.orig
+sed 's,^\(CFLAGS = .*\),\1 -fexceptions,' Makefile.orig > Makefile
+make CFLAGS="${MAKE_CFLAGS}" CXXFLAGS="${MAKE_CXXFLAGS}" LDFLAGS="${MAKE_LDFLAGS}"
+make install
+
+# Find and move the static build
+rename_installed_lib "libantlr3c.a" "libantlr3c-static.a"
+
+# Build shared ANTLR library
+make clean
+
+./configure --with-pic --disable-antlrdebug --prefix="$INSTALL_DIR" $ANTLR_CONFIGURE_ARGS $BUILD_TYPE
+
+cp Makefile Makefile.orig
+sed 's,^\(CFLAGS = .*\),\1 -fexceptions,' Makefile.orig > Makefile
+make CFLAGS="${MAKE_CFLAGS}" CXXFLAGS="${MAKE_CXXFLAGS}" LDFLAGS="${MAKE_LDFLAGS}"
+make install
+rename_installed_lib "libantlr3c.la" "libantlr3c.la.orig"
+
+LIB_DIR=$(guess_lib_dir "libantlr3c.la.orig")
+awk '/^old_library=/ {print "old_library='\''libantlr3c-static.a'\''"} /^library_names=/ {print "library_names='\''libantlr3c.a'\''"} !/^old_library=/ && !/^library_names=/ {print}' < "$LIB_DIR/libantlr3c.la.orig" > "$LIB_DIR/libantlr3c.la"
+rm "$LIB_DIR/libantlr3c.la.orig"
+
+echo
+echo ===================== Now configure CVC4 with =====================
+echo ./configure.sh
