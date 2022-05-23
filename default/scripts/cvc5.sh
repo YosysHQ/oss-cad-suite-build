@@ -9,10 +9,8 @@ git clone https://github.com/uiri/toml.git
 export PYTHONPATH=$PYTHONPATH:`pwd`/toml
 if [ ${ARCH_BASE} == 'windows' ]; then
     export CMAKE_TOOLCHAIN_FILE=${PATCHES_DIR}/Toolchain-mingw64.cmake
-    sed -i -re 's,cmake \"\$root_dir\" \$cmake_opts,cmake \"\$root_dir\" \$cmake_opts -DCMAKE_TOOLCHAIN_FILE=\$\{CMAKE_TOOLCHAIN_FILE\} -DCVC4_WINDOWS_BUILD=TRUE,g' configure.sh
-else
-    sed -i -re 's,cmake \"\$root_dir\" \$cmake_opts,cmake \"\$root_dir\" \$cmake_opts -DCMAKE_TOOLCHAIN_FILE=\$\{CMAKE_TOOLCHAIN_FILE\},g' configure.sh
 fi
+sed -i -re 's,cmake \"\$root_dir\" \$cmake_opts,cmake \"\$root_dir\" \$cmake_opts -DCMAKE_TOOLCHAIN_FILE=\$\{CMAKE_TOOLCHAIN_FILE\},g' configure.sh
 CXXFLAGS=-fPIC CFLAGS=-fPIC ./configure.sh --static --no-static-binary --prefix=${INSTALL_PREFIX} --no-unit-testing --auto-download --no-poly
 cd build
 make DESTDIR=${OUTPUT_DIR} -j${NPROC}
