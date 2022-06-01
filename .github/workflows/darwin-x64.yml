@@ -554,9 +554,44 @@ jobs:
           tag: bucket-darwin-x64
           artifacts: "darwin-x64-openfpgaloader.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
+  darwin-x64-picosat:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/oss-cad-suite-build'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-picosat
+      - name: Download previous build
+        run: |
+          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-darwin-x64/darwin-x64-picosat.tgz"
+          if wget --spider "${URL}" 2>/dev/null; then
+              wget -qO- "${URL}" | tar xvfz -
+          else
+              echo "Previous version not found in bucket"
+          fi
+      - name: Build
+        run: ./builder.py build --arch=darwin-x64 --target=picosat --single --tar
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('darwin-x64-picosat.tgz') != ''
+        with:
+          allowUpdates: True
+          prerelease: True
+          omitBody: True
+          omitBodyDuringUpdate: True
+          omitNameDuringUpdate: True
+          tag: bucket-darwin-x64
+          artifacts: "darwin-x64-picosat.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
   darwin-x64-aiger:
     runs-on: ubuntu-latest
     continue-on-error: true
+    needs: darwin-x64-picosat
     steps:
       - uses: actions/checkout@v2
         with:
@@ -575,6 +610,8 @@ jobs:
           else
               echo "Previous version not found in bucket"
           fi
+      - name: Download darwin-x64-picosat
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-darwin-x64/darwin-x64-picosat.tgz" | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=darwin-x64 --target=aiger --single --tar
       - uses: ncipollo/release-action@v1

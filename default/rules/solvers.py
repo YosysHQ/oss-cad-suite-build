@@ -242,8 +242,16 @@ SourceLocation(
 )
 
 Target(
+	name = 'picosat',
+	sources = [ 'picosat' ],
+	license_file = 'picosat/LICENSE',
+	license_build_only = True,
+)
+
+Target(
 	name = 'aiger',
-	sources = [ 'picosat', 'lingeling', 'aiger' ],
+	sources = [ 'lingeling', 'aiger' ],
+	dependencies = [ 'picosat' ],
 	arch = [ 'linux-x64', 'linux-arm', 'linux-arm64', 'linux-riscv64', 'darwin-x64', 'darwin-arm64' ],
 	license_file = 'aiger/LICENSE',
 )

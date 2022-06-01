@@ -767,9 +767,44 @@ jobs:
           tag: bucket-linux-x64
           artifacts: "linux-x64-openfpgaloader.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
+  linux-x64-picosat:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/oss-cad-suite-build'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-picosat
+      - name: Download previous build
+        run: |
+          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-picosat.tgz"
+          if wget --spider "${URL}" 2>/dev/null; then
+              wget -qO- "${URL}" | tar xvfz -
+          else
+              echo "Previous version not found in bucket"
+          fi
+      - name: Build
+        run: ./builder.py build --arch=linux-x64 --target=picosat --single --tar
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('linux-x64-picosat.tgz') != ''
+        with:
+          allowUpdates: True
+          prerelease: True
+          omitBody: True
+          omitBodyDuringUpdate: True
+          omitNameDuringUpdate: True
+          tag: bucket-linux-x64
+          artifacts: "linux-x64-picosat.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-aiger:
     runs-on: ubuntu-latest
     continue-on-error: true
+    needs: linux-x64-picosat
     steps:
       - uses: actions/checkout@v2
         with:
@@ -788,6 +823,8 @@ jobs:
           else
               echo "Previous version not found in bucket"
           fi
+      - name: Download linux-x64-picosat
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-picosat.tgz" | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-x64 --target=aiger --single --tar
       - uses: ncipollo/release-action@v1

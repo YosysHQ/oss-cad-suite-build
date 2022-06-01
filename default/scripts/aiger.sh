@@ -1,7 +1,5 @@
-cd picosat
-./configure.sh
-make
-cd ../aiger
+mv ${BUILD_DIR}/picosat/dev/* ${BUILD_DIR}/picosat
+cd aiger
 $CC -O3 -DNDEBUG -c aiger.c
 cd ../lingeling
 ./configure.sh
