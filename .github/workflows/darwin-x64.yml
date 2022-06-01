@@ -134,6 +134,8 @@ jobs:
           else
               echo "Previous version not found in bucket"
           fi
+      - name: Download linux-x64-abc
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-abc.tgz" | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=darwin-x64 --target=yosys --single --tar
       - uses: ncipollo/release-action@v1

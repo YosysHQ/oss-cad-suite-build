@@ -6,6 +6,40 @@ on:
     - cron: '30 0 * * *'
 
 jobs:
+  linux-x64-abc:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/oss-cad-suite-build'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-abc
+      - name: Download previous build
+        run: |
+          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-abc.tgz"
+          if wget --spider "${URL}" 2>/dev/null; then
+              wget -qO- "${URL}" | tar xvfz -
+          else
+              echo "Previous version not found in bucket"
+          fi
+      - name: Build
+        run: ./builder.py build --arch=linux-x64 --target=abc --single --tar
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('linux-x64-abc.tgz') != ''
+        with:
+          allowUpdates: True
+          prerelease: True
+          omitBody: True
+          omitBodyDuringUpdate: True
+          omitNameDuringUpdate: True
+          tag: bucket-linux-x64
+          artifacts: "linux-x64-abc.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-python3:
     runs-on: ubuntu-latest
     continue-on-error: true
@@ -114,6 +148,7 @@ jobs:
   linux-x64-yosys:
     runs-on: ubuntu-latest
     continue-on-error: true
+    needs: linux-x64-abc
     steps:
       - uses: actions/checkout@v2
         with:
@@ -132,6 +167,8 @@ jobs:
           else
               echo "Previous version not found in bucket"
           fi
+      - name: Download linux-x64-abc
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-abc.tgz" | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-x64 --target=yosys --single --tar
       - uses: ncipollo/release-action@v1

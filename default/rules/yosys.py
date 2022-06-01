@@ -21,10 +21,26 @@ SourceLocation(
 	revision = 'tags/2.42.2'
 )
 
+SourceLocation(
+	name = 'abc',
+	vcs = 'git',
+	location = 'https://github.com/YosysHQ/abc',
+	revision = 'origin/yosys-experimental'
+)
+
+Target(
+	name = 'abc',
+	sources = [ 'abc'],
+	build_native = True, # using this for license only
+	license_file = 'abc/copyright.txt',
+	license_build_only = True,
+)
+
 Target(
 	name = 'yosys',
 	sources = [ 'yosys'],
 	resources = [ 'xdot', 'graphviz' ],
+	dependencies = [ 'abc' ],
 	license_file = 'yosys/COPYING',
 )
 
