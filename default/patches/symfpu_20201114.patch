@@ -1,0 +1,348 @@
+# Copyright (C) 2020 Martin Brain.
+
+diff --git a/core/add.h b/core/add.h
+index 44ee8ae..028ccae 100644
+--- a/core/add.h
++++ b/core/add.h
+@@ -396,15 +396,14 @@ template <class t>
+ 		     ubv::zero(alignedSum.getWidth()),
+ 		     (shiftedStickyBit | ITE(!overflow, ubv::zero(1), sum.extract(0,0)).extend(alignedSum.getWidth() - 1))));
+    
+-   
+-   // Put it back together
+-   unpackedFloat<t> sumResult(resultSign, correctedExponent, (alignedSum | stickyBit).contract(1));
+-
+    // We return something in an extended format
+    //  *. One extra exponent bit to deal with the 'overflow' case
+    //  *. Two extra significand bits for the guard and sticky bits
+    fpt extendedFormat(format.exponentWidth() + 1, format.significandWidth() + 2);
+    
++   // Put it back together
++   unpackedFloat<t> sumResult(extendedFormat, resultSign, correctedExponent, (alignedSum | stickyBit).contract(1));
++
+    // Deal with the major cancellation case
+    // It would be nice to use normaliseUpDetectZero but the sign
+    // of the zero depends on the rounding mode.
+@@ -524,7 +523,7 @@ template <class t>
+ 				 extendedLargerExponent.decrement())));
+ 
+    // Far path : Construct result
+-   unpackedFloat<t> farPathResult(resultSign, correctedExponent, (alignedSum | shiftedStickyBit).contract(1));
++   unpackedFloat<t> farPathResult(extendedFormat, resultSign, correctedExponent, (alignedSum | shiftedStickyBit).contract(1));
+ 
+ 
+ 
+@@ -542,13 +541,14 @@ template <class t>
+    prop nearNoCancel(nearSum.extract(sumWidth - 2, sumWidth - 2).isAllOnes());
+ 
+    ubv choppedNearSum(nearSum.extract(sumWidth - 3,1)); // In the case this is used, cut bits are all 0 
+-   unpackedFloat<t> cancellation(resultSign, 
++   unpackedFloat<t> cancellation(extendedFormat,
++				 resultSign,
+ 				 larger.getExponent().decrement(),
+ 				 choppedNearSum);
+ 
+ 
+    // Near path : Construct result
+-   unpackedFloat<t> nearPathResult(resultSign, extendedLargerExponent, nearSum.contract(1));
++   unpackedFloat<t> nearPathResult(extendedFormat, resultSign, extendedLargerExponent, nearSum.contract(1));
+ 
+ 
+ 
+diff --git a/core/convert.h b/core/convert.h
+index 27b1f58..372f3a5 100644
+--- a/core/convert.h
++++ b/core/convert.h
+@@ -94,14 +94,20 @@ unpackedFloat<t> roundToIntegral (const typename t::fpt &format,
+   
+   // Otherwise, compute rounding location
+   sbv initialRoundingPoint(expandingSubtract<t>(packedSigWidth,exponent));  // Expansion only needed in obscure formats
+-  sbv roundingPoint(collar<t>(initialRoundingPoint,
+-			      sbv::zero(exponentWidth + 1),
+-			      unpackedSigWidth.extend(1).increment()));
++  sbv collaredRoundingPoint(collar<t>(initialRoundingPoint,
++				      sbv::zero(exponentWidth + 1),
++				      unpackedSigWidth.extend(1).increment()));
+ 
+   // Round
+   ubv significand(input.getSignificand());
++  bwt significandWidth(significand.getWidth());
++  ubv roundingPoint((significandWidth >= exponentWidth) ?
++		    collaredRoundingPoint.toUnsigned().matchWidth(significand) :
++		    collaredRoundingPoint.toUnsigned().extract(significandWidth - 1, 0));
++  // Extract is safe because of the collar
++
+   significandRounderResult<t> roundedResult(variablePositionRound<t>(roundingMode, input.getSign(), significand,
+-								     roundingPoint.toUnsigned().matchWidth(significand),
++								     roundingPoint,
+ 								     prop(false), // TODO : Could actually be exponent >= 0
+ 								     isID));      // The fast-path case so just deactives some code
+ 
+@@ -168,14 +174,18 @@ unpackedFloat<t> roundToIntegral (const typename t::fpt &format,
+ template <class t>
+   unpackedFloat<t> convertUBVToFloat (const typename t::fpt &targetFormat,
+ 				      const typename t::rm &roundingMode,
+-				      const typename t::ubv &input,
++				      const typename t::ubv &preInput,
+ 				      const typename t::bwt &decimalPointPosition = 0) {
+   
+   typedef typename t::bwt bwt;
+   typedef typename t::prop prop;
++  typedef typename t::ubv ubv;
+   typedef typename t::sbv sbv;
+   typedef typename t::fpt fpt;
+ 
++  // In the case of a 1 bit input(?) extend to 2 bits so that the intermediate float is a sensible format
++  ubv input((preInput.getWidth() == 1) ? preInput.extend(1) : preInput);
++
+   bwt inputWidth(input.getWidth());
+ 
+   PRECONDITION(decimalPointPosition <= inputWidth);
+@@ -208,6 +218,7 @@ template <class t>
+ 
+   bwt inputWidth(input.getWidth());
+ 
++  PRECONDITION(inputWidth > 1);   // A 1 bit signed-number is ???
+   PRECONDITION(decimalPointPosition <= inputWidth);
+   
+   // Devise an appropriate format 
+diff --git a/core/divide.h b/core/divide.h
+index 9cfcebc..90f126a 100644
+--- a/core/divide.h
++++ b/core/divide.h
+@@ -105,7 +105,8 @@ template <class t>
+   ubv finishedSignificand(alignedSignificand | ubv(divided.remainderBit).extend(resWidth - 1));
+   
+   // Put back together
+-  unpackedFloat<t> divideResult(divideSign, alignedExponent.extend(1), finishedSignificand);
++  fpt extendedFormat(format.exponentWidth() + 1, format.significandWidth() + 2);
++  unpackedFloat<t> divideResult(extendedFormat, divideSign, alignedExponent, finishedSignificand);
+ 
+   // A brief word about formats.
+   // You might think that the extend above is unnecessary : it is from a overflow point of view.
+@@ -115,7 +116,6 @@ template <class t>
+   // can have an exponent greater than very large normal * 2 ( + 1)
+   // because the exponent range is asymmetric with more subnormal than normal.
+   
+-  fpt extendedFormat(format.exponentWidth() + 2, format.significandWidth() + 2);
+   POSTCONDITION(divideResult.valid(extendedFormat));
+ 
+   return divideResult;
+diff --git a/core/multiply.h b/core/multiply.h
+index f464de1..7aeb463 100644
+--- a/core/multiply.h
++++ b/core/multiply.h
+@@ -97,10 +97,9 @@ template <class t>
+ 
+   
+   // Put back together
+-  unpackedFloat<t> multiplyResult(multiplySign, alignedExponent, alignedSignificand);
+-
+-  
+   fpt extendedFormat(format.exponentWidth() + 1, format.significandWidth() * 2);
++  unpackedFloat<t> multiplyResult(extendedFormat, multiplySign, alignedExponent, alignedSignificand);
++
+   POSTCONDITION(multiplyResult.valid(extendedFormat));
+ 
+   return multiplyResult;
+diff --git a/core/operations.h b/core/operations.h
+index 84b0263..15ead9e 100644
+--- a/core/operations.h
++++ b/core/operations.h
+@@ -24,6 +24,24 @@
+ 
+ namespace symfpu {
+ 
++  /*** Size matching ***/
++  template <class t, class bv>
++  std::pair<bv, bv> sameWidth(const bv &op1, const bv &op2) {
++    typename t::bwt w1(op1.getWidth());
++    typename t::bwt w2(op2.getWidth());
++
++    if (w1 == w2) {
++      return std::make_pair(op1, op2);
++    } else if (w1 < w2) {
++      return std::make_pair(op1.matchWidth(op2), op2);
++    } else {
++      INVARIANT(w1 > w2);
++      return std::make_pair(op1.matchWidth(op2), op2);
++    }
++  }
++
++
++
+   /*** Expanding operations ***/
+   template <class t, class bv>
+   bv expandingAdd (const bv &op1, const bv &op2) {
+diff --git a/core/packing.h b/core/packing.h
+index b93d884..65a97c4 100644
+--- a/core/packing.h
++++ b/core/packing.h
+@@ -102,7 +102,7 @@ namespace symfpu {
+     ubv packedSign(uf.getSign());
+ 
+     // Exponent
+-    bwt packedExWidth = format.packedExponentWidth();
++    bwt packedExWidth(format.packedExponentWidth());
+ 
+     prop inNormalRange(uf.inNormalRange(format, prop(true)));
+     INVARIANT(inNormalRange || uf.inSubnormalRange(format, prop(true)));     // Default values ensure this.
+@@ -131,10 +131,18 @@ namespace symfpu {
+     // Significand
+     bwt packedSigWidth = format.packedSignificandWidth();
+     ubv unpackedSignificand(uf.getSignificand());
++    bwt unpackedSignificandWidth = unpackedSignificand.getWidth();
+ 
+-    INVARIANT(packedSigWidth == unpackedSignificand.getWidth() - 1);
++    INVARIANT(packedSigWidth == unpackedSignificandWidth - 1);
+     ubv dropLeadingOne(unpackedSignificand.extract(packedSigWidth - 1,0));
+-    ubv correctedSubnormal((unpackedSignificand >> (uf.getSubnormalAmount(format).toUnsigned().matchWidth(unpackedSignificand))).extract(packedSigWidth - 1,0));
++
++    ubv subnormalShiftAmount(uf.getSubnormalAmount(format).toUnsigned());
++    ubv shiftAmount((subnormalShiftAmount.getWidth() <= unpackedSignificandWidth) ?
++		    subnormalShiftAmount.matchWidth(unpackedSignificand) :
++		    subnormalShiftAmount.extract(unpackedSignificandWidth - 1, 0));
++    // The extraction could loose data if exponent is much larger than the significand
++    // However getSubnormalAmount is between 0 and packedSigWidth so it should be safe
++    ubv correctedSubnormal((unpackedSignificand >> shiftAmount).extract(packedSigWidth - 1,0));
+ 
+     prop hasFixedSignificand(uf.getNaN() || uf.getInf() || uf.getZero());
+     
+diff --git a/core/rounder.h b/core/rounder.h
+index 3eb4796..723f5be 100644
+--- a/core/rounder.h
++++ b/core/rounder.h
+@@ -381,7 +381,14 @@ template <class t>
+   // Note that this is negative if normal, giving a full subnormal mask
+   // but the result will be ignored (see the next invariant)
+ 
+-  ubv subnormalShiftPrepared(subnormalAmount.toUnsigned().matchWidth(extractedSignificand));
++
++  // Care is needed if the exponents are longer than the significands
++  // In the case when data is lost it is negative and not used
++  bwt extractedSignificandWidth(extractedSignificand.getWidth());
++  ubv subnormalShiftPrepared((extractedSignificandWidth >= expWidth + 1) ?
++			     subnormalAmount.toUnsigned().matchWidth(extractedSignificand) :
++			     subnormalAmount.toUnsigned().extract(extractedSignificandWidth - 1, 0));
++
+ 
+   // Compute masks
+   ubv subnormalMask(orderEncode<t>(subnormalShiftPrepared)); // Invariant implies this if all ones, it will not be used
+@@ -569,8 +576,11 @@ unpackedFloat<t> originalRounder (const typename t::fpt &format,
+   prop aboveLimit(subnormalAmount >= sbv(expWidth, targetSignificandWidth));  // Will underflow
+   sbv subnormalShift(ITE((belowLimit || aboveLimit), sbv::zero(expWidth), subnormalAmount));
+   // Optimisation : collar
+-  
+-  ubv subnormalShiftPrepared(subnormalShift.toUnsigned().extend(targetSignificandWidth - expWidth));
++
++  bwt extractedSignificandWidth(extractedSignificand.getWidth());
++  ubv subnormalShiftPrepared((extractedSignificandWidth >= expWidth + 1) ?
++			     subnormalAmount.toUnsigned().extend(targetSignificandWidth - expWidth) :
++			     subnormalAmount.toUnsigned().extract(extractedSignificandWidth - 1, 0));
+   ubv guardLocation(ubv::one(targetSignificandWidth) << subnormalShiftPrepared);
+   ubv stickyMask(guardLocation.decrement());
+ 
+diff --git a/core/sqrt.h b/core/sqrt.h
+index b7a1f65..d66206c 100644
+--- a/core/sqrt.h
++++ b/core/sqrt.h
+@@ -91,12 +91,11 @@ template <class t>
+ 
+   ubv finishedSignificand(sqrtd.result.append(ubv(sqrtd.remainderBit)));
+ 
+-  unpackedFloat<t> sqrtResult(sqrtSign, exponentHalved, finishedSignificand);
+-
+-  
+   fpt extendedFormat(format.exponentWidth(), format.significandWidth() + 2);
+   // format.exponentWidth() - 1 should also be true but requires shrinking the exponent and
+   // then increasing it in the rounder
++  unpackedFloat<t> sqrtResult(extendedFormat, sqrtSign, exponentHalved, finishedSignificand);
++
+   POSTCONDITION(sqrtResult.valid(extendedFormat));
+ 
+   return sqrtResult;
+diff --git a/core/unpackedFloat.h b/core/unpackedFloat.h
+index 691b346..9e1be93 100644
+--- a/core/unpackedFloat.h
++++ b/core/unpackedFloat.h
+@@ -102,6 +102,17 @@ namespace symfpu {
+       sign(s), exponent(exp), significand(signif)
+       {}
+ 
++    // An intermediate point in some operations is producing a value in an extended
++    // format (for example, multiply produces an intermediate value with one extra exponent
++    // bit and double the number of significand bits).  However the unpacked size of the
++    // significand is larger than the bits given by the format.  This constructor does
++    // the appropriate extension so that what is constructed is a valid unpacked float
++    // in the given format.
++    unpackedFloat (const fpt &fmt, const prop &s, const sbv &exp, const ubv &signif) :
++      nan(false), inf(false), zero(false),
++      sign(s), exponent(exp.matchWidth(defaultExponent(fmt))), significand(signif)
++      {}
++
+     unpackedFloat (const unpackedFloat<t> &old) :
+       nan(old.nan), inf(old.inf), zero(old.zero),
+       sign(old.sign), exponent(old.exponent), significand(old.significand)
+@@ -155,6 +166,8 @@ namespace symfpu {
+ 
+     static bwt exponentWidth(const fpt &format) {
+ 
++      // This calculation is a little more complex than you might think...
++
+       // Note that there is one more exponent above 0 than there is
+       // below.  This is the opposite of 2's compliment but this is not
+       // a problem because the highest packed exponent corresponds to
+@@ -163,17 +176,33 @@ namespace symfpu {
+       // However we do need to increase it to allow subnormals (packed)
+       // to be normalised.
+ 
+-      bwt width = format.exponentWidth();
++      // The smallest exponent is:
++      //  -2^(format.exponentWidth() - 1) - 2  -  (format.significandWidth() - 1)
++      //
++      // We need an unpacked exponent width u such that
++      //  -2^(u-1) <= -2^(format.exponentWidth() - 1) - 2  -     (format.significandWidth() - 1)
++      //           i.e.
++      //   2^(u-1) >=  2^(format.exponentWidth() - 1)      +     (format.significandWidth() - 3)
++
++      bwt formatExponentWidth = format.exponentWidth();
++      bwt formatSignificandWidth = format.significandWidth();
++
++      if (formatSignificandWidth <= 3) {
++	// Subnormals fit into the gap between minimum normal exponent and what is represenatble
++	// using a signed number
++	return formatExponentWidth;
++      }
+ 
+-      // Could be improved to remove overflow concerns
+-      uint64_t minimumExponent = ((1 << (width - 1)) - 2) + (format.significandWidth() - 1);
++      bwt bitsNeededForSubnormals = bitsToRepresent(format.significandWidth() - 3);
++      if (bitsNeededForSubnormals < formatExponentWidth - 1) {
++	// Significand is short compared to exponent range,
++	// one extra bit should be sufficient
++	return formatExponentWidth + 1;
+ 
+-      // Increase width until even the smallest subnormal can be normalised
+-      while ((1UL << (width - 1)) < minimumExponent) {
+-	++width;
++      } else {
++	// Significand is long compared to exponent range
++	return bitsToRepresent((bwt(1) << (formatExponentWidth - 1)) + formatSignificandWidth - 3) + 1;
+       }
+-
+-      return width;
+     }
+ 
+     static bwt significandWidth(const fpt &format) {
+@@ -409,7 +438,10 @@ namespace symfpu {
+ 		(subnormalAmount <= sbv(exWidth,sigWidth)));
+ 
+       // Invariant implies this following steps do not loose data
+-      ubv mask(orderEncode<t>(subnormalAmount.toUnsigned().matchWidth(significand)));
++      ubv mask(orderEncode<t>((sigWidth >= exWidth) ?
++			      subnormalAmount.toUnsigned().matchWidth(significand) :
++			      subnormalAmount.toUnsigned().extract(sigWidth - 1, 0)
++			      ));
+ 
+       prop correctlyAbbreviated((mask & significand).isAllZeros());
+ 

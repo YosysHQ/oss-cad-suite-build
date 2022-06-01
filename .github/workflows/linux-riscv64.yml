@@ -752,6 +752,8 @@ jobs:
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-riscv64/linux-riscv64-cadical.tgz" | tar xvfz -
       - name: Download linux-riscv64-lingeling
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-riscv64/linux-riscv64-lingeling.tgz" | tar xvfz -
+      - name: Download linux-x64-symfpu
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-symfpu.tgz" | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-riscv64 --target=bitwuzla --single --tar
       - uses: ncipollo/release-action@v1

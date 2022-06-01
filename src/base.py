@@ -89,7 +89,7 @@ class SourceLocation:
 		sources[name] = self
 
 class Target:
-	def __init__(self, name, sources = [], dependencies = [], resources = [], patches = [], arch = [], license_url = None, license_file = None, top_package = False, build_native = False, release_name = None, gitrev = [], branding = None, readme = None, package = None, tools = None, preload = None):
+	def __init__(self, name, sources = [], dependencies = [], resources = [], patches = [], arch = [], license_url = None, license_file = None, license_build_only = False, top_package = False, build_native = False, release_name = None, gitrev = [], branding = None, readme = None, package = None, tools = None, preload = None):
 		self.name = name
 		self.sources = sources
 		self.dependencies = dependencies
@@ -97,6 +97,7 @@ class Target:
 		self.patches = patches
 		self.license_url = license_url
 		self.license_file = license_file
+		self.license_build_only = license_build_only
 		self.hash = None
 		self.built = False
 		self.top_package = top_package
@@ -635,18 +636,25 @@ def buildCode(build_target, build_arch, nproc, force, dry, pack_sources, single,
 			os.makedirs(license_dir)
 			license_file = os.path.join(license_dir, "LICENSE." + target.name)
 			with open(license_file, 'w') as f:
-				f.write("YosysHQ embeds '{}' in its distribution bundle.\n".format(target.name))
-				f.write("\nBuild is based on folowing sources:\n")
-				f.write('=' * 80 + '\n')
-				for s in target.sources:
-					f.write("{} {} checkout revision {}\n".format(sources[s].vcs, sources[s].location, sources[s].hash))
-				f.write("\nFollowing files are included:\n")
-				f.write('=' * 80 + '\n')
-				for root, _, files in sorted(os.walk(output_dir)):
-					for filename in sorted(files):
-						fpath = os.path.join(root, filename).replace(output_dir,"")
-						if not fpath.startswith("/dev"):
-							f.write(fpath.replace("/yosyshq/","") + '\n')
+				if target.license_build_only:
+					f.write("YosysHQ uses '{}' to build package(s) in its distribution bundle.\n".format(target.name))
+					f.write("\nBuild is based on folowing sources:\n")
+					f.write('=' * 80 + '\n')
+					for s in target.sources:
+						f.write("{} {} checkout revision {}\n".format(sources[s].vcs, sources[s].location, sources[s].hash))
+				else:
+					f.write("YosysHQ embeds '{}' in its distribution bundle.\n".format(target.name))
+					f.write("\nBuild is based on folowing sources:\n")
+					f.write('=' * 80 + '\n')
+					for s in target.sources:
+						f.write("{} {} checkout revision {}\n".format(sources[s].vcs, sources[s].location, sources[s].hash))
+					f.write("\nFollowing files are included:\n")
+					f.write('=' * 80 + '\n')
+					for root, _, files in sorted(os.walk(output_dir)):
+						for filename in sorted(files):
+							fpath = os.path.join(root, filename).replace(output_dir,"")
+							if not fpath.startswith("/dev"):
+								f.write(fpath.replace("/yosyshq/","") + '\n')
 				f.write("\nSoftware is under following license :\n")
 				f.write('=' * 80 + '\n')
 				if target.license_url is not None:
@@ -660,6 +668,11 @@ def buildCode(build_target, build_arch, nproc, force, dry, pack_sources, single,
 					with open(os.path.join(build_dir, target.license_file), 'r') as lf:
 						f.write(lf.read())
 				f.write('\n' + '=' * 80 + '\n')
+			for dep in target.dependencies:
+				dep_license_dir = os.path.join(build_dir, dep + prefix, "license")
+				log_step("Adding dependancy license file for {} ...".format(dep))
+				if os.path.exists(dep_license_dir):
+					run(['rsync','-a', dep_license_dir+"/", license_dir])
 
 		if target.top_package:
 			if arch == 'windows-x64':

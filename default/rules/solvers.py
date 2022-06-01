@@ -18,6 +18,22 @@ Target(
 # bitwuzla
 
 SourceLocation(
+	name = 'symfpu',
+	vcs = 'git',
+	location = 'https://github.com/martin-cs/symfpu',
+	revision = '8fbe139bf0071cbe0758d2f6690a546c69ff0053',
+)
+
+Target(
+	name = 'symfpu',
+	sources = [ 'symfpu' ],
+	patches = [ 'symfpu_20201114.patch' ],
+	license_file = 'symfpu/LICENSE',
+	license_build_only = True,
+	build_native = True, # header only library
+)
+
+SourceLocation(
 	name = 'bitwuzla',
 	vcs = 'git',
 	location = 'https://github.com/bitwuzla/bitwuzla',
@@ -27,7 +43,7 @@ SourceLocation(
 Target(
 	name = 'bitwuzla',
 	sources = [ 'bitwuzla' ],
-	dependencies = [ 'lingeling', 'cadical', 'btor2tools' ],
+	dependencies = [ 'lingeling', 'cadical', 'btor2tools', 'symfpu' ],
 	patches = [ 'Toolchain-mingw64.cmake' ],
 	license_file = 'bitwuzla/COPYING',
 )
@@ -46,6 +62,7 @@ Target(
 	sources = [ 'lingeling' ],
 	patches = [ 'Lingeling_20190110.patch' ],
 	license_file = 'lingeling/COPYING',
+	license_build_only = True,
 )
 
 SourceLocation(
@@ -60,6 +77,7 @@ Target(
 	sources = [ 'cadical' ],
 	patches = [ 'CaDiCaL_20190730.patch' ],
 	license_file = 'cadical/LICENSE',
+	license_build_only = True,
 )
 
 SourceLocation(
@@ -73,6 +91,7 @@ Target(
 	name = 'btor2tools',
 	sources = [ 'btor2tools' ],
 	license_file = 'btor2tools/LICENSE.txt',
+	license_build_only = True,
 )
 
 SourceLocation(
@@ -130,11 +149,15 @@ Target(
 	name = 'cvc5',
 	sources = [ 'cvc5' ],
 	patches = [ 'get-antlr-3.4' ],
+	license_file = 'cvc5/COPYING',
+	license_build_only = True,
 )
 
 Target(
 	name = 'cvc4',
 	sources = [ 'cvc4' ],
+	license_file = 'cvc4/COPYING',
+	license_build_only = True,
 )
 
 Target(
@@ -143,6 +166,7 @@ Target(
 	dependencies = [ 'cvc4', 'boolector', 'bison' ],
 	patches = [ 'smt-switch-win32.diff' ],
 	license_file = 'smt-switch/LICENSE',
+	license_build_only = True,
 )
 
 Target(

@@ -641,6 +641,8 @@ jobs:
           else
               echo "Previous version not found in bucket"
           fi
+      - name: Download linux-x64-symfpu
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-symfpu.tgz" | tar xvfz -
       - name: Download windows-x64-btor2tools
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-windows-x64/windows-x64-btor2tools.tgz" | tar xvfz -
       - name: Download windows-x64-cadical

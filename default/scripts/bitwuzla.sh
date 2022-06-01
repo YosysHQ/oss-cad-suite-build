@@ -2,11 +2,9 @@ mkdir -p bitwuzla/deps/install
 cp -r btor2tools/${INSTALL_PREFIX}/* bitwuzla/deps/install/.
 cp -r cadical/${INSTALL_PREFIX}/* bitwuzla/deps/install/.
 cp -r lingeling/${INSTALL_PREFIX}/* bitwuzla/deps/install/.
+cp -r symfpu/${INSTALL_PREFIX}/* bitwuzla/deps/install/.
 
 cd bitwuzla
-
-# Download and build SymFPU
-./contrib/setup-symfpu.sh
 
 # Build Bitwuzla
 sed -i -re "s,cmake ..,cmake .. -DCMAKE_TOOLCHAIN_FILE=\${CMAKE_TOOLCHAIN_FILE},g" ./configure.sh
