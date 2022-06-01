@@ -644,6 +644,18 @@ def buildCode(build_target, build_arch, nproc, force, dry, pack_sources, single,
 						f.write("{} {} checkout revision {}\n".format(sources[s].vcs, sources[s].location, sources[s].hash))
 				else:
 					f.write("YosysHQ embeds '{}' in its distribution bundle.\n".format(target.name))
+					build_deps = 0
+					for dep in target.dependencies:
+						if (targets[dep].license_build_only):
+							build_deps += 1
+
+					if (build_deps> 0):
+						f.write("\nThis package is built using packages: ")
+						for dep in target.dependencies:
+							if (targets[dep].license_build_only):
+								f.write("'{}' ".format(dep))
+						f.write("\n")
+						
 					f.write("\nBuild is based on folowing sources:\n")
 					f.write('=' * 80 + '\n')
 					for s in target.sources:
