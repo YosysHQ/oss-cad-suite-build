@@ -54,13 +54,20 @@ Target(
 	arch = [ 'linux-x64' ],
 )
 
+SourceLocation(
+	name = 'xdot',
+	vcs = 'git',
+	location = 'https://github.com/jrfonseca/xdot.py',
+	revision = '6248c81c21a0fe825089311b17f2c302eea614a2',
+	license_file = 'LICENSE.txt',
+)
+
 Target(
 	name = 'xdot',
 	dependencies = [ 'python3' ],
 	resources = [ 'python3' ],
 	patches = [ 'python3_package.sh' ],
-	sources = [ ],
-	#license_url = 'https://raw.githubusercontent.com/jrfonseca/xdot.py/master/LICENSE.txt',
+	sources = [ 'xdot' ],
 	arch = [ 'linux-x64', 'linux-arm', 'linux-arm64', 'linux-riscv64', 'darwin-x64', 'darwin-arm64' ],
 )
 
