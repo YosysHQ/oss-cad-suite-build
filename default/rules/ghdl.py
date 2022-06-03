@@ -5,11 +5,11 @@ SourceLocation(
 	vcs = 'git',
 	location = 'https://github.com/ghdl/ghdl',
 	revision = 'origin/master',
+	license_file = 'COPYING.md',
 )
 
 Target(
 	name = 'ghdl',
 	sources = [ 'ghdl' ],
-	license_file = 'ghdl/COPYING.md',
 	arch = [ 'linux-x64' ],
 )

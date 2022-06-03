@@ -4,25 +4,25 @@ SourceLocation(
 	name = 'sby',
 	vcs = 'git',
 	location = 'https://github.com/YosysHQ/sby',
-	revision = 'origin/master'
+	revision = 'origin/master',
+	license_file = 'COPYING',
 )
 
 Target(
 	name = 'sby',
 	sources = [ 'sby' ],
 	resources = [ 'python3' ],
-	license_file = 'sby/COPYING',
 )
 
 SourceLocation(
 	name = 'sby-gui',
 	vcs = 'git',
 	location = 'https://github.com/YosysHQ/sby-gui',
-	revision = 'origin/master'
+	revision = 'origin/master',
+	license_file = 'COPYING',
 )
 
 Target(
 	name = 'sby-gui',
 	sources = [ 'sby-gui' ],
-	license_file = 'sby-gui/COPYING',
 )

@@ -5,6 +5,7 @@ SourceLocation(
 	vcs = 'git',
 	location = 'https://github.com/cocotb/cocotb',
 	revision = 'origin/master',
+	license_file = 'LICENSE',
 )
 
 Target(

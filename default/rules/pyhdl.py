@@ -6,6 +6,7 @@ SourceLocation(
 	vcs = 'git',
 	location = 'https://github.com/amaranth-lang/amaranth',
 	revision = 'origin/main',
+	license_file = 'LICENSE.txt',
 )
 
 SourceLocation(
@@ -13,6 +14,7 @@ SourceLocation(
 	vcs = 'git',
 	location = 'https://github.com/amaranth-lang/amaranth-boards',
 	revision = 'origin/main',
+	license_file = 'LICENSE.txt',
 )
 
 SourceLocation(
@@ -20,6 +22,7 @@ SourceLocation(
 	vcs = 'git',
 	location = 'https://github.com/m-labs/migen',
 	revision = 'origin/master',
+	license_file = 'LICENSE',
 )
 
 Target(

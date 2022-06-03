@@ -79,24 +79,25 @@ def get_size(path: str) -> int:
     return sum(p.stat().st_size for p in Path(path).rglob('*'))
 
 class SourceLocation:
-	def __init__(self, name, vcs, location, revision, no_submodules = False):
+	def __init__(self, name, vcs, location, revision, license_url = None, license_file = None, license_build_only = False, no_submodules = False):
 		self.name = name
 		self.location = location
 		self.vcs = vcs
 		self.revision = revision
 		self.hash = None
+		self.license_url = license_url
+		self.license_file = license_file
+		self.license_build_only = license_build_only
 		self.no_submodules = no_submodules
 		sources[name] = self
 
 class Target:
-	def __init__(self, name, sources = [], dependencies = [], resources = [], patches = [], arch = [], license_url = None, license_file = None, license_build_only = False, top_package = False, build_native = False, release_name = None, gitrev = [], branding = None, readme = None, package = None, tools = None, preload = None):
+	def __init__(self, name, sources = [], dependencies = [], resources = [], patches = [], arch = [], license_build_only = False, top_package = False, build_native = False, release_name = None, gitrev = [], branding = None, readme = None, package = None, tools = None, preload = None):
 		self.name = name
 		self.sources = sources
 		self.dependencies = dependencies
 		self.resources = resources
 		self.patches = patches
-		self.license_url = license_url
-		self.license_file = license_file
 		self.license_build_only = license_build_only
 		self.hash = None
 		self.built = False
@@ -630,61 +631,55 @@ def buildCode(build_target, build_arch, nproc, force, dry, pack_sources, single,
 		if code!=0:
 			log_error("Script returned error code {}.".format(code))
 
-		if target.license_file is not None or target.license_url is not None:
-			log_step("Generating license file ...")
-			license_dir = os.path.join(output_dir + prefix, "license")
-			os.makedirs(license_dir)
-			license_file = os.path.join(license_dir, "LICENSE." + target.name)
-			with open(license_file, 'w') as f:
-				if target.license_build_only:
-					f.write("YosysHQ uses '{}' to build package(s) in its distribution bundle.\n".format(target.name))
-					f.write("\nBuild is based on folowing sources:\n")
-					f.write('=' * 80 + '\n')
-					for s in target.sources:
-						f.write("{} {} checkout revision {}\n".format(sources[s].vcs, sources[s].location, sources[s].hash))
-				else:
-					f.write("YosysHQ embeds '{}' in its distribution bundle.\n".format(target.name))
-					build_deps = 0
-					for dep in target.dependencies:
-						if (targets[dep].license_build_only):
-							build_deps += 1
+		for s in target.sources:
+			src = sources[s]
+			if src.license_file is not None or src.license_url is not None:
+				log_step("Generating license file for {}...".format(src.name))
+				license_dir = os.path.join(output_dir + prefix, "license")
+				os.makedirs(license_dir, exist_ok = True)
+				license_file = os.path.join(license_dir, "LICENSE." + src.name)
+				with open(license_file, 'w') as f:
+					if src.license_build_only:
+						f.write("YosysHQ uses '{}' to build package(s) in its distribution bundle.\n".format(src.name))
+					else:
+						f.write("YosysHQ embeds '{}' in its distribution bundle.\n".format(src.name))
 
-					if (build_deps> 0):
-						f.write("\nThis package is built using packages: ")
+					if target.name == src.name:
+						build_deps = 0
 						for dep in target.dependencies:
 							if (targets[dep].license_build_only):
-								f.write("'{}' ".format(dep))
-						f.write("\n")
-						
+								build_deps += 1
+
+						if (build_deps> 0):
+							f.write("\nThis package is built using packages: ")
+							for dep in target.dependencies:
+								if (targets[dep].license_build_only):
+									f.write("'{}' ".format(dep))
+							f.write("\n")
+
 					f.write("\nBuild is based on folowing sources:\n")
 					f.write('=' * 80 + '\n')
-					for s in target.sources:
-						f.write("{} {} checkout revision {}\n".format(sources[s].vcs, sources[s].location, sources[s].hash))
-					f.write("\nFollowing files are included:\n")
+					f.write("{} {} checkout revision {}\n".format(src.vcs, src.location, src.hash))
+
+					f.write("\nSoftware is under following license :\n")
 					f.write('=' * 80 + '\n')
-					for root, _, files in sorted(os.walk(output_dir)):
-						for filename in sorted(files):
-							fpath = os.path.join(root, filename).replace(output_dir,"")
-							if not fpath.startswith("/dev"):
-								f.write(fpath.replace("/yosyshq/","") + '\n')
-				f.write("\nSoftware is under following license :\n")
-				f.write('=' * 80 + '\n')
-				if target.license_url is not None:
-					log_step("Retrieving license file for {}...".format(target.name))
-					try:
-						with urllib.request.urlopen(target.license_url) as lf:
-							f.write(lf.read().decode('utf-8'))
-					except urllib.error.URLError as e:
-						log_error(str(e))
-				if target.license_file is not None:
-					with open(os.path.join(build_dir, target.license_file), 'r') as lf:
-						f.write(lf.read())
-				f.write('\n' + '=' * 80 + '\n')
-			for dep in target.dependencies:
-				dep_license_dir = os.path.join(build_dir, dep + prefix, "license")
-				log_step("Adding dependancy license file for {} ...".format(dep))
-				if os.path.exists(dep_license_dir):
-					run(['rsync','-a', dep_license_dir+"/", license_dir])
+					if src.license_url is not None:
+						log_step("Retrieving license file for {}...".format(target.name))
+						try:
+							with urllib.request.urlopen(src.license_url) as lf:
+								f.write(lf.read().decode('utf-8'))
+						except urllib.error.URLError as e:
+							log_error(str(e))
+					if src.license_file is not None:
+						with open(os.path.join(build_dir, src.name, src.license_file), 'r') as lf:
+							f.write(lf.read())
+					f.write('\n' + '=' * 80 + '\n')
+				if target.name == src.name:
+					for dep in target.dependencies:
+						dep_license_dir = os.path.join(build_dir, dep + prefix, "license")
+						log_step("Adding dependancy license file for {} ...".format(dep))
+						if os.path.exists(dep_license_dir):
+							run(['rsync','-a', dep_license_dir+"/", license_dir])
 
 		if target.top_package:
 			if arch == 'windows-x64':

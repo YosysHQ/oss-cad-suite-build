@@ -6,13 +6,13 @@ SourceLocation(
 	name = 'dfu-util',
 	vcs = 'git',
 	location = 'https://git.code.sf.net/p/dfu-util/dfu-util',
-	revision = 'origin/master'
+	revision = 'origin/master',
+	license_file = 'COPYING',
 )
 
 Target(
 	name = 'dfu-util',
 	sources = [ 'dfu-util' ],
-	license_file = 'dfu-util/COPYING',
 	package = 'programmers',
 )
 
@@ -23,12 +23,12 @@ SourceLocation(
 	vcs = 'git',
 	location = 'https://github.com/adamgreig/ecpdap',
 	revision = 'origin/master',
+	license_file = 'LICENSE-MIT',
 )
 
 Target(
 	name = 'ecpdap',
 	sources = [ 'ecpdap' ],
-	license_file = 'ecpdap/LICENSE-MIT',
 	package = 'programmers',
 )
 
@@ -38,13 +38,13 @@ SourceLocation(
 	name = 'ecpprog',
 	vcs = 'git',
 	location = 'https://github.com/gregdavill/ecpprog',
-	revision = 'origin/main'
+	revision = 'origin/main',
+	license_file = 'COPYING',
 )
 
 Target(
 	name = 'ecpprog',
 	sources = [ 'ecpprog' ],
-	license_file = 'ecpprog/COPYING',
 	package = 'programmers',
 )
 
@@ -54,14 +54,14 @@ SourceLocation(
 	name = 'fujprog',
 	vcs = 'git',
 	location = 'https://github.com/kost/fujprog',
-	revision = 'origin/master'
+	revision = 'origin/master',
+	license_file = 'LICENSE',
 )
 
 Target(
 	name = 'fujprog',
 	sources = [ 'fujprog' ],
 	patches = [ 'Toolchain-mingw64.cmake' ],
-	license_file = 'fujprog/LICENSE',
 	package = 'programmers',
 )
 
@@ -72,12 +72,12 @@ SourceLocation(
 	vcs = 'git',
 	location = 'https://github.com/trabucayre/openFPGALoader',
 	revision = 'origin/master',
+	license_file = 'LICENSE',
 )
 
 Target(
 	name = 'openfpgaloader',
 	sources = [ 'openfpgaloader' ],
-	license_file = 'openfpgaloader/LICENSE',
 	package = 'programmers',
 )
 
@@ -88,6 +88,7 @@ SourceLocation(
 	vcs = 'git',
 	location = 'https://github.com/jpenalbae/black-iceprog',
 	revision = 'origin/master',
+	license_file = 'LICENSE.txt',
 )
 
 SourceLocation(
@@ -95,6 +96,7 @@ SourceLocation(
 	vcs = 'git',
 	location = 'https://github.com/pitrz/icefunprog',
 	revision = 'origin/master',
+	license_file = 'license.txt',
 )
 
 SourceLocation(
@@ -102,6 +104,7 @@ SourceLocation(
 	vcs = 'git',
 	location = 'https://github.com/tinyfpga/TinyFPGA-B-Series',
 	revision = 'origin/master',
+	license_file = 'LICENSE',
 )
 
 SourceLocation(
@@ -109,6 +112,7 @@ SourceLocation(
 	vcs = 'git',
 	location = 'https://github.com/tinyfpga/TinyFPGA-Bootloader',
 	revision = 'origin/master',
+	license_file = 'LICENSE',
 )
 
 Target(
@@ -134,13 +138,13 @@ SourceLocation(
 	vcs = 'git',
 	location = 'https://repo.or.cz/openocd.git',
 	revision = 'origin/master',
+	license_file = 'COPYING',
 )
 
 Target(
 	name = 'openocd',
 	sources = [ 'openocd' ],
 	patches = [ 'openocd.diff' ],
-	license_file = 'openocd/COPYING',
 	package = 'programmers',
 )
 

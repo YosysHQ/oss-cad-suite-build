@@ -4,14 +4,14 @@ SourceLocation(
 	name = 'mcy',
 	vcs = 'git',
 	location = 'https://github.com/YosysHQ/mcy',
-	revision = 'origin/master'
+	revision = 'origin/master',
+	license_file = 'COPYING',
 )
 
 Target(
 	name = 'mcy',
 	sources = [ 'mcy' ],
 	resources = [ 'flask' ],
-	license_file = 'mcy/COPYING',
 )
 
 SourceLocation(
@@ -19,6 +19,7 @@ SourceLocation(
 	vcs = 'git',
 	location = 'https://github.com/pallets/flask',
 	revision = 'tags/1.1.2',
+	license_file = 'LICENSE.rst',
 )
 
 Target(
@@ -26,5 +27,4 @@ Target(
 	sources = [ 'flask' ],
 	dependencies = [ 'python3' ],
 	resources = [ 'python3'],
-	license_file = 'flask/LICENSE.rst',
 )

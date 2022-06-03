@@ -4,14 +4,16 @@ SourceLocation(
 	name = 'libusb',
 	vcs = 'git',
 	location = 'https://github.com/libusb/libusb',
-	revision = 'tags/v1.0.24'
+	revision = 'tags/v1.0.24',
+	license_file = 'COPYING',
 )
 
 SourceLocation(
 	name = 'libftdi',
 	vcs = 'git',
 	location = 'git://developer.intra2net.com/libftdi',
-	revision = 'tags/v1.5'
+	revision = 'tags/v1.5',
+	license_file = 'LICENSE',
 )
 
 Target(

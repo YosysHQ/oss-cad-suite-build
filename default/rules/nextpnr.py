@@ -6,6 +6,7 @@ SourceLocation(
 	vcs = 'git',
 	location = 'https://github.com/YosysHQ/nextpnr',
 	revision = 'origin/master',
+	license_file = 'COPYING',
 )
 
 Target(
@@ -20,7 +21,6 @@ Target(
 	sources = [ 'nextpnr' ],
 	dependencies = [ 'python3', 'nextpnr-bba'],
 	resources = [ 'python3' ],
-	license_file = 'nextpnr/COPYING',
 )
 
 Target(
@@ -28,7 +28,6 @@ Target(
 	sources = [ 'nextpnr' ],
 	dependencies = [ 'python3', 'nextpnr-bba', 'icestorm-bba'],
 	resources = [ 'python3' ],
-	license_file = 'nextpnr/COPYING',
 	package = 'ice40',
 )
 
@@ -37,7 +36,6 @@ Target(
 	sources = [ 'nextpnr' ],
 	dependencies = [ 'python3', 'nextpnr-bba', 'prjtrellis-bba'],
 	resources = [ 'python3' ],
-	license_file = 'nextpnr/COPYING',
 	package = 'ecp5',
 )
 
@@ -46,7 +44,6 @@ Target(
 	sources = [ 'nextpnr' ],
 	dependencies = [ 'python3', 'nextpnr-bba', 'prjtrellis-bba'],
 	resources = [ 'python3' ],
-	license_file = 'nextpnr/COPYING',
 	package = 'ecp5', # using same prjtrellis base
 )
 
@@ -55,7 +52,6 @@ Target(
 	sources = [ 'nextpnr' ],
 	dependencies = [ 'python3', 'nextpnr-bba', 'prjoxide-bba' ],
 	resources = [ 'python3' ],
-	license_file = 'nextpnr/COPYING',
 	package = 'nexus',
 )
 
@@ -64,7 +60,6 @@ Target(
 	sources = [ 'nextpnr', 'mistral' ],
 	dependencies = [ 'python3', 'nextpnr-bba' ],
 	resources = [ 'python3' ],
-	license_file = 'nextpnr/COPYING',
 )
 
 # architecture specific
@@ -73,6 +68,7 @@ SourceLocation(
 	vcs = 'git',
 	location = 'https://github.com/YosysHQ/icestorm',
 	revision = 'origin/master',
+	license_file = 'COPYING',
 )
 
 SourceLocation(
@@ -80,6 +76,7 @@ SourceLocation(
 	vcs = 'git',
 	location = 'https://github.com/YosysHQ/prjtrellis',
 	revision = 'origin/master',
+	license_file = 'COPYING',
 )
 
 SourceLocation(
@@ -87,6 +84,7 @@ SourceLocation(
 	vcs = 'git',
 	location = 'https://github.com/gatecat/prjoxide',
 	revision = 'origin/master',
+	license_file = 'COPYING',
 )
 
 SourceLocation(
@@ -94,26 +92,24 @@ SourceLocation(
 	vcs = 'git',
 	location = 'https://github.com/Ravenslofty/mistral',
 	revision = 'origin/master',
+	license_file = 'LICENSE',
 )
 
 Target(
 	name = 'icestorm',
 	sources = [ 'icestorm' ],
-	license_file = 'icestorm/COPYING',
 	package = 'ice40',
 )
 
 Target(
 	name = 'prjtrellis',
 	sources = [ 'prjtrellis' ],
-	license_file = 'prjtrellis/COPYING',
 	package = 'ecp5',
 )
 
 Target(
 	name = 'prjoxide',
 	sources = [ 'prjoxide' ],
-	license_file = 'prjoxide/COPYING',
 	package = 'nexus',
 )
 

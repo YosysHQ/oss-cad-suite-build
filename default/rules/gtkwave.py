@@ -5,11 +5,11 @@ SourceLocation(
 	vcs = 'git',
 	location = 'https://github.com/gtkwave/gtkwave',
 	revision = 'origin/master',
+	license_file = 'LICENSE',
 )
 
 Target(
 	name = 'gtkwave',
 	sources = [ 'gtkwave' ],
-	license_file = 'gtkwave/LICENSE',
 	package = 'gtkwave',
 )

@@ -5,12 +5,12 @@ SourceLocation(
 	vcs = 'git',
 	location = 'https://github.com/verilator/verilator',
 	revision = 'origin/master',
+	license_file = 'LICENSE',
 )
 
 Target(
 	name = 'verilator',
 	sources = [ 'verilator' ],
 	patches = [ 'verilated.mk.in' ],
-	license_file = 'verilator/LICENSE',
 	package = 'verilator',
 )

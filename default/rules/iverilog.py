@@ -5,11 +5,11 @@ SourceLocation(
 	vcs = 'git',
 	location = 'https://github.com/steveicarus/iverilog',
 	revision = 'origin/master',
+	license_file = 'COPYING',
 )
 
 Target(
 	name = 'iverilog',
 	sources = [ 'iverilog' ],
-	license_file = 'iverilog/COPYING',
 	package = 'iverilog',
 )
