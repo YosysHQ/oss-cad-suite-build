@@ -3,7 +3,7 @@ mkdir -p lib
 mkdir -p libexec
 
 rm -rf ${OUTPUT_DIR}/dev
-rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/include
+rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/include/ghdl
 
 if [ ${ARCH} == 'linux-x64' ]; then
     ldlinuxname="ld-linux-x86-64.so.2"
