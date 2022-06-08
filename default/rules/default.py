@@ -55,6 +55,7 @@ Target(
     top_package = True,
     dependencies = [
         'yosys',
+        'aiger',
         'avy',
         'bitwuzla',
         'boolector',
@@ -70,6 +71,31 @@ Target(
         'gtkwave',
     ],
     branding ='OSS CAD Formal',
+    readme = 'README',
+    resources = [ 'system-resources' ],
+)
+
+Target(
+    name = 'yosyshq-ci',
+    release_name = 'oss-cad-suite-ci',
+    top_package = True,
+    dependencies = [
+        'aiger',
+        'avy',
+        'bitwuzla',
+        'boolector',
+        'cvc4',
+        'cvc5',
+        'yices',
+        'suprove',
+        'pono',
+        'z3',
+        'mcy',
+        'sby',
+        'gtkwave',
+        'iverilog',
+    ],
+    branding ='OSS CAD Suite',
     readme = 'README',
     resources = [ 'system-resources' ],
 )
