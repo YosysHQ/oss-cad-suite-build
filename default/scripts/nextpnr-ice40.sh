@@ -9,5 +9,9 @@ cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${INSTALL_PREFIX} -DCMAK
       -DARCH=ice40 \
       -DICE40_CHIPDB=${BUILD_DIR}/icestorm-bba/ice40/chipdb \
       -DBUILD_GUI=${build_gui} -DUSE_IPO=OFF . -DBBA_IMPORT=${BUILD_DIR}/nextpnr-bba/nextpnr/bba/bba-export.cmake
+if [ ${ARCH} == 'darwin-arm64' ]; then
+      make DESTDIR=${OUTPUT_DIR} chipdb-ice40
+fi
 make DESTDIR=${OUTPUT_DIR} -j${NPROC} install
+
 ${STRIP} ${OUTPUT_DIR}${INSTALL_PREFIX}/bin/nextpnr-ice40${EXE}
