@@ -1,7 +1,11 @@
 FROM yosyshq/cross-linux-x64:1.0 AS builder
 
+
 RUN cd /tmp \
-    && git clone https://github.com/auriamg/macdylibbundler \
+    && RUSTUP_HOME=/opt/rust/rustup CARGO_HOME=/opt/rust/cargo rustup update \
+    && cargo install --git https://github.com/indygreg/PyOxidizer --branch main apple-codesign
+RUN cd /tmp \
+    && git clone https://github.com/mmicko/macdylibbundler \
     && cd macdylibbundler \
     && sed -i "s,CXXFLAGS=-O2 -std=c++11,CXXFLAGS=-O2 -std=c++11 -static-libstdc++ -static-libgcc,g" Makefile \
     && make 
@@ -212,6 +216,12 @@ RUN cd /opt \
   && tar xfj /tmp/zstd/zstd-1.5.0_0.darwin_20.arm64.tbz2 \
   && echo "Unpack gtk2-2.24.32_0+quartz.darwin_20.arm64.tbz2" \
   && tar xfj /tmp/gtk2/gtk2-2.24.32_0+quartz.darwin_20.arm64.tbz2 \
+  && echo "Unpack libidn2-2.3.1_0.darwin_20.arm64.tbz2" \
+  && tar xfj /tmp/libidn2/libidn2-2.3.1_0.darwin_20.arm64.tbz2 \
+  && echo "Unpack libpsl-0.21.1-20200817_1.darwin_20.arm64.tbz2" \
+  && tar xfj /tmp/libpsl/libpsl-0.21.1-20200817_1.darwin_20.arm64.tbz2 \
+  && echo "Unpack libunistring-0.9.10_0.darwin_20.arm64.tbz2" \
+  && tar xfj /tmp/libunistring/libunistring-0.9.10_0.darwin_20.arm64.tbz2 \
   && echo "Cleanup" \
   && cp /usr/include/FlexLexer.h /opt/local/include/. \
   && cp /opt/local/share/pkgconfig/* /opt/local/lib/pkgconfig/. \  
@@ -219,6 +229,7 @@ RUN cd /opt \
   && cp -r /opt/local/share/eigen3 /tmp \
   && cp -r /opt/local/share/gir-1.0 /tmp \
   && cp -r /opt/local/share/glib-2.0 /tmp \
+  && cp -r /opt/local/share/terminfo /tmp \
   && rm -rf /opt/local/etc \
   && rm -rf /opt/local/libexec \
   && rm -rf /opt/local/sbin \
@@ -229,6 +240,7 @@ RUN cd /opt \
   && mv /tmp/eigen3 /opt/local/share \
   && mv /tmp/gir-1.0 /opt/local/share \
   && mv /tmp/glib-2.0 /opt/local/share \
+  && mv /tmp/terminfo /opt/local/share \
   && rm -rf /tmp/* \
   && mkdir -p /usr/local/osxcross/target/macports/pkgs/opt \
   && ln -s /opt/local /usr/local/osxcross/target/macports/pkgs/opt \
@@ -238,7 +250,9 @@ RUN cd /opt \
   && rm gtk-osx-application-darwin-arm64.tgz
 
 COPY --from=builder /tmp/macdylibbundler/dylibbundler /usr/local/bin/dylibbundler
+COPY --from=builder /root/.cargo/bin/rcodesign /usr/local/bin/rcodesign
 RUN chmod +x /usr/local/bin/dylibbundler
+RUN chmod +x /usr/local/bin/rcodesign
 
 RUN cp /usr/local/osxcross/target/bin/${CROSS_NAME}-otool /usr/local/osxcross/target/bin/otool \
   && cp /usr/local/osxcross/target/bin/${CROSS_NAME}-install_name_tool /usr/local/osxcross/target/bin/install_name_tool \
@@ -268,3 +282,4 @@ RUN cd /opt/local/share/gir-1.0 &&\
     done
 
 COPY gschemas.compiled /opt/local/share/glib-2.0/schemas/
+RUN RUSTUP_HOME=/opt/rust/rustup CARGO_HOME=/opt/rust/cargo rustup update
