@@ -25,7 +25,7 @@ arch_chain = dict({
 	'linux-arm' : 'darwin-x64', 
 	'linux-arm64' : 'windows-x64', 
 	'linux-riscv64' : 'linux-arm64',
-	'darwin-arm64' : 'darwin-x64',
+	'darwin-arm64' : 'linux-arm',
 })
 
 cargo_target = dict({
