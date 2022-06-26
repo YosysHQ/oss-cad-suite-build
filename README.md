@@ -8,6 +8,8 @@
 [![linux-arm64](https://github.com/YosysHQ/oss-cad-suite-build/actions/workflows/linux-arm64.yml/badge.svg)](https://github.com/YosysHQ/oss-cad-suite-build/releases/latest)
 [![linux-riscv64](https://github.com/YosysHQ/oss-cad-suite-build/actions/workflows/linux-riscv64.yml/badge.svg)](https://github.com/YosysHQ/oss-cad-suite-build/releases/latest)
 
+[![darwin-arm64](https://github.com/YosysHQ/oss-cad-suite-build/actions/workflows/darwin-arm64.yml/badge.svg)](https://github.com/YosysHQ/oss-cad-suite-build/releases/latest)
+
 # Introduction
 
 OSS CAD Suite is a binary software distribution for a number of [open source software](https://en.wikipedia.org/wiki/Open-source_software) used in digital logic design. 
