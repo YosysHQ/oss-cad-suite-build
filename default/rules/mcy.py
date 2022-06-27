@@ -18,7 +18,7 @@ SourceLocation(
 	name = 'flask',
 	vcs = 'git',
 	location = 'https://github.com/pallets/flask',
-	revision = 'tags/1.1.2',
+	revision = 'tags/2.1.2',
 	license_file = 'LICENSE.rst',
 )
 
