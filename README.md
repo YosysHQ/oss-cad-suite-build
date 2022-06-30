@@ -120,8 +120,11 @@ Distributed libraries are based on Ubuntu 20.04, but everything is packaged in s
 ## darwin-x64
 Any macOS 10.14 or later with Intel CPU should use this distribution package.
 
+## darwin-arm64
+Any macOS 11.00 or later with M1 CPU should use this distribution package.
+
 ## windows-x64
-This architecture is supported for Windows 10, but older 64-bit version of Windows 7, 8 or 8.1 should work. 
+This architecture is supported for Windows 10 and 11, but older 64-bit version of Windows 7, 8 or 8.1 should work. 
 
 ## linux-arm
 ARM based Linux devices such as Raspberry Pi 3, 4 or 400 can use this distribution package.
