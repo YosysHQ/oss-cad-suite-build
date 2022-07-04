@@ -4,7 +4,7 @@ if  [ ${ARCH_BASE} == 'darwin' ]; then
 	sed -i -re "s,CXX = clang,CXX = ${CC},g" Makefile
 	sed -i -re "s,LD = clang\+\+,LD = ${CXX},g" Makefile
 if [ ${ARCH} == 'darwin-arm64' ]; then
-	sed -i -re "s,09a7e6d,750b562,g" Makefile
+	sed -i -re "s,1863430,750b562,g" Makefile
 	sed -i -re "s,ARCHFLAGS=\"-DABC_USE_STDINT_H\",ABC_USE_LIBSTDCXX=1 ABC_USE_NAMESPACE=abc ARCHFLAGS=\"-DABC_USE_STDINT_H -Wno-c\+\+11-narrowing -Wno-unknown-warning-option\",g" Makefile
 fi
 elif [ ${ARCH} == 'linux-x64' ]; then
