@@ -1,13 +1,59 @@
 diff --git a/btor/src/boolector_term.cpp b/btor/src/boolector_term.cpp
-index 19480e7..f40ae71 100644
+index 19480e7..018bb8d 100644
 --- a/btor/src/boolector_term.cpp
 +++ b/btor/src/boolector_term.cpp
+@@ -26,6 +26,10 @@ extern "C"
+ #include "assert.h"
+ #include <unordered_map>
+ #include "stdio.h"
++#include <io.h>
++#include <fcntl.h>
++#include <sys/stat.h>
++#include <windows.h>
+ 
+ // defining hash for old compilers
+ namespace std
+@@ -320,6 +324,34 @@ bool BoolectorTerm::is_value() const
+   return res;
+ }
+ 
++FILE *tempfileopen()
++{
++    int fd;
++    FILE *fp;
++    char tp[MAX_PATH - 13];
++    char fn[MAX_PATH + 1];
++
++    if (!GetTempPathA(sizeof(tp), tp))
++         return NULL;
++
++    if (!GetTempFileNameA(tp, "tmpfile", 0, fn))
++         return NULL;
++
++    fd = _open(fn,
++         _O_CREAT | _O_RDWR | _O_SHORT_LIVED | _O_TEMPORARY | _O_BINARY,
++         _S_IREAD | _S_IWRITE);
++    if (fd == -1)
++         return NULL;
++
++    fp = _fdopen(fd, "w+");
++    if (!fp) {
++         _close(fd);
++         return NULL;
++    }
++
++	return fp;
++}
++
+ std::string BoolectorTerm::to_string()
+ {
+   std::string sres;
 @@ -353,6 +353,26 @@ std::string BoolectorTerm::to_string()
      // won't necessarily use symbol names (might use auxiliary variables)
      char * cres;
      size_t size;
 +#ifdef _WIN32
-+    FILE * stream = tmpfile();
++    FILE * stream = tempfileopen();
 +    boolector_dump_smt2_node(btor, stream, node);
 +    int64_t status = fflush(stream);
 +    if (status != 0)
