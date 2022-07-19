@@ -65,6 +65,22 @@ Target(
 	package = 'programmers',
 )
 
+# iceprogduino
+
+SourceLocation(
+	name = 'iceprogduino',
+	vcs = 'git',
+	location = 'https://github.com/OLIMEX/iCE40HX1K-EVB',
+	revision = 'origin/master',
+	license_file = 'LICENSE',
+)
+
+Target(
+	name = 'iceprogduino',
+	sources = [ 'iceprogduino' ],
+	package = 'programmers',
+)
+
 # openfpgaloader
 
 SourceLocation(
