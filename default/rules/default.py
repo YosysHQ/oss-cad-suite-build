@@ -37,6 +37,7 @@ Target(
         'iverilog',
         'ecpdap',
         'fujprog',
+        'iceprogduino',
         'python-programmers',
         'openocd',
         'icesprog',
