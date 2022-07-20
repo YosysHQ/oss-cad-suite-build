@@ -1,8 +1,10 @@
 mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/bin/
 if [ ${ARCH} == 'windows-x64' ]; then
-	cp iceprogduino/windows/winiceprogduino/winiceprogduino.exe ${OUTPUT_DIR}${INSTALL_PREFIX}/bin/iceprogduino.exe
+	cd iceprogduino/windows/winiceprogduino
+	sed -i 's,usleep,usleep2,g' main.c
+	${CC} main.c -o iceprogduino.exe
 else
 	cd iceprogduino/programmer/iceprogduino
-	make
-	cp iceprogduino${EXE} ${OUTPUT_DIR}${INSTALL_PREFIX}/bin/.
+	${CC} iceprogduino.c -o iceprogduino
 fi
+cp iceprogduino${EXE} ${OUTPUT_DIR}${INSTALL_PREFIX}/bin/.

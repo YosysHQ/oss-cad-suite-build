@@ -78,6 +78,7 @@ SourceLocation(
 Target(
 	name = 'iceprogduino',
 	sources = [ 'iceprogduino' ],
+	gitrev = [ ('iceprogduino', 'programmer'), ('iceprogduino', 'windows') ],
 	package = 'programmers',
 )
 
