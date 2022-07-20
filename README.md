@@ -55,6 +55,7 @@ Contact us at contact@yosyshq.com to arrange a free evaluation license.
  * [fujprog](https://github.com/kost/fujprog) ULX2S / ULX3S JTAG programmer
  * [openocd](http://openocd.org/) Open On-Chip Debugger
  * [icesprog](https://github.com/wuxx/icesugar/tree/master/tools/src) iCESugar FPGA board programmer
+ * [iceprogduino](https://github.com/OLIMEX/iCE40HX1K-EVB/tree/master/programmer/iceprogduino) Olinuxino based programmer for iCE40HX1K-EVB
  * [TinyFPGA](https://github.com/tinyfpga/TinyFPGA-Bootloader) USB Bootloader
  * [TinyFPGA-B](https://github.com/tinyfpga/TinyFPGA-B-Series) TinyFPGA B2 Board programmer
  * [iceFUN](https://github.com/pitrz/icefunprog) iceFUN Programmer
