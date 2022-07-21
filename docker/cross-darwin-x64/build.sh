@@ -1,1 +1,1 @@
-docker build -t="yosyshq/cross-darwin-x64:1.0" .
+docker build -t="yosyshq/cross-darwin-x64:1.1" -f Dockerfile.11 .

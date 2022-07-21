@@ -1,0 +1,3 @@
+FROM yosyshq/cross-darwin-arm64:1.0
+
+RUN chmod -R o+w /opt/rust && RUSTUP_HOME=/opt/rust/rustup CARGO_HOME=/opt/rust/cargo rustup update
