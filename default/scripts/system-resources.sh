@@ -39,6 +39,8 @@ fi
 
 if [ ${ARCH_BASE} == 'darwin' ]; then
     cp ${PATCHES_DIR}/environment ${OUTPUT_DIR}${INSTALL_PREFIX}/.
+    cp ${PATCHES_DIR}/activate ${OUTPUT_DIR}${INSTALL_PREFIX}/.
+    chmod 755 ${OUTPUT_DIR}${INSTALL_PREFIX}/activate
 
     mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/etc
     cp ${PATCHES_DIR}/cacert.pem ${OUTPUT_DIR}${INSTALL_PREFIX}/etc/.
