@@ -92,7 +92,7 @@ class SourceLocation:
 		sources[name] = self
 
 class Target:
-	def __init__(self, name, sources = [], dependencies = [], resources = [], patches = [], arch = [], license_build_only = False, top_package = False, build_native = False, release_name = None, gitrev = [], branding = None, readme = None, package = None, tools = None, preload = None):
+	def __init__(self, name, sources = [], dependencies = [], resources = [], patches = [], arch = [], license_build_only = False, top_package = False, build_native = False, release_name = None, gitrev = [], branding = None, readme = None, package = None, tools = None, preload = None, force = False):
 		self.name = name
 		self.sources = sources
 		self.dependencies = dependencies
@@ -112,6 +112,7 @@ class Target:
 		self.package = package
 		self.tools = tools
 		self.preload = preload
+		self.force = force
 		if release_name:
 			self.release_name = release_name
 		else:
@@ -520,7 +521,7 @@ def buildCode(build_target, build_arch, nproc, force, dry, pack_sources, single,
 
 		output_dir = os.path.join(OUTPUTS_ROOT, arch, target.name)
 
-		forceBuild = force
+		forceBuild = force or target.force
 		for dep in sorted(target.dependencies):
 			forceBuild = forceBuild or targets[dep].built
 		hash_file = os.path.join(output_dir, '.hash')
