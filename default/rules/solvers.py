@@ -128,7 +128,7 @@ SourceLocation(
 	name = 'pono',
 	vcs = 'git',
 	location = 'https://github.com/upscale-project/pono',
-	revision = 'origin/master',
+	revision = '8b2a94649f5ea1161260a611de4b49e6f5d92b98',
 	license_file = 'LICENSE',
 )
 
