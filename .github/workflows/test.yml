@@ -1,0 +1,22 @@
+name: test
+
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows: [ linux-x64 ]
+    types:
+      - completed
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get latest sby sources
+      - uses: actions/checkout@v2
+        with:
+          repository: YosysHQ/sby
+      - name: Setup test environment
+        uses: YosysHQ/setup-oss-cad-suite@v1
+      - name: Run checks
+        run: tabbypip install xmlschema && make ci
