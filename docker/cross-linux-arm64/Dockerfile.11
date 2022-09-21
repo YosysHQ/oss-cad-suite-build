@@ -1,3 +1,10 @@
 FROM yosyshq/cross-linux-arm64:1.0
 
 RUN chmod -R o+w /opt/rust && RUSTUP_HOME=/opt/rust/rustup CARGO_HOME=/opt/rust/cargo rustup update
+
+RUN set -e -x ;\
+    apt -y update ;\
+    apt -y install \
+        libedit-dev:arm64; \
+    apt -y autoremove ;\
+    rm -rf /var/lib/apt/lists/*
