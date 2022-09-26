@@ -9,8 +9,13 @@ if [ ${ARCH} == 'linux-arm' ] || [ ${ARCH} == 'linux-arm64' ] || [ ${ARCH} == 'l
     param=--with-llvm-config='llvm-config'
     LDFLAGS=-L/usr/lib/${CROSS_NAME}
 elif [ ${ARCH} == 'darwin-x64' ]; then
-    export PATH="$PATH:/opt/gnat/bin"
-    export GNAT_LARGS="-static-libgcc"
+    wget https://github.com/ghdl/ghdl/releases/download/nightly/ghdl-macos-10.15-mcode.tgz
+    mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}
+    tar xvfz ghdl-macos-10.15-mcode.tgz -C ${OUTPUT_DIR}${INSTALL_PREFIX}
+    install_name_tool -id @executable_path/../lib/libghdl-3_0_0_dev.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libghdl-3_0_0_dev.dylib
+    wget https://github.com/mmicko/macos-resources/releases/download/v2/libgnat-2019.dylib
+    cp libgnat-2019.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/.
+    exit 0
 elif [ ${ARCH} == 'windows-x64' ]; then
     sed -i 's,grt-all libs.vhdl.llvm all.vpi,grt-all all.vpi,g' Makefile.in
     sed -i 's,install.llvm.program install.vhdllib,install.llvm.program ,g' Makefile.in

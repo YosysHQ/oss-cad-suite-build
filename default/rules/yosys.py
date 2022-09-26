@@ -51,7 +51,7 @@ Target(
 	name = 'ghdl-yosys-plugin',
 	sources = [ 'ghdl-yosys-plugin' ],
 	dependencies = [ 'ghdl', 'yosys' ],
-	arch = [ 'linux-x64' ],
+	arch = [ 'linux-x64', 'darwin-x64' ],
 )
 
 SourceLocation(
