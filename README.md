@@ -139,7 +139,7 @@ RiscV-64 based Linux devices should use this distribtuion package, but please no
 
 # Contributing
 
-To be able to build OSS CAD Suite yourself need to install `docker` and `python 3.6` or higher, with `click` library.
+To be able to build OSS CAD Suite yourself need to install `docker` (please note this only works on x64 platforms) and `python 3.6` or higher, with `click` library.
 
 
 After that just running ```./builder.py``` should work fine.
