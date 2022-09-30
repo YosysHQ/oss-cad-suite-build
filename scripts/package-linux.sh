@@ -71,6 +71,12 @@ export PYTHONNOUSERSITE=1
 export SSL_CERT_FILE="\$release_topdir_abs"/etc/cacert.pem
 EOT
         fi
+        if [ ! -z "$(lddtree -l libexec/$(basename $binfile) | grep tcl)" ]; then
+            cat >> $binfile << EOT
+export TCL_LIBRARY="\$release_topdir_abs/lib/tcl8.6"
+export TK_LIBRARY="\$release_topdir_abs/lib/tk8.6"
+EOT
+        fi
         if [ ! -z "$(lddtree -l libexec/$(basename $binfile) | grep Qt5)" ]; then
             is_using_fonts=true
             cat >> $binfile << EOT
@@ -109,8 +115,6 @@ export XDG_CACHE_HOME=\$HOME/.cache/yosyshq
 export XDG_DATA_HOME=\$HOME/.local/share/yosyshq
 export XDG_CURRENT_DESKTOP="KDE"
 export LC_ALL="C"
-export TCL_LIBRARY="\$release_topdir_abs/lib/tcl8.6"
-export TK_LIBRARY="\$release_topdir_abs/lib/tk8.6"
 export GDK_PIXBUF_MODULE_FILE="\$XDG_CACHE_HOME/loaders.cache"
 mkdir -p \$XDG_CONFIG_HOME \$XDG_CACHE_HOME \$XDG_DATA_HOME
 "\$release_topdir_abs"/lib/$ldlinuxname --inhibit-cache --inhibit-rpath "" --library-path "\$release_topdir_abs"/lib "\$release_topdir_abs"/libexec/gdk-pixbuf-query-loaders --update-cache

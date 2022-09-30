@@ -52,6 +52,12 @@ export PYTHONNOUSERSITE=1
 export SSL_CERT_FILE="\$release_topdir_abs"/etc/cacert.pem
 EOT
         fi
+        if [ ! -z "$(otool -L libexec/$(basename $binfile) | grep tcl)" ]; then
+            cat >> $binfile << EOT
+export TCL_LIBRARY="\$release_topdir_abs/lib/tcl8.6"
+export TK_LIBRARY="\$release_topdir_abs/lib/tk8.6"
+EOT
+        fi
         if [ ! -z "$(otool -L libexec/$(basename $binfile) | grep QtCore)" ]; then
             install_name_tool -add_rpath @executable_path/../Frameworks libexec/$(basename $binfile)
             cat >> $binfile << EOT
