@@ -79,7 +79,7 @@ Contact us at contact@yosyshq.com to arrange a free evaluation license.
 
 1. Download an archive matching your OS from [the releases page](https://github.com/YosysHQ/oss-cad-suite-build/releases/latest).
 2. Extract the archive to a location of your choice (for Windows it is recommended that path does not contain spaces)
-3. On macOS to allow execution of quarantined files run: ```./activate``` in extracted location once
+3. On macOS to allow execution of quarantined files ```xattr -d com.apple.quarantine oss-cad-suite-darwin-x64-yyymmdd.tgz``` on downloaded file, or run: ```./activate``` in extracted location once.
 4. Set the environment as described below.
 
 Linux and macOS
