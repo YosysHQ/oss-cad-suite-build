@@ -1,3 +1,9 @@
 FROM yosyshq/cross-darwin-x64:1.0
 
 RUN chmod -R o+w /opt/rust && RUSTUP_HOME=/opt/rust/rustup CARGO_HOME=/opt/rust/cargo rustup update
+
+RUN cd /usr/local && \
+    wget https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.9.1%2B1/OpenJDK11U-jre_x64_linux_hotspot_11.0.9.1_1.tar.gz -O OpenJDK11U-jre_x64_linux_hotspot_11.0.9.1_1.tar.gz && \
+    tar xvfz OpenJDK11U-jre_x64_linux_hotspot_11.0.9.1_1.tar.gz && \
+    mv jdk-11.0.9.1+1-jre jre-11 && \
+    rm -rf OpenJDK11U-jre_x64_linux_hotspot_11.0.9.1_1.tar.gz
