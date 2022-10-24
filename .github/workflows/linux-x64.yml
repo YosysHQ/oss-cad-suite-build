@@ -10,12 +10,12 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: _sources
           key: cache-sources-abc
@@ -44,12 +44,12 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: _sources
           key: cache-sources-python3
@@ -79,12 +79,12 @@ jobs:
     continue-on-error: true
     needs: linux-x64-python3
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: _sources
           key: cache-sources-xdot
@@ -115,12 +115,12 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: _sources
           key: cache-sources-graphviz
@@ -150,12 +150,12 @@ jobs:
     continue-on-error: true
     needs: linux-x64-abc
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: _sources
           key: cache-sources-yosys
@@ -186,12 +186,12 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: _sources
           key: cache-sources-ghdl
@@ -221,12 +221,12 @@ jobs:
     continue-on-error: true
     needs: [ linux-x64-ghdl, linux-x64-yosys ]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: _sources
           key: cache-sources-ghdl-yosys-plugin
@@ -259,12 +259,12 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: _sources
           key: cache-sources-nextpnr-bba
@@ -294,12 +294,12 @@ jobs:
     continue-on-error: true
     needs: [ linux-x64-nextpnr-bba, linux-x64-python3 ]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: _sources
           key: cache-sources-nextpnr-generic
@@ -332,12 +332,12 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: _sources
           key: cache-sources-icestorm
@@ -367,12 +367,12 @@ jobs:
     continue-on-error: true
     needs: linux-x64-icestorm
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: _sources
           key: cache-sources-icestorm-bba
@@ -404,12 +404,12 @@ jobs:
     continue-on-error: true
     needs: [ linux-x64-icestorm-bba, linux-x64-nextpnr-bba, linux-x64-python3 ]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: _sources
           key: cache-sources-nextpnr-ice40
@@ -444,12 +444,12 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: _sources
           key: cache-sources-prjtrellis-bba
@@ -479,12 +479,12 @@ jobs:
     continue-on-error: true
     needs: [ linux-x64-nextpnr-bba, linux-x64-prjtrellis-bba, linux-x64-python3 ]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: _sources
           key: cache-sources-nextpnr-ecp5
@@ -520,12 +520,12 @@ jobs:
     continue-on-error: true
     needs: [ linux-x64-nextpnr-bba, linux-x64-prjtrellis-bba, linux-x64-python3 ]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: _sources
           key: cache-sources-nextpnr-machxo2
@@ -560,12 +560,12 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: _sources
           key: cache-sources-prjoxide
@@ -595,12 +595,12 @@ jobs:
     continue-on-error: true
     needs: linux-x64-prjoxide
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: _sources
           key: cache-sources-prjoxide-bba
@@ -632,12 +632,12 @@ jobs:
     continue-on-error: true
     needs: [ linux-x64-nextpnr-bba, linux-x64-prjoxide-bba, linux-x64-python3 ]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: _sources
           key: cache-sources-nextpnr-nexus
@@ -672,12 +672,12 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: _sources
           key: cache-sources-prjtrellis
@@ -706,12 +706,12 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: _sources
           key: cache-sources-dfu-util
@@ -740,12 +740,12 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: _sources
           key: cache-sources-ecpprog
@@ -774,12 +774,12 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: _sources
           key: cache-sources-openfpgaloader
@@ -808,12 +808,12 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: _sources
           key: cache-sources-picosat
@@ -843,12 +843,12 @@ jobs:
     continue-on-error: true
     needs: linux-x64-picosat
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: _sources
           key: cache-sources-aiger
@@ -879,12 +879,12 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: _sources
           key: cache-sources-avy
@@ -913,12 +913,12 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: _sources
           key: cache-sources-lingeling
@@ -947,12 +947,12 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: _sources
           key: cache-sources-cadical
@@ -981,12 +981,12 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: _sources
           key: cache-sources-btor2tools
@@ -1015,12 +1015,12 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: _sources
           key: cache-sources-symfpu
@@ -1050,12 +1050,12 @@ jobs:
     continue-on-error: true
     needs: [ linux-x64-btor2tools, linux-x64-cadical, linux-x64-lingeling, linux-x64-symfpu ]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: _sources
           key: cache-sources-bitwuzla
@@ -1093,12 +1093,12 @@ jobs:
     continue-on-error: true
     needs: [ linux-x64-btor2tools, linux-x64-cadical, linux-x64-lingeling ]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: _sources
           key: cache-sources-boolector
@@ -1133,12 +1133,12 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: _sources
           key: cache-sources-cvc4
@@ -1167,12 +1167,12 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: _sources
           key: cache-sources-cvc5
@@ -1201,12 +1201,12 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: _sources
           key: cache-sources-yices
@@ -1235,12 +1235,12 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: _sources
           key: cache-sources-python2
@@ -1270,12 +1270,12 @@ jobs:
     continue-on-error: true
     needs: linux-x64-python2
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: _sources
           key: cache-sources-suprove
@@ -1306,12 +1306,12 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: _sources
           key: cache-sources-bison
@@ -1341,12 +1341,12 @@ jobs:
     continue-on-error: true
     needs: [ linux-x64-bison, linux-x64-boolector, linux-x64-cvc4 ]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: _sources
           key: cache-sources-smt-switch
@@ -1382,12 +1382,12 @@ jobs:
     continue-on-error: true
     needs: [ linux-x64-boolector, linux-x64-cvc4, linux-x64-smt-switch ]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: _sources
           key: cache-sources-pono
@@ -1422,12 +1422,12 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: _sources
           key: cache-sources-z3
@@ -1457,12 +1457,12 @@ jobs:
     continue-on-error: true
     needs: linux-x64-python3
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: _sources
           key: cache-sources-flask
@@ -1493,12 +1493,12 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: _sources
           key: cache-sources-mcy
@@ -1527,12 +1527,12 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: _sources
           key: cache-sources-sby
@@ -1561,12 +1561,12 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: _sources
           key: cache-sources-sby-gui
@@ -1595,12 +1595,12 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: _sources
           key: cache-sources-gtkwave
@@ -1629,12 +1629,12 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: _sources
           key: cache-sources-verilator
@@ -1663,12 +1663,12 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: _sources
           key: cache-sources-iverilog
@@ -1697,12 +1697,12 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: _sources
           key: cache-sources-ecpdap
@@ -1731,12 +1731,12 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: _sources
           key: cache-sources-fujprog
@@ -1765,12 +1765,12 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: _sources
           key: cache-sources-iceprogduino
@@ -1800,12 +1800,12 @@ jobs:
     continue-on-error: true
     needs: linux-x64-python3
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: _sources
           key: cache-sources-python-programmers
@@ -1836,12 +1836,12 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: _sources
           key: cache-sources-openocd
@@ -1870,12 +1870,12 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: _sources
           key: cache-sources-icesprog
@@ -1904,12 +1904,12 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: _sources
           key: cache-sources-utils
@@ -1939,12 +1939,12 @@ jobs:
     continue-on-error: true
     needs: linux-x64-python3
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: _sources
           key: cache-sources-pyhdl
@@ -1976,12 +1976,12 @@ jobs:
     continue-on-error: true
     needs: linux-x64-python3
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: _sources
           key: cache-sources-cocotb
@@ -2012,12 +2012,12 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: _sources
           key: cache-sources-capnproto
@@ -2046,12 +2046,12 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: _sources
           key: cache-sources-flatbuffers
@@ -2081,12 +2081,12 @@ jobs:
     continue-on-error: true
     needs: [ linux-x64-capnproto, linux-x64-flatbuffers ]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: _sources
           key: cache-sources-surelog
@@ -2120,12 +2120,12 @@ jobs:
     continue-on-error: true
     needs: linux-x64-surelog
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: _sources
           key: cache-sources-surelog-data
@@ -2157,12 +2157,12 @@ jobs:
     continue-on-error: true
     needs: [ linux-x64-surelog, linux-x64-yosys ]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: _sources
           key: cache-sources-surelog-plugin
@@ -2195,12 +2195,12 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: _sources
           key: cache-sources-system-resources
@@ -2232,7 +2232,7 @@ jobs:
       - name: Get current date
         id: date
         run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Download linux-x64-aiger
