@@ -16,6 +16,22 @@ function python3_package_setup {
         #cp -r /usr/lib64/python3.8/site-packages/cairo ${PYTHONHOME}/lib/python3.8/lib-dynload/.
         cp -r ${BUILD_DIR}/python3${INSTALL_PREFIX}/lib ${BUILD_DIR}/python3${INSTALL_PREFIX}/lib64
     fi
+
+    if [ ${ARCH} == 'linux-arm' ]; then
+        sed -i 's,/yosyshq/,'${PYTHONHOME}/',g' ${PYTHONHOME}/lib/python3.8/_sysconfigdata__linux_arm-linux-gnueabihf.py
+    elif [ ${ARCH} == 'linux-arm64' ]; then
+        sed -i 's,/yosyshq/,'${PYTHONHOME}/',g' ${PYTHONHOME}/lib/python3.8/_sysconfigdata__linux_aarch64-linux-gnu.py
+    elif [ ${ARCH} == 'linux-riscv64' ]; then
+        sed -i 's,/yosyshq/,'${PYTHONHOME}/',g' ${PYTHONHOME}/lib/python3.8/_sysconfigdata__linux_riscv64-linux-gnu.py
+    elif [ ${ARCH} == 'linux-x64' ]; then
+        sed -i 's,/yosyshq/,'${PYTHONHOME}/',g' ${PYTHONHOME}/lib/python3.8/_sysconfigdata__linux_x86_64-linux-gnu.py
+    elif [ ${ARCH} == 'windows-x64' ]; then
+        sed -i 's,/yosyshq/,'${PYTHONHOME}/',g' ${PYTHONHOME}/lib/python3.8/_sysconfigdata__win_.py
+    elif [ ${ARCH} == 'darwin-x64' ]; then
+        sed -i 's,/yosyshq/,'${PYTHONHOME}/',g' ${PYTHONHOME}/lib/python3.8/_sysconfigdata__darwin_darwin.py
+    elif [ ${ARCH} == 'darwin-arm64' ]; then
+        sed -i 's,/yosyshq/,'${PYTHONHOME}/',g' ${PYTHONHOME}/lib/python3.8/_sysconfigdata__darwin_darwin.py
+    fi
 }
 
 function python3_package_install {
