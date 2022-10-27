@@ -772,7 +772,7 @@ def generateYaml(target, build_arch, write_to_file):
 		if target.top_package:
 			yaml_content +="      - name: Get current date\n"
 			yaml_content +="        id: date\n"
-			yaml_content +="        run: echo \"::set-output name=date::$(date +'%Y-%m-%d')\"\n"
+			yaml_content +="        run: echo \"date=$(date +'%Y-%m-%d')\" >> $GITHUB_OUTPUT\n"
 		yaml_content +="      - uses: actions/checkout@v3\n"
 		yaml_content +="        with:\n"
 		yaml_content +="          repository: 'yosyshq/oss-cad-suite-build'\n"
