@@ -1,20 +1,6 @@
 from src.base import SourceLocation, Target
 
 SourceLocation(
-	name = 'capnproto',
-	vcs = 'git',
-	location = 'https://github.com/capnproto/capnproto',
-	revision = '14f24a41b24cf5b92574e9dfba78816e8234a75c',
-)
-
-SourceLocation(
-	name = 'flatbuffers',
-	vcs = 'git',
-	location = 'https://github.com/google/flatbuffers',
-	revision = '5792623df42e6165a376907bbb8e6090d0946db5',
-)
-
-SourceLocation(
 	name = 'surelog',
 	vcs = 'git',
 	location = 'https://github.com/chipsalliance/Surelog',
@@ -32,13 +18,15 @@ SourceLocation(
 
 Target(
 	name = 'capnproto',
-	sources = [ 'capnproto'],
+	sources = [ 'surelog'],
+	gitrev = [ ('surelog', 'third_party/UHDM/third_party/capnproto') ],
 	build_native = True,
 )
 
 Target(
 	name = 'flatbuffers',
-	sources = [ 'flatbuffers'],
+	sources = [ 'surelog'],
+	gitrev = [ ('surelog', 'third_partyflatbuffers') ],
 	build_native = True,
 )
 
