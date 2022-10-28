@@ -26,7 +26,7 @@ Target(
 Target(
 	name = 'flatbuffers',
 	sources = [ 'surelog'],
-	gitrev = [ ('surelog', 'third_partyflatbuffers') ],
+	gitrev = [ ('surelog', 'third_party/flatbuffers') ],
 	build_native = True,
 )
 
