@@ -1,1 +1,1 @@
-@cmd /k environment.bat
+@cmd /k "%~dp0\environment.bat" 
