@@ -48,5 +48,4 @@ Target(
 	sources = [ 'surelog-plugin' ],
 	dependencies = [ 'yosys', 'surelog'],
 	gitrev = [ ('surelog-plugin', 'systemverilog-plugin') ],
-	arch = [ 'linux-x64', 'linux-arm', 'linux-arm64', 'linux-riscv64', 'darwin-x64', 'darwin-arm64' ],
 )
