@@ -48,10 +48,11 @@ Contact us at contact@yosyshq.com to arrange a free evaluation license.
  * [Bitwuzla](https://github.com/bitwuzla/bitwuzla) SMT solver
 
 ### PnR
- * [nextpnr](https://github.com/YosysHQ/nextpnr) a portable FPGA place and route tool (generic, ice40, ecp5, machxo2, nexus)
+ * [nextpnr](https://github.com/YosysHQ/nextpnr) a portable FPGA place and route tool (generic, ice40, ecp5, machxo2, nexus, gowin)
  * [Project IceStorm](https://github.com/YosysHQ/icestorm) tools for working with Lattice ICE40 bitstreams
  * [Project Trellis](https://github.com/YosysHQ/prjtrellis) tools for working with Lattice ECP5 bitstreams
  * [Project Oxide](https://github.com/gatecat/prjoxide) tools for working with Lattice Nexus bitstreams
+ * [Project Apicula](https://github.com/YosysHQ/apicula) tools for working with Gowin bitstreams
  
 ### FPGA board programming tools
  * [openFPGALoader](https://github.com/trabucayre/openFPGALoader) universal utility for programming FPGA
