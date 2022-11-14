@@ -62,6 +62,14 @@ Target(
 	resources = [ 'python3' ],
 )
 
+Target(
+	name = 'nextpnr-gowin',
+	sources = [ 'nextpnr' ],
+	dependencies = [ 'python3', 'nextpnr-bba', 'apicula-bba'],
+	resources = [ 'python3' ],
+	package = 'gowin',
+)
+
 # architecture specific
 SourceLocation(
 	name = 'icestorm',
@@ -95,6 +103,14 @@ SourceLocation(
 	license_file = 'LICENSE',
 )
 
+SourceLocation(
+	name = 'apicula',
+	vcs = 'git',
+	location = 'https://github.com/YosysHQ/apicula',
+	revision = 'origin/master',
+	license_file = 'LICENSE',
+)
+
 Target(
 	name = 'icestorm',
 	sources = [ 'icestorm' ],
@@ -111,6 +127,14 @@ Target(
 	name = 'prjoxide',
 	sources = [ 'prjoxide' ],
 	package = 'nexus',
+)
+
+Target(
+	name = 'apicula',
+	sources = [ 'apicula' ],
+	dependencies = [ 'python3' ],
+	resources = [ 'python3' ],
+	package = 'gowin',
 )
 
 # chip databases
@@ -135,5 +159,14 @@ Target(
 	sources = [ 'nextpnr' ],
 	dependencies = [ 'prjoxide' ],
 	gitrev = [ ('nextpnr', 'nexus') ],
+	build_native = True,
+)
+
+Target(
+	name = 'apicula-bba',
+	sources = [ 'nextpnr' ],
+	dependencies = [ 'apicula', 'python3' ],
+	resources = [ 'python3' ],
+	gitrev = [ ('nextpnr', 'gowin') ],
 	build_native = True,
 )
