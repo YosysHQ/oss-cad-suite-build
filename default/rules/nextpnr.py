@@ -135,6 +135,7 @@ Target(
 	dependencies = [ 'python3' ],
 	resources = [ 'python3' ],
 	package = 'gowin',
+	arch = [ 'linux-x64', 'linux-arm', 'linux-arm64', 'linux-riscv64', 'darwin-x64', 'darwin-arm64' ],
 )
 
 # chip databases
