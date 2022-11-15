@@ -53,6 +53,24 @@ function python3_package_install {
     fi
 }
 
+function python3_package_install_numpy {
+    install_cmd="setup.py install --prefix=${OUTPUT_DIR}${INSTALL_PREFIX} $1"
+    if [ ${ARCH} == 'linux-arm' ]; then
+        _PYTHON_HOST_PLATFORM=linux-arm  _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__linux_arm-linux-gnueabihf python3.8 ${install_cmd}
+    elif [ ${ARCH} == 'linux-arm64' ]; then
+        _PYTHON_HOST_PLATFORM=linux-aarch64 _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__linux_aarch64-linux-gnu python3.8 ${install_cmd}
+    elif [ ${ARCH} == 'linux-riscv64' ]; then
+        _PYTHON_HOST_PLATFORM=linux-riscv64 _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__linux_riscv64-linux-gnu python3.8 ${install_cmd}
+    elif [ ${ARCH} == 'linux-x64' ]; then
+        ${PYTHONHOME}/py3bin/python3 ${install_cmd}
+    elif [ ${ARCH} == 'windows-x64' ]; then
+        _PYTHON_HOST_PLATFORM=mingw-x64 _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__win_ python3.8 setup.py build --cpu-dispatch="max -avx512f -avx512cd -avx512_knl -avx512_knm -avx512_skx -avx512_clx -avx512_cnl -avx512_icl" install --prefix=${OUTPUT_DIR}${INSTALL_PREFIX} $1
+    elif [ ${ARCH} == 'darwin-x64' ]; then        
+        _PYTHON_HOST_PLATFORM=darwin-x64 _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__darwin_darwin python3.8 ${install_cmd}
+    elif [ ${ARCH} == 'darwin-arm64' ]; then        
+        _PYTHON_HOST_PLATFORM=darwin-aarch64 _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__darwin_darwin python3.8 ${install_cmd}
+    fi
+}
 function python3_package_develop {
     install_cmd="setup.py develop --prefix=${OUTPUT_DIR}${INSTALL_PREFIX} $1"
     if [ ${ARCH} == 'linux-arm' ]; then
@@ -90,6 +108,7 @@ function python3_package_pip_install {
         _PYTHON_HOST_PLATFORM=darwin-aarch64 _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__darwin_darwin python3.8 ${install_cmd}
     fi
 }
+
 function python3_package_pth {
     rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/bin/easy_install*
     rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/python3.8/site-packages/setuptools.pth 
