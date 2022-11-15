@@ -668,10 +668,47 @@ jobs:
           tag: bucket-linux-x64
           artifacts: "linux-x64-nextpnr-nexus.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
-  linux-x64-apicula:
+  linux-x64-numpy:
     runs-on: ubuntu-latest
     continue-on-error: true
     needs: linux-x64-python3
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          repository: 'yosyshq/oss-cad-suite-build'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v3
+        with:
+          path: _sources
+          key: cache-sources-numpy
+      - name: Download previous build
+        run: |
+          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-numpy.tgz"
+          if wget --spider "${URL}" 2>/dev/null; then
+              wget -qO- "${URL}" | tar xvfz -
+          else
+              echo "Previous version not found in bucket"
+          fi
+      - name: Download linux-x64-python3
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3.tgz" | tar xvfz -
+      - name: Build
+        run: ./builder.py build --arch=linux-x64 --target=numpy --single --tar
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('linux-x64-numpy.tgz') != ''
+        with:
+          allowUpdates: True
+          prerelease: True
+          omitBody: True
+          omitBodyDuringUpdate: True
+          omitNameDuringUpdate: True
+          tag: bucket-linux-x64
+          artifacts: "linux-x64-numpy.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
+  linux-x64-apicula:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    needs: [ linux-x64-numpy, linux-x64-python3 ]
     steps:
       - uses: actions/checkout@v3
         with:
@@ -690,6 +727,8 @@ jobs:
           else
               echo "Previous version not found in bucket"
           fi
+      - name: Download linux-x64-numpy
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-numpy.tgz" | tar xvfz -
       - name: Download linux-x64-python3
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3.tgz" | tar xvfz -
       - name: Build
@@ -708,7 +747,7 @@ jobs:
   linux-x64-apicula-bba:
     runs-on: ubuntu-latest
     continue-on-error: true
-    needs: [ linux-x64-apicula, linux-x64-python3 ]
+    needs: [ linux-x64-apicula, linux-x64-numpy, linux-x64-python3 ]
     steps:
       - uses: actions/checkout@v3
         with:
@@ -729,6 +768,8 @@ jobs:
           fi
       - name: Download linux-x64-apicula
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-apicula.tgz" | tar xvfz -
+      - name: Download linux-x64-numpy
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-numpy.tgz" | tar xvfz -
       - name: Download linux-x64-python3
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3.tgz" | tar xvfz -
       - name: Build
@@ -2344,7 +2385,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-default:
     runs-on: ubuntu-latest
-    needs: [ linux-x64-aiger, linux-x64-apicula, linux-x64-avy, linux-x64-bitwuzla, linux-x64-boolector, linux-x64-cocotb, linux-x64-cvc4, linux-x64-cvc5, linux-x64-dfu-util, linux-x64-ecpdap, linux-x64-ecpprog, linux-x64-flask, linux-x64-fujprog, linux-x64-ghdl, linux-x64-ghdl-yosys-plugin, linux-x64-graphviz, linux-x64-gtkwave, linux-x64-iceprogduino, linux-x64-icesprog, linux-x64-icestorm, linux-x64-iverilog, linux-x64-mcy, linux-x64-nextpnr-ecp5, linux-x64-nextpnr-generic, linux-x64-nextpnr-gowin, linux-x64-nextpnr-ice40, linux-x64-nextpnr-machxo2, linux-x64-nextpnr-nexus, linux-x64-openfpgaloader, linux-x64-openocd, linux-x64-pono, linux-x64-prjoxide, linux-x64-prjtrellis, linux-x64-pyhdl, linux-x64-python-programmers, linux-x64-python2, linux-x64-python3, linux-x64-sby, linux-x64-sby-gui, linux-x64-suprove, linux-x64-surelog, linux-x64-surelog-data, linux-x64-surelog-plugin, linux-x64-system-resources, linux-x64-utils, linux-x64-verilator, linux-x64-xdot, linux-x64-yices, linux-x64-yosys, linux-x64-z3 ]
+    needs: [ linux-x64-aiger, linux-x64-apicula, linux-x64-avy, linux-x64-bitwuzla, linux-x64-boolector, linux-x64-cocotb, linux-x64-cvc4, linux-x64-cvc5, linux-x64-dfu-util, linux-x64-ecpdap, linux-x64-ecpprog, linux-x64-flask, linux-x64-fujprog, linux-x64-ghdl, linux-x64-ghdl-yosys-plugin, linux-x64-graphviz, linux-x64-gtkwave, linux-x64-iceprogduino, linux-x64-icesprog, linux-x64-icestorm, linux-x64-iverilog, linux-x64-mcy, linux-x64-nextpnr-ecp5, linux-x64-nextpnr-generic, linux-x64-nextpnr-gowin, linux-x64-nextpnr-ice40, linux-x64-nextpnr-machxo2, linux-x64-nextpnr-nexus, linux-x64-numpy, linux-x64-openfpgaloader, linux-x64-openocd, linux-x64-pono, linux-x64-prjoxide, linux-x64-prjtrellis, linux-x64-pyhdl, linux-x64-python-programmers, linux-x64-python2, linux-x64-python3, linux-x64-sby, linux-x64-sby-gui, linux-x64-suprove, linux-x64-surelog, linux-x64-surelog-data, linux-x64-surelog-plugin, linux-x64-system-resources, linux-x64-utils, linux-x64-verilator, linux-x64-xdot, linux-x64-yices, linux-x64-yosys, linux-x64-z3 ]
     steps:
       - name: Get current date
         id: date
@@ -2408,6 +2449,8 @@ jobs:
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-machxo2.tgz" | tar xvfz -
       - name: Download linux-x64-nextpnr-nexus
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-nexus.tgz" | tar xvfz -
+      - name: Download linux-x64-numpy
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-numpy.tgz" | tar xvfz -
       - name: Download linux-x64-openfpgaloader
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-openfpgaloader.tgz" | tar xvfz -
       - name: Download linux-x64-openocd
