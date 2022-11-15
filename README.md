@@ -24,14 +24,14 @@ See [Tabby CAD Datasheet](https://www.yosyshq.com/tabby-cad-datasheet) for detai
  * [Amaranth](https://github.com/amaranth-lang/amaranth) refreshed Python toolbox for building complex digital hardware
  * [Migen](https://github.com/m-labs/migen) Python toolbox for building complex digital hardware
  * [ABC](https://people.eecs.berkeley.edu/~alanmi/abc/) A System for Sequential Synthesis and Verification
- * [GHDL](https://github.com/ghdl/ghdl) VHDL 2008/93/87 simulator (linux-x64 platform only)
+ * [GHDL](https://github.com/ghdl/ghdl) VHDL 2008/93/87 simulator (linux-x64 and darwin-x64 platforms only)
  * [Surelog](https://github.com/chipsalliance/Surelog) SystemVerilog 2017 Pre-processor, Parser, Elaborator and UHDM Compiler
  
 Did you know that the Tabby CAD version of yosys supports industry standard SystemVerilog, VHDL and SVA? 
 Contact us at contact@yosyshq.com to arrange a free evaluation license.
 
 ### Plugins
- * [GHDL plugin](https://github.com/ghdl/ghdl-yosys-plugin) VHDL synthesis based on GHDL (linux-x64 platform only)
+ * [GHDL plugin](https://github.com/ghdl/ghdl-yosys-plugin) VHDL synthesis based on GHDL (linux-x64 and darwin-x64 platforms only)
  * [SystemVerilog plugin](https://github.com/chipsalliance/yosys-f4pga-plugins/tree/main/systemverilog-plugin) SystemVerilog and UHDM synthesis based on Surelog
 
 ### Formal Tools
