@@ -9,7 +9,9 @@ cp /opt/local/bin/realpath libexec/.
 
 cp ${PATCHES_DIR}/${README} ${OUTPUT_DIR}${INSTALL_PREFIX}/README
 sed "s|___BRANDING___|${BRANDING}|g" -i ${OUTPUT_DIR}${INSTALL_PREFIX}/environment
-sed "s|___BRANDING___|${BRANDING}|g" -i ${OUTPUT_DIR}${INSTALL_PREFIX}/bin/tabbyadm
+if [ -f "${OUTPUT_DIR}${INSTALL_PREFIX}/bin/tabbyadm" ]; then
+    sed "s|___BRANDING___|${BRANDING}|g" -i ${OUTPUT_DIR}${INSTALL_PREFIX}/bin/tabbyadm
+fi
 
 for bindir in bin py3bin super_prove/bin share/verilator/bin lib/ivl; do
     for binfile in $(file -h $bindir/* | grep Mach-O | grep executable | cut -f1 -d:); do
