@@ -8,4 +8,9 @@ RUN cd /usr/local && \
     mv jdk-11.0.9.1+1-jre jre-11 && \
     rm -rf OpenJDK11U-jre_x64_linux_hotspot_11.0.9.1_1.tar.gz
 
-RUN dnf install -y wget
+RUN dnf install -y wget boost-devel
+
+RUN git clone --recursive https://github.com/gsauthof/pe-util && \
+    cd pe-util && \
+    CC=gcc CXX=g++ LD=g++ cmake . && \
+    make install -j9
