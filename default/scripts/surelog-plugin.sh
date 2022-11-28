@@ -8,7 +8,8 @@ cd surelog-plugin
 sed -i 's,DATA_DIR = \$(DESTDIR)\$(shell \$(YOSYS_CONFIG) --datdir),DATA_DIR = ${OUTPUT_DIR}/yosyshq/share/yosys,g' Makefile_plugin.common
 sed -i 's,PLUGINS_DIR = \$(DATA_DIR)/plugins,PLUGINS_DIR = ${OUTPUT_DIR}/yosyshq/share/yosys/plugins,g' Makefile_plugin.common
 if [ ${ARCH_BASE} == 'darwin' ] ; then
-    sed -i 's,-Wl\,--whole-archive -luhdm -Wl\,--no-whole-archive,-luhdm,g' systemverilog-plugin/Makefile
+    sed -i 's,-Wl\,--whole-archive,,g' systemverilog-plugin/Makefile
+    sed -i 's,-Wl\,--no-whole-archive,,g' systemverilog-plugin/Makefile
     sed -i 's,-lrt,,g' systemverilog-plugin/Makefile
     export MACOSX_DEPLOYMENT_TARGET=10.15
 fi
