@@ -16,4 +16,5 @@ cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${INSTALL_PREFIX} -DCMAK
 make DESTDIR=${OUTPUT_DIR} -j${NPROC} install
 mv ${OUTPUT_DIR}${INSTALL_PREFIX} ${OUTPUT_DIR}/dev
 mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/bin
-cp ${OUTPUT_DIR}/dev/bin/* ${OUTPUT_DIR}${INSTALL_PREFIX}/bin/.
+rm -rf ${OUTPUT_DIR}/dev/bin/pkg
+cp -r ${OUTPUT_DIR}/dev/bin/* ${OUTPUT_DIR}${INSTALL_PREFIX}/bin/.
