@@ -21,4 +21,5 @@ make -j${NPROC}
 mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/include
 mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/lib
 cp src/ccadical.h ${OUTPUT_DIR}${INSTALL_PREFIX}/include/.
+cp src/cadical.hpp ${OUTPUT_DIR}${INSTALL_PREFIX}/include/.
 cp build/libcadical.a ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/.

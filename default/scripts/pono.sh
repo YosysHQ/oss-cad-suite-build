@@ -11,6 +11,8 @@ sed -i -re 's,cmake \"\$root_dir\" \$cmake_opts,cmake \"\$root_dir\" \$cmake_opt
 sed -i 's,target_link_libraries(pono-lib PUBLIC "${SMT_SWITCH_DIR}/local/lib/libsmt-switch-btor.a"),target_link_libraries(pono-lib PUBLIC "${SMT_SWITCH_DIR}/local/lib/libsmt-switch-btor.a")\ntarget_link_libraries(pono-lib PUBLIC "${SMT_SWITCH_DIR}/local/lib/liblgl.a")\ntarget_link_libraries(pono-lib PUBLIC "${SMT_SWITCH_DIR}/local/lib/libcadical.a"),g' CMakeLists.txt 
 sed -i 's,add_subdirectory(tests),#add_subdirectory(tests),g' CMakeLists.txt 
 if [ ${ARCH_BASE} == 'windows' ]; then
+    cp ../cvc5/dev/build/src/main/libcvc5.dll.a ../pono/deps/smt-switch/local/lib/.
+    sed -i 's,target_link_libraries(pono-lib PUBLIC "${SMT_SWITCH_DIR}/local/lib/libsmt-switch-cvc5.a"),target_link_libraries(pono-lib PUBLIC "${SMT_SWITCH_DIR}/local/lib/libsmt-switch-cvc5.a")\ntarget_link_libraries(pono-lib PUBLIC "${SMT_SWITCH_DIR}/local/lib/libcvc5.dll.a"),g' CMakeLists.txt 
     sed -i -re 's,FMT_USE_WINDOWS_H 1,FMT_USE_WINDOWS_H 0,g' contrib/fmt/format.h
     sed -i -re 's,SIGALRM,SIGABRT,g' pono.cpp
 fi

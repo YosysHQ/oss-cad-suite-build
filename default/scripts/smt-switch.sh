@@ -6,11 +6,17 @@ if [ ${ARCH_BASE} == 'windows' ]; then
     patch -p1 < ${PATCHES_DIR}/smt-switch-win32.diff
     sed -i -re 's,__APPLE__,__WIN32__,g' src/generic_solver.cpp
     sed -i -re 's,__APPLE__,__WIN32__,g' tests/test-generic-solver.cpp
-    sed -i -re 's,\*.o,\*.obj,g' cvc4/CMakeLists.txt
+    sed -i -re 's,\*.o,\*.obj,g' cvc5/CMakeLists.txt
     sed -i -re 's,\*.o,\*.obj,g' btor/CMakeLists.txt
     echo > contrib/memstream-0.1/memstream.c
+    export CMAKE_TOOLCHAIN_FILE=${PATCHES_DIR}/Toolchain-mingw64.cmake
 fi
-./configure.sh --cvc4 --cvc4-home=${BUILD_DIR}/cvc4/dev --btor-home=${BUILD_DIR}/boolector/dev --prefix=${INSTALL_PREFIX} --static --smtlib-reader --bison-dir=${BUILD_DIR}/bison/deps/bison/bison-install
+if [ ${ARCH_BASE} == 'darwin' ]; then
+    sed -i -re 's,linux,l1nux,g' scripts/repack-static-lib.sh 
+    sed -i -re 's,darwin,linux,g' scripts/repack-static-lib.sh 
+    sed -i -re 's,libtool,x86_64-apple-darwin20.2-libtool,g' scripts/repack-static-lib.sh 
+fi
+./configure.sh --cvc5 --cvc5-home=${BUILD_DIR}/cvc5/dev --btor-home=${BUILD_DIR}/boolector/dev --prefix=${INSTALL_PREFIX} --static --smtlib-reader --bison-dir=${BUILD_DIR}/bison/deps/bison/bison-install
 cd build
 make DESTDIR=${OUTPUT_DIR} -j${NPROC}
 make DESTDIR=${OUTPUT_DIR} install

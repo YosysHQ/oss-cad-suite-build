@@ -119,7 +119,7 @@ SourceLocation(
 	name = 'smt-switch',
 	vcs = 'git',
 	location = 'https://github.com/makaimann/smt-switch',
-	revision = 'e64c261faa826beb51f22ff6d5e74f581362ab47',
+	revision = '445b5bc5172cc4a56db121e5ba4c7a5e14147bd5',
 	license_file = 'LICENSE',
 	license_build_only = True,
 )
@@ -128,7 +128,7 @@ SourceLocation(
 	name = 'pono',
 	vcs = 'git',
 	location = 'https://github.com/upscale-project/pono',
-	revision = '8b2a94649f5ea1161260a611de4b49e6f5d92b98',
+	revision = 'b243cef7ea0c98840e7e012f5ce30f3430b1edcc',
 	license_file = 'LICENSE',
 )
 
@@ -150,6 +150,21 @@ SourceLocation(
 	license_build_only = True,
 )
 
+SourceLocation(
+	name = 'libpoly',
+	vcs = 'git',
+	location = 'https://github.com/SRI-CSL/libpoly',
+	revision = '1383809f2aa5005ef20110fec84b66959518f697',
+	license_file = 'LICENCE',
+	license_build_only = True,
+)
+
+Target(
+	name = 'libpoly',
+	sources = [ 'libpoly' ],
+	license_build_only = True,
+)
+
 Target(
 	name = 'bison',
 	sources = [ 'smt-switch' ],
@@ -159,6 +174,7 @@ Target(
 Target(
 	name = 'cvc5',
 	sources = [ 'cvc5' ],
+	dependencies = [ 'libpoly', 'cadical', 'symfpu' ],
 	patches = [ 'get-antlr-3.4' ],
 	license_build_only = True,
 )
@@ -172,15 +188,15 @@ Target(
 Target(
 	name = 'smt-switch',
 	sources = [ 'smt-switch' ],
-	dependencies = [ 'cvc4', 'boolector', 'bison' ],
-	patches = [ 'smt-switch-win32.diff' ],
+	dependencies = [ 'cvc5', 'boolector', 'bison' ],
+	patches = [ 'smt-switch-win32.diff', 'Toolchain-mingw64.cmake' ],
 	license_build_only = True,
 )
 
 Target(
 	name = 'pono',
 	sources = [ 'pono' ],
-	dependencies = [ 'smt-switch', 'cvc4', 'boolector' ],
+	dependencies = [ 'smt-switch', 'cvc5', 'boolector' ],
 )
 
 # suprove
