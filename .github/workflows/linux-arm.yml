@@ -998,9 +998,44 @@ jobs:
           tag: bucket-linux-arm
           artifacts: "linux-arm-cvc4.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
+  linux-arm-libpoly:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          repository: 'yosyshq/oss-cad-suite-build'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v3
+        with:
+          path: _sources
+          key: cache-sources-libpoly
+      - name: Download previous build
+        run: |
+          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm/linux-arm-libpoly.tgz"
+          if wget --spider "${URL}" 2>/dev/null; then
+              wget -qO- "${URL}" | tar xvfz -
+          else
+              echo "Previous version not found in bucket"
+          fi
+      - name: Build
+        run: ./builder.py build --arch=linux-arm --target=libpoly --single --tar
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('linux-arm-libpoly.tgz') != ''
+        with:
+          allowUpdates: True
+          prerelease: True
+          omitBody: True
+          omitBodyDuringUpdate: True
+          omitNameDuringUpdate: True
+          tag: bucket-linux-arm
+          artifacts: "linux-arm-libpoly.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
   linux-arm-cvc5:
     runs-on: ubuntu-latest
     continue-on-error: true
+    needs: [ linux-arm-cadical, linux-arm-libpoly ]
     steps:
       - uses: actions/checkout@v3
         with:
@@ -1019,6 +1054,12 @@ jobs:
           else
               echo "Previous version not found in bucket"
           fi
+      - name: Download linux-arm-cadical
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm/linux-arm-cadical.tgz" | tar xvfz -
+      - name: Download linux-arm-libpoly
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm/linux-arm-libpoly.tgz" | tar xvfz -
+      - name: Download linux-x64-symfpu
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-symfpu.tgz" | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-arm --target=cvc5 --single --tar
       - uses: ncipollo/release-action@v1
@@ -1140,7 +1181,7 @@ jobs:
   linux-arm-smt-switch:
     runs-on: ubuntu-latest
     continue-on-error: true
-    needs: [ linux-arm-boolector, linux-arm-cvc4 ]
+    needs: [ linux-arm-boolector, linux-arm-cvc5 ]
     steps:
       - uses: actions/checkout@v3
         with:
@@ -1161,8 +1202,8 @@ jobs:
           fi
       - name: Download linux-arm-boolector
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm/linux-arm-boolector.tgz" | tar xvfz -
-      - name: Download linux-arm-cvc4
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm/linux-arm-cvc4.tgz" | tar xvfz -
+      - name: Download linux-arm-cvc5
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm/linux-arm-cvc5.tgz" | tar xvfz -
       - name: Download linux-x64-bison
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-bison.tgz" | tar xvfz -
       - name: Build
@@ -1181,7 +1222,7 @@ jobs:
   linux-arm-pono:
     runs-on: ubuntu-latest
     continue-on-error: true
-    needs: [ linux-arm-boolector, linux-arm-cvc4, linux-arm-smt-switch ]
+    needs: [ linux-arm-boolector, linux-arm-cvc5, linux-arm-smt-switch ]
     steps:
       - uses: actions/checkout@v3
         with:
@@ -1202,8 +1243,8 @@ jobs:
           fi
       - name: Download linux-arm-boolector
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm/linux-arm-boolector.tgz" | tar xvfz -
-      - name: Download linux-arm-cvc4
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm/linux-arm-cvc4.tgz" | tar xvfz -
+      - name: Download linux-arm-cvc5
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm/linux-arm-cvc5.tgz" | tar xvfz -
       - name: Download linux-arm-smt-switch
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm/linux-arm-smt-switch.tgz" | tar xvfz -
       - name: Build
