@@ -3,7 +3,7 @@ export HOME=/tmp
 curl --silent --show-error --retry 5 https://bootstrap.pypa.io/get-pip.py | python3
 export PATH=/tmp/.local/bin:/usr/local/jre-11/bin:${BUILD_DIR}/capnproto/usr/local/bin:${BUILD_DIR}/flatbuffers/usr/local/bin:$PATH
 pip install orderedmultidict
-sed -i 's,COMMAND \${CAPNP_DIR}/capnp compile -o${CAPNP_DIR}/capnpc-c++,COMMAND capnp compile -oc++,g' third_party/UHDM/CMakeLists.txt
+sed -i 's,COMMAND \${CAPNP_EXECUTABLE} compile -o\${CAPNPC_CXX_EXECUTABLE},COMMAND capnp compile -oc++,g' third_party/UHDM/CMakeLists.txt
 sed -i 's,\${FLATBUFFERS_FLATC_EXECUTABLE},flatc,g' CMakeLists.txt
 if [ ${ARCH} != 'linux-x64' ]; then
     sed -i 's,\$<TARGET_FILE:surelog-bin>,echo,g' CMakeLists.txt
