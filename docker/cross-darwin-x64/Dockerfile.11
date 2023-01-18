@@ -7,3 +7,10 @@ RUN cd /usr/local && \
     tar xvfz OpenJDK11U-jre_x64_linux_hotspot_11.0.9.1_1.tar.gz && \
     mv jdk-11.0.9.1+1-jre jre-11 && \
     rm -rf OpenJDK11U-jre_x64_linux_hotspot_11.0.9.1_1.tar.gz
+
+RUN set -e -x ;\
+    apt -y update ;\
+    apt -y install \
+        help2man; \
+    apt -y autoremove ;\
+    rm -rf /var/lib/apt/lists/*

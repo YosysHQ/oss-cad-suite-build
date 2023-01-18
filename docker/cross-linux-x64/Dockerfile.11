@@ -5,6 +5,7 @@ RUN chmod -R o+w /opt/rust && RUSTUP_HOME=/opt/rust/rustup CARGO_HOME=/opt/rust/
 RUN set -e -x ;\
     apt -y update ;\
     apt -y install \
+        help2man \
         libedit-dev; \
     apt -y autoremove ;\
     rm -rf /var/lib/apt/lists/*
