@@ -1,6 +1,6 @@
 source ${PATCHES_DIR}/python3_package.sh
 python3_package_setup
-python3_package_pip_install "pyyaml"
+python3_package_pip_install "pyyaml setuptools_scm"
 
 mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/python3.8/site-packages/pyhdl
 for target in *; do    
