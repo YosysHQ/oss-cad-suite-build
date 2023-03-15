@@ -10,6 +10,8 @@ if [ ${ARCH} != 'linux-x64' ]; then
     mkdir -p bin/pkg
 fi
 
+sed -i 's,VERSION 3.20,VERSION 3.15,g'  CMakeLists.txt
+sed -i 's,VERSION 3.20,VERSION 3.15,g'  third_party/UHDM/CMakeLists.txt
 sed -i -z 's,if (WIN32)\n  if (SURELOG_WITH_PYTHON),if (MSVC)\n  if (SURELOG_WITH_PYTHON),g'  CMakeLists.txt
 sed -i 's,defined(_MSC_VER),defined(__MINGW32__),g'  src/Common/FileSystem.cpp 
 sed -i 's,<Windows.h>,<windows.h>,g' src/Common/FileSystem.cpp 
