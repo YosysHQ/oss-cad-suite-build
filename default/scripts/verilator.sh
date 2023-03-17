@@ -4,8 +4,13 @@ if [ ${ARCH_BASE} == 'darwin' ]; then
 fi
 autoconf
 ./configure --prefix=${INSTALL_PREFIX} --host=${CROSS_NAME}
-make DESTDIR=${OUTPUT_DIR} -j${NPROC}
-make DESTDIR=${OUTPUT_DIR} prefix=${INSTALL_PREFIX} -j${NPROC} install
+if [ ${ARCH_BASE} == 'darwin' ]; then
+    make DESTDIR=${OUTPUT_DIR} -j2
+    make DESTDIR=${OUTPUT_DIR} prefix=${INSTALL_PREFIX} install
+else
+    make DESTDIR=${OUTPUT_DIR} -j${NPROC}
+    make DESTDIR=${OUTPUT_DIR} prefix=${INSTALL_PREFIX} -j${NPROC} install
+fi
 
 sed -i 's,AR = '${AR}',AR = ar,g' ${OUTPUT_DIR}${INSTALL_PREFIX}/share/verilator/include/verilated.mk
 sed -i 's,CXX = '${CXX}',CXX = g++,g' ${OUTPUT_DIR}${INSTALL_PREFIX}/share/verilator/include/verilated.mk
