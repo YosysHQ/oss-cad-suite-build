@@ -37,6 +37,7 @@ Contact us at contact@yosyshq.com to arrange a free evaluation license.
 ### Formal Tools
  * [sby](https://github.com/YosysHQ/sby) a front-end driver program for Yosys-based formal hardware verification flows.
  * [mcy](https://github.com/YosysHQ/mcy) Mutation Cover with Yosys
+ * [eqy](https://github.com/YosysHQ/eqy) Equivalence Checking with Yosys
  * [sby-gui](https://github.com/YosysHQ/sby-gui) GUI for sby
  * [aiger](https://github.com/arminbiere/aiger) AIGER tools including bounded model checker
  * [avy](https://bitbucket.org/arieg/extavy) Interpolating Property Directed Reachability tool
