@@ -1365,6 +1365,43 @@ jobs:
           tag: bucket-linux-arm
           artifacts: "linux-arm-mcy.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
+  linux-arm-eqy:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    needs: linux-arm-yosys
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          repository: 'yosyshq/oss-cad-suite-build'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v3
+        with:
+          path: _sources
+          key: cache-sources-eqy
+      - name: Download previous build
+        run: |
+          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm/linux-arm-eqy.tgz"
+          if wget --spider "${URL}" 2>/dev/null; then
+              wget -qO- "${URL}" | tar xvfz -
+          else
+              echo "Previous version not found in bucket"
+          fi
+      - name: Download linux-arm-yosys
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm/linux-arm-yosys.tgz" | tar xvfz -
+      - name: Build
+        run: ./builder.py build --arch=linux-arm --target=eqy --single --tar
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('linux-arm-eqy.tgz') != ''
+        with:
+          allowUpdates: True
+          prerelease: True
+          omitBody: True
+          omitBodyDuringUpdate: True
+          omitNameDuringUpdate: True
+          tag: bucket-linux-arm
+          artifacts: "linux-arm-eqy.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
   linux-arm-sby:
     runs-on: ubuntu-latest
     continue-on-error: true
@@ -1963,7 +2000,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-arm-default:
     runs-on: ubuntu-latest
-    needs: [ linux-arm-aiger, linux-arm-apicula, linux-arm-avy, linux-arm-bitwuzla, linux-arm-boolector, linux-arm-cocotb, linux-arm-cvc4, linux-arm-cvc5, linux-arm-dfu-util, linux-arm-ecpdap, linux-arm-ecpprog, linux-arm-flask, linux-arm-fujprog, linux-arm-graphviz, linux-arm-gtkwave, linux-arm-iceprogduino, linux-arm-icesprog, linux-arm-icestorm, linux-arm-iverilog, linux-arm-mcy, linux-arm-nextpnr-ecp5, linux-arm-nextpnr-generic, linux-arm-nextpnr-gowin, linux-arm-nextpnr-ice40, linux-arm-nextpnr-machxo2, linux-arm-nextpnr-nexus, linux-arm-numpy, linux-arm-openfpgaloader, linux-arm-openocd, linux-arm-pono, linux-arm-prjoxide, linux-arm-prjtrellis, linux-arm-pyhdl, linux-arm-python-programmers, linux-arm-python2, linux-arm-python3, linux-arm-sby, linux-arm-sby-gui, linux-arm-suprove, linux-arm-surelog, linux-arm-surelog-plugin, linux-arm-system-resources, linux-arm-utils, linux-arm-verilator, linux-arm-xdot, linux-arm-yices, linux-arm-yosys, linux-arm-z3 ]
+    needs: [ linux-arm-aiger, linux-arm-apicula, linux-arm-avy, linux-arm-bitwuzla, linux-arm-boolector, linux-arm-cocotb, linux-arm-cvc4, linux-arm-cvc5, linux-arm-dfu-util, linux-arm-ecpdap, linux-arm-ecpprog, linux-arm-eqy, linux-arm-flask, linux-arm-fujprog, linux-arm-graphviz, linux-arm-gtkwave, linux-arm-iceprogduino, linux-arm-icesprog, linux-arm-icestorm, linux-arm-iverilog, linux-arm-mcy, linux-arm-nextpnr-ecp5, linux-arm-nextpnr-generic, linux-arm-nextpnr-gowin, linux-arm-nextpnr-ice40, linux-arm-nextpnr-machxo2, linux-arm-nextpnr-nexus, linux-arm-numpy, linux-arm-openfpgaloader, linux-arm-openocd, linux-arm-pono, linux-arm-prjoxide, linux-arm-prjtrellis, linux-arm-pyhdl, linux-arm-python-programmers, linux-arm-python2, linux-arm-python3, linux-arm-sby, linux-arm-sby-gui, linux-arm-suprove, linux-arm-surelog, linux-arm-surelog-plugin, linux-arm-system-resources, linux-arm-utils, linux-arm-verilator, linux-arm-xdot, linux-arm-yices, linux-arm-yosys, linux-arm-z3 ]
     steps:
       - name: Get current date
         id: date
@@ -1993,6 +2030,8 @@ jobs:
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm/linux-arm-ecpdap.tgz" | tar xvfz -
       - name: Download linux-arm-ecpprog
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm/linux-arm-ecpprog.tgz" | tar xvfz -
+      - name: Download linux-arm-eqy
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm/linux-arm-eqy.tgz" | tar xvfz -
       - name: Download linux-arm-flask
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm/linux-arm-flask.tgz" | tar xvfz -
       - name: Download linux-arm-fujprog
