@@ -51,6 +51,11 @@ EOT
 export VERILATOR_ROOT="\$release_topdir_abs/share/verilator"
 EOT
         fi
+        if [ ! -z "$(basename $binfile | grep openFPGALoader)" ]; then
+            cat >> $binfile << EOT
+export OPENFPGALOADER_SOJ_DIR="\$release_topdir_abs/share/openFPGALoader"
+EOT
+        fi
         if [ ! -z "$(basename $binfile | grep iverilog)" ]; then
             cat >> $binfile << EOT
 set -- "-p" "VVP_EXECUTABLE=\$release_topdir_abs/bin/vvp" "\$@"
