@@ -1887,83 +1887,6 @@ jobs:
           tag: bucket-linux-arm
           artifacts: "linux-arm-cocotb.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
-  linux-arm-surelog:
-    runs-on: ubuntu-latest
-    continue-on-error: true
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          repository: 'yosyshq/oss-cad-suite-build'
-      - name: Cache sources
-        id: cache-sources
-        uses: actions/cache@v3
-        with:
-          path: _sources
-          key: cache-sources-surelog
-      - name: Download previous build
-        run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm/linux-arm-surelog.tgz"
-          if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
-          else
-              echo "Previous version not found in bucket"
-          fi
-      - name: Download linux-x64-capnproto
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-capnproto.tgz" | tar xvfz -
-      - name: Download linux-x64-flatbuffers
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-flatbuffers.tgz" | tar xvfz -
-      - name: Build
-        run: ./builder.py build --arch=linux-arm --target=surelog --single --tar
-      - uses: ncipollo/release-action@v1
-        if: hashFiles('linux-arm-surelog.tgz') != ''
-        with:
-          allowUpdates: True
-          prerelease: True
-          omitBody: True
-          omitBodyDuringUpdate: True
-          omitNameDuringUpdate: True
-          tag: bucket-linux-arm
-          artifacts: "linux-arm-surelog.tgz"
-          token: ${{ secrets.GITHUB_TOKEN }}
-  linux-arm-surelog-plugin:
-    runs-on: ubuntu-latest
-    continue-on-error: true
-    needs: [ linux-arm-surelog, linux-arm-yosys ]
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          repository: 'yosyshq/oss-cad-suite-build'
-      - name: Cache sources
-        id: cache-sources
-        uses: actions/cache@v3
-        with:
-          path: _sources
-          key: cache-sources-surelog-plugin
-      - name: Download previous build
-        run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm/linux-arm-surelog-plugin.tgz"
-          if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
-          else
-              echo "Previous version not found in bucket"
-          fi
-      - name: Download linux-arm-surelog
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm/linux-arm-surelog.tgz" | tar xvfz -
-      - name: Download linux-arm-yosys
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm/linux-arm-yosys.tgz" | tar xvfz -
-      - name: Build
-        run: ./builder.py build --arch=linux-arm --target=surelog-plugin --single --tar
-      - uses: ncipollo/release-action@v1
-        if: hashFiles('linux-arm-surelog-plugin.tgz') != ''
-        with:
-          allowUpdates: True
-          prerelease: True
-          omitBody: True
-          omitBodyDuringUpdate: True
-          omitNameDuringUpdate: True
-          tag: bucket-linux-arm
-          artifacts: "linux-arm-surelog-plugin.tgz"
-          token: ${{ secrets.GITHUB_TOKEN }}
   linux-arm-system-resources:
     runs-on: ubuntu-latest
     continue-on-error: true
@@ -2000,7 +1923,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-arm-default:
     runs-on: ubuntu-latest
-    needs: [ linux-arm-aiger, linux-arm-apicula, linux-arm-avy, linux-arm-bitwuzla, linux-arm-boolector, linux-arm-cocotb, linux-arm-cvc4, linux-arm-cvc5, linux-arm-dfu-util, linux-arm-ecpdap, linux-arm-ecpprog, linux-arm-eqy, linux-arm-flask, linux-arm-fujprog, linux-arm-graphviz, linux-arm-gtkwave, linux-arm-iceprogduino, linux-arm-icesprog, linux-arm-icestorm, linux-arm-iverilog, linux-arm-mcy, linux-arm-nextpnr-ecp5, linux-arm-nextpnr-generic, linux-arm-nextpnr-gowin, linux-arm-nextpnr-ice40, linux-arm-nextpnr-machxo2, linux-arm-nextpnr-nexus, linux-arm-numpy, linux-arm-openfpgaloader, linux-arm-openocd, linux-arm-pono, linux-arm-prjoxide, linux-arm-prjtrellis, linux-arm-pyhdl, linux-arm-python-programmers, linux-arm-python2, linux-arm-python3, linux-arm-sby, linux-arm-sby-gui, linux-arm-suprove, linux-arm-surelog, linux-arm-surelog-plugin, linux-arm-system-resources, linux-arm-utils, linux-arm-verilator, linux-arm-xdot, linux-arm-yices, linux-arm-yosys, linux-arm-z3 ]
+    needs: [ linux-arm-aiger, linux-arm-apicula, linux-arm-avy, linux-arm-bitwuzla, linux-arm-boolector, linux-arm-cocotb, linux-arm-cvc4, linux-arm-cvc5, linux-arm-dfu-util, linux-arm-ecpdap, linux-arm-ecpprog, linux-arm-eqy, linux-arm-flask, linux-arm-fujprog, linux-arm-graphviz, linux-arm-gtkwave, linux-arm-iceprogduino, linux-arm-icesprog, linux-arm-icestorm, linux-arm-iverilog, linux-arm-mcy, linux-arm-nextpnr-ecp5, linux-arm-nextpnr-generic, linux-arm-nextpnr-gowin, linux-arm-nextpnr-ice40, linux-arm-nextpnr-machxo2, linux-arm-nextpnr-nexus, linux-arm-numpy, linux-arm-openfpgaloader, linux-arm-openocd, linux-arm-pono, linux-arm-prjoxide, linux-arm-prjtrellis, linux-arm-pyhdl, linux-arm-python-programmers, linux-arm-python2, linux-arm-python3, linux-arm-sby, linux-arm-sby-gui, linux-arm-suprove, linux-arm-system-resources, linux-arm-utils, linux-arm-verilator, linux-arm-xdot, linux-arm-yices, linux-arm-yosys, linux-arm-z3 ]
     steps:
       - name: Get current date
         id: date
@@ -2088,10 +2011,6 @@ jobs:
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm/linux-arm-sby-gui.tgz" | tar xvfz -
       - name: Download linux-arm-suprove
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm/linux-arm-suprove.tgz" | tar xvfz -
-      - name: Download linux-arm-surelog
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm/linux-arm-surelog.tgz" | tar xvfz -
-      - name: Download linux-arm-surelog-plugin
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm/linux-arm-surelog-plugin.tgz" | tar xvfz -
       - name: Download linux-arm-system-resources
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm/linux-arm-system-resources.tgz" | tar xvfz -
       - name: Download linux-arm-utils
@@ -2106,8 +2025,6 @@ jobs:
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm/linux-arm-yosys.tgz" | tar xvfz -
       - name: Download linux-arm-z3
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm/linux-arm-z3.tgz" | tar xvfz -
-      - name: Download linux-x64-surelog-data
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-surelog-data.tgz" | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-arm --target=default --single
       - uses: ncipollo/release-action@v1
