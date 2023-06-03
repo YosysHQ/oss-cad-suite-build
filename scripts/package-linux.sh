@@ -205,8 +205,8 @@ EOT
         fi
         if $is_using_fonts; then
             cat >> "${script}" <<EOT
-export FONTCONFIG_FILE="\$XDG_CONFIG_HOME/fonts.conf"
 export FONTCONFIG_PATH="\$release_topdir_abs/etc/fonts"
+export FONTCONFIG_FILE="\$FONTCONFIG_PATH/fonts.conf"
 sed "s|TARGET_DIR|\$release_topdir_abs|g" "\$release_topdir_abs/etc/fonts/fonts.conf.template" > \$FONTCONFIG_FILE
 EOT
         fi
