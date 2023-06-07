@@ -98,6 +98,7 @@ export XDG_CACHE_HOME=\$HOME/.cache/yosyshq
 export XDG_DATA_HOME=\$HOME/.local/share/yosyshq
 export XDG_CURRENT_DESKTOP="KDE"
 export LC_ALL="C"
+mkdir -p \$XDG_CONFIG_HOME \$XDG_CACHE_HOME \$XDG_DATA_HOME
 EOT
         fi
         if [ ! -z "$(lddtree -l libexec/$(basename $binfile) | grep gtk)" ]; then
