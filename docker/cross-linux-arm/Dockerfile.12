@@ -1,0 +1,3 @@
+FROM yosyshq/cross-linux-arm:1.1
+
+RUN RUSTUP_HOME=/opt/rust/rustup CARGO_HOME=/opt/rust/cargo rustup update && chmod -R o+w /opt/rust
