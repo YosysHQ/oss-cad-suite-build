@@ -1,3 +1,5 @@
 FROM yosyshq/cross-linux-x64:1.1
 
 RUN RUSTUP_HOME=/opt/rust/rustup CARGO_HOME=/opt/rust/cargo rustup update && chmod -R o+w /opt/rust
+
+RUN ln -s /lib64/ld-linux-x86-64.so.2 /lib64/ld-lsb-x86-64.so.3
