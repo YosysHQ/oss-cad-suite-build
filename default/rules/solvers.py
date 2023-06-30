@@ -38,7 +38,7 @@ SourceLocation(
 	name = 'bitwuzla',
 	vcs = 'git',
 	location = 'https://github.com/bitwuzla/bitwuzla',
-	revision = 'origin/main',
+	revision = '1230d80a5275ddf525da9c218c2bcd29c3130e49',
 	license_file = 'COPYING',
 )
 
