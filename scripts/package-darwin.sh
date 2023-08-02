@@ -220,5 +220,7 @@ EOT
     sed -i "s,/yosyshq,\${release_topdir_abs},g" bin/yosys-config
     chmod +x bin/yosys-config
 fi
-
+if [ ${PRELOAD} == 'True' ]; then
+    rcodesign sign lib/preload.o
+fi
 chmod -R u=rwX,go=rX *
