@@ -67,7 +67,9 @@ EOT
         fi
         if [ ! -z "$(otool -L libexec/$(basename $binfile) | grep QtCore)" ]; then
             install_name_tool -add_rpath @executable_path/../Frameworks libexec/$(basename $binfile)
-            rcodesign sign libexec/$(basename $binfile)
+            if [ ${ARCH} == 'darwin-arm64' ]; then
+                rcodesign sign libexec/$(basename $binfile)
+            fi
             cat >> $binfile << EOT
 export QT_PLUGIN_PATH="\$release_topdir_abs/lib/qt5/plugins"
 export QT_LOGGING_RULES="*=false"
@@ -222,6 +224,8 @@ EOT
     chmod +x bin/yosys-config
 fi
 if [ ${PRELOAD} == 'True' ]; then
-    rcodesign sign lib/preload.o
+    if [ ${ARCH} == 'darwin-arm64' ]; then
+        rcodesign sign lib/preload.o
+    fi
 fi
 chmod -R u=rwX,go=rX *

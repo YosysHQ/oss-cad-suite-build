@@ -68,10 +68,12 @@ if [ ${ARCH_BASE} == 'darwin' ]; then
     cp /opt/local/lib/libgdk-3.0.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/.
     dylibbundler -of -b -x ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libgtk-3.0.dylib -p @executable_path/../lib -d ${OUTPUT_DIR}${INSTALL_PREFIX}/lib
     install_name_tool -id @executable_path/../lib/libgtk-3.0.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libgtk-3.0.dylib
-    rcodesign sign ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libgtk-3.0.dylib
     dylibbundler -of -b -x ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libgdk-3.0.dylib -p @executable_path/../lib -d ${OUTPUT_DIR}${INSTALL_PREFIX}/lib
     install_name_tool -id @executable_path/../lib/libgdk-3.0.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libgdk-3.0.dylib
-    rcodesign sign ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libgdk-3.0.dylib
+    if [ ${ARCH} == 'darwin-arm64' ]; then
+        rcodesign sign ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libgtk-3.0.dylib
+        rcodesign sign ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libgdk-3.0.dylib
+    fi
     mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/share/glib-2.0
     mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/share/mime
     mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/share/icons
