@@ -67,6 +67,7 @@ EOT
         fi
         if [ ! -z "$(otool -L libexec/$(basename $binfile) | grep QtCore)" ]; then
             install_name_tool -add_rpath @executable_path/../Frameworks libexec/$(basename $binfile)
+            rcodesign sign libexec/$(basename $binfile)
             cat >> $binfile << EOT
 export QT_PLUGIN_PATH="\$release_topdir_abs/lib/qt5/plugins"
 export QT_LOGGING_RULES="*=false"
