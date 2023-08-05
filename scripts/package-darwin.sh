@@ -78,10 +78,12 @@ for bindir in bin py3bin super_prove/bin share/verilator/bin lib/ivl; do
                 export LC_ALL="C"
                 export XDG_DATA_DIRS="\$release_topdir_abs"/share
                 export XDG_CONFIG_DIRS="\$release_topdir_abs"
-                export XDG_CONFIG_HOME="\$HOME/.config/yosyshq"
-                export XDG_CACHE_HOME="\$HOME/.cache/yosyshq"
-                export XDG_DATA_HOME="\$HOME/.local/share/yosyshq"
-                mkdir -p "\$HOME/.config/yosyshq" "\$HOME/.local/share/yosyshq"
+                if [ ! -z ${HOME:+x} ]; then
+                    export XDG_CONFIG_HOME="\$HOME/.config/yosyshq"
+                    export XDG_CACHE_HOME="\$HOME/.cache/yosyshq"
+                    export XDG_DATA_HOME="\$HOME/.local/share/yosyshq"
+                    mkdir -p "\$HOME/.config/yosyshq" "\$HOME/.local/share/yosyshq"
+                fi
             EOT
         fi
         if [ ! -z "$(otool -L libexec/$(basename $binfile) | grep libgtk)" ]; then
@@ -105,11 +107,13 @@ for bindir in bin py3bin super_prove/bin share/verilator/bin lib/ivl; do
                 export LC_ALL="C"
                 export XDG_DATA_DIRS="\$release_topdir_abs"/share
                 export XDG_CONFIG_DIRS="\$release_topdir_abs"
-                export XDG_CONFIG_HOME="\$HOME/.config/yosyshq"
-                export XDG_CACHE_HOME="\$HOME/.cache/yosyshq"
-                export XDG_DATA_HOME="\$HOME/.local/share/yosyshq"
-                export GDK_PIXBUF_MODULE_FILE="\$XDG_CACHE_HOME/loaders.cache"
-                mkdir -p "\$XDG_CONFIG_HOME" "\$XDG_CACHE_HOME" "\$XDG_DATA_HOME"
+                if [ ! -z ${HOME:+x} ]; then
+                    export XDG_CONFIG_HOME="\$HOME/.config/yosyshq"
+                    export XDG_CACHE_HOME="\$HOME/.cache/yosyshq"
+                    export XDG_DATA_HOME="\$HOME/.local/share/yosyshq"
+                    export GDK_PIXBUF_MODULE_FILE="\$XDG_CACHE_HOME/loaders.cache"
+                    mkdir -p "\$XDG_CONFIG_HOME" "\$XDG_CACHE_HOME" "\$XDG_DATA_HOME"
+                fi
                 "\$release_topdir_abs"/libexec/gdk-pixbuf-query-loaders --update-cache
             EOT
         fi
@@ -179,11 +183,13 @@ for script in bin/* py3bin/*; do
                 export LD_LIBRARY_PATH="\$release_topdir_abs/lib"
                 export XDG_DATA_DIRS="\$release_topdir_abs"/share
                 export XDG_CONFIG_DIRS="\$release_topdir_abs"
-                export XDG_CONFIG_HOME="\$HOME/.config/yosyshq"
-                export XDG_CACHE_HOME="\$HOME/.cache/yosyshq"
-                export XDG_DATA_HOME="\$HOME/.local/share/yosyshq"
-                export GDK_PIXBUF_MODULE_FILE="\$XDG_CACHE_HOME/loaders.cache"
-                mkdir -p "\$XDG_CONFIG_HOME" "\$XDG_CACHE_HOME" "\$XDG_DATA_HOME"
+                if [ ! -z ${HOME:+x} ]; then
+                    export XDG_CONFIG_HOME="\$HOME/.config/yosyshq"
+                    export XDG_CACHE_HOME="\$HOME/.cache/yosyshq"
+                    export XDG_DATA_HOME="\$HOME/.local/share/yosyshq"
+                    export GDK_PIXBUF_MODULE_FILE="\$XDG_CACHE_HOME/loaders.cache"
+                    mkdir -p "\$XDG_CONFIG_HOME" "\$XDG_CACHE_HOME" "\$XDG_DATA_HOME"
+                fi
                 "\$release_topdir_abs"/libexec/gdk-pixbuf-query-loaders --update-cache
                 exec "\$release_topdir_abs"/libexec/python3.8 "\$release_topdir_abs"/libexec/$(basename $script) "\$@"
             EOT

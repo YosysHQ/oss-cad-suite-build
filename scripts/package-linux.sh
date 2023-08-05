@@ -95,10 +95,12 @@ for bindir in bin py2bin py3bin super_prove/bin share/verilator/bin lib/ivl; do
                 export XDG_CURRENT_DESKTOP="KDE"
                 export XDG_DATA_DIRS="\$release_topdir_abs"/share
                 export XDG_CONFIG_DIRS="\$release_topdir_abs"
-                export XDG_CONFIG_HOME="\$HOME/.config/yosyshq"
-                export XDG_CACHE_HOME="\$HOME/.cache/yosyshq"
-                export XDG_DATA_HOME="\$HOME/.local/share/yosyshq"
-                mkdir -p "\$XDG_CONFIG_HOME" "\$XDG_CACHE_HOME" "\$XDG_DATA_HOME"
+                if [ ! -z ${HOME:+x} ]; then
+                    export XDG_CONFIG_HOME="\$HOME/.config/yosyshq"
+                    export XDG_CACHE_HOME="\$HOME/.cache/yosyshq"
+                    export XDG_DATA_HOME="\$HOME/.local/share/yosyshq"
+                    mkdir -p "\$XDG_CONFIG_HOME" "\$XDG_CACHE_HOME" "\$XDG_DATA_HOME"
+                fi
             EOT
         fi
         if [ ! -z "$(lddtree -l libexec/$(basename $binfile) | grep gtk)" ]; then
@@ -120,11 +122,13 @@ for bindir in bin py2bin py3bin super_prove/bin share/verilator/bin lib/ivl; do
                 export XDG_CURRENT_DESKTOP="KDE"
                 export XDG_DATA_DIRS="\$release_topdir_abs"/share
                 export XDG_CONFIG_DIRS="\$release_topdir_abs"
-                export XDG_CONFIG_HOME="\$HOME/.config/yosyshq"
-                export XDG_CACHE_HOME="\$HOME/.cache/yosyshq"
-                export XDG_DATA_HOME="\$HOME/.local/share/yosyshq"
-                export GDK_PIXBUF_MODULE_FILE="\$XDG_CACHE_HOME/loaders.cache"
-                mkdir -p "\$XDG_CONFIG_HOME" "\$XDG_CACHE_HOME" "\$XDG_DATA_HOME"
+                if [ ! -z ${HOME:+x} ]; then
+                    export XDG_CONFIG_HOME="\$HOME/.config/yosyshq"
+                    export XDG_CACHE_HOME="\$HOME/.cache/yosyshq"
+                    export XDG_DATA_HOME="\$HOME/.local/share/yosyshq"
+                    export GDK_PIXBUF_MODULE_FILE="\$XDG_CACHE_HOME/loaders.cache"
+                    mkdir -p "\$XDG_CONFIG_HOME" "\$XDG_CACHE_HOME" "\$XDG_DATA_HOME"
+                fi
                 "\$release_topdir_abs"/lib/$ldlinuxname --inhibit-cache --inhibit-rpath "" --library-path "\$release_topdir_abs"/lib "\$release_topdir_abs"/libexec/gdk-pixbuf-query-loaders --update-cache
             EOT
         fi
@@ -132,8 +136,10 @@ for bindir in bin py2bin py3bin super_prove/bin share/verilator/bin lib/ivl; do
         if $is_using_fonts; then
             cat >> $binfile <<-EOT
                 export FONTCONFIG_PATH="\$release_topdir_abs/etc/fonts"
-                export FONTCONFIG_FILE="\$XDG_CONFIG_HOME/fonts.conf"
-                sed "s|TARGET_DIR|\$release_topdir_abs|g" "\$release_topdir_abs/etc/fonts/fonts.conf.template" > "\$FONTCONFIG_FILE"
+                if [ ! -z ${HOME:+x} ]; then
+                    export FONTCONFIG_FILE="\$XDG_CONFIG_HOME/fonts.conf"
+                    sed "s|TARGET_DIR|\$release_topdir_abs|g" "\$release_topdir_abs/etc/fonts/fonts.conf.template" > "\$FONTCONFIG_FILE"
+                fi
             EOT
         fi
 
@@ -194,11 +200,13 @@ for script in bin/* py3bin/*; do
                 export XDG_CURRENT_DESKTOP="KDE"
                 export XDG_DATA_DIRS="\$release_topdir_abs"/share
                 export XDG_CONFIG_DIRS="\$release_topdir_abs"
-                export XDG_CONFIG_HOME="\$HOME/.config/yosyshq"
-                export XDG_CACHE_HOME="\$HOME/.cache/yosyshq"
-                export XDG_DATA_HOME="\$HOME/.local/share/yosyshq"
-                export GDK_PIXBUF_MODULE_FILE="\$XDG_CACHE_HOME/loaders.cache"
-                mkdir -p "\$XDG_CONFIG_HOME" "\$XDG_CACHE_HOME" "\$XDG_DATA_HOME"
+                if [ ! -z ${HOME:+x} ]; then
+                    export XDG_CONFIG_HOME="\$HOME/.config/yosyshq"
+                    export XDG_CACHE_HOME="\$HOME/.cache/yosyshq"
+                    export XDG_DATA_HOME="\$HOME/.local/share/yosyshq"
+                    export GDK_PIXBUF_MODULE_FILE="\$XDG_CACHE_HOME/loaders.cache"
+                    mkdir -p "\$XDG_CONFIG_HOME" "\$XDG_CACHE_HOME" "\$XDG_DATA_HOME"
+                fi
                 "\$release_topdir_abs"/lib/$ldlinuxname --inhibit-cache --inhibit-rpath "" --library-path "\$release_topdir_abs"/lib "\$release_topdir_abs"/libexec/gdk-pixbuf-query-loaders --update-cache
                 export LC_ALL="C"
                 export GI_TYPELIB_PATH="\$release_topdir_abs/lib/girepository-1.0"
@@ -207,8 +215,10 @@ for script in bin/* py3bin/*; do
         if $is_using_fonts; then
             cat >> "${script}" <<-EOT
                 export FONTCONFIG_PATH="\$release_topdir_abs/etc/fonts"
-                export FONTCONFIG_FILE="\$XDG_CONFIG_HOME/fonts.conf"
-                sed "s|TARGET_DIR|\$release_topdir_abs|g" "\$release_topdir_abs/etc/fonts/fonts.conf.template" > "\$FONTCONFIG_FILE"
+                if [ ! -z ${HOME:+x} ]; then
+                    export FONTCONFIG_FILE="\$XDG_CONFIG_HOME/fonts.conf"
+                    sed "s|TARGET_DIR|\$release_topdir_abs|g" "\$release_topdir_abs/etc/fonts/fonts.conf.template" > "\$FONTCONFIG_FILE"
+                fi
             EOT
         fi
         cat >> "${script}" <<-EOT
