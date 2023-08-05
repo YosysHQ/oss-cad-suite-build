@@ -91,13 +91,13 @@ for bindir in bin py2bin py3bin super_prove/bin share/verilator/bin lib/ivl; do
                 export QT_LOGGING_RULES="*=false"
                 unset QT_QPA_PLATFORMTHEME
                 unset QT_STYLE_OVERRIDE
+                export LC_ALL="C"
+                export XDG_CURRENT_DESKTOP="KDE"
                 export XDG_DATA_DIRS="\$release_topdir_abs"/share
                 export XDG_CONFIG_DIRS="\$release_topdir_abs"
                 export XDG_CONFIG_HOME=\$HOME/.config/yosyshq
                 export XDG_CACHE_HOME=\$HOME/.cache/yosyshq
                 export XDG_DATA_HOME=\$HOME/.local/share/yosyshq
-                export XDG_CURRENT_DESKTOP="KDE"
-                export LC_ALL="C"
                 mkdir -p \$XDG_CONFIG_HOME \$XDG_CACHE_HOME \$XDG_DATA_HOME
             EOT
         fi
@@ -116,13 +116,13 @@ for bindir in bin py2bin py3bin super_prove/bin share/verilator/bin lib/ivl; do
                 export GTK_DATA_PREFIX="\$release_topdir_abs"
                 export GDK_PIXBUF_MODULEDIR="\$release_topdir_abs/lib/gdk-pixbuf-2.0/loaders"
                 export GTK_THEME="Adwaita"
+                export LC_ALL="C"
+                export XDG_CURRENT_DESKTOP="KDE"
                 export XDG_DATA_DIRS="\$release_topdir_abs"/share
                 export XDG_CONFIG_DIRS="\$release_topdir_abs"
                 export XDG_CONFIG_HOME=\$HOME/.config/yosyshq
                 export XDG_CACHE_HOME=\$HOME/.cache/yosyshq
                 export XDG_DATA_HOME=\$HOME/.local/share/yosyshq
-                export XDG_CURRENT_DESKTOP="KDE"
-                export LC_ALL="C"
                 export GDK_PIXBUF_MODULE_FILE="\$XDG_CACHE_HOME/loaders.cache"
                 mkdir -p \$XDG_CONFIG_HOME \$XDG_CACHE_HOME \$XDG_DATA_HOME
                 "\$release_topdir_abs"/lib/$ldlinuxname --inhibit-cache --inhibit-rpath "" --library-path "\$release_topdir_abs"/lib "\$release_topdir_abs"/libexec/gdk-pixbuf-query-loaders --update-cache
@@ -131,8 +131,8 @@ for bindir in bin py2bin py3bin super_prove/bin share/verilator/bin lib/ivl; do
 
         if $is_using_fonts; then
             cat >> $binfile <<-EOT
-                export FONTCONFIG_FILE="\$XDG_CONFIG_HOME/fonts.conf"
                 export FONTCONFIG_PATH="\$release_topdir_abs/etc/fonts"
+                export FONTCONFIG_FILE="\$XDG_CONFIG_HOME/fonts.conf"
                 sed "s|TARGET_DIR|\$release_topdir_abs|g" "\$release_topdir_abs/etc/fonts/fonts.conf.template" > \$FONTCONFIG_FILE
             EOT
         fi
@@ -189,14 +189,14 @@ for script in bin/* py3bin/*; do
                 export GTK_DATA_PREFIX="\$release_topdir_abs"
                 export GDK_PIXBUF_MODULEDIR="\$release_topdir_abs/lib/gdk-pixbuf-2.0/loaders"
                 export GTK_THEME="Adwaita"
+                export TCL_LIBRARY="\$release_topdir_abs/lib/tcl8.6"
+                export TK_LIBRARY="\$release_topdir_abs/lib/tk8.6"
+                export XDG_CURRENT_DESKTOP="KDE"
                 export XDG_DATA_DIRS="\$release_topdir_abs"/share
                 export XDG_CONFIG_DIRS="\$release_topdir_abs"
                 export XDG_CONFIG_HOME=\$HOME/.config/yosyshq
                 export XDG_CACHE_HOME=\$HOME/.cache/yosyshq
                 export XDG_DATA_HOME=\$HOME/.local/share/yosyshq
-                export XDG_CURRENT_DESKTOP="KDE"
-                export TCL_LIBRARY="\$release_topdir_abs/lib/tcl8.6"
-                export TK_LIBRARY="\$release_topdir_abs/lib/tk8.6"
                 export GDK_PIXBUF_MODULE_FILE="\$XDG_CACHE_HOME/loaders.cache"
                 mkdir -p \$XDG_CONFIG_HOME \$XDG_CACHE_HOME \$XDG_DATA_HOME
                 "\$release_topdir_abs"/lib/$ldlinuxname --inhibit-cache --inhibit-rpath "" --library-path "\$release_topdir_abs"/lib "\$release_topdir_abs"/libexec/gdk-pixbuf-query-loaders --update-cache
@@ -206,8 +206,8 @@ for script in bin/* py3bin/*; do
         fi
         if $is_using_fonts; then
             cat >> "${script}" <<-EOT
-                export FONTCONFIG_FILE="\$XDG_CONFIG_HOME/fonts.conf"
                 export FONTCONFIG_PATH="\$release_topdir_abs/etc/fonts"
+                export FONTCONFIG_FILE="\$XDG_CONFIG_HOME/fonts.conf"
                 sed "s|TARGET_DIR|\$release_topdir_abs|g" "\$release_topdir_abs/etc/fonts/fonts.conf.template" > \$FONTCONFIG_FILE
             EOT
         fi

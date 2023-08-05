@@ -75,12 +75,12 @@ for bindir in bin py3bin super_prove/bin share/verilator/bin lib/ivl; do
                 export QT_LOGGING_RULES="*=false"
                 unset QT_QPA_PLATFORMTHEME
                 unset QT_STYLE_OVERRIDE
+                export LC_ALL="C"
                 export XDG_DATA_DIRS="\$release_topdir_abs"/share
                 export XDG_CONFIG_DIRS="\$release_topdir_abs"
                 export XDG_CONFIG_HOME=\$HOME/.config/yosyshq
                 export XDG_CACHE_HOME=\$HOME/.cache/yosyshq
                 export XDG_DATA_HOME=\$HOME/.local/share/yosyshq
-                export LC_ALL="C"
                 mkdir -p \$HOME/.config/yosyshq \$HOME/.local/share/yosyshq
             EOT
         fi
@@ -100,14 +100,14 @@ for bindir in bin py3bin super_prove/bin share/verilator/bin lib/ivl; do
                 export GTK_DATA_PREFIX="\$release_topdir_abs"
                 export GDK_PIXBUF_MODULEDIR="\$release_topdir_abs/lib/gdk-pixbuf-2.0/loaders"
                 #export GTK_THEME="Adwaita"
+                export TCL_LIBRARY="\$release_topdir_abs/lib/tcl8.6"
+                export TK_LIBRARY="\$release_topdir_abs/lib/tk8.6"
+                export LC_ALL="C"
                 export XDG_DATA_DIRS="\$release_topdir_abs"/share
                 export XDG_CONFIG_DIRS="\$release_topdir_abs"
                 export XDG_CONFIG_HOME=\$HOME/.config/yosyshq
                 export XDG_CACHE_HOME=\$HOME/.cache/yosyshq
                 export XDG_DATA_HOME=\$HOME/.local/share/yosyshq
-                export LC_ALL="C"
-                export TCL_LIBRARY="\$release_topdir_abs/lib/tcl8.6"
-                export TK_LIBRARY="\$release_topdir_abs/lib/tk8.6"
                 export GDK_PIXBUF_MODULE_FILE="\$XDG_CACHE_HOME/loaders.cache"
                 mkdir -p \$XDG_CONFIG_HOME \$XDG_CACHE_HOME \$XDG_DATA_HOME
                 "\$release_topdir_abs"/libexec/gdk-pixbuf-query-loaders --update-cache
@@ -170,18 +170,18 @@ for script in bin/* py3bin/*; do
                 export GTK_DATA_PREFIX="\$release_topdir_abs"
                 export GDK_PIXBUF_MODULEDIR="\$release_topdir_abs/lib/gdk-pixbuf-2.0/loaders"
                 export GTK_THEME="Adwaita"
+                export GI_TYPELIB_PATH="\$release_topdir_abs/lib/girepository-1.0"
+                export TCL_LIBRARY="\$release_topdir_abs/lib/tcl8.6"
+                export TK_LIBRARY="\$release_topdir_abs/lib/tk8.6"
+                export PYTHONHOME="\$release_topdir_abs"
+                export PYTHONNOUSERSITE=1
+                export LC_ALL="C"
+                export LD_LIBRARY_PATH="\$release_topdir_abs/lib"
                 export XDG_DATA_DIRS="\$release_topdir_abs"/share
                 export XDG_CONFIG_DIRS="\$release_topdir_abs"
                 export XDG_CONFIG_HOME=\$HOME/.config/yosyshq
                 export XDG_CACHE_HOME=\$HOME/.cache/yosyshq
                 export XDG_DATA_HOME=\$HOME/.local/share/yosyshq
-                export TCL_LIBRARY="\$release_topdir_abs/lib/tcl8.6"
-                export TK_LIBRARY="\$release_topdir_abs/lib/tk8.6"
-                export LC_ALL="C"
-                export GI_TYPELIB_PATH="\$release_topdir_abs/lib/girepository-1.0"
-                export LD_LIBRARY_PATH="\$release_topdir_abs/lib"
-                export PYTHONHOME="\$release_topdir_abs"
-                export PYTHONNOUSERSITE=1
                 export GDK_PIXBUF_MODULE_FILE="\$XDG_CACHE_HOME/loaders.cache"
                 mkdir -p \$XDG_CONFIG_HOME \$XDG_CACHE_HOME \$XDG_DATA_HOME
                 "\$release_topdir_abs"/libexec/gdk-pixbuf-query-loaders --update-cache
