@@ -4,10 +4,10 @@ if [ ${ARCH_BASE} == 'windows' ]; then
     patch -p1 < ${PATCHES_DIR}/CaDiCaL_20190730.patch
 fi
 if [ ${ARCH} == 'linux-arm' ] || [ ${ARCH} == 'linux-arm64' ] || [ ${ARCH} == 'linux-riscv64' ]; then
-    sed -i '316,439d' configure
+    sed -i '316,436d' configure
 fi
 if [ ${ARCH_BASE} == 'darwin' ]; then
-    sed -i '316,439d' configure
+    sed -i '316,436d' configure
 fi
 if [ ${ARCH_BASE} == 'windows' ]; then
     sed -i '247,347d' configure
