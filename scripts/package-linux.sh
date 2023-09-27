@@ -61,6 +61,12 @@ EOT
 set -- "-p" "VVP_EXECUTABLE=\$release_topdir_abs/bin/vvp" "\$@"
 EOT
         fi
+        if [ ! -z "$(basename $binfile | grep vvp)" ]; then
+            cat >> $binfile << EOT
+export PYTHONEXECUTABLE="\$release_topdir_abs/bin/tabbypy3"
+export PYTHONHOME="\$release_topdir_abs"
+EOT
+        fi
         if [ ! -z "$(strings libexec/$(basename $binfile) | grep ghdl)" ]; then
             cat >> $binfile << EOT
 export GHDL_PREFIX="\$release_topdir_abs/lib/ghdl"
