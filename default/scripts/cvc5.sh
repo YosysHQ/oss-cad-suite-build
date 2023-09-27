@@ -10,6 +10,9 @@ if [ ${ARCH_BASE} != 'windows' ]; then
 fi
 ANTLR_CONFIGURE_ARGS="--host=${CROSS_NAME} --build=`gcc -dumpmachine`"  ./contrib/get-antlr-3.4
 git clone https://github.com/uiri/toml.git
+cd toml
+git checkout 5706d3155f4da8f3b84875f80bfe0dfc6565f61f
+cd ..
 export PYTHONPATH=$PYTHONPATH:`pwd`/toml
 if [ ${ARCH_BASE} == 'windows' ]; then
     export CMAKE_TOOLCHAIN_FILE=${PATCHES_DIR}/Toolchain-mingw64.cmake
