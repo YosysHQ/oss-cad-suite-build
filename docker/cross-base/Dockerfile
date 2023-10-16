@@ -27,6 +27,7 @@ RUN set -e -x ;\
         qt5-qmake \
         qtbase5-dev-tools \
         libtool \
+        help2man \
         llvm; \
     apt -y autoremove ;\
     rm -rf /var/lib/apt/lists/*

@@ -34,7 +34,8 @@ RUN set -e -x ;\
         libhidapi-dev \
         libcurl4-openssl-dev \
         libbz2-dev \
-        libltdl-dev; \
+        libltdl-dev \
+        libedit-dev; \
     apt -y autoremove ;\
     rm -rf /var/lib/apt/lists/*
 
