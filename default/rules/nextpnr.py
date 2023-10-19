@@ -140,7 +140,7 @@ Target(
 Target(
 	name = 'apicula',
 	sources = [ 'apicula' ],
-	dependencies = [ 'python3', 'numpy' ],
+	dependencies = [ 'python3', 'python3-native', 'numpy' ],
 	resources = [ 'python3', 'numpy' ],
 	package = 'gowin',
 )
@@ -181,8 +181,7 @@ Target(
 Target(
 	name = 'apicula-bba',
 	sources = [ 'nextpnr' ],
-	dependencies = [ 'apicula', 'python3', 'numpy' ],
-	resources = [ 'python3' ],
+	dependencies = [ 'apicula', 'python3-native', 'numpy' ],
 	gitrev = [ ('nextpnr', 'gowin') ],
 	build_native = True,
 )
