@@ -115,7 +115,7 @@ SourceLocation(
 	name = 'numpy',
 	vcs = 'git',
 	location = 'https://github.com/numpy/numpy',
-	revision = 'tags/v1.23.4',
+	revision = 'tags/v1.26.1',
 	license_file = 'LICENSE.txt',
 )
 
