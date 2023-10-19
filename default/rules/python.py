@@ -4,14 +4,21 @@ SourceLocation(
 	name = 'python3',
 	vcs = 'git',
 	location = 'https://github.com/python/cpython',
-	revision = 'tags/v3.8.6',
+	revision = 'tags/v3.11.6',
 	license_file = 'LICENSE',
 )
 
 Target(
 	name = 'python3',
 	sources = [ 'python3' ],
+	dependencies = [ 'python3-native' ],
 	patches = [ 'python38.diff', 'python38-mingw.diff', 'python38-darwin.diff' ],
+)
+
+Target(
+	name = 'python3-native',
+	sources = [ 'python3' ],
+	build_native = True,
 )
 
 SourceLocation(
