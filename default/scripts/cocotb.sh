@@ -5,4 +5,4 @@ pushd cocotb
 python3_package_install
 python3_package_pth "cocotb"
 python3_package_pip_install "pytest"
-rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/python3.8/site-packages/cocotb/share/makefiles/simulators/Makefile.verilator
+rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/python3.11/site-packages/cocotb/share/makefiles/simulators/Makefile.verilator
