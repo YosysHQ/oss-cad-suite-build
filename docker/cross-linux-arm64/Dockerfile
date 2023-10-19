@@ -1,4 +1,4 @@
-FROM yosyshq/cross-base:1.0
+FROM yosyshq/cross-base:2.0
 
 ENV CROSS_NAME aarch64-linux-gnu
 
@@ -12,12 +12,12 @@ RUN set -e -x ;\
         g++-aarch64-linux-gnu \
         gnat-9-aarch64-linux-gnu \
         libc6-dev-arm64-cross; \
-    echo 'deb [arch=amd64] http://archive.ubuntu.com/ubuntu/ focal main multiverse restricted universe' > /etc/apt/sources.list ; \
-    echo 'deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ focal main multiverse restricted universe' >> /etc/apt/sources.list ; \
-    echo 'deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ focal-updates main multiverse restricted universe' >> /etc/apt/sources.list ; \
-    echo 'deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ focal-security main multiverse restricted universe' >> /etc/apt/sources.list ; \
-    echo 'deb [arch=amd64] http://archive.ubuntu.com/ubuntu/ focal-updates main multiverse restricted universe' >> /etc/apt/sources.list ; \
-    echo 'deb [arch=amd64] http://security.ubuntu.com/ubuntu/ focal-security main multiverse restricted universe' >> /etc/apt/sources.list ; \
+    echo 'deb [arch=amd64] http://archive.ubuntu.com/ubuntu/ jammy main multiverse restricted universe' > /etc/apt/sources.list ; \
+    echo 'deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ jammy main multiverse restricted universe' >> /etc/apt/sources.list ; \
+    echo 'deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ jammy-updates main multiverse restricted universe' >> /etc/apt/sources.list ; \
+    echo 'deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ jammy-security main multiverse restricted universe' >> /etc/apt/sources.list ; \
+    echo 'deb [arch=amd64] http://archive.ubuntu.com/ubuntu/ jammy-updates main multiverse restricted universe' >> /etc/apt/sources.list ; \
+    echo 'deb [arch=amd64] http://security.ubuntu.com/ubuntu/ jammy-security main multiverse restricted universe' >> /etc/apt/sources.list ; \
     dpkg --add-architecture arm64 ;\
     apt -y update ;\
     apt -y upgrade ;\
@@ -43,8 +43,9 @@ RUN set -e -x ;\
         libhidapi-dev:arm64 \
         libcurl4-openssl-dev:arm64 \
         libbz2-dev:arm64 \
-        libllvm10:arm64 \
-        libltdl-dev:arm64; \
+        libllvm14:arm64 \
+        libltdl-dev:arm64 \
+        libedit-dev:arm64; \
     apt -y autoremove ;\
     rm -rf /var/lib/apt/lists/*
 
@@ -67,9 +68,9 @@ RUN rustup target add aarch64-unknown-linux-gnu && \
     echo "[target.aarch64-unknown-linux-gnu]" > /.cargo/config && \
     echo "linker = \"aarch64-linux-gnu-gcc\"" >> /.cargo/config
 
-RUN wget http://ports.ubuntu.com/pool/main/g/gobject-introspection/libgirepository1.0-dev_1.64.1-1~ubuntu20.04.1_arm64.deb && \
-    dpkg-deb -xv libgirepository1.0-dev_1.64.1-1~ubuntu20.04.1_arm64.deb / && \
-    rm -rf libgirepository1.0-dev_1.64.1-1~ubuntu20.04.1_arm64.deb && \
-    wget http://ports.ubuntu.com/pool/main/g/gobject-introspection/gir1.2-glib-2.0_1.64.1-1~ubuntu20.04.1_arm64.deb && \
-    dpkg-deb -xv gir1.2-glib-2.0_1.64.1-1~ubuntu20.04.1_arm64.deb / && \
-    rm -rf gir1.2-glib-2.0_1.64.1-1~ubuntu20.04.1_arm64.deb
+RUN wget http://ports.ubuntu.com/pool/main/g/gobject-introspection/libgirepository1.0-dev_1.72.0-1_arm64.deb && \
+    dpkg-deb -xv libgirepository1.0-dev_1.72.0-1_arm64.deb / && \
+    rm -rf libgirepository1.0-dev_1.72.0-1_arm64.deb && \
+    wget http://ports.ubuntu.com/pool/main/g/gobject-introspection/gir1.2-glib-2.0_1.72.0-1_arm64.deb && \
+    dpkg-deb -xv gir1.2-glib-2.0_1.72.0-1_arm64.deb / && \
+    rm -rf gir1.2-glib-2.0_1.72.0-1_arm64.deb
