@@ -148,7 +148,7 @@ Target(
 Target(
 	name = 'numpy',
 	sources = [ 'numpy' ],
-	dependencies = [ 'python3' ],
+	dependencies = [ 'python3', 'python3-native' ],
 	resources = [ 'python3' ],
 	patches= [ 'mingw-numpy.patch' ],
 )
