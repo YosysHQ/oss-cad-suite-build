@@ -38,7 +38,7 @@ SourceLocation(
 	name = 'bitwuzla',
 	vcs = 'git',
 	location = 'https://github.com/bitwuzla/bitwuzla',
-	revision = '1230d80a5275ddf525da9c218c2bcd29c3130e49',
+	revision = '6e46391816b4baf8c9fc0b8c0c1d2fbe63b6f30e',
 	license_file = 'COPYING',
 )
 
@@ -119,7 +119,7 @@ SourceLocation(
 	name = 'smt-switch',
 	vcs = 'git',
 	location = 'https://github.com/makaimann/smt-switch',
-	revision = '445b5bc5172cc4a56db121e5ba4c7a5e14147bd5',
+	revision = 'f2d7d3d6dfccc0b4d6b604563acd34629bac884d',
 	license_file = 'LICENSE',
 	license_build_only = True,
 )
@@ -166,12 +166,6 @@ Target(
 )
 
 Target(
-	name = 'bison',
-	sources = [ 'smt-switch' ],
-	build_native = True,
-)
-
-Target(
 	name = 'cvc5',
 	sources = [ 'cvc5' ],
 	dependencies = [ 'libpoly', 'cadical', 'symfpu' ],
@@ -188,7 +182,7 @@ Target(
 Target(
 	name = 'smt-switch',
 	sources = [ 'smt-switch' ],
-	dependencies = [ 'cvc5', 'boolector', 'bison' ],
+	dependencies = [ 'cvc5', 'boolector'],
 	patches = [ 'smt-switch-win32.diff', 'Toolchain-mingw64.cmake' ],
 	license_build_only = True,
 )
