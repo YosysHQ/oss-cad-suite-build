@@ -29,14 +29,15 @@ elif [ ${ARCH} == 'windows-x64' ]; then
 else
     echo "ac_cv_file__dev_ptmx=no" > config.site
     echo "ac_cv_file__dev_ptc=no" >> config.site
-	CONFIG_SITE=config.site ./configure --prefix=${INSTALL_PREFIX} --host=${CROSS_NAME} --build=`gcc -dumpmachine` --disable-ipv6 --enable-shared --with-ensurepip=install --with-build-python=${BUILD_DIR}/python3-native${INSTALL_PREFIX}/bin/python3.11
+	CONFIG_SITE=config.site ./configure --prefix=${INSTALL_PREFIX} --host=${CROSS_NAME} --build=`gcc -dumpmachine` --disable-ipv6 --enable-shared --with-ensurepip=no --with-build-python=${BUILD_DIR}/python3-native${INSTALL_PREFIX}/bin/python3.11
 fi
 
 make DESTDIR=${OUTPUT_DIR} -j${NPROC} install
-if [ -d "${OUTPUT_DIR}/usr" ]; then
-    cp -r ${OUTPUT_DIR}/usr/* ${OUTPUT_DIR}${INSTALL_PREFIX}/.
-    rm -rf ${OUTPUT_DIR}/usr
-fi
+
+
+cp -R ${BUILD_DIR}/python3-native${INSTALL_PREFIX}/lib/python3.11/site-packages/*  ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/python3.11/site-packages/.
+cp -R ${BUILD_DIR}/python3-native${INSTALL_PREFIX}/bin/pip*  ${OUTPUT_DIR}${INSTALL_PREFIX}/bin/.
+
 mv ${OUTPUT_DIR}${INSTALL_PREFIX}/bin ${OUTPUT_DIR}${INSTALL_PREFIX}/py3bin
 if [ ${ARCH_BASE} == 'darwin' ]; then
     install_name_tool -id ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libpython3.11.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libpython3.11.dylib
