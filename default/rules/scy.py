@@ -11,7 +11,7 @@ SourceLocation(
 Target(
 	name = 'scy',
 	sources = [ 'scy' ],
-	dependencies = [ 'python3' ],
+	dependencies = [ 'python3', 'python3-native' ],
 	resources = [ 'mau', 'python3' ],
 	patches = [ 'python3_package.sh' ],
 )

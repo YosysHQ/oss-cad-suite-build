@@ -11,7 +11,7 @@ SourceLocation(
 Target(
 	name = 'mau',
 	sources = [ 'mau' ],
-	dependencies = [ 'python3' ],
+	dependencies = [ 'python3', 'python3-native' ],
 	resources = [ 'python3' ],
 	patches = [ 'python3_package.sh' ],
 )

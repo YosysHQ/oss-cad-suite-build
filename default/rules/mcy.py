@@ -25,6 +25,6 @@ SourceLocation(
 Target(
 	name = 'flask',
 	sources = [ 'flask' ],
-	dependencies = [ 'python3' ],
+	dependencies = [ 'python3', 'python3-native' ],
 	resources = [ 'python3'],
 )

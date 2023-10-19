@@ -135,7 +135,7 @@ SourceLocation(
 Target(
 	name = 'python-programmers',
 	sources = [ 'black-iceprog', 'icefunprog', 'tinyfpgab', 'tinyprog'],
-    dependencies = [ 'python3' ],
+    dependencies = [ 'python3', 'python3-native' ],
 	patches = [ 'python3_package.sh' ],
 	resources = [ 'python3' ],
 	tools = { 
