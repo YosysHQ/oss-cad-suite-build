@@ -34,7 +34,6 @@ fi
 
 make DESTDIR=${OUTPUT_DIR} -j${NPROC} install
 
-
 cp -R ${BUILD_DIR}/python3-native${INSTALL_PREFIX}/lib/python3.11/site-packages/*  ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/python3.11/site-packages/.
 cp -R ${BUILD_DIR}/python3-native${INSTALL_PREFIX}/bin/pip*  ${OUTPUT_DIR}${INSTALL_PREFIX}/bin/.
 
