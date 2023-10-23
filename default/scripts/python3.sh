@@ -10,22 +10,23 @@ if [ ${ARCH_BASE} == 'darwin' ]; then
     echo "ac_cv_file__dev_ptc=no" >> config.site
     CONFIG_SITE=config.site ./configure --prefix=${INSTALL_PREFIX} --enable-optimizations --enable-shared --with-system-ffi --with-openssl=/opt/local --host=${CROSS_NAME} --build=`gcc -dumpmachine`  --disable-ipv6
 elif [ ${ARCH} == 'windows-x64' ]; then
-	patch -p1 < ${PATCHES_DIR}/python38-mingw.diff
+	patch -p1 < ${PATCHES_DIR}/python3.11.6-mingw.diff
 	autoreconf -vfi
-    export CFLAGS=" -fwrapv -D__USE_MINGW_ANSI_STDIO=1 -D_WIN32_WINNT=0x0601"
-    export CXXFLAGS=" -fwrapv -D__USE_MINGW_ANSI_STDIO=1 -D_WIN32_WINNT=0x0601"
-	./configure --prefix=${INSTALL_PREFIX} --host=${CROSS_NAME} --build=`gcc -dumpmachine`  \
-		--enable-optimizations \
+	# Ensure that we are using the system copy of various libraries rather than copies shipped in the tarball
+	rm -r Modules/expat
+	rm -r Modules/_ctypes/{darwin,libffi}*
+	# Just to be sure that we are using the wanted thread model
+	rm -f Python/thread_nt.h
+    echo "ac_cv_file__dev_ptmx=no" > config.site
+    echo "ac_cv_file__dev_ptc=no" >> config.site
+	export WINDRES=x86_64-w64-mingw32-windres
+	CONFIG_SITE=config.site ./configure --prefix=${INSTALL_PREFIX} --host=${CROSS_NAME} --build=`gcc -dumpmachine`  \
 		--enable-shared \
-		--with-nt-threads \
-		--with-computed-gotos \
 		--with-system-expat \
-		--with-system-ffi \
-		--without-c-locale-coercion \
-		--enable-loadable-sqlite-extensions
-    sed -e "s|windres|x86_64-w64-mingw32-windres|g" -i Makefile
-	sed -e "s|#define HAVE_DECL_RTLD_LOCAL 1|#define HAVE_DECL_RTLD_LOCAL 0|g" -i pyconfig.h
-	sed -e "s|#define HAVE_DECL_RTLD_GLOBAL 1|#define HAVE_DECL_RTLD_GLOBAL 0|g" -i pyconfig.h	
+		--with-suffix=.exe \
+		--enable-loadable-sqlite-extensions \
+		--with-ensurepip=no \
+		--with-build-python=${BUILD_DIR}/python3-native${INSTALL_PREFIX}/bin/python3.11
 else
     echo "ac_cv_file__dev_ptmx=no" > config.site
     echo "ac_cv_file__dev_ptc=no" >> config.site
@@ -43,6 +44,5 @@ if [ ${ARCH_BASE} == 'darwin' ]; then
     install_name_tool -change ${INSTALL_PREFIX}/lib/libpython3.11.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libpython3.11.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/py3bin/python3.11
 elif [ ${ARCH} == 'windows-x64' ]; then
 	cp ${OUTPUT_DIR}${INSTALL_PREFIX}/py3bin/libpython3.11.dll ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/.
-	cp ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/python3.11/_sysconfigdata__win_.py ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/python3.11/_sysconfigdata__win32_.py
 fi
 find ${OUTPUT_DIR}${INSTALL_PREFIX} -name "libpython*.a" | xargs rm -rf
