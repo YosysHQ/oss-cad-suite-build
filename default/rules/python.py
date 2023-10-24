@@ -32,5 +32,13 @@ SourceLocation(
 Target(
 	name = 'python2',
 	sources = [ 'python2' ],
+	dependencies = [ 'python2-native' ],
 	patches = [ 'python27.diff', 'python27-darwin.diff' ],
+)
+
+Target(
+	name = 'python2-native',
+	sources = [ 'python2' ],
+	patches = [ 'python27.diff'],
+	build_native = True,
 )

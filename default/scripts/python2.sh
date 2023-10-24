@@ -18,17 +18,18 @@ rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/bin
 
 export _PYTHON_PROJECT_BASE=${BUILD_DIR}/python2
 export PYTHONPATH=${OUTPUT_DIR}${INSTALL_PREFIX}/lib/python2.7:${OUTPUT_DIR}${INSTALL_PREFIX}/lib/python2.7/plat-linux2:${OUTPUT_DIR}${INSTALL_PREFIX}/lib/python2.7/site-packages
+export PYTHON2_NATIVE=${BUILD_DIR}/python2-native${INSTALL_PREFIX}/bin/python2.7
 pip_cmd="pip install future --target ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/python2.7/site-packages --no-cache-dir --disable-pip-version-check"
 if [ ${ARCH} == 'linux-arm' ]; then
-	_PYTHON_HOST_PLATFORM=linux2-arm  python2.7 -m ${pip_cmd}
+	_PYTHON_HOST_PLATFORM=linux2-arm ${PYTHON2_NATIVE} -m ${pip_cmd}
 elif [ ${ARCH} == 'linux-arm64' ]; then
-	_PYTHON_HOST_PLATFORM=linux2-aarch64 python2.7 -m ${pip_cmd}
+	_PYTHON_HOST_PLATFORM=linux2-aarch64 ${PYTHON2_NATIVE} -m ${pip_cmd}
 elif [ ${ARCH} == 'linux-riscv64' ]; then
-	_PYTHON_HOST_PLATFORM=linux2-riscv64 python2.7 -m ${pip_cmd}
+	_PYTHON_HOST_PLATFORM=linux2-riscv64 ${PYTHON2_NATIVE} -m ${pip_cmd}
 elif [ ${ARCH} == 'linux-x64' ]; then
-	_PYTHON_HOST_PLATFORM=linux2-x64 python2.7 -m ${pip_cmd}
+	_PYTHON_HOST_PLATFORM=linux2-x64 ${PYTHON2_NATIVE} -m ${pip_cmd}
 elif [ ${ARCH} == 'darwin-x64' ]; then
-	_PYTHON_HOST_PLATFORM=darwin-x64 python2.7 -m ${pip_cmd}
+	_PYTHON_HOST_PLATFORM=darwin-x64 ${PYTHON2_NATIVE} -m ${pip_cmd}
 fi
 
 mkdir -p ${OUTPUT_DIR}/dev
