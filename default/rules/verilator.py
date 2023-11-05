@@ -11,6 +11,6 @@ SourceLocation(
 Target(
 	name = 'verilator',
 	sources = [ 'verilator' ],
-	patches = [ 'verilated.mk.in' ],
+	patches = [ 'verilator_patches.py' ],
 	package = 'verilator',
 )

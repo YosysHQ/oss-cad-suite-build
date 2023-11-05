@@ -1,7 +1,5 @@
 cd verilator
-if [ ${ARCH_BASE} == 'darwin' ]; then
-    cp ${PATCHES_DIR}/verilated.mk.in include/.
-fi
+python3 ${PATCHES_DIR}/verilator_patches.py
 autoconf
 ./configure --prefix=${INSTALL_PREFIX} --host=${CROSS_NAME}
 if [ ${ARCH_BASE} == 'darwin' ]; then
