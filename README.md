@@ -163,3 +163,6 @@ To build specific target and architecture:
 ./builder.py build --target=yosys --arch=linux-arm64
 ```
 
+# Alternatives
+
+If your project is primarily written in Python (using tools such as Amaranth or LiteX), and you only need synthesis and PnR tools, you might find [YoWASP](https://yowasp.org) more suited to your needs since it allows managing installation and versioning of these tools in the same way as any other Python package dependencies.
