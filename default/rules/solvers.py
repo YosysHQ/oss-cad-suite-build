@@ -71,7 +71,7 @@ SourceLocation(
 	name = 'cadical',
 	vcs = 'git',
 	location = 'https://github.com/arminbiere/cadical',
-	revision = 'origin/master',
+	revision = 'e7369b4b04fafe8b4b139d5e181528f5006d0816',
 	license_file = 'LICENSE',
 	license_build_only = True,
 )
