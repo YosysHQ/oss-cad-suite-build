@@ -1,4 +1,4 @@
-FROM yosyshq/cross-base:1.0
+FROM yosyshq/cross-base:2.0
 
 ENV CROSS_NAME arm-linux-gnueabihf
 
@@ -12,12 +12,12 @@ RUN set -e -x ;\
         g++-arm-linux-gnueabihf \
         gnat-9-arm-linux-gnueabihf \
         libc6-dev-armhf-cross; \
-    echo 'deb [arch=amd64] http://archive.ubuntu.com/ubuntu/ focal main multiverse restricted universe' > /etc/apt/sources.list ; \
-    echo 'deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ focal main multiverse restricted universe' >> /etc/apt/sources.list ; \
-    echo 'deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ focal-updates main multiverse restricted universe' >> /etc/apt/sources.list ; \
-    echo 'deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ focal-security main multiverse restricted universe' >> /etc/apt/sources.list ; \
-    echo 'deb [arch=amd64] http://archive.ubuntu.com/ubuntu/ focal-updates main multiverse restricted universe' >> /etc/apt/sources.list ; \
-    echo 'deb [arch=amd64] http://security.ubuntu.com/ubuntu/ focal-security main multiverse restricted universe' >> /etc/apt/sources.list ; \
+    echo 'deb [arch=amd64] http://archive.ubuntu.com/ubuntu/ jammy main multiverse restricted universe' > /etc/apt/sources.list ; \
+    echo 'deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ jammy main multiverse restricted universe' >> /etc/apt/sources.list ; \
+    echo 'deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ jammy-updates main multiverse restricted universe' >> /etc/apt/sources.list ; \
+    echo 'deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ jammy-security main multiverse restricted universe' >> /etc/apt/sources.list ; \
+    echo 'deb [arch=amd64] http://archive.ubuntu.com/ubuntu/ jammy-updates main multiverse restricted universe' >> /etc/apt/sources.list ; \
+    echo 'deb [arch=amd64] http://security.ubuntu.com/ubuntu/ jammy-security main multiverse restricted universe' >> /etc/apt/sources.list ; \
     dpkg --add-architecture armhf ;\
     apt -y update ;\
     apt -y upgrade ;\
@@ -43,8 +43,9 @@ RUN set -e -x ;\
         libhidapi-dev:armhf \
         libcurl4-openssl-dev:armhf \
         libbz2-dev:armhf \
-        libllvm10:armhf \
-        libltdl-dev:armhf; \
+        libllvm14:armhf \
+        libltdl-dev:armhf \
+        libedit-dev:armhf; \
     apt -y autoremove ;\
     rm -rf /var/lib/apt/lists/*
 
@@ -67,9 +68,9 @@ RUN rustup target add arm-unknown-linux-gnueabihf && \
     echo "[target.arm-unknown-linux-gnueabihf]" > /.cargo/config && \
     echo "linker = \"arm-linux-gnueabihf-gcc\"" >> /.cargo/config
 
-RUN wget http://ports.ubuntu.com/pool/main/g/gobject-introspection/libgirepository1.0-dev_1.64.1-1~ubuntu20.04.1_armhf.deb && \
-    dpkg-deb -xv libgirepository1.0-dev_1.64.1-1~ubuntu20.04.1_armhf.deb / && \
-    rm -rf libgirepository1.0-dev_1.64.1-1~ubuntu20.04.1_armhf.deb && \
-    wget http://ports.ubuntu.com/pool/main/g/gobject-introspection/gir1.2-glib-2.0_1.64.1-1~ubuntu20.04.1_armhf.deb && \
-    dpkg-deb -xv gir1.2-glib-2.0_1.64.1-1~ubuntu20.04.1_armhf.deb / && \
-    rm -rf gir1.2-glib-2.0_1.64.1-1~ubuntu20.04.1_armhf.deb
+RUN wget http://ports.ubuntu.com/pool/main/g/gobject-introspection/libgirepository1.0-dev_1.72.0-1_armhf.deb && \
+    dpkg-deb -xv libgirepository1.0-dev_1.72.0-1_armhf.deb / && \
+    rm -rf libgirepository1.0-dev_1.72.0-1_armhf.deb && \
+    wget http://ports.ubuntu.com/pool/main/g/gobject-introspection/gir1.2-glib-2.0_1.72.0-1_armhf.deb && \
+    dpkg-deb -xv gir1.2-glib-2.0_1.72.0-1_armhf.deb / && \
+    rm -rf gir1.2-glib-2.0_1.72.0-1_armhf.deb
