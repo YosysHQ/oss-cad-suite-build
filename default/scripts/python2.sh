@@ -8,6 +8,7 @@ if [ ${ARCH} == 'darwin-x64' ]; then
 fi
 echo "ac_cv_file__dev_ptmx=no" > config.site
 echo "ac_cv_file__dev_ptc=no" >> config.site
+export PATH=${BUILD_DIR}/python2-native${INSTALL_PREFIX}/bin:$PATH
 CONFIG_SITE=config.site ./configure --prefix=${INSTALL_PREFIX} --host=${CROSS_NAME} --build=`gcc -dumpmachine` --disable-ipv6 --enable-shared --with-system-ffi --with-ensurepip=install
 make DESTDIR=${OUTPUT_DIR} -j${NPROC} install
 if [ -d "${OUTPUT_DIR}/usr" ]; then
