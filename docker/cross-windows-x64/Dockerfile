@@ -27,7 +27,7 @@ RUN dnf install -y  mingw64-gcc \
                     gperf \
                     bc \
                     rsync \
-                    python3 \
+                    python3.11 \
                     which \
                     libtool \
                     libtool-ltdl-devel \
@@ -69,7 +69,7 @@ RUN rustup target add x86_64-pc-windows-gnu && \
     echo "linker = \"x86_64-w64-mingw32-gcc\"" >> /.cargo/config && \
     echo "ar = \"x86_64-w64-mingw32-ar\"" >> /.cargo/config
 
-RUN ln -s /usr/bin/python3 /usr/bin/python
+RUN rm -f /usr/bin/python3; ln -s /usr/bin/python3.11 /usr/bin/python ; ln -s /usr/bin/python3.11 /usr/bin/python3
 
 RUN cd /tmp \
     && curl -L  https://dl.fedoraproject.org/pub/fedora/linux/development/rawhide/Everything/source/tree/Packages/m/mingw-gmp-6.1.2-16.fc39.src.rpm --output mingw-gmp-6.1.2-16.fc39.src.rpm \
