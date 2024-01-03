@@ -34,7 +34,8 @@ RUN dnf install -y  mingw64-gcc \
                     diffutils \
                     java-11-openjdk-headless \
                     cpio \
-                    xz
+                    xz \
+                    help2man
 
 ENV CROSS_NAME x86_64-w64-mingw32
 
@@ -50,9 +51,7 @@ ENV PKG_CONFIG_PATH /usr/x86_64-w64-mingw32/sys-root/mingw/lib/pkgconfig
 
 ENV CROSS_PREFIX /opt/${CROSS_NAME}
 
-#RUN cp /usr/include/FlexLexer.h /usr/x86_64-w64-mingw32/sys-root/mingw/include/.
-
-#RUN cp /usr/x86_64-w64-mingw32/sys-root/mingw/lib/libpthread.dll.a  /usr/x86_64-w64-mingw32/sys-root/mingw/lib/libpthread.a
+RUN cp /usr/include/FlexLexer.h /usr/x86_64-w64-mingw32/sys-root/mingw/include/.
 
 COPY Toolchain.cmake ${CROSS_PREFIX}/
 
@@ -83,30 +82,4 @@ RUN cd /tmp \
     && rm -rf /tmp/* \
     && true
 
-#    && curl http://ftp.gnu.org/gnu/bison/bison-3.5.tar.gz --output /tmp/bison-3.5.tar.gz \
-#    && curl -L https://raw.githubusercontent.com/reactos/RosBE/master/Patches/bison-3.5-reactos-fix-win32-build.patch --output /tmp/bison.patch \
-#    && cd /tmp \
-#    && tar -xzf bison-3.5.tar.gz \
-#    && cd bison-3.5 \
-#    && patch -p1 < /tmp/bison.patch \
-#    && mingw64-configure \
-#    && mingw64-make -j9 \
-#    && mingw64-make install \
-#    && rm -rf /tmp/* \
-#    && true
-#
-#COPY winsock2.h /usr/x86_64-w64-mingw32/sys-root/mingw/include/
-
-RUN cp /usr/include/FlexLexer.h /usr/x86_64-w64-mingw32/sys-root/mingw/include/.
-
-RUN dnf install -y help2man
-
-RUN cd /usr/local && \
-    curl -L https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.9.1%2B1/OpenJDK11U-jre_x64_linux_hotspot_11.0.9.1_1.tar.gz --output OpenJDK11U-jre_x64_linux_hotspot_11.0.9.1_1.tar.gz && \
-    tar xvfz OpenJDK11U-jre_x64_linux_hotspot_11.0.9.1_1.tar.gz && \
-    mv jdk-11.0.9.1+1-jre jre-11 && \
-    rm -rf OpenJDK11U-jre_x64_linux_hotspot_11.0.9.1_1.tar.gz
-
 WORKDIR /work
-
-#RUN dnf install -y python3-cairo python3-cairo-devel
