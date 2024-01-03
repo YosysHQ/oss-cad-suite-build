@@ -53,3 +53,5 @@ RUN wget http://archive.ubuntu.com/ubuntu/pool/main/g/gobject-introspection/libg
     wget http://archive.ubuntu.com/ubuntu/pool/main/g/gobject-introspection/gir1.2-glib-2.0_1.72.0-1_amd64.deb && \
     dpkg-deb -xv gir1.2-glib-2.0_1.72.0-1_amd64.deb / && \
     rm -rf gir1.2-glib-2.0_1.72.0-1_amd64.deb
+
+RUN ln -s /lib64/ld-linux-x86-64.so.2 /lib64/ld-lsb-x86-64.so.3

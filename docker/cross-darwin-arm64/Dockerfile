@@ -1,16 +1,15 @@
-FROM yosyshq/cross-linux-x64:1.0 AS builder
-
+FROM yosyshq/cross-linux-x64:2.0 AS builder
 
 RUN cd /tmp \
     && RUSTUP_HOME=/opt/rust/rustup CARGO_HOME=/opt/rust/cargo rustup update \
-    && cargo install --git https://github.com/indygreg/PyOxidizer --branch main apple-codesign
+    && cargo install --git https://github.com/indygreg/apple-platform-rs --branch main --bin rcodesign apple-codesign
 RUN cd /tmp \
     && git clone https://github.com/mmicko/macdylibbundler \
     && cd macdylibbundler \
     && sed -i "s,CXXFLAGS=-O2 -std=c++11,CXXFLAGS=-O2 -std=c++11 -static-libstdc++ -static-libgcc,g" Makefile \
     && make 
 
-FROM yosyshq/cross-base:1.0
+FROM yosyshq/cross-base:2.0
 
 RUN set -e -x ;\
     apt -y update ;\
@@ -19,7 +18,8 @@ RUN set -e -x ;\
         clang \
         pkgconf \
         libtool \
-        python3-distutils \
+        help2man \
+        python3 \
         libxml2-dev \
         libz-dev \
         liblzma-dev \
@@ -30,12 +30,12 @@ RUN set -e -x ;\
 # Taken from https://github.com/joseluisq/rust-linux-darwin-builder
 
 # Mac OS X SDK version
-ARG OSX_SDK_VERSION=11.1
-ARG OSX_SDK_SUM=97a916b0b68aae9dcd32b7d12422ede3e5f34db8e169fa63bfb18ec410b8f5d9
+ARG OSX_SDK_VERSION=14.0
+ARG OSX_SDK_SUM=5e4d3be6b445f0eacc0333ff2117e93e4433d8c4fe44053a14f735033a98aaa9
 ARG OSX_VERSION_MIN=11.0
 
 # OS X Cross
-ARG OSX_CROSS_COMMIT=8a716a43a72dab1db9630d7824ee0af3730cb8f9
+ARG OSX_CROSS_COMMIT=5e1b71fcceb23952f3229995edca1b6231525b5b
 
 # Install OS X Cross
 # A Mac OS X cross toolchain for Linux, FreeBSD, OpenBSD and Android
@@ -61,7 +61,7 @@ RUN set -eux \
     && true
 
 
-ENV CROSS_NAME aarch64-apple-darwin20.2
+ENV CROSS_NAME aarch64-apple-darwin23
 
 ENV CROSS_PREFIX /opt/${CROSS_NAME}
 
@@ -78,8 +78,8 @@ ENV PATH /usr/local/osxcross/target/bin:$PATH
 RUN rustup target add aarch64-apple-darwin && \
     mkdir -p /.cargo && \
     echo "[target.aarch64-apple-darwin]" > /.cargo/config && \
-    echo "linker = \"aarch64-apple-darwin20.2-clang\"" >> /.cargo/config && \
-    echo "ar = \"aarch64-apple-darwin20.2-ar\"" >> /.cargo/config
+    echo "linker = \"aarch64-apple-darwin23-clang\"" >> /.cargo/config && \
+    echo "ar = \"aarch64-apple-darwin23-ar\"" >> /.cargo/config
 
 
 COPY Toolchain.cmake ${CROSS_PREFIX}/
@@ -263,23 +263,23 @@ COPY uname /usr/local/osxcross/target/bin/
 RUN chmod +x /usr/local/osxcross/target/bin/uname
 
 # Install just g-ir-compiler, not using apt since it adds lots more
-RUN wget http://archive.ubuntu.com/ubuntu/pool/main/g/gobject-introspection/libgirepository-1.0-1_1.64.1-1~ubuntu20.04.1_amd64.deb && \
-    dpkg-deb -xv libgirepository-1.0-1_1.64.1-1~ubuntu20.04.1_amd64.deb / && \
-    rm -rf libgirepository-1.0-1_1.64.1-1~ubuntu20.04.1_amd64.deb && \
-    wget http://archive.ubuntu.com/ubuntu/pool/main/g/gobject-introspection/gobject-introspection_1.64.1-1~ubuntu20.04.1_amd64.deb && \
-    dpkg-deb -xv gobject-introspection_1.64.1-1~ubuntu20.04.1_amd64.deb / && \
-    rm -rf gobject-introspection_1.64.1-1~ubuntu20.04.1_amd64.deb
-
-RUN cd /opt/local/share/gir-1.0 &&\
-    for i in *.gir; do  \
-        sed -i 's|/opt/local/lib/||g' $i ; \
-        sed -i 's|./gdk-pixbuf/||g' $i ; \
-    done && \
-    for i in *.gir; do  \
-        echo $i ; \ 
-        filename="${i%.*}" ; \
-        g-ir-compiler $i -o /opt/local/lib/girepository-1.0/$filename.typelib --includedir /opt/local/share/gir-1.0 ; \
-    done
-
-COPY gschemas.compiled /opt/local/share/glib-2.0/schemas/
-RUN RUSTUP_HOME=/opt/rust/rustup CARGO_HOME=/opt/rust/cargo rustup update
+#RUN wget http://archive.ubuntu.com/ubuntu/pool/main/g/gobject-introspection/libgirepository-1.0-1_1.64.1-1~ubuntu20.04.1_amd64.deb && \
+#    dpkg-deb -xv libgirepository-1.0-1_1.64.1-1~ubuntu20.04.1_amd64.deb / && \
+#    rm -rf libgirepository-1.0-1_1.64.1-1~ubuntu20.04.1_amd64.deb && \
+#    wget http://archive.ubuntu.com/ubuntu/pool/main/g/gobject-introspection/gobject-introspection_1.64.1-1~ubuntu20.04.1_amd64.deb && \
+#    dpkg-deb -xv gobject-introspection_1.64.1-1~ubuntu20.04.1_amd64.deb / && \
+#    rm -rf gobject-introspection_1.64.1-1~ubuntu20.04.1_amd64.deb
+#
+#RUN cd /opt/local/share/gir-1.0 &&\
+#    for i in *.gir; do  \
+#        sed -i 's|/opt/local/lib/||g' $i ; \
+#        sed -i 's|./gdk-pixbuf/||g' $i ; \
+#    done && \
+#    for i in *.gir; do  \
+#        echo $i ; \ 
+#        filename="${i%.*}" ; \
+#        g-ir-compiler $i -o /opt/local/lib/girepository-1.0/$filename.typelib --includedir /opt/local/share/gir-1.0 ; \
+#    done
+#
+#COPY gschemas.compiled /opt/local/share/glib-2.0/schemas/
+#RUN RUSTUP_HOME=/opt/rust/rustup CARGO_HOME=/opt/rust/cargo rustup update

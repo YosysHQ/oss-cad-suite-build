@@ -41,7 +41,7 @@ Target(
         'ecpdap',
         'fujprog',
         'iceprogduino',
-        'python-programmers',
+        #'python-programmers',
         'openocd',
         'icesprog',
         'utils',

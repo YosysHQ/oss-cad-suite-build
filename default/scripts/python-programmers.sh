@@ -4,6 +4,8 @@ cp -r tinyfpgab/programmer/* tinyfpgab/.
 cp -r tinyprog/programmer/* tinyprog/.
 
 python3_package_setup
+python3_package_pip_install "wheel"
+export CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse
 for target in *; do
     if [ $target != 'python3' ] && [ $target != 'python3-native' ]; then
         pushd $target
