@@ -115,8 +115,8 @@ RUN cd /opt \
   && tar xfj /tmp/bzip2/bzip2-1.0.8_0.darwin_21.arm64.tbz2 \
   && echo "Unpack cairo-1.17.6_1+quartz.darwin_21.arm64.tbz2" \
   && tar xfj /tmp/cairo/cairo-1.17.6_1+quartz.darwin_21.arm64.tbz2 \
-  && echo "Unpack curl-8.5.0_0+http2+ssl.darwin_21.arm64.tbz2" \
-  && tar xfj /tmp/curl/curl-8.5.0_0+http2+ssl.darwin_21.arm64.tbz2 \
+  && echo "Unpack curl-8.5.0_0+ssl.darwin_21.arm64.tbz2" \
+  && tar xfj /tmp/curl/curl-8.5.0_0+ssl.darwin_21.arm64.tbz2 \
   && echo "Unpack eigen3-3.4.0_1.any_any.noarch.tbz2" \
   && tar xfj /tmp/eigen3/eigen3-3.4.0_1.any_any.noarch.tbz2 \
   && echo "Unpack expat-2.5.0_0.darwin_21.arm64.tbz2" \
