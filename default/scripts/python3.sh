@@ -1,14 +1,14 @@
 cd python3
 #patch -p1 < ${PATCHES_DIR}/python38.diff
 if [ ${ARCH_BASE} == 'darwin' ]; then
-	patch -p1 < ${PATCHES_DIR}/python38-darwin.diff
+	patch -p1 < ${PATCHES_DIR}/python3.11.6-darwin.diff
 	sed -e "s|MACOS = (HOST_PLATFORM == 'darwin')|MACOS = (HOST_PLATFORM.startswith('darwin'))|g" -i setup.py 
 	autoreconf -vfi
     export CFLAGS="-I/opt/local/include"
     export LDFLAGS="-L/opt/local/lib"
     echo "ac_cv_file__dev_ptmx=no" > config.site
     echo "ac_cv_file__dev_ptc=no" >> config.site
-    CONFIG_SITE=config.site ./configure --prefix=${INSTALL_PREFIX} --enable-optimizations --enable-shared --with-system-ffi --with-openssl=/opt/local --host=${CROSS_NAME} --build=`gcc -dumpmachine`  --disable-ipv6
+    CONFIG_SITE=config.site ./configure --prefix=${INSTALL_PREFIX} --enable-shared --with-system-ffi --with-openssl=/opt/local --host=${CROSS_NAME} --build=`gcc -dumpmachine`  --disable-ipv6  --with-build-python=${BUILD_DIR}/python3-native${INSTALL_PREFIX}/bin/python3.11
 elif [ ${ARCH} == 'windows-x64' ]; then
 	patch -p1 < ${PATCHES_DIR}/python3.11.6-mingw.diff
 	autoreconf -vfi

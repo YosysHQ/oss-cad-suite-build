@@ -1,0 +1,117 @@
+diff --git a/configure.ac b/configure.ac
+index e1cbb7c7fb..9e2db62443 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -542,6 +542,9 @@ then
+ 	*-*-linux*)
+ 		ac_sys_system=Linux
+ 		;;
++	*-*-darwin*)
++		ac_sys_system=Darwin
++		;;
+ 	*-*-cygwin*)
+ 		ac_sys_system=Cygwin
+ 		;;
+@@ -597,6 +600,15 @@ if test "$cross_compiling" = yes; then
+ 			_host_cpu=$host_cpu
+ 		esac
+ 		;;
++	*-*-darwin*)
++		case "$host_cpu" in
++		arm*)
++			_host_cpu=arm
++			;;
++		*)
++			_host_cpu=$host_cpu
++		esac
++		;;
+ 	*-*-cygwin*)
+ 		_host_cpu=
+ 		;;
+@@ -1625,17 +1637,6 @@ then
+         ARFLAGS="rcs"
+ fi
+ 
+-AC_CHECK_TOOLS([READELF], [readelf], [:])
+-if test "$cross_compiling" = yes; then
+-    case "$READELF" in
+-	readelf|:)
+-	AC_MSG_ERROR([readelf for the host is required for cross builds])
+-	;;
+-    esac
+-fi
+-AC_SUBST(READELF)
+-
+-
+ case $MACHDEP in
+ hp*|HP*)
+ 	# install -d does not work on HP-UX
+@@ -2944,54 +2945,8 @@ case $ac_sys_system/$ac_sys_release in
+     LIBTOOL_CRUFT=$LIBTOOL_CRUFT' -compatibility_version $(VERSION) -current_version $(VERSION)';;
+   Darwin/*)
+     gcc_version=`gcc -dumpversion`
+-    if test ${gcc_version} '<' 4.0
+-        then
+-            LIBTOOL_CRUFT="-lcc_dynamic"
+-        else
+-            LIBTOOL_CRUFT=""
+-    fi
+-    AC_RUN_IFELSE([AC_LANG_SOURCE([[
+-    #include <unistd.h>
+-    int main(int argc, char*argv[])
+-    {
+-      if (sizeof(long) == 4) {
+-    	  return 0;
+-      } else {
+-      	  return 1;
+-      }
+-    }
+-    ]])],[ac_osx_32bit=yes],[ac_osx_32bit=no],[ac_osx_32bit=yes])
+-
+-    if test "${ac_osx_32bit}" = "yes"; then
+-    	case `/usr/bin/arch` in
+-    	i386)
+-    		MACOSX_DEFAULT_ARCH="i386"
+-    		;;
+-    	ppc)
+-    		MACOSX_DEFAULT_ARCH="ppc"
+-    		;;
+-    	*)
+-    		AC_MSG_ERROR([Unexpected output of 'arch' on macOS])
+-    		;;
+-    	esac
+-    else
+-    	case `/usr/bin/arch` in
+-    	i386)
+-    		MACOSX_DEFAULT_ARCH="x86_64"
+-    		;;
+-    	ppc)
+-    		MACOSX_DEFAULT_ARCH="ppc64"
+-		;;
+-    	arm64)
+-    		MACOSX_DEFAULT_ARCH="arm64"
+-    		;;
+-    	*)
+-    		AC_MSG_ERROR([Unexpected output of 'arch' on macOS])
+-    		;;
+-    	esac
+-
+-    fi
+ 
++    MACOSX_DEFAULT_ARCH="x86_64"
+     LIBTOOL_CRUFT=$LIBTOOL_CRUFT" -lSystem -lSystemStubs -arch_only ${MACOSX_DEFAULT_ARCH}"
+     LIBTOOL_CRUFT=$LIBTOOL_CRUFT' -install_name $(PYTHONFRAMEWORKINSTALLDIR)/Versions/$(VERSION)/$(PYTHONFRAMEWORK)'
+     LIBTOOL_CRUFT=$LIBTOOL_CRUFT' -compatibility_version $(VERSION) -current_version $(VERSION)';;
+@@ -4598,10 +4553,10 @@ AC_CHECK_FUNCS([ \
+   mknod mknodat mktime mmap mremap nice openat opendir pathconf pause pipe \
+   pipe2 plock poll posix_fadvise posix_fallocate posix_spawn posix_spawnp \
+   pread preadv preadv2 pthread_condattr_setclock pthread_init pthread_kill \
+-  pwrite pwritev pwritev2 readlink readlinkat readv realpath renameat \
++  pwrite pwritev2 readlink readlinkat readv realpath renameat \
+   rtpSpawn sched_get_priority_max sched_rr_get_interval sched_setaffinity \
+   sched_setparam sched_setscheduler sem_clockwait sem_getvalue sem_open \
+-  sem_timedwait sem_unlink sendfile setegid seteuid setgid sethostname \
++  sem_timedwait sem_unlink setegid seteuid setgid sethostname \
+   setitimer setlocale setpgid setpgrp setpriority setregid setresgid \
+   setresuid setreuid setsid setuid setvbuf shutdown sigaction sigaltstack \
+   sigfillset siginterrupt sigpending sigrelse sigtimedwait sigwait \
