@@ -133,6 +133,8 @@ RUN cd /opt \
   && tar xfj /tmp/gdk-pixbuf2/gdk-pixbuf2-2.42.10_1.darwin_21.arm64.tbz2 \
   && echo "Unpack gettext-0.21.1_0.darwin_21.arm64.tbz2" \
   && tar xfj /tmp/gettext/gettext-0.21.1_0.darwin_21.arm64.tbz2 \
+  && echo "Unpack gettext-runtime-0.21.1_0.darwin_21.arm64.tbz2" \
+  && tar xfj /tmp/gettext-runtime/gettext-runtime-0.21.1_0.darwin_21.arm64.tbz2 \
   && echo "Unpack glib2-2.78.3_1+quartz.darwin_21.arm64.tbz2" \
   && tar xfj /tmp/glib2/glib2-2.78.3_1+quartz.darwin_21.arm64.tbz2 \
   && echo "Unpack gmp-6.3.0_0.darwin_21.arm64.tbz2" \
