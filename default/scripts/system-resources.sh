@@ -46,8 +46,8 @@ if [ ${ARCH_BASE} == 'darwin' ]; then
     cp ${PATCHES_DIR}/cacert.pem ${OUTPUT_DIR}${INSTALL_PREFIX}/etc/.
 
     mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/Frameworks
-    cp -r /opt/Qt5.12.8/lib/*.framework ${OUTPUT_DIR}${INSTALL_PREFIX}/Frameworks/.
-    cp -rv /opt/Qt5.12.8/plugins/* ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/qt5/plugins/.
+    cp -r /opt/Qt5.15.3/lib/*.framework ${OUTPUT_DIR}${INSTALL_PREFIX}/Frameworks/.
+    cp -rv /opt/Qt5.15.3/plugins/* ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/qt5/plugins/.
     find  ${OUTPUT_DIR}${INSTALL_PREFIX}/Frameworks -type d -name Headers -prune -exec rm -rf {} +
     find  ${OUTPUT_DIR}${INSTALL_PREFIX}/Frameworks -type l -name Headers -prune -exec rm -rf {} +
 
