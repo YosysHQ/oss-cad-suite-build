@@ -107,8 +107,6 @@ RUN cd /opt \
   && cd / \
   && echo "Unpack atk-2.38.0_1.darwin_21.arm64.tbz2" \
   && tar xfj /tmp/atk/atk-2.38.0_1.darwin_21.arm64.tbz2 \
-  && echo "Unpack boost-1.76_0.darwin_21.arm64.tbz2" \
-  && tar xfj /tmp/boost/boost-1.76_0.darwin_21.arm64.tbz2 \
   && echo "Unpack boost176-1.76.0_10+no_single.darwin_21.arm64.tbz2" \
   && tar xfj /tmp/boost176/boost176-1.76.0_10+no_single.darwin_21.arm64.tbz2 \
   && echo "Unpack brotli-1.1.0_0.darwin_21.arm64.tbz2" \
@@ -230,6 +228,8 @@ RUN cd /opt \
   && echo "Unpack gtk-osx-application-gtk2-3.0.1_2.darwin_21.arm64.tbz2" \
   && tar xfj /tmp/gtk-osx-application-gtk2/gtk-osx-application-gtk2-3.0.1_2.darwin_21.arm64.tbz2 \
   && echo "Cleanup" \
+  && cp -r /opt/local/libexec/boost/1.76/include/* /opt/local/include/. \
+  && cp /opt/local/libexec/boost/1.76/lib/* /opt/local/lib/. \
   && cp /usr/include/FlexLexer.h /opt/local/include/. \
   && cp /opt/local/share/pkgconfig/* /opt/local/lib/pkgconfig/. \  
   && cp -r /opt/local/share/cmake /tmp \
