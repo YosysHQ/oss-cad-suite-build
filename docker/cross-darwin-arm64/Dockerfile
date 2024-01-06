@@ -151,6 +151,8 @@ RUN cd /opt \
   && tar xfj /tmp/hidapi/hidapi-0.12.0_0.darwin_21.arm64.tbz2 \
   && echo "Unpack icu-74.1_0.darwin_21.arm64.tbz2" \
   && tar xfj /tmp/icu/icu-74.1_0.darwin_21.arm64.tbz2 \
+  && echo "Unpack libdeflate-1.19_0.darwin_21.arm64.tbz2" \
+  && tar xfj /tmp/libdeflate/libdeflate-1.19_0.darwin_21.arm64.tbz2 \
   && echo "Unpack libepoxy-1.5.10_0.darwin_21.arm64.tbz2" \
   && tar xfj /tmp/libepoxy/libepoxy-1.5.10_0.darwin_21.arm64.tbz2 \
   && echo "Unpack libffi-3.4.4_0.darwin_21.arm64.tbz2" \
@@ -251,7 +253,8 @@ RUN cd /opt \
   && mv /tmp/terminfo /opt/local/share \
   && rm -rf /tmp/* \
   && mkdir -p /usr/local/osxcross/target/macports/pkgs/opt \
-  && ln -s /opt/local /usr/local/osxcross/target/macports/pkgs/opt
+  && ln -s /opt/local /usr/local/osxcross/target/macports/pkgs/opt \
+  && cp /opt/local/lib/pkgconfig/gtk-mac-integration-gtk2.pc /opt/local/lib/pkgconfig/gtk-mac-integration.pc
 
 COPY --from=builder /tmp/macdylibbundler/dylibbundler /usr/local/bin/dylibbundler
 COPY --from=builder /root/.cargo/bin/rcodesign /usr/local/bin/rcodesign
