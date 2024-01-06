@@ -1,5 +1,6 @@
 cd icestorm
 sed -i 's,Darwin,XXXXX,g' icebox/Makefile
+sed -i 's,CC,CXX,g' iceprog/Makefile
 make PREFIX=${INSTALL_PREFIX} DESTDIR=${OUTPUT_DIR} install -j${NPROC}
 if [ ${ARCH_BASE} != 'windows' ]; then
     mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/libexec
