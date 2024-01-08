@@ -83,6 +83,15 @@ RUN cd /tmp \
     && mingw64-configure --disable-shared --enable-cxx --enable-static \
     && mingw64-make -j9 \
     && mingw64-make install \
+    && curl http://ftp.gnu.org/gnu/bison/bison-3.5.tar.gz --output /tmp/bison-3.5.tar.gz \
+    && curl -L https://raw.githubusercontent.com/reactos/RosBE/master/Patches/bison-3.5-reactos-fix-win32-build.patch --output /tmp/bison.patch \
+    && cd /tmp \
+    && tar -xzf bison-3.5.tar.gz \
+    && cd bison-3.5 \
+    && patch -p1 < /tmp/bison.patch \
+    && mingw64-configure \
+    && mingw64-make -j9 \
+    && mingw64-make install \
     && rm -rf /tmp/* \
     && true
 
