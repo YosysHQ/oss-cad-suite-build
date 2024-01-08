@@ -145,6 +145,8 @@ RUN cd /opt \
   && tar xfj /tmp/graphite2/graphite2-1.3.14_0.darwin_21.arm64.tbz2 \
   && echo "Unpack gtk2-2.24.33_3+quartz.darwin_21.arm64.tbz2" \
   && tar xfj /tmp/gtk2/gtk2-2.24.33_3+quartz.darwin_21.arm64.tbz2 \
+  && echo "Unpack gtk3-3.24.38_0+quartz.darwin_21.arm64.tbz2" \
+  && tar xfj /tmp/gtk3/gtk3-3.24.38_0+quartz.darwin_21.arm64.tbz2 \
   && echo "Unpack harfbuzz-8.3.0_0.darwin_21.arm64.tbz2" \
   && tar xfj /tmp/harfbuzz/harfbuzz-8.3.0_0.darwin_21.arm64.tbz2 \
   && echo "Unpack hidapi-0.12.0_0.darwin_21.arm64.tbz2" \
@@ -153,6 +155,8 @@ RUN cd /opt \
   && tar xfj /tmp/icu/icu-74.1_0.darwin_21.arm64.tbz2 \
   && echo "Unpack libdeflate-1.19_0.darwin_21.arm64.tbz2" \
   && tar xfj /tmp/libdeflate/libdeflate-1.19_0.darwin_21.arm64.tbz2 \
+  && echo "Unpack libepoxy-1.5.10_0.darwin_21.arm64.tbz2" \
+  && tar xfj /tmp/libepoxy/libepoxy-1.5.10_0.darwin_21.arm64.tbz2 \
   && echo "Unpack libffi-3.4.4_0.darwin_21.arm64.tbz2" \
   && tar xfj /tmp/libffi/libffi-3.4.4_0.darwin_21.arm64.tbz2 \
   && echo "Unpack libftdi1-1.5_2.darwin_21.arm64.tbz2" \
@@ -169,6 +173,8 @@ RUN cd /opt \
   && tar xfj /tmp/libtool/libtool-2.4.7_1.darwin_21.arm64.tbz2 \
   && echo "Unpack libusb-1.0.26_0.darwin_21.arm64.tbz2" \
   && tar xfj /tmp/libusb/libusb-1.0.26_0.darwin_21.arm64.tbz2 \
+  && echo "Unpack mesa-22.1.7_1.darwin_21.arm64.tbz2" \
+  && tar xfj /tmp/mesa/mesa-22.1.7_1.darwin_21.arm64.tbz2 \
   && echo "Unpack ncurses-6.4_1.darwin_21.arm64.tbz2" \
   && tar xfj /tmp/ncurses/ncurses-6.4_1.darwin_21.arm64.tbz2 \ 
   && echo "Unpack openssl-3_16.darwin_21.arm64.tbz2" \
@@ -193,6 +199,24 @@ RUN cd /opt \
   && tar xfj /tmp/tiff/tiff-4.6.0_0.darwin_21.arm64.tbz2 \
   && echo "Unpack tk-8.6.13_2+quartz.darwin_21.arm64.tbz2" \
   && tar xfj /tmp/tk/tk-8.6.13_2+quartz.darwin_21.arm64.tbz2 \
+  && echo "Unpack xorg-libX11-1.8.7_0.darwin_21.arm64.tbz2" \
+  && tar xfj /tmp/xorg-libX11/xorg-libX11-1.8.7_0.darwin_21.arm64.tbz2 \
+  && echo "Unpack xorg-libxcb-1.16_0+python311.darwin_21.arm64.tbz2" \
+  && tar xfj /tmp/xorg-libxcb/xorg-libxcb-1.16_0+python311.darwin_21.arm64.tbz2 \
+  && echo "Unpack xorg-libXdamage-1.1.6_0.darwin_21.arm64.tbz2" \
+  && tar xfj /tmp/xorg-libXdamage/xorg-libXdamage-1.1.6_0.darwin_21.arm64.tbz2 \
+  && echo "Unpack xorg-libXext-1.3.5_0.darwin_21.arm64.tbz2" \
+  && tar xfj /tmp/xorg-libXext/xorg-libXext-1.3.5_0.darwin_21.arm64.tbz2 \ 
+  && echo "Unpack xorg-libXfixes-6.0.1_0.darwin_21.arm64.tbz2" \
+  && tar xfj /tmp/xorg-libXfixes/xorg-libXfixes-6.0.1_0.darwin_21.arm64.tbz2 \
+  && echo "Unpack xorg-libXdmcp-1.1.4_0.darwin_21.arm64.tbz2" \
+  && tar xfj /tmp/xorg-libXdmcp/xorg-libXdmcp-1.1.4_0.darwin_21.arm64.tbz2 \
+  && echo "Unpack xorg-libXau-1.0.11_0.darwin_21.arm64.tbz2" \
+  && tar xfj /tmp/xorg-libXau/xorg-libXau-1.0.11_0.darwin_21.arm64.tbz2 \
+  && echo "Unpack xorg-xcb-proto-1.16.0_0+python311.darwin_any.noarch.tbz2 " \
+  && tar xfj /tmp/xorg-xcb-proto/xorg-xcb-proto-1.16.0_0+python311.darwin_any.noarch.tbz2  \
+  && echo "Unpack xorg-xorgproto-2023.2_0.darwin_any.noarch.tbz2" \
+  && tar xfj /tmp/xorg-xorgproto/xorg-xorgproto-2023.2_0.darwin_any.noarch.tbz2 \
   && echo "Unpack xz-5.4.5_0.darwin_21.arm64.tbz2" \
   && tar xfj /tmp/xz/xz-5.4.5_0.darwin_21.arm64.tbz2 \
   && echo "Unpack zlib-1.3_0.darwin_21.arm64.tbz2" \
@@ -209,6 +233,10 @@ RUN cd /opt \
   && tar xfj /tmp/gtk-osx-application-common-gtk2/gtk-osx-application-common-gtk2-3.0.1_2.darwin_21.arm64.tbz2 \
   && echo "Unpack gtk-osx-application-gtk2-3.0.1_2.darwin_21.arm64.tbz2" \
   && tar xfj /tmp/gtk-osx-application-gtk2/gtk-osx-application-gtk2-3.0.1_2.darwin_21.arm64.tbz2 \
+  && echo "Unpack gtk-osx-application-common-gtk3-3.0.1_2.darwin_21.arm64.tbz2" \
+  && tar xfj /tmp/gtk-osx-application-common-gtk3/gtk-osx-application-common-gtk3-3.0.1_2.darwin_21.arm64.tbz2 \
+  && echo "Unpack gtk-osx-application-gtk3-3.0.1_2.darwin_21.arm64.tbz2" \
+  && tar xfj /tmp/gtk-osx-application-gtk3/gtk-osx-application-gtk3-3.0.1_2.darwin_21.arm64.tbz2 \
   && echo "Unpack lerc-4.0.0_1.darwin_21.arm64.tbz2" \
   && tar xfj /tmp/lerc/lerc-4.0.0_1.darwin_21.arm64.tbz2 \
   && echo "Cleanup" \
