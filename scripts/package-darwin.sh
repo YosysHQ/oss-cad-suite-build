@@ -191,7 +191,7 @@ export PYTHONNOUSERSITE=1
 export GDK_PIXBUF_MODULE_FILE="\$XDG_CACHE_HOME/loaders.cache"
 mkdir -p \$XDG_CONFIG_HOME \$XDG_CACHE_HOME \$XDG_DATA_HOME
 "\$release_topdir_abs"/libexec/gdk-pixbuf-query-loaders --update-cache
-exec "\$release_topdir_abs"/libexec/python3.8 "\$release_topdir_abs"/libexec/$(basename $script) "\$@"
+exec "\$release_bindir_abs"/tabbypy3 "\$release_topdir_abs"/libexec/$(basename $script) "\$@"
 EOT
         else
         cat >> "${script}" <<EOT
