@@ -1,0 +1,41 @@
+diff --git a/src/expr/mkmetakind b/src/expr/mkmetakind
+index c11ec8df2..42c9f66ec 100755
+--- a/src/expr/mkmetakind
++++ b/src/expr/mkmetakind
+@@ -16,6 +16,9 @@
+ #
+ # Output is to standard out.
+ #
++# Required to disable this option for bash >=5.2 to avoid automatically
++# replacing & by the substituted text.
++shopt | grep -q '^patsub_replacement\b' &&  shopt -u patsub_replacement
+ 
+ copyright=2010-2022
+ 
+diff --git a/src/include/cvc5_public.h b/src/include/cvc5_public.h
+index 73ab62b95..2e7248113 100644
+--- a/src/include/cvc5_public.h
++++ b/src/include/cvc5_public.h
+@@ -19,7 +19,9 @@
+ 
+ #include <stddef.h>
+ #include <stdint.h>
+-
++#if defined __cplusplus
++#include <cstdint>
++#endif
+ // Define CVC5_PREDICT_FALSE(x) that helps the compiler predict that x will be
+ // false (if there is compiler support).
+ #ifdef __has_builtin
+diff --git a/src/util/didyoumean.cpp b/src/util/didyoumean.cpp
+index 5082593a8..e01e6ba0e 100644
+--- a/src/util/didyoumean.cpp
++++ b/src/util/didyoumean.cpp
+@@ -23,6 +23,7 @@
+ #include <algorithm>
+ #include <array>
+ #include <sstream>
++#include <cstdint>
+ #include <string>
+ #include <vector>
+ 

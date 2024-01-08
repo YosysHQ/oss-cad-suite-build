@@ -1,4 +1,5 @@
 cd cvc5
+patch -p1 < ${PATCHES_DIR}/cvc5.diff
 cp ${PATCHES_DIR}/get-antlr-3.4 contrib/.
 mkdir -p deps/install
 cp -r ${BUILD_DIR}/libpoly/yosyshq/* deps/install/. 

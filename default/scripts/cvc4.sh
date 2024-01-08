@@ -1,4 +1,5 @@
 cd cvc4
+patch -p1 < ${PATCHES_DIR}/cvc4.diff
 export MACHINE_TYPE=x86_64
 if [ ${ARCH_BASE} != 'windows' ]; then
     sed -i -re 's,rm -rf src/antlr3debughandlers.c \&\& touch src/antlr3debughandlers.c,rm -rf src/antlr3debughandlers.c \&\& touch src/antlr3debughandlers.c \&\& cp  /usr/share/misc/config.* . ,g' ./contrib/get-antlr-3.4
