@@ -25,6 +25,9 @@ RUN dnf install -y  mingw64-gcc \
                     bison \
                     patch \
                     gperf \
+                    binutils \
+                    gcc \
+                    g++ \
                     bc \
                     rsync \
                     python3 \
@@ -35,7 +38,8 @@ RUN dnf install -y  mingw64-gcc \
                     java-11-openjdk-headless \
                     cpio \
                     xz \
-                    help2man
+                    help2man \
+                    wget boost-devel
 
 ENV CROSS_NAME x86_64-w64-mingw32
 
@@ -81,5 +85,10 @@ RUN cd /tmp \
     && mingw64-make install \
     && rm -rf /tmp/* \
     && true
+
+RUN git clone --recursive https://github.com/gsauthof/pe-util && \
+    cd pe-util && \
+    CC=gcc CXX=g++ LD=g++ cmake . && \
+    make install -j9
 
 WORKDIR /work
