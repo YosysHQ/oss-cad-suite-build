@@ -150,7 +150,6 @@ Target(
 	sources = [ 'numpy' ],
 	dependencies = [ 'python3', 'python3-native' ],
 	resources = [ 'python3' ],
-	patches= [ 'mingw-numpy.patch' ],
 )
 
 # chip databases
