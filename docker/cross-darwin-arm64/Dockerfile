@@ -85,7 +85,7 @@ RUN rustup target add aarch64-apple-darwin && \
 
 COPY Toolchain.cmake ${CROSS_PREFIX}/
 
-ENV MACOSX_DEPLOYMENT_TARGET=11.0
+ENV MACOSX_DEPLOYMENT_TARGET=12.0
 
 ENV CMAKE_TOOLCHAIN_FILE ${CROSS_PREFIX}/Toolchain.cmake
 
@@ -143,8 +143,6 @@ RUN cd /opt \
   && tar xfj /tmp/gobject-introspection/gobject-introspection-1.78.1_0.darwin_21.arm64.tbz2 \
   && echo "Unpack graphite2-1.3.14_0.darwin_21.arm64.tbz2" \
   && tar xfj /tmp/graphite2/graphite2-1.3.14_0.darwin_21.arm64.tbz2 \
-  && echo "Unpack gtk2-2.24.33_3+quartz.darwin_21.arm64.tbz2" \
-  && tar xfj /tmp/gtk2/gtk2-2.24.33_3+quartz.darwin_21.arm64.tbz2 \
   && echo "Unpack gtk3-3.24.38_0+quartz.darwin_21.arm64.tbz2" \
   && tar xfj /tmp/gtk3/gtk3-3.24.38_0+quartz.darwin_21.arm64.tbz2 \
   && echo "Unpack harfbuzz-8.3.0_0.darwin_21.arm64.tbz2" \
@@ -229,10 +227,6 @@ RUN cd /opt \
   && tar xfj /tmp/libpsl/libpsl-0.21.2-20230117_0.darwin_21.arm64.tbz2 \
   && echo "Unpack libunistring-1.1_0.darwin_21.arm64.tbz2" \
   && tar xfj /tmp/libunistring/libunistring-1.1_0.darwin_21.arm64.tbz2 \
-  && echo "Unpack gtk-osx-application-common-gtk2-3.0.1_2.darwin_21.arm64.tbz2" \
-  && tar xfj /tmp/gtk-osx-application-common-gtk2/gtk-osx-application-common-gtk2-3.0.1_2.darwin_21.arm64.tbz2 \
-  && echo "Unpack gtk-osx-application-gtk2-3.0.1_2.darwin_21.arm64.tbz2" \
-  && tar xfj /tmp/gtk-osx-application-gtk2/gtk-osx-application-gtk2-3.0.1_2.darwin_21.arm64.tbz2 \
   && echo "Unpack gtk-osx-application-common-gtk3-3.0.1_2.darwin_21.arm64.tbz2" \
   && tar xfj /tmp/gtk-osx-application-common-gtk3/gtk-osx-application-common-gtk3-3.0.1_2.darwin_21.arm64.tbz2 \
   && echo "Unpack gtk-osx-application-gtk3-3.0.1_2.darwin_21.arm64.tbz2" \
@@ -262,7 +256,7 @@ RUN cd /opt \
   && rm -rf /tmp/* \
   && mkdir -p /usr/local/osxcross/target/macports/pkgs/opt \
   && ln -s /opt/local /usr/local/osxcross/target/macports/pkgs/opt \
-  && cp /opt/local/lib/pkgconfig/gtk-mac-integration-gtk2.pc /opt/local/lib/pkgconfig/gtk-mac-integration.pc
+  && cp /opt/local/lib/pkgconfig/gtk-mac-integration-gtk3.pc /opt/local/lib/pkgconfig/gtk-mac-integration.pc
 
 COPY --from=builder /tmp/macdylibbundler/dylibbundler /usr/local/bin/dylibbundler
 COPY --from=builder /root/.cargo/bin/rcodesign /usr/local/bin/rcodesign

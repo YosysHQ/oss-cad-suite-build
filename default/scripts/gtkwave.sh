@@ -1,6 +1,8 @@
 if [ ${ARCH_BASE} == 'darwin' ]; then
-    cd gtkwave/gtkwave3
-    ./configure --prefix=${INSTALL_PREFIX} --host=${CROSS_NAME} --with-tcl=$(xcrun --show-sdk-path)/System/Library/Frameworks/Tcl.framework --with-tk=$(xcrun --show-sdk-path)/System/Library/Frameworks/Tk.framework
+    cd gtkwave/gtkwave3-gtk3
+    sed -i -re "s,@GSETTINGS_RULES@,,g" ./src/Makefile.am
+    ./autogen.sh
+    ./configure --prefix=${INSTALL_PREFIX} --host=${CROSS_NAME} --enable-gtk3 --with-tcl=$(xcrun --show-sdk-path)/System/Library/Frameworks/Tcl.framework --with-tk=$(xcrun --show-sdk-path)/System/Library/Frameworks/Tk.framework --disable-dependency-tracking
 elif [ ${ARCH_BASE} == 'windows' ]; then
     cd gtkwave/gtkwave3-gtk3
     sed -i -re "s,@GSETTINGS_RULES@,,g" ./src/Makefile.am
