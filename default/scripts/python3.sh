@@ -1,5 +1,4 @@
 cd python3
-#patch -p1 < ${PATCHES_DIR}/python38.diff
 if [ ${ARCH_BASE} == 'darwin' ]; then
 	patch -p1 < ${PATCHES_DIR}/python3.11.6-darwin.diff
 	sed -e "s|MACOS = (HOST_PLATFORM == 'darwin')|MACOS = (HOST_PLATFORM.startswith('darwin'))|g" -i setup.py 

@@ -12,7 +12,7 @@ Target(
 	name = 'python3',
 	sources = [ 'python3' ],
 	dependencies = [ 'python3-native' ],
-	patches = [ 'python38.diff', 'python38-mingw.diff', 'python38-darwin.diff' ],
+	patches = [ 'python3.11.6-mingw.diff', 'python3.11.6-darwin.diff' ],
 )
 
 Target(
