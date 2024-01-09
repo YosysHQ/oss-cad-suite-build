@@ -13,7 +13,7 @@ fi
 
 # We copy all DLLs that we are using
 cp /usr/x86_64-w64-mingw32/sys-root/mingw/bin/*.dll lib/.
-
+cp lib/libffi-*.dll py3bin/.
 # Replace symbolic links with actual files
 for f in $(find . -type l)
 do
