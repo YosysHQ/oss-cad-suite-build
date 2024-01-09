@@ -1,8 +1,11 @@
 cd cvc4
-patch -p1 < ${PATCHES_DIR}/cvc4.diff
 export MACHINE_TYPE=x86_64
 if [ ${ARCH_BASE} != 'windows' ]; then
     sed -i -re 's,rm -rf src/antlr3debughandlers.c \&\& touch src/antlr3debughandlers.c,rm -rf src/antlr3debughandlers.c \&\& touch src/antlr3debughandlers.c \&\& cp  /usr/share/misc/config.* . ,g' ./contrib/get-antlr-3.4
+else
+    sed -i 's,#!/usr/bin/env bash,#!/usr/bin/env bash\nshopt -u patsub_replacement,g' src/expr/mkmetakind
+    sed -i 's,#include <iosfwd>,#include <iosfwd>\n#include <cstdint>,g' src/expr/metakind_template.h
+    sed -i 's,#include <string>,#include <string>\n#include <cstdint>,g' src/api/cvc4cpp.h 
 fi
 ANTLR_CONFIGURE_ARGS="--host=${CROSS_NAME} --build=`gcc -dumpmachine`"  ./contrib/get-antlr-3.4
 git clone https://github.com/uiri/toml.git
