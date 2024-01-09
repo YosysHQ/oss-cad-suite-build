@@ -3,6 +3,7 @@ sed -i -re 's,target_link_libraries\(smt-switch-btor smt-switch\),target_link_li
 sed -i -re 's,cmake \"\$root_dir\" \$cmake_opts,cmake \"\$root_dir\" \$cmake_opts -DCMAKE_TOOLCHAIN_FILE=\$\{CMAKE_TOOLCHAIN_FILE\},g' configure.sh
 sed -i 's,add_subdirectory(tests),#add_subdirectory(tests),g' CMakeLists.txt 
 if [ ${ARCH_BASE} == 'windows' ]; then
+    sed -i 's,#include <string>,#include <string>\n#include <cstdint>,g' include/ops.h
     patch -p1 < ${PATCHES_DIR}/smt-switch-win32.diff
     sed -i -re 's,__APPLE__,__WIN32__,g' src/generic_solver.cpp
     sed -i -re 's,__APPLE__,__WIN32__,g' tests/test-generic-solver.cpp
