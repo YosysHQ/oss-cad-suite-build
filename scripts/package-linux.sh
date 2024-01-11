@@ -33,33 +33,33 @@ for bindir in bin py2bin py3bin super_prove/bin share/verilator/bin lib/ivl; do
         done
         mv $binfile libexec
         is_using_fonts=false
-        cat > $binfile << EOT
-#!/usr/bin/env bash
-release_bindir="\$(dirname "\${BASH_SOURCE[0]}")"
-release_bindir_abs="\$(readlink -f "\$release_bindir")"
-release_topdir_abs="\$(readlink -f "\$release_bindir/$rel_path")"
-export PATH="\$release_bindir_abs:\$PATH"
-EOT
+        cat > $binfile <<-EOT
+            #!/usr/bin/env bash
+            release_bindir="\$(dirname "\${BASH_SOURCE[0]}")"
+            release_bindir_abs="\$(readlink -f "\$release_bindir")"
+            release_topdir_abs="\$(readlink -f "\$release_bindir/$rel_path")"
+            export PATH="\$release_bindir_abs:\$PATH"
+        EOT
 
         if [ $bindir == 'py3bin' ]; then
-            cat >> $binfile << EOT
-export PYTHONEXECUTABLE="\$release_topdir_abs/bin/tabbypy3"
-EOT
+            cat >> $binfile <<-EOT
+                export PYTHONEXECUTABLE="\$release_topdir_abs/bin/tabbypy3"
+            EOT
         fi
         if [ ! -z "$(basename $binfile | grep verilator)" ]; then
-            cat >> $binfile << EOT
-export VERILATOR_ROOT="\$release_topdir_abs/share/verilator"
-EOT
+            cat >> $binfile <<-EOT
+                export VERILATOR_ROOT="\$release_topdir_abs/share/verilator"
+            EOT
         fi
         if [ ! -z "$(basename $binfile | grep openFPGALoader)" ]; then
-            cat >> $binfile << EOT
-export OPENFPGALOADER_SOJ_DIR="\$release_topdir_abs/share/openFPGALoader"
-EOT
+            cat >> $binfile <<-EOT
+                export OPENFPGALOADER_SOJ_DIR="\$release_topdir_abs/share/openFPGALoader"
+            EOT
         fi
         if [ ! -z "$(basename $binfile | grep iverilog)" ]; then
-            cat >> $binfile << EOT
-set -- "-p" "VVP_EXECUTABLE=\$release_topdir_abs/bin/vvp" "\$@"
-EOT
+            cat >> $binfile <<-EOT
+                set -- "-p" "VVP_EXECUTABLE=\$release_topdir_abs/bin/vvp" "\$@"
+            EOT
         fi
         if [ ! -z "$(basename $binfile | grep vvp)" ]; then
             cat >> $binfile << EOT
@@ -68,95 +68,101 @@ export PYTHONHOME="\$release_topdir_abs"
 EOT
         fi
         if [ ! -z "$(strings libexec/$(basename $binfile) | grep ghdl)" ]; then
-            cat >> $binfile << EOT
-export GHDL_PREFIX="\$release_topdir_abs/lib/ghdl"
-EOT
+            cat >> $binfile <<-EOT
+                export GHDL_PREFIX="\$release_topdir_abs/lib/ghdl"
+            EOT
         fi
         if [ $binfile == "bin/yosys" ] && [ -f "share/yosys/plugins/ghdl.so" ]; then
-            cat >> $binfile << EOT
-export GHDL_PREFIX="\$release_topdir_abs/lib/ghdl"
-EOT
+            cat >> $binfile <<-EOT
+                export GHDL_PREFIX="\$release_topdir_abs/lib/ghdl"
+            EOT
         fi
         if [ ! -z "$(lddtree -l libexec/$(basename $binfile) | grep python)" ]; then
-            cat >> $binfile << EOT
-export PYTHONHOME="\$release_topdir_abs"
-export PYTHONNOUSERSITE=1
-export SSL_CERT_FILE="\$release_topdir_abs"/etc/cacert.pem
-EOT
+            cat >> $binfile <<-EOT
+                export PYTHONHOME="\$release_topdir_abs"
+                export PYTHONNOUSERSITE=1
+                export SSL_CERT_FILE="\$release_topdir_abs"/etc/cacert.pem
+            EOT
         fi
         if [ ! -z "$(lddtree -l libexec/$(basename $binfile) | grep tcl)" ]; then
-            cat >> $binfile << EOT
-export TCL_LIBRARY="\$release_topdir_abs/lib/tcl8.6"
-export TK_LIBRARY="\$release_topdir_abs/lib/tk8.6"
-EOT
+            cat >> $binfile <<-EOT
+                export TCL_LIBRARY="\$release_topdir_abs/lib/tcl8.6"
+                export TK_LIBRARY="\$release_topdir_abs/lib/tk8.6"
+            EOT
         fi
         if [ ! -z "$(lddtree -l libexec/$(basename $binfile) | grep Qt5)" ]; then
             is_using_fonts=true
-            cat >> $binfile << EOT
-export QT_PLUGIN_PATH="\$release_topdir_abs/lib/qt5/plugins"
-export QT_LOGGING_RULES="*=false"
-unset QT_QPA_PLATFORMTHEME
-unset QT_STYLE_OVERRIDE
-export XDG_DATA_DIRS="\$release_topdir_abs"/share
-export XDG_CONFIG_DIRS="\$release_topdir_abs"
-export XDG_CONFIG_HOME=\$HOME/.config/yosyshq
-export XDG_CACHE_HOME=\$HOME/.cache/yosyshq
-export XDG_DATA_HOME=\$HOME/.local/share/yosyshq
-export XDG_CURRENT_DESKTOP="KDE"
-export LC_ALL="C"
-mkdir -p \$XDG_CONFIG_HOME \$XDG_CACHE_HOME \$XDG_DATA_HOME
-EOT
+            cat >> $binfile <<-EOT
+                export QT_PLUGIN_PATH="\$release_topdir_abs/lib/qt5/plugins"
+                export QT_LOGGING_RULES="*=false"
+                unset QT_QPA_PLATFORMTHEME
+                unset QT_STYLE_OVERRIDE
+                export LC_ALL="C"
+                export XDG_CURRENT_DESKTOP="KDE"
+                export XDG_DATA_DIRS="\$release_topdir_abs"/share
+                export XDG_CONFIG_DIRS="\$release_topdir_abs"
+                if [ ! -z ${HOME:+x} ]; then
+                    export XDG_CONFIG_HOME="\$HOME/.config/yosyshq"
+                    export XDG_CACHE_HOME="\$HOME/.cache/yosyshq"
+                    export XDG_DATA_HOME="\$HOME/.local/share/yosyshq"
+                    mkdir -p "\$XDG_CONFIG_HOME" "\$XDG_CACHE_HOME" "\$XDG_DATA_HOME"
+                fi
+            EOT
         fi
         if [ ! -z "$(lddtree -l libexec/$(basename $binfile) | grep gtk)" ]; then
-# Set and unset variables according to:
-# https://refspecs.linuxbase.org/gtk/2.6/gtk/gtk-running.html
-# https://specifications.freedesktop.org/basedir-spec/0.6/ar01s03.html
+            # Set and unset variables according to:
+            # https://refspecs.linuxbase.org/gtk/2.6/gtk/gtk-running.html
+            # https://specifications.freedesktop.org/basedir-spec/0.6/ar01s03.html
             is_using_fonts=true
-            cat >> $binfile << EOT
-unset GTK_MODULES
-unset GTK3_MODULES
-export GTK_PATH="\$release_topdir_abs/lib"
-export GTK_IM_MODULE=""
-export GTK_IM_MODULE_FILE="/dev/null"
-export GTK_EXE_PREFIX="\$release_topdir_abs"
-export GTK_DATA_PREFIX="\$release_topdir_abs"
-export GDK_PIXBUF_MODULEDIR="\$release_topdir_abs/lib/gdk-pixbuf-2.0/loaders"
-export GTK_THEME="Adwaita"
-export XDG_DATA_DIRS="\$release_topdir_abs"/share
-export XDG_CONFIG_DIRS="\$release_topdir_abs"
-export XDG_CONFIG_HOME=\$HOME/.config/yosyshq
-export XDG_CACHE_HOME=\$HOME/.cache/yosyshq
-export XDG_DATA_HOME=\$HOME/.local/share/yosyshq
-export XDG_CURRENT_DESKTOP="KDE"
-export LC_ALL="C"
-export GDK_PIXBUF_MODULE_FILE="\$XDG_CACHE_HOME/loaders.cache"
-mkdir -p \$XDG_CONFIG_HOME \$XDG_CACHE_HOME \$XDG_DATA_HOME
-"\$release_topdir_abs"/lib/$ldlinuxname --inhibit-cache --inhibit-rpath "" --library-path "\$release_topdir_abs"/lib "\$release_topdir_abs"/libexec/gdk-pixbuf-query-loaders --update-cache
-EOT
+            cat >> $binfile <<-EOT
+                unset GTK_MODULES
+                unset GTK3_MODULES
+                export GTK_PATH="\$release_topdir_abs/lib"
+                export GTK_IM_MODULE=""
+                export GTK_IM_MODULE_FILE="/dev/null"
+                export GTK_EXE_PREFIX="\$release_topdir_abs"
+                export GTK_DATA_PREFIX="\$release_topdir_abs"
+                export GDK_PIXBUF_MODULEDIR="\$release_topdir_abs/lib/gdk-pixbuf-2.0/loaders"
+                export GTK_THEME="Adwaita"
+                export LC_ALL="C"
+                export XDG_CURRENT_DESKTOP="KDE"
+                export XDG_DATA_DIRS="\$release_topdir_abs"/share
+                export XDG_CONFIG_DIRS="\$release_topdir_abs"
+                if [ ! -z ${HOME:+x} ]; then
+                    export XDG_CONFIG_HOME="\$HOME/.config/yosyshq"
+                    export XDG_CACHE_HOME="\$HOME/.cache/yosyshq"
+                    export XDG_DATA_HOME="\$HOME/.local/share/yosyshq"
+                    export GDK_PIXBUF_MODULE_FILE="\$XDG_CACHE_HOME/loaders.cache"
+                    mkdir -p "\$XDG_CONFIG_HOME" "\$XDG_CACHE_HOME" "\$XDG_DATA_HOME"
+                fi
+                "\$release_topdir_abs"/lib/$ldlinuxname --inhibit-cache --inhibit-rpath "" --library-path "\$release_topdir_abs"/lib "\$release_topdir_abs"/libexec/gdk-pixbuf-query-loaders --update-cache
+            EOT
         fi
 
         if $is_using_fonts; then
-            cat >> $binfile << EOT
-export FONTCONFIG_FILE="\$XDG_CONFIG_HOME/fonts.conf"
-export FONTCONFIG_PATH="\$release_topdir_abs/etc/fonts"
-sed "s|TARGET_DIR|\$release_topdir_abs|g" "\$release_topdir_abs/etc/fonts/fonts.conf.template" > \$FONTCONFIG_FILE
-EOT
+            cat >> $binfile <<-EOT
+                export FONTCONFIG_PATH="\$release_topdir_abs/etc/fonts"
+                if [ ! -z ${HOME:+x} ]; then
+                    export FONTCONFIG_FILE="\$XDG_CONFIG_HOME/fonts.conf"
+                    sed "s|TARGET_DIR|\$release_topdir_abs|g" "\$release_topdir_abs/etc/fonts/fonts.conf.template" > "\$FONTCONFIG_FILE"
+                fi
+            EOT
         fi
 
 if [ ${PRELOAD} == 'True' ]; then
     if [ $binfile == "bin/yosys" ] || [ $binfile == "bin/tabbylic" ]; then
         echo "Skipping"
     else
-        cat >> $binfile << EOT
-exec "\$release_topdir_abs"/lib/$ldlinuxname --inhibit-cache --inhibit-rpath "" --library-path "\$release_topdir_abs"/lib --preload "\$release_topdir_abs"/lib/preload.o "\$release_topdir_abs"/libexec/$(basename $binfile) "\$@"
-EOT
+        cat >> $binfile <<-EOT
+            exec "\$release_topdir_abs"/lib/$ldlinuxname --inhibit-cache --inhibit-rpath "" --library-path "\$release_topdir_abs"/lib --preload "\$release_topdir_abs"/lib/preload.o "\$release_topdir_abs"/libexec/$(basename $binfile) "\$@"
+        EOT
         chmod +x $binfile
         continue
     fi
 fi
-        cat >> $binfile << EOT
-exec "\$release_topdir_abs"/lib/$ldlinuxname --inhibit-cache --inhibit-rpath "" --library-path "\$release_topdir_abs"/lib "\$release_topdir_abs"/libexec/$(basename $binfile) "\$@"
-EOT
+        cat >> $binfile <<-EOT
+            exec "\$release_topdir_abs"/lib/$ldlinuxname --inhibit-cache --inhibit-rpath "" --library-path "\$release_topdir_abs"/lib "\$release_topdir_abs"/libexec/$(basename $binfile) "\$@"
+        EOT
         chmod +x $binfile
     done
 done
@@ -171,55 +177,59 @@ for script in bin/* py3bin/*; do
     rel_path=$(realpath --relative-to=bin .)
     if $(head -1 "${script}" | grep -q python3); then
         mv "${script}" libexec
-        cat > "${script}" <<EOT
-#!/usr/bin/env bash
-release_bindir="\$(dirname "\${BASH_SOURCE[0]}")"
-release_bindir_abs="\$(readlink -f "\$release_bindir/../bin")"
-release_topdir_abs="\$(readlink -f "\$release_bindir/$rel_path")"
-export PATH="\$release_bindir_abs:\$PATH"
-export PYTHONEXECUTABLE="\$release_bindir_abs/tabbypy3"
-EOT
+        cat > "${script}" <<-EOT
+            #!/usr/bin/env bash
+            release_bindir="\$(dirname "\${BASH_SOURCE[0]}")"
+            release_bindir_abs="\$(readlink -f "\$release_bindir/../bin")"
+            release_topdir_abs="\$(readlink -f "\$release_bindir/$rel_path")"
+            export PATH="\$release_bindir_abs:\$PATH"
+            export PYTHONEXECUTABLE="\$release_bindir_abs/tabbypy3"
+        EOT
         is_using_fonts=false
         if [ $script == 'bin/xdot' ]; then
-# Set and unset variables according to:
-# https://refspecs.linuxbase.org/gtk/2.6/gtk/gtk-running.html
-# https://specifications.freedesktop.org/basedir-spec/0.6/ar01s03.html
+            # Set and unset variables according to:
+            # https://refspecs.linuxbase.org/gtk/2.6/gtk/gtk-running.html
+            # https://specifications.freedesktop.org/basedir-spec/0.6/ar01s03.html
             is_using_fonts=true
-            cat >> "${script}" <<EOT
-unset GTK_MODULES
-unset GTK3_MODULES
-export GTK_PATH="\$release_topdir_abs/lib"
-export GTK_IM_MODULE=""
-export GTK_IM_MODULE_FILE="/dev/null"
-export GTK_EXE_PREFIX="\$release_topdir_abs"
-export GTK_DATA_PREFIX="\$release_topdir_abs"
-export GDK_PIXBUF_MODULEDIR="\$release_topdir_abs/lib/gdk-pixbuf-2.0/loaders"
-export GTK_THEME="Adwaita"
-export XDG_DATA_DIRS="\$release_topdir_abs"/share
-export XDG_CONFIG_DIRS="\$release_topdir_abs"
-export XDG_CONFIG_HOME=\$HOME/.config/yosyshq
-export XDG_CACHE_HOME=\$HOME/.cache/yosyshq
-export XDG_DATA_HOME=\$HOME/.local/share/yosyshq
-export XDG_CURRENT_DESKTOP="KDE"
-export TCL_LIBRARY="\$release_topdir_abs/lib/tcl8.6"
-export TK_LIBRARY="\$release_topdir_abs/lib/tk8.6"
-export GDK_PIXBUF_MODULE_FILE="\$XDG_CACHE_HOME/loaders.cache"
-mkdir -p \$XDG_CONFIG_HOME \$XDG_CACHE_HOME \$XDG_DATA_HOME
-"\$release_topdir_abs"/lib/$ldlinuxname --inhibit-cache --inhibit-rpath "" --library-path "\$release_topdir_abs"/lib "\$release_topdir_abs"/libexec/gdk-pixbuf-query-loaders --update-cache
-export LC_ALL="C"
-export GI_TYPELIB_PATH="\$release_topdir_abs/lib/girepository-1.0"
-EOT
+            cat >> "${script}" <<-EOT
+                unset GTK_MODULES
+                unset GTK3_MODULES
+                export GTK_PATH="\$release_topdir_abs/lib"
+                export GTK_IM_MODULE=""
+                export GTK_IM_MODULE_FILE="/dev/null"
+                export GTK_EXE_PREFIX="\$release_topdir_abs"
+                export GTK_DATA_PREFIX="\$release_topdir_abs"
+                export GDK_PIXBUF_MODULEDIR="\$release_topdir_abs/lib/gdk-pixbuf-2.0/loaders"
+                export GTK_THEME="Adwaita"
+                export TCL_LIBRARY="\$release_topdir_abs/lib/tcl8.6"
+                export TK_LIBRARY="\$release_topdir_abs/lib/tk8.6"
+                export XDG_CURRENT_DESKTOP="KDE"
+                export XDG_DATA_DIRS="\$release_topdir_abs"/share
+                export XDG_CONFIG_DIRS="\$release_topdir_abs"
+                if [ ! -z ${HOME:+x} ]; then
+                    export XDG_CONFIG_HOME="\$HOME/.config/yosyshq"
+                    export XDG_CACHE_HOME="\$HOME/.cache/yosyshq"
+                    export XDG_DATA_HOME="\$HOME/.local/share/yosyshq"
+                    export GDK_PIXBUF_MODULE_FILE="\$XDG_CACHE_HOME/loaders.cache"
+                    mkdir -p "\$XDG_CONFIG_HOME" "\$XDG_CACHE_HOME" "\$XDG_DATA_HOME"
+                fi
+                "\$release_topdir_abs"/lib/$ldlinuxname --inhibit-cache --inhibit-rpath "" --library-path "\$release_topdir_abs"/lib "\$release_topdir_abs"/libexec/gdk-pixbuf-query-loaders --update-cache
+                export LC_ALL="C"
+                export GI_TYPELIB_PATH="\$release_topdir_abs/lib/girepository-1.0"
+            EOT
         fi
         if $is_using_fonts; then
-            cat >> "${script}" <<EOT
-export FONTCONFIG_FILE="\$XDG_CONFIG_HOME/fonts.conf"
-export FONTCONFIG_PATH="\$release_topdir_abs/etc/fonts"
-sed "s|TARGET_DIR|\$release_topdir_abs|g" "\$release_topdir_abs/etc/fonts/fonts.conf.template" > \$FONTCONFIG_FILE
-EOT
+            cat >> "${script}" <<-EOT
+                export FONTCONFIG_PATH="\$release_topdir_abs/etc/fonts"
+                if [ ! -z ${HOME:+x} ]; then
+                    export FONTCONFIG_FILE="\$XDG_CONFIG_HOME/fonts.conf"
+                    sed "s|TARGET_DIR|\$release_topdir_abs|g" "\$release_topdir_abs/etc/fonts/fonts.conf.template" > "\$FONTCONFIG_FILE"
+                fi
+            EOT
         fi
-        cat >> "${script}" <<EOT
-exec \$release_bindir_abs/tabbypy3 "\$release_topdir_abs"/libexec/$(basename $script) "\$@"
-EOT
+        cat >> "${script}" <<-EOT
+            exec \$release_bindir_abs/tabbypy3 "\$release_topdir_abs"/libexec/$(basename $script) "\$@"
+        EOT
         chmod +x "${script}"
     fi
 done
@@ -247,12 +257,12 @@ fi
 
 if [ -f "bin/yosys-config" ]; then
     mv bin/yosys-config bin/yosys-config.orig
-    cat > bin/yosys-config << EOT
-#!/usr/bin/env bash
-release_bindir="\$(dirname "\${BASH_SOURCE[0]}")"
-release_bindir_abs="\$(readlink -f "\$release_bindir")"
-release_topdir_abs="\$(readlink -f "\$release_bindir/$rel_path")"
-EOT
+    cat > bin/yosys-config <<-EOT
+        #!/usr/bin/env bash
+        release_bindir="\$(dirname "\${BASH_SOURCE[0]}")"
+        release_bindir_abs="\$(readlink -f "\$release_bindir")"
+        release_topdir_abs="\$(readlink -f "\$release_bindir/$rel_path")"
+    EOT
     cat bin/yosys-config.orig >> bin/yosys-config
     rm bin/yosys-config.orig
     sed -i "s,\"/yosyshq,\${release_topdir_abs}\",g" bin/yosys-config
