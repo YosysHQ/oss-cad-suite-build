@@ -11,12 +11,6 @@ if [ ${ARCH} == 'linux-x64' ]; then
 elif [ ${ARCH} == 'linux-arm64' ]; then
     ldlinuxname="ld-linux-aarch64.so.1"
     arch_prefix="aarch64-linux-gnu"
-elif [ ${ARCH} == 'linux-arm' ]; then
-    ldlinuxname="ld-linux-armhf.so.3"
-    arch_prefix="arm-linux-gnueabihf"
-elif [ ${ARCH} == 'linux-riscv64' ]; then
-    ldlinuxname="ld-linux-riscv64-lp64d.so.1"
-    arch_prefix="riscv64-linux-gnu"
 fi
 
 cp ${PATCHES_DIR}/${README} ${OUTPUT_DIR}${INSTALL_PREFIX}/README

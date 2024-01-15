@@ -209,7 +209,7 @@ Target(
 	dependencies = [ 'python2' ],
 	resources = [ 'python2' ],
 	patches = [ 'suprove.diff' ],
-	arch = [ 'linux-x64', 'linux-arm', 'linux-arm64', 'linux-riscv64' ],
+	arch = [ 'linux-x64', 'linux-arm64' ],
 )
 
 # yices
@@ -271,5 +271,5 @@ Target(
 	name = 'aiger',
 	sources = [ 'lingeling', 'aiger' ],
 	dependencies = [ 'picosat' ],
-	arch = [ 'linux-x64', 'linux-arm', 'linux-arm64', 'linux-riscv64', 'darwin-x64', 'darwin-arm64' ],
+	arch = [ 'linux-x64', 'linux-arm64', 'darwin-x64', 'darwin-arm64' ],
 )

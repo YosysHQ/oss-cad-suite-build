@@ -1,7 +1,7 @@
 cd ghdl
 param=--with-llvm-config="llvm-config"
 sed -i 's,ghdl1-llvm,../bin/ghdl1-llvm,g' configure
-if [ ${ARCH} == 'linux-arm' ] || [ ${ARCH} == 'linux-arm64' ] || [ ${ARCH} == 'linux-riscv64' ]; then
+if [ ${ARCH} == 'linux-arm64' ]; then
     sed -i 's,grt-all libs.vhdl.llvm all.vpi,grt-all all.vpi,g' Makefile.in
     sed -i 's,install.llvm.program install.vhdllib,install.llvm.program ,g' Makefile.in
     sed -i '130,133d' Makefile.in

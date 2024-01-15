@@ -4,12 +4,8 @@ function python3_package_setup {
     export PYTHONPATH=${OUTPUT_DIR}${INSTALL_PREFIX}/lib/python3.11/site-packages:${BUILD_DIR}/python3${INSTALL_PREFIX}/lib/python3.11:${BUILD_DIR}/python3${INSTALL_PREFIX}/lib/python3.11/site-packages
     export PYTHON3_NATIVE=${BUILD_DIR}/python3-native${INSTALL_PREFIX}/bin/python3.11
     cp ${_PYTHON_PROJECT_BASE}/lib/python3.11/_sysconfigdata__* ${PYTHONHOME}/lib/python3.11/.
-    if [ ${ARCH} == 'linux-arm' ]; then
-        sed -i 's,/yosyshq/,'${PYTHONHOME}/',g' ${PYTHONHOME}/lib/python3.11/_sysconfigdata__linux_arm-linux-gnueabihf.py
-    elif [ ${ARCH} == 'linux-arm64' ]; then
+    if [ ${ARCH} == 'linux-arm64' ]; then
         sed -i 's,/yosyshq/,'${PYTHONHOME}/',g' ${PYTHONHOME}/lib/python3.11/_sysconfigdata__linux_aarch64-linux-gnu.py
-    elif [ ${ARCH} == 'linux-riscv64' ]; then
-        sed -i 's,/yosyshq/,'${PYTHONHOME}/',g' ${PYTHONHOME}/lib/python3.11/_sysconfigdata__linux_riscv64-linux-gnu.py
     elif [ ${ARCH} == 'linux-x64' ]; then
         sed -i 's,/yosyshq/,'${PYTHONHOME}/',g' ${PYTHONHOME}/lib/python3.11/_sysconfigdata__linux_x86_64-linux-gnu.py
     elif [ ${ARCH} == 'windows-x64' ]; then
@@ -24,13 +20,8 @@ function python3_package_setup {
 
 function python3_package_install {
     install_cmd="setup.py install --prefix=${OUTPUT_DIR}${INSTALL_PREFIX} $1"
-    if [ ${ARCH} == 'linux-arm' ]; then
-        _PYTHON_HOST_PLATFORM=linux-arm  _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__linux_arm-linux-gnueabihf ${PYTHON3_NATIVE} ${install_cmd}
-    elif [ ${ARCH} == 'linux-arm64' ]; then
+    if [ ${ARCH} == 'linux-arm64' ]; then
         _PYTHON_HOST_PLATFORM=linux-aarch64 _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__linux_aarch64-linux-gnu ${PYTHON3_NATIVE} ${install_cmd}
-    elif [ ${ARCH} == 'linux-riscv64' ]; then
-        _PYTHON_HOST_PLATFORM=linux-riscv64 _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__linux_riscv64-linux-gnu ${PYTHON3_NATIVE} ${install_cmd}
-    elif [ ${ARCH} == 'linux-x64' ]; then
         _PYTHON_HOST_PLATFORM=linux-x64 _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__linux_x86_64-linux-gnu ${PYTHON3_NATIVE} ${install_cmd}
     elif [ ${ARCH} == 'windows-x64' ]; then
         _PYTHON_HOST_PLATFORM=mingw-x64 _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__win32_ ${PYTHON3_NATIVE} ${install_cmd}
@@ -43,12 +34,8 @@ function python3_package_install {
 
 function python3_package_install_numpy {
     install_cmd="setup.py install --prefix=${OUTPUT_DIR}${INSTALL_PREFIX} $1"
-    if [ ${ARCH} == 'linux-arm' ]; then
-        _PYTHON_HOST_PLATFORM=linux-arm  _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__linux_arm-linux-gnueabihf ${PYTHON3_NATIVE} ${install_cmd}
-    elif [ ${ARCH} == 'linux-arm64' ]; then
+    if [ ${ARCH} == 'linux-arm64' ]; then
         _PYTHON_HOST_PLATFORM=linux-aarch64 _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__linux_aarch64-linux-gnu ${PYTHON3_NATIVE} ${install_cmd}
-    elif [ ${ARCH} == 'linux-riscv64' ]; then
-        _PYTHON_HOST_PLATFORM=linux-riscv64 _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__linux_riscv64-linux-gnu ${PYTHON3_NATIVE} ${install_cmd}
     elif [ ${ARCH} == 'linux-x64' ]; then
         _PYTHON_HOST_PLATFORM=linux-x64 _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__linux_x86_64-linux-gnu ${PYTHON3_NATIVE} ${install_cmd}
     elif [ ${ARCH} == 'windows-x64' ]; then
@@ -61,12 +48,8 @@ function python3_package_install_numpy {
 }
 function python3_package_develop {
     install_cmd="setup.py develop --prefix=${OUTPUT_DIR}${INSTALL_PREFIX} $1"
-    if [ ${ARCH} == 'linux-arm' ]; then
-        _PYTHON_HOST_PLATFORM=linux-arm  _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__linux_arm-linux-gnueabihf ${PYTHON3_NATIVE} ${install_cmd}
-    elif [ ${ARCH} == 'linux-arm64' ]; then
+    if [ ${ARCH} == 'linux-arm64' ]; then
         _PYTHON_HOST_PLATFORM=linux-aarch64 _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__linux_aarch64-linux-gnu ${PYTHON3_NATIVE} ${install_cmd}
-    elif [ ${ARCH} == 'linux-riscv64' ]; then
-        _PYTHON_HOST_PLATFORM=linux-riscv64 _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__linux_riscv64-linux-gnu ${PYTHON3_NATIVE} ${install_cmd}
     elif [ ${ARCH} == 'linux-x64' ]; then
         _PYTHON_HOST_PLATFORM=linux-x64 _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__linux_x86_64-linux-gnu ${PYTHON3_NATIVE} ${install_cmd}
     elif [ ${ARCH} == 'windows-x64' ]; then
@@ -80,12 +63,8 @@ function python3_package_develop {
 
 function python3_package_pip_install {
     install_cmd="-m pip install --target ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/python3.11/site-packages --no-cache-dir --disable-pip-version-check $1"
-    if [ ${ARCH} == 'linux-arm' ]; then
-        _PYTHON_HOST_PLATFORM=linux-arm  _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__linux_arm-linux-gnueabihf ${PYTHON3_NATIVE} ${install_cmd}
-    elif [ ${ARCH} == 'linux-arm64' ]; then
+    if [ ${ARCH} == 'linux-arm64' ]; then
         _PYTHON_HOST_PLATFORM=linux-aarch64 _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__linux_aarch64-linux-gnu ${PYTHON3_NATIVE} ${install_cmd}
-    elif [ ${ARCH} == 'linux-riscv64' ]; then
-        _PYTHON_HOST_PLATFORM=linux-riscv64 _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__linux_riscv64-linux-gnu ${PYTHON3_NATIVE} ${install_cmd}
     elif [ ${ARCH} == 'linux-x64' ]; then
         _PYTHON_HOST_PLATFORM=linux-x64 _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__linux_x86_64-linux-gnu ${PYTHON3_NATIVE} ${install_cmd}
     elif [ ${ARCH} == 'windows-x64' ]; then

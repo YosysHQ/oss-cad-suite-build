@@ -143,7 +143,7 @@ Target(
 	dependencies = [ 'python3', 'python3-native', 'numpy' ],
 	resources = [ 'python3', 'numpy' ],
 	package = 'gowin',
-	arch = [ 'linux-x64', 'linux-arm64', 'linux-riscv64', 'darwin-x64', 'darwin-arm64' ],
+	arch = [ 'linux-x64', 'linux-arm64', 'darwin-x64', 'darwin-arm64' ],
 )
 
 Target(
@@ -151,7 +151,7 @@ Target(
 	sources = [ 'numpy' ],
 	dependencies = [ 'python3', 'python3-native' ],
 	resources = [ 'python3' ],
-	arch = [ 'linux-x64', 'linux-arm64', 'linux-riscv64', 'darwin-x64', 'darwin-arm64' ],
+	arch = [ 'linux-x64', 'linux-arm64', 'darwin-x64', 'darwin-arm64' ],
 )
 
 # chip databases

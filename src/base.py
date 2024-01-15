@@ -17,22 +17,18 @@ from pathlib import Path
 
 sources = dict()
 targets = dict()
-architectures = [ 'linux-x64', 'darwin-x64', 'windows-x64', 'linux-arm', 'linux-arm64', 'linux-riscv64', 'darwin-arm64']
+architectures = [ 'linux-x64', 'darwin-x64', 'windows-x64', 'linux-arm64', 'darwin-arm64']
 arch_chain = dict({
 	'linux-x64' : None, 
 	'darwin-x64' : 'linux-x64', 
 	'windows-x64' : 'linux-x64', 
-	'linux-arm' : 'darwin-x64', 
 	'linux-arm64' : 'windows-x64', 
-	'linux-riscv64' : 'linux-arm64',
-	'darwin-arm64' : 'linux-arm',
+	'darwin-arm64' : 'darwin-x64',
 })
 
 cargo_target = dict({
 	'linux-x64' : 'x86_64-unknown-linux-gnu', 
-	'linux-arm' : 'arm-unknown-linux-gnueabihf', 
 	'linux-arm64' : 'aarch64-unknown-linux-gnu', 
-	'linux-riscv64' : 'riscv64gc-unknown-linux-gnu',
 	'windows-x64' : 'x86_64-pc-windows-gnu', 
 	'darwin-x64' : 'x86_64-apple-darwin', 
 	'darwin-arm64' : 'aarch64-apple-darwin',

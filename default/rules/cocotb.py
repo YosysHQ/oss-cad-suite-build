@@ -14,5 +14,5 @@ Target(
 	resources = [ 'python3' ],
 	patches = [ 'python3_package.sh' ],
 	sources = [ 'cocotb' ],
-	arch = [ 'linux-x64', 'linux-arm64', 'linux-riscv64', 'darwin-x64' ],
+	arch = [ 'linux-x64', 'linux-arm64', 'darwin-x64' ],
 )
