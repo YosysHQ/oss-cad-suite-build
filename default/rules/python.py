@@ -33,7 +33,7 @@ Target(
 	name = 'python2',
 	sources = [ 'python2' ],
 	dependencies = [ 'python2-native' ],
-	patches = [ 'python27.diff', 'python27-darwin.diff' ],
+	patches = [ 'python27.diff'],
 )
 
 Target(
