@@ -618,74 +618,6 @@ jobs:
           tag: bucket-darwin-arm64
           artifacts: "darwin-arm64-apicula.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
-  darwin-arm64-dfu-util:
-    runs-on: ubuntu-latest
-    continue-on-error: true
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          repository: 'yosyshq/oss-cad-suite-build'
-      - name: Cache sources
-        id: cache-sources
-        uses: actions/cache@v3
-        with:
-          path: _sources
-          key: cache-sources-dfu-util
-      - name: Download previous build
-        run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-darwin-arm64/darwin-arm64-dfu-util.tgz"
-          if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
-          else
-              echo "Previous version not found in bucket"
-          fi
-      - name: Build
-        run: ./builder.py build --arch=darwin-arm64 --target=dfu-util --single --tar
-      - uses: ncipollo/release-action@v1
-        if: hashFiles('darwin-arm64-dfu-util.tgz') != ''
-        with:
-          allowUpdates: True
-          prerelease: True
-          omitBody: True
-          omitBodyDuringUpdate: True
-          omitNameDuringUpdate: True
-          tag: bucket-darwin-arm64
-          artifacts: "darwin-arm64-dfu-util.tgz"
-          token: ${{ secrets.GITHUB_TOKEN }}
-  darwin-arm64-ecpprog:
-    runs-on: ubuntu-latest
-    continue-on-error: true
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          repository: 'yosyshq/oss-cad-suite-build'
-      - name: Cache sources
-        id: cache-sources
-        uses: actions/cache@v3
-        with:
-          path: _sources
-          key: cache-sources-ecpprog
-      - name: Download previous build
-        run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-darwin-arm64/darwin-arm64-ecpprog.tgz"
-          if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
-          else
-              echo "Previous version not found in bucket"
-          fi
-      - name: Build
-        run: ./builder.py build --arch=darwin-arm64 --target=ecpprog --single --tar
-      - uses: ncipollo/release-action@v1
-        if: hashFiles('darwin-arm64-ecpprog.tgz') != ''
-        with:
-          allowUpdates: True
-          prerelease: True
-          omitBody: True
-          omitBodyDuringUpdate: True
-          omitNameDuringUpdate: True
-          tag: bucket-darwin-arm64
-          artifacts: "darwin-arm64-ecpprog.tgz"
-          token: ${{ secrets.GITHUB_TOKEN }}
   darwin-arm64-openfpgaloader:
     runs-on: ubuntu-latest
     continue-on-error: true
@@ -1407,108 +1339,6 @@ jobs:
           tag: bucket-darwin-arm64
           artifacts: "darwin-arm64-iverilog.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
-  darwin-arm64-ecpdap:
-    runs-on: ubuntu-latest
-    continue-on-error: true
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          repository: 'yosyshq/oss-cad-suite-build'
-      - name: Cache sources
-        id: cache-sources
-        uses: actions/cache@v3
-        with:
-          path: _sources
-          key: cache-sources-ecpdap
-      - name: Download previous build
-        run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-darwin-arm64/darwin-arm64-ecpdap.tgz"
-          if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
-          else
-              echo "Previous version not found in bucket"
-          fi
-      - name: Build
-        run: ./builder.py build --arch=darwin-arm64 --target=ecpdap --single --tar
-      - uses: ncipollo/release-action@v1
-        if: hashFiles('darwin-arm64-ecpdap.tgz') != ''
-        with:
-          allowUpdates: True
-          prerelease: True
-          omitBody: True
-          omitBodyDuringUpdate: True
-          omitNameDuringUpdate: True
-          tag: bucket-darwin-arm64
-          artifacts: "darwin-arm64-ecpdap.tgz"
-          token: ${{ secrets.GITHUB_TOKEN }}
-  darwin-arm64-fujprog:
-    runs-on: ubuntu-latest
-    continue-on-error: true
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          repository: 'yosyshq/oss-cad-suite-build'
-      - name: Cache sources
-        id: cache-sources
-        uses: actions/cache@v3
-        with:
-          path: _sources
-          key: cache-sources-fujprog
-      - name: Download previous build
-        run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-darwin-arm64/darwin-arm64-fujprog.tgz"
-          if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
-          else
-              echo "Previous version not found in bucket"
-          fi
-      - name: Build
-        run: ./builder.py build --arch=darwin-arm64 --target=fujprog --single --tar
-      - uses: ncipollo/release-action@v1
-        if: hashFiles('darwin-arm64-fujprog.tgz') != ''
-        with:
-          allowUpdates: True
-          prerelease: True
-          omitBody: True
-          omitBodyDuringUpdate: True
-          omitNameDuringUpdate: True
-          tag: bucket-darwin-arm64
-          artifacts: "darwin-arm64-fujprog.tgz"
-          token: ${{ secrets.GITHUB_TOKEN }}
-  darwin-arm64-iceprogduino:
-    runs-on: ubuntu-latest
-    continue-on-error: true
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          repository: 'yosyshq/oss-cad-suite-build'
-      - name: Cache sources
-        id: cache-sources
-        uses: actions/cache@v3
-        with:
-          path: _sources
-          key: cache-sources-iceprogduino
-      - name: Download previous build
-        run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-darwin-arm64/darwin-arm64-iceprogduino.tgz"
-          if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
-          else
-              echo "Previous version not found in bucket"
-          fi
-      - name: Build
-        run: ./builder.py build --arch=darwin-arm64 --target=iceprogduino --single --tar
-      - uses: ncipollo/release-action@v1
-        if: hashFiles('darwin-arm64-iceprogduino.tgz') != ''
-        with:
-          allowUpdates: True
-          prerelease: True
-          omitBody: True
-          omitBodyDuringUpdate: True
-          omitNameDuringUpdate: True
-          tag: bucket-darwin-arm64
-          artifacts: "darwin-arm64-iceprogduino.tgz"
-          token: ${{ secrets.GITHUB_TOKEN }}
   darwin-arm64-python-programmers:
     runs-on: ubuntu-latest
     continue-on-error: true
@@ -1547,74 +1377,6 @@ jobs:
           omitNameDuringUpdate: True
           tag: bucket-darwin-arm64
           artifacts: "darwin-arm64-python-programmers.tgz"
-          token: ${{ secrets.GITHUB_TOKEN }}
-  darwin-arm64-openocd:
-    runs-on: ubuntu-latest
-    continue-on-error: true
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          repository: 'yosyshq/oss-cad-suite-build'
-      - name: Cache sources
-        id: cache-sources
-        uses: actions/cache@v3
-        with:
-          path: _sources
-          key: cache-sources-openocd
-      - name: Download previous build
-        run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-darwin-arm64/darwin-arm64-openocd.tgz"
-          if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
-          else
-              echo "Previous version not found in bucket"
-          fi
-      - name: Build
-        run: ./builder.py build --arch=darwin-arm64 --target=openocd --single --tar
-      - uses: ncipollo/release-action@v1
-        if: hashFiles('darwin-arm64-openocd.tgz') != ''
-        with:
-          allowUpdates: True
-          prerelease: True
-          omitBody: True
-          omitBodyDuringUpdate: True
-          omitNameDuringUpdate: True
-          tag: bucket-darwin-arm64
-          artifacts: "darwin-arm64-openocd.tgz"
-          token: ${{ secrets.GITHUB_TOKEN }}
-  darwin-arm64-icesprog:
-    runs-on: ubuntu-latest
-    continue-on-error: true
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          repository: 'yosyshq/oss-cad-suite-build'
-      - name: Cache sources
-        id: cache-sources
-        uses: actions/cache@v3
-        with:
-          path: _sources
-          key: cache-sources-icesprog
-      - name: Download previous build
-        run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-darwin-arm64/darwin-arm64-icesprog.tgz"
-          if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
-          else
-              echo "Previous version not found in bucket"
-          fi
-      - name: Build
-        run: ./builder.py build --arch=darwin-arm64 --target=icesprog --single --tar
-      - uses: ncipollo/release-action@v1
-        if: hashFiles('darwin-arm64-icesprog.tgz') != ''
-        with:
-          allowUpdates: True
-          prerelease: True
-          omitBody: True
-          omitBodyDuringUpdate: True
-          omitNameDuringUpdate: True
-          tag: bucket-darwin-arm64
-          artifacts: "darwin-arm64-icesprog.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   darwin-arm64-utils:
     runs-on: ubuntu-latest
@@ -1725,7 +1487,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   darwin-arm64-default:
     runs-on: ubuntu-latest
-    needs: [ darwin-arm64-aiger, darwin-arm64-apicula, darwin-arm64-avy, darwin-arm64-bitwuzla, darwin-arm64-boolector, darwin-arm64-cvc4, darwin-arm64-cvc5, darwin-arm64-dfu-util, darwin-arm64-ecpdap, darwin-arm64-ecpprog, darwin-arm64-eqy, darwin-arm64-formal, darwin-arm64-fujprog, darwin-arm64-graphviz, darwin-arm64-gtkwave, darwin-arm64-iceprogduino, darwin-arm64-icesprog, darwin-arm64-icestorm, darwin-arm64-iverilog, darwin-arm64-nextpnr-ecp5, darwin-arm64-nextpnr-generic, darwin-arm64-nextpnr-gowin, darwin-arm64-nextpnr-ice40, darwin-arm64-nextpnr-machxo2, darwin-arm64-nextpnr-nexus, darwin-arm64-numpy, darwin-arm64-openfpgaloader, darwin-arm64-openocd, darwin-arm64-pono, darwin-arm64-prjoxide, darwin-arm64-prjtrellis, darwin-arm64-pyhdl, darwin-arm64-python-programmers, darwin-arm64-python3, darwin-arm64-system-resources, darwin-arm64-utils, darwin-arm64-verilator, darwin-arm64-xdot, darwin-arm64-yices, darwin-arm64-yosys, darwin-arm64-z3 ]
+    needs: [ darwin-arm64-aiger, darwin-arm64-apicula, darwin-arm64-avy, darwin-arm64-bitwuzla, darwin-arm64-boolector, darwin-arm64-cvc4, darwin-arm64-cvc5, darwin-arm64-eqy, darwin-arm64-formal, darwin-arm64-graphviz, darwin-arm64-gtkwave, darwin-arm64-icestorm, darwin-arm64-iverilog, darwin-arm64-nextpnr-ecp5, darwin-arm64-nextpnr-generic, darwin-arm64-nextpnr-gowin, darwin-arm64-nextpnr-ice40, darwin-arm64-nextpnr-machxo2, darwin-arm64-nextpnr-nexus, darwin-arm64-numpy, darwin-arm64-openfpgaloader, darwin-arm64-pono, darwin-arm64-prjoxide, darwin-arm64-prjtrellis, darwin-arm64-pyhdl, darwin-arm64-python-programmers, darwin-arm64-python3, darwin-arm64-system-resources, darwin-arm64-utils, darwin-arm64-verilator, darwin-arm64-xdot, darwin-arm64-yices, darwin-arm64-yosys, darwin-arm64-z3 ]
     steps:
       - name: Get current date
         id: date
@@ -1747,26 +1509,14 @@ jobs:
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-darwin-arm64/darwin-arm64-cvc4.tgz" | tar xvfz -
       - name: Download darwin-arm64-cvc5
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-darwin-arm64/darwin-arm64-cvc5.tgz" | tar xvfz -
-      - name: Download darwin-arm64-dfu-util
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-darwin-arm64/darwin-arm64-dfu-util.tgz" | tar xvfz -
-      - name: Download darwin-arm64-ecpdap
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-darwin-arm64/darwin-arm64-ecpdap.tgz" | tar xvfz -
-      - name: Download darwin-arm64-ecpprog
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-darwin-arm64/darwin-arm64-ecpprog.tgz" | tar xvfz -
       - name: Download darwin-arm64-eqy
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-darwin-arm64/darwin-arm64-eqy.tgz" | tar xvfz -
       - name: Download darwin-arm64-formal
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-darwin-arm64/darwin-arm64-formal.tgz" | tar xvfz -
-      - name: Download darwin-arm64-fujprog
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-darwin-arm64/darwin-arm64-fujprog.tgz" | tar xvfz -
       - name: Download darwin-arm64-graphviz
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-darwin-arm64/darwin-arm64-graphviz.tgz" | tar xvfz -
       - name: Download darwin-arm64-gtkwave
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-darwin-arm64/darwin-arm64-gtkwave.tgz" | tar xvfz -
-      - name: Download darwin-arm64-iceprogduino
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-darwin-arm64/darwin-arm64-iceprogduino.tgz" | tar xvfz -
-      - name: Download darwin-arm64-icesprog
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-darwin-arm64/darwin-arm64-icesprog.tgz" | tar xvfz -
       - name: Download darwin-arm64-icestorm
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-darwin-arm64/darwin-arm64-icestorm.tgz" | tar xvfz -
       - name: Download darwin-arm64-iverilog
@@ -1787,8 +1537,6 @@ jobs:
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-darwin-arm64/darwin-arm64-numpy.tgz" | tar xvfz -
       - name: Download darwin-arm64-openfpgaloader
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-darwin-arm64/darwin-arm64-openfpgaloader.tgz" | tar xvfz -
-      - name: Download darwin-arm64-openocd
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-darwin-arm64/darwin-arm64-openocd.tgz" | tar xvfz -
       - name: Download darwin-arm64-pono
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-darwin-arm64/darwin-arm64-pono.tgz" | tar xvfz -
       - name: Download darwin-arm64-prjoxide

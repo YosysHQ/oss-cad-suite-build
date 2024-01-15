@@ -618,74 +618,6 @@ jobs:
           tag: bucket-linux-arm64
           artifacts: "linux-arm64-apicula.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
-  linux-arm64-dfu-util:
-    runs-on: ubuntu-latest
-    continue-on-error: true
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          repository: 'yosyshq/oss-cad-suite-build'
-      - name: Cache sources
-        id: cache-sources
-        uses: actions/cache@v3
-        with:
-          path: _sources
-          key: cache-sources-dfu-util
-      - name: Download previous build
-        run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-dfu-util.tgz"
-          if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
-          else
-              echo "Previous version not found in bucket"
-          fi
-      - name: Build
-        run: ./builder.py build --arch=linux-arm64 --target=dfu-util --single --tar
-      - uses: ncipollo/release-action@v1
-        if: hashFiles('linux-arm64-dfu-util.tgz') != ''
-        with:
-          allowUpdates: True
-          prerelease: True
-          omitBody: True
-          omitBodyDuringUpdate: True
-          omitNameDuringUpdate: True
-          tag: bucket-linux-arm64
-          artifacts: "linux-arm64-dfu-util.tgz"
-          token: ${{ secrets.GITHUB_TOKEN }}
-  linux-arm64-ecpprog:
-    runs-on: ubuntu-latest
-    continue-on-error: true
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          repository: 'yosyshq/oss-cad-suite-build'
-      - name: Cache sources
-        id: cache-sources
-        uses: actions/cache@v3
-        with:
-          path: _sources
-          key: cache-sources-ecpprog
-      - name: Download previous build
-        run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-ecpprog.tgz"
-          if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
-          else
-              echo "Previous version not found in bucket"
-          fi
-      - name: Build
-        run: ./builder.py build --arch=linux-arm64 --target=ecpprog --single --tar
-      - uses: ncipollo/release-action@v1
-        if: hashFiles('linux-arm64-ecpprog.tgz') != ''
-        with:
-          allowUpdates: True
-          prerelease: True
-          omitBody: True
-          omitBodyDuringUpdate: True
-          omitNameDuringUpdate: True
-          tag: bucket-linux-arm64
-          artifacts: "linux-arm64-ecpprog.tgz"
-          token: ${{ secrets.GITHUB_TOKEN }}
   linux-arm64-openfpgaloader:
     runs-on: ubuntu-latest
     continue-on-error: true
@@ -1480,108 +1412,6 @@ jobs:
           tag: bucket-linux-arm64
           artifacts: "linux-arm64-iverilog.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
-  linux-arm64-ecpdap:
-    runs-on: ubuntu-latest
-    continue-on-error: true
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          repository: 'yosyshq/oss-cad-suite-build'
-      - name: Cache sources
-        id: cache-sources
-        uses: actions/cache@v3
-        with:
-          path: _sources
-          key: cache-sources-ecpdap
-      - name: Download previous build
-        run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-ecpdap.tgz"
-          if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
-          else
-              echo "Previous version not found in bucket"
-          fi
-      - name: Build
-        run: ./builder.py build --arch=linux-arm64 --target=ecpdap --single --tar
-      - uses: ncipollo/release-action@v1
-        if: hashFiles('linux-arm64-ecpdap.tgz') != ''
-        with:
-          allowUpdates: True
-          prerelease: True
-          omitBody: True
-          omitBodyDuringUpdate: True
-          omitNameDuringUpdate: True
-          tag: bucket-linux-arm64
-          artifacts: "linux-arm64-ecpdap.tgz"
-          token: ${{ secrets.GITHUB_TOKEN }}
-  linux-arm64-fujprog:
-    runs-on: ubuntu-latest
-    continue-on-error: true
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          repository: 'yosyshq/oss-cad-suite-build'
-      - name: Cache sources
-        id: cache-sources
-        uses: actions/cache@v3
-        with:
-          path: _sources
-          key: cache-sources-fujprog
-      - name: Download previous build
-        run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-fujprog.tgz"
-          if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
-          else
-              echo "Previous version not found in bucket"
-          fi
-      - name: Build
-        run: ./builder.py build --arch=linux-arm64 --target=fujprog --single --tar
-      - uses: ncipollo/release-action@v1
-        if: hashFiles('linux-arm64-fujprog.tgz') != ''
-        with:
-          allowUpdates: True
-          prerelease: True
-          omitBody: True
-          omitBodyDuringUpdate: True
-          omitNameDuringUpdate: True
-          tag: bucket-linux-arm64
-          artifacts: "linux-arm64-fujprog.tgz"
-          token: ${{ secrets.GITHUB_TOKEN }}
-  linux-arm64-iceprogduino:
-    runs-on: ubuntu-latest
-    continue-on-error: true
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          repository: 'yosyshq/oss-cad-suite-build'
-      - name: Cache sources
-        id: cache-sources
-        uses: actions/cache@v3
-        with:
-          path: _sources
-          key: cache-sources-iceprogduino
-      - name: Download previous build
-        run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-iceprogduino.tgz"
-          if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
-          else
-              echo "Previous version not found in bucket"
-          fi
-      - name: Build
-        run: ./builder.py build --arch=linux-arm64 --target=iceprogduino --single --tar
-      - uses: ncipollo/release-action@v1
-        if: hashFiles('linux-arm64-iceprogduino.tgz') != ''
-        with:
-          allowUpdates: True
-          prerelease: True
-          omitBody: True
-          omitBodyDuringUpdate: True
-          omitNameDuringUpdate: True
-          tag: bucket-linux-arm64
-          artifacts: "linux-arm64-iceprogduino.tgz"
-          token: ${{ secrets.GITHUB_TOKEN }}
   linux-arm64-python-programmers:
     runs-on: ubuntu-latest
     continue-on-error: true
@@ -1620,74 +1450,6 @@ jobs:
           omitNameDuringUpdate: True
           tag: bucket-linux-arm64
           artifacts: "linux-arm64-python-programmers.tgz"
-          token: ${{ secrets.GITHUB_TOKEN }}
-  linux-arm64-openocd:
-    runs-on: ubuntu-latest
-    continue-on-error: true
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          repository: 'yosyshq/oss-cad-suite-build'
-      - name: Cache sources
-        id: cache-sources
-        uses: actions/cache@v3
-        with:
-          path: _sources
-          key: cache-sources-openocd
-      - name: Download previous build
-        run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-openocd.tgz"
-          if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
-          else
-              echo "Previous version not found in bucket"
-          fi
-      - name: Build
-        run: ./builder.py build --arch=linux-arm64 --target=openocd --single --tar
-      - uses: ncipollo/release-action@v1
-        if: hashFiles('linux-arm64-openocd.tgz') != ''
-        with:
-          allowUpdates: True
-          prerelease: True
-          omitBody: True
-          omitBodyDuringUpdate: True
-          omitNameDuringUpdate: True
-          tag: bucket-linux-arm64
-          artifacts: "linux-arm64-openocd.tgz"
-          token: ${{ secrets.GITHUB_TOKEN }}
-  linux-arm64-icesprog:
-    runs-on: ubuntu-latest
-    continue-on-error: true
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          repository: 'yosyshq/oss-cad-suite-build'
-      - name: Cache sources
-        id: cache-sources
-        uses: actions/cache@v3
-        with:
-          path: _sources
-          key: cache-sources-icesprog
-      - name: Download previous build
-        run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-icesprog.tgz"
-          if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
-          else
-              echo "Previous version not found in bucket"
-          fi
-      - name: Build
-        run: ./builder.py build --arch=linux-arm64 --target=icesprog --single --tar
-      - uses: ncipollo/release-action@v1
-        if: hashFiles('linux-arm64-icesprog.tgz') != ''
-        with:
-          allowUpdates: True
-          prerelease: True
-          omitBody: True
-          omitBodyDuringUpdate: True
-          omitNameDuringUpdate: True
-          tag: bucket-linux-arm64
-          artifacts: "linux-arm64-icesprog.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-arm64-utils:
     runs-on: ubuntu-latest
@@ -1837,7 +1599,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-arm64-default:
     runs-on: ubuntu-latest
-    needs: [ linux-arm64-aiger, linux-arm64-apicula, linux-arm64-avy, linux-arm64-bitwuzla, linux-arm64-boolector, linux-arm64-cocotb, linux-arm64-cvc4, linux-arm64-cvc5, linux-arm64-dfu-util, linux-arm64-ecpdap, linux-arm64-ecpprog, linux-arm64-eqy, linux-arm64-formal, linux-arm64-fujprog, linux-arm64-graphviz, linux-arm64-gtkwave, linux-arm64-iceprogduino, linux-arm64-icesprog, linux-arm64-icestorm, linux-arm64-iverilog, linux-arm64-nextpnr-ecp5, linux-arm64-nextpnr-generic, linux-arm64-nextpnr-gowin, linux-arm64-nextpnr-ice40, linux-arm64-nextpnr-machxo2, linux-arm64-nextpnr-nexus, linux-arm64-numpy, linux-arm64-openfpgaloader, linux-arm64-openocd, linux-arm64-pono, linux-arm64-prjoxide, linux-arm64-prjtrellis, linux-arm64-pyhdl, linux-arm64-python-programmers, linux-arm64-python2, linux-arm64-python3, linux-arm64-suprove, linux-arm64-system-resources, linux-arm64-utils, linux-arm64-verilator, linux-arm64-xdot, linux-arm64-yices, linux-arm64-yosys, linux-arm64-z3 ]
+    needs: [ linux-arm64-aiger, linux-arm64-apicula, linux-arm64-avy, linux-arm64-bitwuzla, linux-arm64-boolector, linux-arm64-cocotb, linux-arm64-cvc4, linux-arm64-cvc5, linux-arm64-eqy, linux-arm64-formal, linux-arm64-graphviz, linux-arm64-gtkwave, linux-arm64-icestorm, linux-arm64-iverilog, linux-arm64-nextpnr-ecp5, linux-arm64-nextpnr-generic, linux-arm64-nextpnr-gowin, linux-arm64-nextpnr-ice40, linux-arm64-nextpnr-machxo2, linux-arm64-nextpnr-nexus, linux-arm64-numpy, linux-arm64-openfpgaloader, linux-arm64-pono, linux-arm64-prjoxide, linux-arm64-prjtrellis, linux-arm64-pyhdl, linux-arm64-python-programmers, linux-arm64-python2, linux-arm64-python3, linux-arm64-suprove, linux-arm64-system-resources, linux-arm64-utils, linux-arm64-verilator, linux-arm64-xdot, linux-arm64-yices, linux-arm64-yosys, linux-arm64-z3 ]
     steps:
       - name: Get current date
         id: date
@@ -1861,26 +1623,14 @@ jobs:
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-cvc4.tgz" | tar xvfz -
       - name: Download linux-arm64-cvc5
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-cvc5.tgz" | tar xvfz -
-      - name: Download linux-arm64-dfu-util
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-dfu-util.tgz" | tar xvfz -
-      - name: Download linux-arm64-ecpdap
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-ecpdap.tgz" | tar xvfz -
-      - name: Download linux-arm64-ecpprog
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-ecpprog.tgz" | tar xvfz -
       - name: Download linux-arm64-eqy
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-eqy.tgz" | tar xvfz -
       - name: Download linux-arm64-formal
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-formal.tgz" | tar xvfz -
-      - name: Download linux-arm64-fujprog
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-fujprog.tgz" | tar xvfz -
       - name: Download linux-arm64-graphviz
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-graphviz.tgz" | tar xvfz -
       - name: Download linux-arm64-gtkwave
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-gtkwave.tgz" | tar xvfz -
-      - name: Download linux-arm64-iceprogduino
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-iceprogduino.tgz" | tar xvfz -
-      - name: Download linux-arm64-icesprog
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-icesprog.tgz" | tar xvfz -
       - name: Download linux-arm64-icestorm
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-icestorm.tgz" | tar xvfz -
       - name: Download linux-arm64-iverilog
@@ -1901,8 +1651,6 @@ jobs:
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-numpy.tgz" | tar xvfz -
       - name: Download linux-arm64-openfpgaloader
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-openfpgaloader.tgz" | tar xvfz -
-      - name: Download linux-arm64-openocd
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-openocd.tgz" | tar xvfz -
       - name: Download linux-arm64-pono
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-pono.tgz" | tar xvfz -
       - name: Download linux-arm64-prjoxide
