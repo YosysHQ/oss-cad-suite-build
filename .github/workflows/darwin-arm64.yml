@@ -3,7 +3,7 @@ name: darwin-arm64
 on:
   workflow_dispatch:
   workflow_run:
-    workflows: [ linux-arm ]
+    workflows: [ darwin-x64 ]
     types:
       - completed
 
@@ -29,6 +29,8 @@ jobs:
           else
               echo "Previous version not found in bucket"
           fi
+      - name: Download linux-x64-python3-native
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=darwin-arm64 --target=python3 --single --tar
       - uses: ncipollo/release-action@v1
@@ -66,6 +68,8 @@ jobs:
           fi
       - name: Download darwin-arm64-python3
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-darwin-arm64/darwin-arm64-python3.tgz" | tar xvfz -
+      - name: Download linux-x64-python3-native
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=darwin-arm64 --target=xdot --single --tar
       - uses: ncipollo/release-action@v1
@@ -519,6 +523,8 @@ jobs:
           fi
       - name: Download darwin-arm64-python3
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-darwin-arm64/darwin-arm64-python3.tgz" | tar xvfz -
+      - name: Download linux-x64-python3-native
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=darwin-arm64 --target=numpy --single --tar
       - uses: ncipollo/release-action@v1
@@ -558,6 +564,8 @@ jobs:
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-darwin-arm64/darwin-arm64-numpy.tgz" | tar xvfz -
       - name: Download darwin-arm64-python3
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-darwin-arm64/darwin-arm64-python3.tgz" | tar xvfz -
+      - name: Download linux-x64-python3-native
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=darwin-arm64 --target=apicula --single --tar
       - uses: ncipollo/release-action@v1
@@ -1133,8 +1141,6 @@ jobs:
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-darwin-arm64/darwin-arm64-boolector.tgz" | tar xvfz -
       - name: Download darwin-arm64-cvc5
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-darwin-arm64/darwin-arm64-cvc5.tgz" | tar xvfz -
-      - name: Download linux-x64-bison
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-bison.tgz" | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=darwin-arm64 --target=smt-switch --single --tar
       - uses: ncipollo/release-action@v1
@@ -1247,6 +1253,8 @@ jobs:
           fi
       - name: Download darwin-arm64-python3
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-darwin-arm64/darwin-arm64-python3.tgz" | tar xvfz -
+      - name: Download linux-x64-python3-native
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=darwin-arm64 --target=flask --single --tar
       - uses: ncipollo/release-action@v1
@@ -1627,6 +1635,8 @@ jobs:
           fi
       - name: Download darwin-arm64-python3
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-darwin-arm64/darwin-arm64-python3.tgz" | tar xvfz -
+      - name: Download linux-x64-python3-native
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=darwin-arm64 --target=python-programmers --single --tar
       - uses: ncipollo/release-action@v1
@@ -1766,6 +1776,8 @@ jobs:
           fi
       - name: Download darwin-arm64-python3
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-darwin-arm64/darwin-arm64-python3.tgz" | tar xvfz -
+      - name: Download linux-x64-python3-native
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=darwin-arm64 --target=pyhdl --single --tar
       - uses: ncipollo/release-action@v1
@@ -1803,6 +1815,8 @@ jobs:
           fi
       - name: Download darwin-arm64-python3
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-darwin-arm64/darwin-arm64-python3.tgz" | tar xvfz -
+      - name: Download linux-x64-python3-native
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=darwin-arm64 --target=mau --single --tar
       - uses: ncipollo/release-action@v1
@@ -1840,6 +1854,8 @@ jobs:
           fi
       - name: Download darwin-arm64-python3
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-darwin-arm64/darwin-arm64-python3.tgz" | tar xvfz -
+      - name: Download linux-x64-python3-native
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=darwin-arm64 --target=scy --single --tar
       - uses: ncipollo/release-action@v1

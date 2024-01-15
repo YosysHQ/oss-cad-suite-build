@@ -40,9 +40,44 @@ jobs:
           tag: bucket-linux-x64
           artifacts: "linux-x64-abc.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
+  linux-x64-python3-native:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          repository: 'yosyshq/oss-cad-suite-build'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v3
+        with:
+          path: _sources
+          key: cache-sources-python3-native
+      - name: Download previous build
+        run: |
+          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz"
+          if wget --spider "${URL}" 2>/dev/null; then
+              wget -qO- "${URL}" | tar xvfz -
+          else
+              echo "Previous version not found in bucket"
+          fi
+      - name: Build
+        run: ./builder.py build --arch=linux-x64 --target=python3-native --single --tar
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('linux-x64-python3-native.tgz') != ''
+        with:
+          allowUpdates: True
+          prerelease: True
+          omitBody: True
+          omitBodyDuringUpdate: True
+          omitNameDuringUpdate: True
+          tag: bucket-linux-x64
+          artifacts: "linux-x64-python3-native.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-python3:
     runs-on: ubuntu-latest
     continue-on-error: true
+    needs: linux-x64-python3-native
     steps:
       - uses: actions/checkout@v3
         with:
@@ -61,6 +96,8 @@ jobs:
           else
               echo "Previous version not found in bucket"
           fi
+      - name: Download linux-x64-python3-native
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-x64 --target=python3 --single --tar
       - uses: ncipollo/release-action@v1
@@ -77,7 +114,7 @@ jobs:
   linux-x64-xdot:
     runs-on: ubuntu-latest
     continue-on-error: true
-    needs: linux-x64-python3
+    needs: [ linux-x64-python3, linux-x64-python3-native ]
     steps:
       - uses: actions/checkout@v3
         with:
@@ -98,6 +135,8 @@ jobs:
           fi
       - name: Download linux-x64-python3
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3.tgz" | tar xvfz -
+      - name: Download linux-x64-python3-native
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-x64 --target=xdot --single --tar
       - uses: ncipollo/release-action@v1
@@ -671,7 +710,7 @@ jobs:
   linux-x64-numpy:
     runs-on: ubuntu-latest
     continue-on-error: true
-    needs: linux-x64-python3
+    needs: [ linux-x64-python3, linux-x64-python3-native ]
     steps:
       - uses: actions/checkout@v3
         with:
@@ -692,6 +731,8 @@ jobs:
           fi
       - name: Download linux-x64-python3
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3.tgz" | tar xvfz -
+      - name: Download linux-x64-python3-native
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-x64 --target=numpy --single --tar
       - uses: ncipollo/release-action@v1
@@ -708,7 +749,7 @@ jobs:
   linux-x64-apicula:
     runs-on: ubuntu-latest
     continue-on-error: true
-    needs: [ linux-x64-numpy, linux-x64-python3 ]
+    needs: [ linux-x64-numpy, linux-x64-python3, linux-x64-python3-native ]
     steps:
       - uses: actions/checkout@v3
         with:
@@ -731,6 +772,8 @@ jobs:
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-numpy.tgz" | tar xvfz -
       - name: Download linux-x64-python3
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3.tgz" | tar xvfz -
+      - name: Download linux-x64-python3-native
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-x64 --target=apicula --single --tar
       - uses: ncipollo/release-action@v1
@@ -747,7 +790,7 @@ jobs:
   linux-x64-apicula-bba:
     runs-on: ubuntu-latest
     continue-on-error: true
-    needs: [ linux-x64-apicula, linux-x64-numpy, linux-x64-python3 ]
+    needs: [ linux-x64-apicula, linux-x64-numpy, linux-x64-python3-native ]
     steps:
       - uses: actions/checkout@v3
         with:
@@ -770,8 +813,8 @@ jobs:
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-apicula.tgz" | tar xvfz -
       - name: Download linux-x64-numpy
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-numpy.tgz" | tar xvfz -
-      - name: Download linux-x64-python3
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3.tgz" | tar xvfz -
+      - name: Download linux-x64-python3-native
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-x64 --target=apicula-bba --single --tar
       - uses: ncipollo/release-action@v1
@@ -1430,9 +1473,44 @@ jobs:
           tag: bucket-linux-x64
           artifacts: "linux-x64-yices.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
+  linux-x64-python2-native:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          repository: 'yosyshq/oss-cad-suite-build'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v3
+        with:
+          path: _sources
+          key: cache-sources-python2-native
+      - name: Download previous build
+        run: |
+          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python2-native.tgz"
+          if wget --spider "${URL}" 2>/dev/null; then
+              wget -qO- "${URL}" | tar xvfz -
+          else
+              echo "Previous version not found in bucket"
+          fi
+      - name: Build
+        run: ./builder.py build --arch=linux-x64 --target=python2-native --single --tar
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('linux-x64-python2-native.tgz') != ''
+        with:
+          allowUpdates: True
+          prerelease: True
+          omitBody: True
+          omitBodyDuringUpdate: True
+          omitNameDuringUpdate: True
+          tag: bucket-linux-x64
+          artifacts: "linux-x64-python2-native.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-python2:
     runs-on: ubuntu-latest
     continue-on-error: true
+    needs: linux-x64-python2-native
     steps:
       - uses: actions/checkout@v3
         with:
@@ -1451,6 +1529,8 @@ jobs:
           else
               echo "Previous version not found in bucket"
           fi
+      - name: Download linux-x64-python2-native
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python2-native.tgz" | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-x64 --target=python2 --single --tar
       - uses: ncipollo/release-action@v1
@@ -1501,44 +1581,10 @@ jobs:
           tag: bucket-linux-x64
           artifacts: "linux-x64-suprove.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
-  linux-x64-bison:
-    runs-on: ubuntu-latest
-    continue-on-error: true
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          repository: 'yosyshq/oss-cad-suite-build'
-      - name: Cache sources
-        id: cache-sources
-        uses: actions/cache@v3
-        with:
-          path: _sources
-          key: cache-sources-bison
-      - name: Download previous build
-        run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-bison.tgz"
-          if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
-          else
-              echo "Previous version not found in bucket"
-          fi
-      - name: Build
-        run: ./builder.py build --arch=linux-x64 --target=bison --single --tar
-      - uses: ncipollo/release-action@v1
-        if: hashFiles('linux-x64-bison.tgz') != ''
-        with:
-          allowUpdates: True
-          prerelease: True
-          omitBody: True
-          omitBodyDuringUpdate: True
-          omitNameDuringUpdate: True
-          tag: bucket-linux-x64
-          artifacts: "linux-x64-bison.tgz"
-          token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-smt-switch:
     runs-on: ubuntu-latest
     continue-on-error: true
-    needs: [ linux-x64-bison, linux-x64-boolector, linux-x64-cvc5 ]
+    needs: [ linux-x64-boolector, linux-x64-cvc5 ]
     steps:
       - uses: actions/checkout@v3
         with:
@@ -1557,8 +1603,6 @@ jobs:
           else
               echo "Previous version not found in bucket"
           fi
-      - name: Download linux-x64-bison
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-bison.tgz" | tar xvfz -
       - name: Download linux-x64-boolector
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-boolector.tgz" | tar xvfz -
       - name: Download linux-x64-cvc5
@@ -1654,7 +1698,7 @@ jobs:
   linux-x64-flask:
     runs-on: ubuntu-latest
     continue-on-error: true
-    needs: linux-x64-python3
+    needs: [ linux-x64-python3, linux-x64-python3-native ]
     steps:
       - uses: actions/checkout@v3
         with:
@@ -1675,6 +1719,8 @@ jobs:
           fi
       - name: Download linux-x64-python3
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3.tgz" | tar xvfz -
+      - name: Download linux-x64-python3-native
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-x64 --target=flask --single --tar
       - uses: ncipollo/release-action@v1
@@ -2034,7 +2080,7 @@ jobs:
   linux-x64-python-programmers:
     runs-on: ubuntu-latest
     continue-on-error: true
-    needs: linux-x64-python3
+    needs: [ linux-x64-python3, linux-x64-python3-native ]
     steps:
       - uses: actions/checkout@v3
         with:
@@ -2055,6 +2101,8 @@ jobs:
           fi
       - name: Download linux-x64-python3
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3.tgz" | tar xvfz -
+      - name: Download linux-x64-python3-native
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-x64 --target=python-programmers --single --tar
       - uses: ncipollo/release-action@v1
@@ -2173,7 +2221,7 @@ jobs:
   linux-x64-pyhdl:
     runs-on: ubuntu-latest
     continue-on-error: true
-    needs: linux-x64-python3
+    needs: [ linux-x64-python3, linux-x64-python3-native ]
     steps:
       - uses: actions/checkout@v3
         with:
@@ -2194,6 +2242,8 @@ jobs:
           fi
       - name: Download linux-x64-python3
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3.tgz" | tar xvfz -
+      - name: Download linux-x64-python3-native
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-x64 --target=pyhdl --single --tar
       - uses: ncipollo/release-action@v1
@@ -2210,7 +2260,7 @@ jobs:
   linux-x64-cocotb:
     runs-on: ubuntu-latest
     continue-on-error: true
-    needs: linux-x64-python3
+    needs: [ linux-x64-python3, linux-x64-python3-native ]
     steps:
       - uses: actions/checkout@v3
         with:
@@ -2231,6 +2281,8 @@ jobs:
           fi
       - name: Download linux-x64-python3
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3.tgz" | tar xvfz -
+      - name: Download linux-x64-python3-native
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-x64 --target=cocotb --single --tar
       - uses: ncipollo/release-action@v1
@@ -2247,7 +2299,7 @@ jobs:
   linux-x64-mau:
     runs-on: ubuntu-latest
     continue-on-error: true
-    needs: linux-x64-python3
+    needs: [ linux-x64-python3, linux-x64-python3-native ]
     steps:
       - uses: actions/checkout@v3
         with:
@@ -2268,6 +2320,8 @@ jobs:
           fi
       - name: Download linux-x64-python3
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3.tgz" | tar xvfz -
+      - name: Download linux-x64-python3-native
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-x64 --target=mau --single --tar
       - uses: ncipollo/release-action@v1
@@ -2284,7 +2338,7 @@ jobs:
   linux-x64-scy:
     runs-on: ubuntu-latest
     continue-on-error: true
-    needs: linux-x64-python3
+    needs: [ linux-x64-python3, linux-x64-python3-native ]
     steps:
       - uses: actions/checkout@v3
         with:
@@ -2305,6 +2359,8 @@ jobs:
           fi
       - name: Download linux-x64-python3
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3.tgz" | tar xvfz -
+      - name: Download linux-x64-python3-native
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-x64 --target=scy --single --tar
       - uses: ncipollo/release-action@v1
