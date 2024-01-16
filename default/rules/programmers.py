@@ -64,4 +64,5 @@ Target(
 		'bin2hex': ['bin2hex', 'hex2bin', 'hex2dump', 'hexdiff', 'hexinfo', 'hexmerge'],
 		'pyserial': ['pyserial-miniterm', 'pyserial-ports'],
 	},
+	arch = [ 'linux-x64', 'linux-arm64', 'darwin-x64', 'darwin-arm64' ],
 )
