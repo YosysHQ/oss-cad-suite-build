@@ -87,6 +87,7 @@ EOT
         if [ ! -z "$(lddtree -l libexec/$(basename $binfile) | grep Qt5)" ]; then
             is_using_fonts=true
             cat >> $binfile << EOT
+export LIBGL_DRIVERS_PATH="\$release_topdir_abs/lib/dri"
 export QT_PLUGIN_PATH="\$release_topdir_abs/lib/qt5/plugins"
 export QT_LOGGING_RULES="*=false"
 unset QT_QPA_PLATFORMTHEME
