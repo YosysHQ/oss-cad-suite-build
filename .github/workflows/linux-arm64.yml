@@ -25,12 +25,12 @@ jobs:
         run: |
           URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-python3.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
+              wget -qO- "${URL}" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
       - name: Download linux-x64-python3-native
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-arm64 --target=python3 --single --tar
       - uses: ncipollo/release-action@v1
@@ -62,14 +62,14 @@ jobs:
         run: |
           URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-xdot.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
+              wget -qO- "${URL}" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
       - name: Download linux-arm64-python3
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-python3.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-python3.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-python3-native
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-arm64 --target=xdot --single --tar
       - uses: ncipollo/release-action@v1
@@ -100,7 +100,7 @@ jobs:
         run: |
           URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-graphviz.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
+              wget -qO- "${URL}" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
@@ -134,12 +134,12 @@ jobs:
         run: |
           URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-yosys.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
+              wget -qO- "${URL}" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
       - name: Download linux-x64-abc
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-abc.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-abc.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-arm64 --target=yosys --single --tar
       - uses: ncipollo/release-action@v1
@@ -171,14 +171,14 @@ jobs:
         run: |
           URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-formal.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
+              wget -qO- "${URL}" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
       - name: Download linux-arm64-python3
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-python3.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-python3.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-python3-native
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-arm64 --target=formal --single --tar
       - uses: ncipollo/release-action@v1
@@ -210,14 +210,14 @@ jobs:
         run: |
           URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-nextpnr-generic.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
+              wget -qO- "${URL}" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
       - name: Download linux-arm64-python3
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-python3.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-python3.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-nextpnr-bba
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-bba.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-bba.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-arm64 --target=nextpnr-generic --single --tar
       - uses: ncipollo/release-action@v1
@@ -249,16 +249,16 @@ jobs:
         run: |
           URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-nextpnr-ice40.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
+              wget -qO- "${URL}" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
       - name: Download linux-arm64-python3
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-python3.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-python3.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-icestorm-bba
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-icestorm-bba.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-icestorm-bba.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-nextpnr-bba
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-bba.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-bba.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-arm64 --target=nextpnr-ice40 --single --tar
       - uses: ncipollo/release-action@v1
@@ -290,16 +290,16 @@ jobs:
         run: |
           URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-nextpnr-ecp5.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
+              wget -qO- "${URL}" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
       - name: Download linux-arm64-python3
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-python3.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-python3.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-nextpnr-bba
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-bba.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-bba.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-prjtrellis-bba
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-prjtrellis-bba.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-prjtrellis-bba.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-arm64 --target=nextpnr-ecp5 --single --tar
       - uses: ncipollo/release-action@v1
@@ -331,16 +331,16 @@ jobs:
         run: |
           URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-nextpnr-machxo2.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
+              wget -qO- "${URL}" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
       - name: Download linux-arm64-python3
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-python3.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-python3.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-nextpnr-bba
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-bba.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-bba.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-prjtrellis-bba
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-prjtrellis-bba.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-prjtrellis-bba.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-arm64 --target=nextpnr-machxo2 --single --tar
       - uses: ncipollo/release-action@v1
@@ -372,16 +372,16 @@ jobs:
         run: |
           URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-nextpnr-nexus.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
+              wget -qO- "${URL}" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
       - name: Download linux-arm64-python3
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-python3.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-python3.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-nextpnr-bba
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-bba.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-bba.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-prjoxide-bba
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-prjoxide-bba.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-prjoxide-bba.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-arm64 --target=nextpnr-nexus --single --tar
       - uses: ncipollo/release-action@v1
@@ -413,16 +413,16 @@ jobs:
         run: |
           URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-nextpnr-gowin.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
+              wget -qO- "${URL}" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
       - name: Download linux-arm64-python3
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-python3.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-python3.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-apicula-bba
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-apicula-bba.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-apicula-bba.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-nextpnr-bba
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-bba.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-bba.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-arm64 --target=nextpnr-gowin --single --tar
       - uses: ncipollo/release-action@v1
@@ -453,7 +453,7 @@ jobs:
         run: |
           URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-icestorm.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
+              wget -qO- "${URL}" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
@@ -487,7 +487,7 @@ jobs:
         run: |
           URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-prjtrellis.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
+              wget -qO- "${URL}" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
@@ -521,7 +521,7 @@ jobs:
         run: |
           URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-prjoxide.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
+              wget -qO- "${URL}" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
@@ -556,14 +556,14 @@ jobs:
         run: |
           URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-numpy.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
+              wget -qO- "${URL}" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
       - name: Download linux-arm64-python3
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-python3.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-python3.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-python3-native
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-arm64 --target=numpy --single --tar
       - uses: ncipollo/release-action@v1
@@ -595,16 +595,16 @@ jobs:
         run: |
           URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-apicula.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
+              wget -qO- "${URL}" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
       - name: Download linux-arm64-numpy
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-numpy.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-numpy.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-arm64-python3
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-python3.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-python3.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-python3-native
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-arm64 --target=apicula --single --tar
       - uses: ncipollo/release-action@v1
@@ -635,7 +635,7 @@ jobs:
         run: |
           URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-openfpgaloader.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
+              wget -qO- "${URL}" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
@@ -669,7 +669,7 @@ jobs:
         run: |
           URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-picosat.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
+              wget -qO- "${URL}" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
@@ -704,12 +704,12 @@ jobs:
         run: |
           URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-aiger.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
+              wget -qO- "${URL}" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
       - name: Download linux-arm64-picosat
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-picosat.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-picosat.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-arm64 --target=aiger --single --tar
       - uses: ncipollo/release-action@v1
@@ -740,7 +740,7 @@ jobs:
         run: |
           URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-avy.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
+              wget -qO- "${URL}" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
@@ -774,7 +774,7 @@ jobs:
         run: |
           URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-lingeling.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
+              wget -qO- "${URL}" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
@@ -808,7 +808,7 @@ jobs:
         run: |
           URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-cadical.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
+              wget -qO- "${URL}" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
@@ -842,7 +842,7 @@ jobs:
         run: |
           URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-btor2tools.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
+              wget -qO- "${URL}" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
@@ -877,18 +877,18 @@ jobs:
         run: |
           URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-bitwuzla.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
+              wget -qO- "${URL}" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
       - name: Download linux-arm64-btor2tools
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-btor2tools.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-btor2tools.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-arm64-cadical
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-cadical.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-cadical.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-arm64-lingeling
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-lingeling.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-lingeling.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-symfpu
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-symfpu.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-symfpu.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-arm64 --target=bitwuzla --single --tar
       - uses: ncipollo/release-action@v1
@@ -920,16 +920,16 @@ jobs:
         run: |
           URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-boolector.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
+              wget -qO- "${URL}" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
       - name: Download linux-arm64-btor2tools
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-btor2tools.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-btor2tools.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-arm64-cadical
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-cadical.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-cadical.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-arm64-lingeling
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-lingeling.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-lingeling.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-arm64 --target=boolector --single --tar
       - uses: ncipollo/release-action@v1
@@ -960,7 +960,7 @@ jobs:
         run: |
           URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-cvc4.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
+              wget -qO- "${URL}" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
@@ -994,7 +994,7 @@ jobs:
         run: |
           URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-libpoly.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
+              wget -qO- "${URL}" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
@@ -1029,16 +1029,16 @@ jobs:
         run: |
           URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-cvc5.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
+              wget -qO- "${URL}" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
       - name: Download linux-arm64-cadical
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-cadical.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-cadical.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-arm64-libpoly
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-libpoly.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-libpoly.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-symfpu
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-symfpu.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-symfpu.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-arm64 --target=cvc5 --single --tar
       - uses: ncipollo/release-action@v1
@@ -1069,7 +1069,7 @@ jobs:
         run: |
           URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-yices.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
+              wget -qO- "${URL}" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
@@ -1103,12 +1103,12 @@ jobs:
         run: |
           URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-python2.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
+              wget -qO- "${URL}" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
       - name: Download linux-x64-python2-native
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python2-native.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python2-native.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-arm64 --target=python2 --single --tar
       - uses: ncipollo/release-action@v1
@@ -1140,12 +1140,12 @@ jobs:
         run: |
           URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-suprove.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
+              wget -qO- "${URL}" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
       - name: Download linux-arm64-python2
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-python2.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-python2.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-arm64 --target=suprove --single --tar
       - uses: ncipollo/release-action@v1
@@ -1177,14 +1177,14 @@ jobs:
         run: |
           URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-smt-switch.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
+              wget -qO- "${URL}" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
       - name: Download linux-arm64-boolector
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-boolector.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-boolector.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-arm64-cvc5
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-cvc5.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-cvc5.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-arm64 --target=smt-switch --single --tar
       - uses: ncipollo/release-action@v1
@@ -1216,16 +1216,16 @@ jobs:
         run: |
           URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-pono.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
+              wget -qO- "${URL}" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
       - name: Download linux-arm64-boolector
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-boolector.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-boolector.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-arm64-cvc5
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-cvc5.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-cvc5.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-arm64-smt-switch
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-smt-switch.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-smt-switch.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-arm64 --target=pono --single --tar
       - uses: ncipollo/release-action@v1
@@ -1256,7 +1256,7 @@ jobs:
         run: |
           URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-z3.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
+              wget -qO- "${URL}" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
@@ -1291,12 +1291,12 @@ jobs:
         run: |
           URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-eqy.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
+              wget -qO- "${URL}" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
       - name: Download linux-arm64-yosys
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-yosys.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-yosys.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-arm64 --target=eqy --single --tar
       - uses: ncipollo/release-action@v1
@@ -1327,7 +1327,7 @@ jobs:
         run: |
           URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-gtkwave.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
+              wget -qO- "${URL}" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
@@ -1361,7 +1361,7 @@ jobs:
         run: |
           URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-verilator.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
+              wget -qO- "${URL}" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
@@ -1395,7 +1395,7 @@ jobs:
         run: |
           URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-iverilog.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
+              wget -qO- "${URL}" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
@@ -1430,14 +1430,14 @@ jobs:
         run: |
           URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-python-programmers.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
+              wget -qO- "${URL}" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
       - name: Download linux-arm64-python3
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-python3.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-python3.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-python3-native
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-arm64 --target=python-programmers --single --tar
       - uses: ncipollo/release-action@v1
@@ -1468,7 +1468,7 @@ jobs:
         run: |
           URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-utils.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
+              wget -qO- "${URL}" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
@@ -1503,14 +1503,14 @@ jobs:
         run: |
           URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-pyhdl.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
+              wget -qO- "${URL}" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
       - name: Download linux-arm64-python3
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-python3.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-python3.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-python3-native
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-arm64 --target=pyhdl --single --tar
       - uses: ncipollo/release-action@v1
@@ -1542,14 +1542,14 @@ jobs:
         run: |
           URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-cocotb.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
+              wget -qO- "${URL}" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
       - name: Download linux-arm64-python3
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-python3.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-python3.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-python3-native
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-arm64 --target=cocotb --single --tar
       - uses: ncipollo/release-action@v1
@@ -1580,7 +1580,7 @@ jobs:
         run: |
           URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-system-resources.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvfz -
+              wget -qO- "${URL}" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
@@ -1608,79 +1608,79 @@ jobs:
         with:
           repository: 'yosyshq/oss-cad-suite-build'
       - name: Download linux-arm64-aiger
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-aiger.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-aiger.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-arm64-apicula
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-apicula.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-apicula.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-arm64-avy
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-avy.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-avy.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-arm64-bitwuzla
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-bitwuzla.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-bitwuzla.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-arm64-boolector
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-boolector.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-boolector.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-arm64-cocotb
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-cocotb.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-cocotb.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-arm64-cvc4
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-cvc4.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-cvc4.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-arm64-cvc5
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-cvc5.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-cvc5.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-arm64-eqy
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-eqy.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-eqy.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-arm64-formal
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-formal.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-formal.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-arm64-graphviz
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-graphviz.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-graphviz.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-arm64-gtkwave
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-gtkwave.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-gtkwave.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-arm64-icestorm
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-icestorm.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-icestorm.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-arm64-iverilog
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-iverilog.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-iverilog.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-arm64-nextpnr-ecp5
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-nextpnr-ecp5.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-nextpnr-ecp5.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-arm64-nextpnr-generic
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-nextpnr-generic.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-nextpnr-generic.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-arm64-nextpnr-gowin
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-nextpnr-gowin.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-nextpnr-gowin.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-arm64-nextpnr-ice40
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-nextpnr-ice40.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-nextpnr-ice40.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-arm64-nextpnr-machxo2
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-nextpnr-machxo2.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-nextpnr-machxo2.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-arm64-nextpnr-nexus
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-nextpnr-nexus.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-nextpnr-nexus.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-arm64-numpy
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-numpy.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-numpy.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-arm64-openfpgaloader
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-openfpgaloader.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-openfpgaloader.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-arm64-pono
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-pono.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-pono.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-arm64-prjoxide
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-prjoxide.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-prjoxide.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-arm64-prjtrellis
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-prjtrellis.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-prjtrellis.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-arm64-pyhdl
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-pyhdl.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-pyhdl.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-arm64-python-programmers
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-python-programmers.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-python-programmers.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-arm64-python2
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-python2.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-python2.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-arm64-python3
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-python3.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-python3.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-arm64-suprove
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-suprove.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-suprove.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-arm64-system-resources
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-system-resources.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-system-resources.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-arm64-utils
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-utils.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-utils.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-arm64-verilator
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-verilator.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-verilator.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-arm64-xdot
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-xdot.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-xdot.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-arm64-yices
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-yices.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-yices.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-arm64-yosys
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-yosys.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-yosys.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-arm64-z3
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-z3.tgz" | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-z3.tgz" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-arm64 --target=default --single
       - uses: ncipollo/release-action@v1
