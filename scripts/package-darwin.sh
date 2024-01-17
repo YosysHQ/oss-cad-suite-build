@@ -152,7 +152,7 @@ fi
 
 for script in bin/* py3bin/*; do
     rel_path=$(realpath --relative-to=bin .)
-    if $(head -1 "${script}" | grep -q python3); then
+    if $(head -1 "${script}" | grep -q python); then
         mv "${script}" libexec
         cat > "${script}" <<EOT
 #!/usr/bin/env bash
