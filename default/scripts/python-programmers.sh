@@ -4,8 +4,10 @@ cp -r tinyfpgab/programmer/* tinyfpgab/.
 cp -r tinyprog/programmer/* tinyprog/.
 
 python3_package_setup
+python3_package_pip_install "rpds-py==0.16.1"
+export CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse
 for target in *; do
-    if [ $target != 'python3' ]; then
+    if [ $target != 'python3' ] && [ $target != 'python3-native' ]; then
         pushd $target
         if [ $target == 'tinyprog' ]; then
             export SETUPTOOLS_SCM_PRETEND_VERSION="1.0.23"

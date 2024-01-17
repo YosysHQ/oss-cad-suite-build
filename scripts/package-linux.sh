@@ -11,12 +11,6 @@ if [ ${ARCH} == 'linux-x64' ]; then
 elif [ ${ARCH} == 'linux-arm64' ]; then
     ldlinuxname="ld-linux-aarch64.so.1"
     arch_prefix="aarch64-linux-gnu"
-elif [ ${ARCH} == 'linux-arm' ]; then
-    ldlinuxname="ld-linux-armhf.so.3"
-    arch_prefix="arm-linux-gnueabihf"
-elif [ ${ARCH} == 'linux-riscv64' ]; then
-    ldlinuxname="ld-linux-riscv64-lp64d.so.1"
-    arch_prefix="riscv64-linux-gnu"
 fi
 
 cp ${PATCHES_DIR}/${README} ${OUTPUT_DIR}${INSTALL_PREFIX}/README
@@ -93,6 +87,7 @@ EOT
         if [ ! -z "$(lddtree -l libexec/$(basename $binfile) | grep Qt5)" ]; then
             is_using_fonts=true
             cat >> $binfile << EOT
+export LIBGL_DRIVERS_PATH="\$release_topdir_abs/lib/dri"
 export QT_PLUGIN_PATH="\$release_topdir_abs/lib/qt5/plugins"
 export QT_LOGGING_RULES="*=false"
 unset QT_QPA_PLATFORMTHEME
@@ -225,8 +220,7 @@ EOT
 done
 
 
-for lib in /lib/$arch_prefix/libnss_dns.so.2 /lib/$arch_prefix/libnss_files.so.2 /lib/$arch_prefix/libnss_compat.so.2 /lib/$arch_prefix/libresolv.so.2 \
-        /lib/$arch_prefix/libnss_nis.so.2 /lib/$arch_prefix/libnss_nisplus.so.2 /lib/$arch_prefix/libnss_hesiod.so.2 /lib/$arch_prefix/libnsl.so.1; do
+for lib in /lib/$arch_prefix/libnss_dns.so.2 /lib/$arch_prefix/libnss_files.so.2 /lib/$arch_prefix/libnss_compat.so.2 /lib/$arch_prefix/libresolv.so.2 /lib/$arch_prefix/libnss_hesiod.so.2; do
     cp "${lib}" lib/
 done
 

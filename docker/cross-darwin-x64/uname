@@ -10,7 +10,7 @@ case $1 in
     echo "Help"
     exit 0
     ;;
--a) echo "Darwin" `/usr/bin/uname -n` "18.7.0 Darwin Kernel Version 18.7.0: Mon Dec 21 19:59:13 PST 2020; root:xnu-4903.278.55~1/RELEASE_X86_64 x86_64" 
+-a) echo "Darwin" `/usr/bin/uname -n` "21.6.0 Darwin Kernel Version 21.6.0: Thu Nov  9 00:38:19 PST 2023; root:xnu-8020.240.18.705.10~1/RELEASE_X86_64 x86_64"
     exit 0 ;;
 -m) echo "x86_64" 
     exit 0 ;;
@@ -18,11 +18,11 @@ case $1 in
     exit 0 ;;
 -p) echo "i386"
     exit 0 ;;
--r) echo "18.7.0"
+-r) echo "21.6.0"
     exit 0 ;;
 -s) echo "Darwin"
     exit 0 ;;
--v) echo "Darwin Kernel Version 18.7.0: Mon Dec 21 19:59:13 PST 2020; root:xnu-4903.278.55~1/RELEASE_X86_64"
+-v) echo "Darwin Kernel Version 21.6.0: Thu Nov  9 00:38:19 PST 2023; root:xnu-8020.240.18.705.10~1/RELEASE_X86_64"
     exit 0;;
 --)
     shift

@@ -3,7 +3,7 @@ if [ ${ARCH_BASE} == 'windows' ]; then
     git checkout cb89cbfa16f47cb7bf1ec6ad9855e7b6d5203c18
     patch -p1 < ${PATCHES_DIR}/CaDiCaL_20190730.patch
 fi
-if [ ${ARCH} == 'linux-arm' ] || [ ${ARCH} == 'linux-arm64' ] || [ ${ARCH} == 'linux-riscv64' ]; then
+if [ ${ARCH} == 'linux-arm64' ]; then
     sed -i '318,436d' configure
 fi
 if [ ${ARCH_BASE} == 'darwin' ]; then

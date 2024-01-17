@@ -1,7 +1,7 @@
 cd yosys
 if  [ ${ARCH_BASE} == 'darwin' ]; then
 	make config-clang
-	sed -i -re "s,CXX = clang,CXX = ${CC},g" Makefile
+	sed -i -re "s,CXX = clang,CXX = ${CXX},g" Makefile
 	sed -i -re "s,LD = clang\+\+,LD = ${CXX},g" Makefile
 elif [ ${ARCH} == 'linux-x64' ]; then
 	make config-clang

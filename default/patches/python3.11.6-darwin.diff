@@ -1,8 +1,8 @@
 diff --git a/configure.ac b/configure.ac
-index 18a044629a..a64b609ccd 100644
+index e1cbb7c7fb..9e2db62443 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -376,6 +376,9 @@ then
+@@ -542,6 +542,9 @@ then
  	*-*-linux*)
  		ac_sys_system=Linux
  		;;
@@ -12,7 +12,7 @@ index 18a044629a..a64b609ccd 100644
  	*-*-cygwin*)
  		ac_sys_system=Cygwin
  		;;
-@@ -425,6 +428,15 @@ if test "$cross_compiling" = yes; then
+@@ -597,6 +600,15 @@ if test "$cross_compiling" = yes; then
  			_host_cpu=$host_cpu
  		esac
  		;;
@@ -28,7 +28,7 @@ index 18a044629a..a64b609ccd 100644
  	*-*-cygwin*)
  		_host_cpu=
  		;;
-@@ -1184,17 +1196,6 @@ then
+@@ -1625,17 +1637,6 @@ then
          ARFLAGS="rcs"
  fi
  
@@ -46,7 +46,7 @@ index 18a044629a..a64b609ccd 100644
  case $MACHDEP in
  hp*|HP*)
  	# install -d does not work on HP-UX
-@@ -2404,51 +2405,7 @@ case $ac_sys_system/$ac_sys_release in
+@@ -2944,54 +2945,8 @@ case $ac_sys_system/$ac_sys_release in
      LIBTOOL_CRUFT=$LIBTOOL_CRUFT' -compatibility_version $(VERSION) -current_version $(VERSION)';;
    Darwin/*)
      gcc_version=`gcc -dumpversion`
@@ -77,7 +77,7 @@ index 18a044629a..a64b609ccd 100644
 -    		MACOSX_DEFAULT_ARCH="ppc"
 -    		;;
 -    	*)
--    		AC_MSG_ERROR([Unexpected output of 'arch' on OSX])
+-    		AC_MSG_ERROR([Unexpected output of 'arch' on macOS])
 -    		;;
 -    	esac
 -    else
@@ -87,29 +87,31 @@ index 18a044629a..a64b609ccd 100644
 -    		;;
 -    	ppc)
 -    		MACOSX_DEFAULT_ARCH="ppc64"
+-		;;
+-    	arm64)
+-    		MACOSX_DEFAULT_ARCH="arm64"
 -    		;;
 -    	*)
--    		AC_MSG_ERROR([Unexpected output of 'arch' on OSX])
+-    		AC_MSG_ERROR([Unexpected output of 'arch' on macOS])
 -    		;;
 -    	esac
 -
 -    fi
--
+ 
 +    MACOSX_DEFAULT_ARCH="x86_64"
      LIBTOOL_CRUFT=$LIBTOOL_CRUFT" -lSystem -lSystemStubs -arch_only ${MACOSX_DEFAULT_ARCH}"
      LIBTOOL_CRUFT=$LIBTOOL_CRUFT' -install_name $(PYTHONFRAMEWORKINSTALLDIR)/Versions/$(VERSION)/$(PYTHONFRAMEWORK)'
      LIBTOOL_CRUFT=$LIBTOOL_CRUFT' -compatibility_version $(VERSION) -current_version $(VERSION)';;
-@@ -3571,10 +3528,10 @@ AC_CHECK_FUNCS(alarm accept4 setitimer getitimer bind_textdomain_codeset chown \
-  initgroups kill killpg lchown lockf linkat lstat lutimes mmap \
-  memrchr mbrtowc mkdirat mkfifo \
-  madvise mkfifoat mknod mknodat mktime mremap nice openat pathconf pause pipe2 plock poll \
-- posix_fallocate posix_fadvise posix_spawn posix_spawnp pread preadv preadv2 \
-- pthread_condattr_setclock pthread_init pthread_kill putenv pwrite pwritev pwritev2 \
-+ posix_fallocate posix_fadvise posix_spawn posix_spawnp pread preadv2 \
-+ pthread_condattr_setclock pthread_init pthread_kill putenv pwrite pwritev2 \
-  readlink readlinkat readv realpath renameat \
-- sem_open sem_timedwait sem_getvalue sem_unlink sendfile setegid seteuid \
-+ sem_open sem_timedwait sem_getvalue sem_unlink setegid seteuid \
-  setgid sethostname \
-  setlocale setregid setreuid setresuid setresgid setsid setpgid setpgrp setpriority setuid setvbuf \
-  sched_get_priority_max sched_setaffinity sched_setscheduler sched_setparam \
+@@ -4598,10 +4553,10 @@ AC_CHECK_FUNCS([ \
+   mknod mknodat mktime mmap mremap nice openat opendir pathconf pause pipe \
+   pipe2 plock poll posix_fadvise posix_fallocate posix_spawn posix_spawnp \
+   pread preadv preadv2 pthread_condattr_setclock pthread_init pthread_kill \
+-  pwrite pwritev pwritev2 readlink readlinkat readv realpath renameat \
++  pwrite pwritev2 readlink readlinkat readv realpath renameat \
+   rtpSpawn sched_get_priority_max sched_rr_get_interval sched_setaffinity \
+   sched_setparam sched_setscheduler sem_clockwait sem_getvalue sem_open \
+-  sem_timedwait sem_unlink sendfile setegid seteuid setgid sethostname \
++  sem_timedwait sem_unlink setegid seteuid setgid sethostname \
+   setitimer setlocale setpgid setpgrp setpriority setregid setresgid \
+   setresuid setreuid setsid setuid setvbuf shutdown sigaction sigaltstack \
+   sigfillset siginterrupt sigpending sigrelse sigtimedwait sigwait \

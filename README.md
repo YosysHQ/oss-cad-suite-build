@@ -4,10 +4,7 @@
 [![darwin-x64](https://github.com/YosysHQ/oss-cad-suite-build/actions/workflows/darwin-x64.yml/badge.svg)](https://github.com/YosysHQ/oss-cad-suite-build/releases/latest)
 [![windows-x64](https://github.com/YosysHQ/oss-cad-suite-build/actions/workflows/windows-x64.yml/badge.svg)](https://github.com/YosysHQ/oss-cad-suite-build/releases/latest)
 
-[![linux-arm](https://github.com/YosysHQ/oss-cad-suite-build/actions/workflows/linux-arm.yml/badge.svg)](https://github.com/YosysHQ/oss-cad-suite-build/releases/latest)
 [![linux-arm64](https://github.com/YosysHQ/oss-cad-suite-build/actions/workflows/linux-arm64.yml/badge.svg)](https://github.com/YosysHQ/oss-cad-suite-build/releases/latest)
-[![linux-riscv64](https://github.com/YosysHQ/oss-cad-suite-build/actions/workflows/linux-riscv64.yml/badge.svg)](https://github.com/YosysHQ/oss-cad-suite-build/releases/latest)
-
 [![darwin-arm64](https://github.com/YosysHQ/oss-cad-suite-build/actions/workflows/darwin-arm64.yml/badge.svg)](https://github.com/YosysHQ/oss-cad-suite-build/releases/latest)
 
 # Introduction
@@ -75,9 +72,9 @@ Contact us at contact@yosyshq.com to arrange a free evaluation license.
 ### Support libraries
  * [Python 3](https://github.com/python/cpython) language interpreter is provided in all supported platforms.
  * [Python 2](https://github.com/python/cpython) language interpreter is provided in Linux platforms in form of library only.
- * [Ubuntu 20.04](https://ubuntu.com/) distribution development packages are used and shared libraries used are provided in package.
+ * [Ubuntu 22.04](https://ubuntu.com/) distribution development packages are used and shared libraries used are provided in package.
  * [macports](https://www.macports.org/) distribution system for macOS is used to obtain all libraries used, and they are provided in package.
- * [MinGW](https://sourceforge.net/projects/mingw) Minimalist GNU for Windows library packages from Fedora 32 are used in compilation and provided in package.
+ * [MinGW](https://sourceforge.net/projects/mingw) Minimalist GNU for Windows library packages from Fedora 39 are used in compilation and provided in package.
  
 # Installation
 
@@ -107,7 +104,7 @@ to create new CMD prompt:
 
 # Using LiteX
 
-We provide you with Python 3.8 and all required software to be able to use LiteX. After activating `environment` it is possible to perform installation same as usual:
+We provide you with Python 3.11 and all required software to be able to use LiteX. After activating `environment` it is possible to perform installation same as usual:
 
 ```
 mkdir -p litex
@@ -124,22 +121,16 @@ Any personal Linux based computer should just work, no additional packages are n
 Distributed libraries are based on Ubuntu 20.04, but everything is packaged in such a way so it can be used on any Linux distribution.
 
 ## darwin-x64
-Any macOS 10.14 or later with Intel CPU should use this distribution package.
+Any macOS 12.00 or later with Intel CPU should use this distribution package.
 
 ## darwin-arm64
-Any macOS 11.00 or later with M1 CPU should use this distribution package.
+Any macOS 12.00 or later with M1/M2 CPU should use this distribution package.
 
 ## windows-x64
 This architecture is supported for Windows 10 and 11, but older 64-bit version of Windows 7, 8 or 8.1 should work. 
 
-## linux-arm
-ARM based Linux devices such as Raspberry Pi 3, 4 or 400 can use this distribution package.
-
 ## linux-arm64
-ARM64 based Linux devices using 64bit CPU as in Raspberry Pi 4 and 400 (with 64bit version of OS installed), and also laptops like the MNT Reform 2 can use this distribution package.
-
-## linux-riscv64
-RiscV-64 based Linux devices should use this distribtuion package, but please note that this is currently **untested**
+ARM64 based Linux devices using 64bit CPU as in Raspberry Pi 4,5 and 400 (with 64bit version of OS installed), and also laptops like the MNT Reform 2 can use this distribution package.
 
 # Contributing
 

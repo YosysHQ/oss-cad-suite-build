@@ -6,8 +6,8 @@
 @set prompt=[___BRANDING___] $p$g
 @set SSL_CERT_FILE=%YOSYSHQ_ROOT%etc\cacert.pem
 
-@set PATH=%YOSYSHQ_ROOT%bin;%YOSYSHQ_ROOT%lib;%YOSYSHQ_ROOT%py3bin;%PATH%
-@set PYTHON_EXECUTABLE=%YOSYSHQ_ROOT%py3bin\python3.exe
+@set PATH=%YOSYSHQ_ROOT%bin;%YOSYSHQ_ROOT%lib;%PATH%
+@set PYTHON_EXECUTABLE=%YOSYSHQ_ROOT%lib\python3.exe
 @set QT_PLUGIN_PATH=%YOSYSHQ_ROOT%lib\qt5\plugins
 @set QT_LOGGING_RULES=*=false
 

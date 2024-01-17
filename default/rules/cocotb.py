@@ -10,9 +10,9 @@ SourceLocation(
 
 Target(
 	name = 'cocotb',
-	dependencies = [ 'python3' ],
+	dependencies = [ 'python3', 'python3-native' ],
 	resources = [ 'python3' ],
 	patches = [ 'python3_package.sh' ],
 	sources = [ 'cocotb' ],
-	arch = [ 'linux-x64', 'linux-arm', 'linux-arm64', 'linux-riscv64', 'darwin-x64' ],	
+	arch = [ 'linux-x64', 'linux-arm64', 'darwin-x64' ],
 )

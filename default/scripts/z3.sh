@@ -11,9 +11,6 @@ if [ ${ARCH_BASE} == 'darwin' ]; then
 fi
 python3 scripts/mk_make.py
 cd build
-if [ ${ARCH} == 'linux-riscv64' ]; then
-	sed -i -re 's,-lpthread,-lpthread -latomic,g' config.mk
-fi
 make PREFIX=${INSTALL_PREFIX} DESTDIR=${OUTPUT_DIR} -j${NPROC}
 make PREFIX=${INSTALL_PREFIX} DESTDIR=${OUTPUT_DIR} -j${NPROC} install
 rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/include

@@ -7,6 +7,9 @@ if [ ${ARCH} == 'windows-x64' ]; then
     cp *.h ../lib/gvc/.
     popd
 fi
+if [ ${ARCH_BASE} == 'darwin' ]; then
+    sed -i 's,stdc++,c++,g' configure.ac
+fi
 patch -p1 < ${PATCHES_DIR}/graphviz_fix.diff
 ./autogen.sh NOCONFIG
 ./configure --prefix=${INSTALL_PREFIX} --host=${CROSS_NAME} --build=`gcc -dumpmachine` --enable-shared=no --enable-static=yes --enable-ltdl=no --with-qt=no

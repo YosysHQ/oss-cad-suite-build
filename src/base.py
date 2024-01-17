@@ -17,22 +17,18 @@ from pathlib import Path
 
 sources = dict()
 targets = dict()
-architectures = [ 'linux-x64', 'darwin-x64', 'windows-x64', 'linux-arm', 'linux-arm64', 'linux-riscv64', 'darwin-arm64']
+architectures = [ 'linux-x64', 'darwin-x64', 'windows-x64', 'linux-arm64', 'darwin-arm64']
 arch_chain = dict({
 	'linux-x64' : None, 
 	'darwin-x64' : 'linux-x64', 
 	'windows-x64' : 'linux-x64', 
-	'linux-arm' : 'darwin-x64', 
 	'linux-arm64' : 'windows-x64', 
-	'linux-riscv64' : 'linux-arm64',
-	'darwin-arm64' : 'linux-arm',
+	'darwin-arm64' : 'darwin-x64',
 })
 
 cargo_target = dict({
 	'linux-x64' : 'x86_64-unknown-linux-gnu', 
-	'linux-arm' : 'arm-unknown-linux-gnueabihf', 
 	'linux-arm64' : 'aarch64-unknown-linux-gnu', 
-	'linux-riscv64' : 'riscv64gc-unknown-linux-gnu',
 	'windows-x64' : 'x86_64-pc-windows-gnu', 
 	'darwin-x64' : 'x86_64-apple-darwin', 
 	'darwin-arm64' : 'aarch64-apple-darwin',
@@ -428,7 +424,7 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, nproc, pack_source
 		else:
 			params += ['-e', '{}={}'.format(i, j)]
 	params += [
-		'yosyshq/cross-'+ arch + ':1.2',
+		'yosyshq/cross-'+ arch + ':2.0',
 		'bash', scriptfile.name
 	]
 	return run_live(params, cwd=build_dir)
@@ -787,16 +783,16 @@ def generateYaml(target, build_arch, write_to_file):
 			yaml_content +="        run: |\n"
 			yaml_content +="          URL=\"{}-{}/{}-{}.tgz\"\n".format(BUCKET_URL, arch, arch, target.name)
 			yaml_content +="          if wget --spider \"${URL}\" 2>/dev/null; then\n"
-			yaml_content +="              wget -qO- \"${URL}\" | tar xvfz -\n"
+			yaml_content +="              wget -qO- \"${URL}\" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -\n"
 			yaml_content +="          else\n"
 			yaml_content +="              echo \"Previous version not found in bucket\"\n"
 			yaml_content +="          fi\n"
 		for n in sorted(needs_download):
 			yaml_content +="      - name: Download {}\n".format(n)
 			if (n.startswith(arch)):
-				yaml_content +="        run: wget -qO- \"{}-{}/{}.tgz\" | tar xvfz -\n".format(BUCKET_URL, arch, n)
+				yaml_content +="        run: wget -qO- \"{}-{}/{}.tgz\" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -\n".format(BUCKET_URL, arch, n)
 			else:
-				yaml_content +="        run: wget -qO- \"{}-{}/{}.tgz\" | tar xvfz -\n".format(BUCKET_URL, "linux-x64", n)
+				yaml_content +="        run: wget -qO- \"{}-{}/{}.tgz\" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -\n".format(BUCKET_URL, "linux-x64", n)
 		if target.top_package:
 			yaml_content +="      - name: Build\n"
 			yaml_content +="        run: ./builder.py build --arch={} --target={} --single\n".format(arch, target.name)

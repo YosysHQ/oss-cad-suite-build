@@ -115,7 +115,7 @@ SourceLocation(
 	name = 'numpy',
 	vcs = 'git',
 	location = 'https://github.com/numpy/numpy',
-	revision = 'tags/v1.23.4',
+	revision = 'tags/v1.26.3',
 	license_file = 'LICENSE.txt',
 )
 
@@ -140,17 +140,18 @@ Target(
 Target(
 	name = 'apicula',
 	sources = [ 'apicula' ],
-	dependencies = [ 'python3', 'numpy' ],
+	dependencies = [ 'python3', 'python3-native', 'numpy' ],
 	resources = [ 'python3', 'numpy' ],
 	package = 'gowin',
+	arch = [ 'linux-x64', 'linux-arm64', 'darwin-x64', 'darwin-arm64' ],
 )
 
 Target(
 	name = 'numpy',
 	sources = [ 'numpy' ],
-	dependencies = [ 'python3' ],
+	dependencies = [ 'python3', 'python3-native' ],
 	resources = [ 'python3' ],
-	patches= [ 'mingw-numpy.patch' ],
+	arch = [ 'linux-x64', 'linux-arm64', 'darwin-x64', 'darwin-arm64' ],
 )
 
 # chip databases
@@ -181,8 +182,7 @@ Target(
 Target(
 	name = 'apicula-bba',
 	sources = [ 'nextpnr' ],
-	dependencies = [ 'apicula', 'python3', 'numpy' ],
-	resources = [ 'python3' ],
+	dependencies = [ 'apicula', 'python3-native', 'numpy' ],
 	gitrev = [ ('nextpnr', 'gowin') ],
 	build_native = True,
 )

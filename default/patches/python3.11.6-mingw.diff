@@ -1,0 +1,1164 @@
+diff -rupN --no-dereference Python-3.11.6/Lib/distutils/ccompiler.py Python-3.11.6-new/Lib/distutils/ccompiler.py
+--- Python-3.11.6/Lib/distutils/ccompiler.py	2023-10-02 15:29:10.000000000 +0200
++++ Python-3.11.6-new/Lib/distutils/ccompiler.py	2023-10-08 11:36:32.945169175 +0200
+@@ -9,7 +9,7 @@ from distutils.spawn import spawn
+ from distutils.file_util import move_file
+ from distutils.dir_util import mkpath
+ from distutils.dep_util import newer_group
+-from distutils.util import split_quoted, execute
++from distutils.util import split_quoted, execute, get_platform
+ from distutils import log
+ 
+ class CCompiler:
+@@ -948,6 +948,8 @@ def get_default_compiler(osname=None, pl
+         osname = os.name
+     if platform is None:
+         platform = sys.platform
++    if get_platform().startswith('mingw'):
++        return 'mingw32'
+     for pattern, compiler in _default_compilers:
+         if re.match(pattern, platform) is not None or \
+            re.match(pattern, osname) is not None:
+@@ -1005,6 +1007,9 @@ def new_compiler(plat=None, compiler=Non
+         if compiler is None:
+             compiler = get_default_compiler(plat)
+ 
++        if "mingw32" in os.environ.get("CC", ""):
++            compiler = "mingw32"
++
+         (module_name, class_name, long_description) = compiler_class[compiler]
+     except KeyError:
+         msg = "don't know how to compile C/C++ code on platform '%s'" % plat
+diff -rupN --no-dereference Python-3.11.6/Lib/distutils/command/build_ext.py Python-3.11.6-new/Lib/distutils/command/build_ext.py
+--- Python-3.11.6/Lib/distutils/command/build_ext.py	2023-10-02 15:29:10.000000000 +0200
++++ Python-3.11.6-new/Lib/distutils/command/build_ext.py	2023-10-08 11:36:32.945169175 +0200
+@@ -186,7 +186,7 @@ class build_ext(Command):
+         # for extensions under windows use different directories
+         # for Release and Debug builds.
+         # also Python's library directory must be appended to library_dirs
+-        if os.name == 'nt':
++        if os.name == 'nt' and not self.plat_name.startswith(('mingw')):
+             # the 'libs' directory is for binary installs - we assume that
+             # must be the *native* platform.  But we don't really support
+             # cross-compiling via a binary install anyway, so we let it go.
+@@ -712,6 +712,20 @@ class build_ext(Command):
+         # pyconfig.h that MSVC groks.  The other Windows compilers all seem
+         # to need it mentioned explicitly, though, so that's what we do.
+         # Append '_d' to the python import library on debug builds.
++
++        # Use self.plat_name as it works even in case of
++        # cross-compilation (at least for mingw build).
++        if self.plat_name.startswith('mingw'):
++            from distutils import sysconfig
++            extra = []
++            for lib in (
++                sysconfig.get_config_var('BLDLIBRARY').split()
++                + sysconfig.get_config_var('SHLIBS').split()
++                ):
++                if lib.startswith('-l'):
++                    extra.append(lib[2:])
++            return ext.libraries + extra
++
+         if sys.platform == "win32":
+             from distutils._msvccompiler import MSVCCompiler
+             if not isinstance(self.compiler, MSVCCompiler):
+@@ -744,7 +758,7 @@ class build_ext(Command):
+                     # We are cross-compiling for one of the relevant platforms
+                     if get_config_var('ANDROID_API_LEVEL') != 0:
+                         link_libpython = True
+-                    elif get_config_var('MACHDEP') == 'cygwin':
++                    elif get_config_var('MACHDEP') == 'cygwin' or get_config_var('MACHDEP') == 'win32':
+                         link_libpython = True
+ 
+             if link_libpython:
+diff -rupN --no-dereference Python-3.11.6/Lib/distutils/cygwinccompiler.py Python-3.11.6-new/Lib/distutils/cygwinccompiler.py
+--- Python-3.11.6/Lib/distutils/cygwinccompiler.py	2023-10-02 15:29:10.000000000 +0200
++++ Python-3.11.6-new/Lib/distutils/cygwinccompiler.py	2023-10-08 11:36:32.945169175 +0200
+@@ -90,7 +90,8 @@ class CygwinCCompiler(UnixCCompiler):
+     compiler_type = 'cygwin'
+     obj_extension = ".o"
+     static_lib_extension = ".a"
+-    shared_lib_extension = ".dll"
++    shared_lib_extension = ".dll.a"
++    dylib_lib_extension = ".dll.a"
+     static_lib_format = "lib%s%s"
+     shared_lib_format = "%s%s"
+     exe_extension = ".exe"
+@@ -235,8 +236,9 @@ class CygwinCCompiler(UnixCCompiler):
+         # (On my machine: 10KiB < stripped_file < ??100KiB
+         #   unstripped_file = stripped_file + XXX KiB
+         #  ( XXX=254 for a typical python extension))
+-        if not debug:
+-            extra_preargs.append("-s")
++        # => Let mingw-find-debuginfo.sh strip the binaries
++        # if not debug:
++        #     extra_preargs.append("-s")
+ 
+         UnixCCompiler.link(self, target_desc, objects, output_filename,
+                            output_dir, libraries, library_dirs,
+@@ -313,7 +315,10 @@ class Mingw32CCompiler(CygwinCCompiler):
+ 
+         # Include the appropriate MSVC runtime library if Python was built
+         # with MSVC 7.0 or later.
+-        self.dll_libraries = get_msvcr()
++        self.dll_libraries = get_msvcr() or []
++
++    def runtime_library_dir_option(self, dir):
++        return "-L" + dir
+ 
+ # Because these compilers aren't configured in Python's pyconfig.h file by
+ # default, we should at least warn the user if he is using an unmodified
+@@ -366,7 +371,7 @@ def check_config_h():
+         return (CONFIG_H_UNCERTAIN,
+                 "couldn't read '%s': %s" % (fn, exc.strerror))
+ 
+-RE_VERSION = re.compile(br'(\d+\.\d+(\.\d+)*)')
++RE_VERSION = re.compile(br'[\D\s]*(\d+\.\d+(\.\d+)*).*$')
+ 
+ def _find_exe_version(cmd):
+     """Find the version of an executable by running `cmd` in the shell.
+@@ -394,10 +399,14 @@ def get_versions():
+ 
+     If not possible it returns None for it.
+     """
+-    commands = ['gcc -dumpversion', 'ld -v', 'dllwrap --version']
++    gcc = os.environ.get('CC') or 'gcc'
++    ld = os.environ.get('LD') or 'ld'
++    dllwrap = os.environ.get('DLLWRAP') or 'dllwrap'
++    commands = [gcc+' -dumpfullversion -dumpversion', ld+' -v', dllwrap+' --version']
+     return tuple([_find_exe_version(cmd) for cmd in commands])
+ 
+ def is_cygwingcc():
+     '''Try to determine if the gcc that would be used is from cygwin.'''
+-    out_string = check_output(['gcc', '-dumpmachine'])
++    gcc = os.environ.get('CC') or 'gcc'
++    out_string = check_output([gcc, '-dumpmachine'])
+     return out_string.strip().endswith(b'cygwin')
+diff -rupN --no-dereference Python-3.11.6/Lib/distutils/sysconfig.py Python-3.11.6-new/Lib/distutils/sysconfig.py
+--- Python-3.11.6/Lib/distutils/sysconfig.py	2023-10-02 15:29:10.000000000 +0200
++++ Python-3.11.6-new/Lib/distutils/sysconfig.py	2023-10-08 11:36:32.945169175 +0200
+@@ -196,7 +196,7 @@ def customize_compiler(compiler):
+     Mainly needed on Unix, so we can plug in the information that
+     varies across Unices and is stored in Python's Makefile.
+     """
+-    if compiler.compiler_type == "unix":
++    if compiler.compiler_type in ["unix", "cygwin", "mingw32"]:
+         if sys.platform == "darwin":
+             # Perform first-time customization of compiler-related
+             # config vars on OS X now that we know we need a compiler.
+@@ -257,8 +257,8 @@ def customize_compiler(compiler):
+             linker_so=ldshared,
+             linker_exe=cc,
+             archiver=archiver)
+-
+-        compiler.shared_lib_extension = shlib_suffix
++        # Don't override value but use what is set in derived compiler class itself
++        # compiler.shared_lib_extension = shlib_suffix
+ 
+ 
+ def get_python_inc(plat_specific=0, prefix=None):
+diff -rupN --no-dereference Python-3.11.6/Lib/distutils/util.py Python-3.11.6-new/Lib/distutils/util.py
+--- Python-3.11.6/Lib/distutils/util.py	2023-10-02 15:29:10.000000000 +0200
++++ Python-3.11.6-new/Lib/distutils/util.py	2023-10-08 11:36:32.946169192 +0200
+@@ -37,6 +37,8 @@ def get_host_platform():
+ 
+     """
+     if os.name == 'nt':
++        if 'GCC' in sys.version:
++            return 'mingw'
+         if 'amd64' in sys.version.lower():
+             return 'win-amd64'
+         if '(arm)' in sys.version.lower():
+diff -rupN --no-dereference Python-3.11.6/configure.ac Python-3.11.6-new/configure.ac
+--- Python-3.11.6/configure.ac	2023-10-08 11:36:31.525145283 +0200
++++ Python-3.11.6-new/configure.ac	2023-10-08 11:36:31.810150072 +0200
+@@ -6388,6 +6388,16 @@ do
+   THREADHEADERS="$THREADHEADERS \$(srcdir)/$h"
+ done
+ 
++dnl Python interpreter main program for frozen scripts
++AC_SUBST(PYTHON_OBJS_FROZENMAIN)
++PYTHON_OBJS_FROZENMAIN="Python/frozenmain.o"
++case $host in
++  *-*-mingw*)
++    dnl 'PC/frozen_dllmain.c' - not yet
++    PYTHON_OBJS_FROZENMAIN=
++    ;;
++esac
++
+ AC_SUBST(SRCDIRS)
+ SRCDIRS="\
+   Modules \
+diff -rupN --no-dereference Python-3.11.6/Makefile.pre.in Python-3.11.6-new/Makefile.pre.in
+--- Python-3.11.6/Makefile.pre.in	2023-10-08 11:36:31.527145317 +0200
++++ Python-3.11.6-new/Makefile.pre.in	2023-10-08 11:36:31.811150089 +0200
+@@ -390,7 +390,7 @@ PYTHON_OBJS=	\
+ 		Python/dynamic_annotations.o \
+ 		Python/errors.o \
+ 		Python/frame.o \
+-		Python/frozenmain.o \
++		@PYTHON_OBJS_FROZENMAIN@ \
+ 		Python/future.o \
+ 		Python/getargs.o \
+ 		Python/getcompiler.o \
+diff -rupN --no-dereference Python-3.11.6/Lib/sysconfig.py Python-3.11.6-new/Lib/sysconfig.py
+--- Python-3.11.6/Lib/sysconfig.py	2023-10-08 11:36:31.526145300 +0200
++++ Python-3.11.6-new/Lib/sysconfig.py	2023-10-08 11:36:33.240174150 +0200
+@@ -2,6 +2,7 @@
+ 
+ import os
+ import sys
++import textwrap
+ from os.path import pardir, realpath
+ 
+ __all__ = [
+@@ -514,11 +515,29 @@ def _generate_posix_vars():
+     os.makedirs(pybuilddir, exist_ok=True)
+     destfile = os.path.join(pybuilddir, name + '.py')
+ 
++    replacement = """
++        keys_to_replace = [
++            'BINDIR', 'BINLIBDEST', 'CONFINCLUDEDIR',
++            'CONFINCLUDEPY', 'DESTDIRS', 'DESTLIB', 'DESTSHARED',
++            'INCLDIRSTOMAKE', 'INCLUDEDIR', 'INCLUDEPY',
++            'LIBDEST', 'LIBDIR', 'LIBPC', 'LIBPL', 'MACHDESTLIB',
++            'MANDIR', 'SCRIPTDIR', 'datarootdir', 'exec_prefix',
++        ]
++
++        prefix = build_time_vars['BINDIR'][:-4]
++
++        for key in keys_to_replace:
++            value = build_time_vars[key]
++            build_time_vars[key] = value.replace(prefix, sys.prefix)
++    """
++
+     with open(destfile, 'w', encoding='utf8') as f:
++        f.write('import sys\n')
+         f.write('# system configuration generated and used by'
+                 ' the sysconfig module\n')
+         f.write('build_time_vars = ')
+         pprint.pprint(vars, stream=f)
++        f.write('\n%s' % textwrap.dedent(replacement))
+ 
+     # Create file used for sys.path fixup -- see Modules/getpath.c
+     with open('pybuilddir.txt', 'w', encoding='utf8') as f:
+diff -rupN --no-dereference Python-3.11.6/setup.py Python-3.11.6-new/setup.py
+--- Python-3.11.6/setup.py	2023-10-02 15:29:10.000000000 +0200
++++ Python-3.11.6-new/setup.py	2023-10-08 11:36:32.664164444 +0200
+@@ -576,6 +576,8 @@ class PyBuildExt(build_ext):
+             print("Failed to build these modules:")
+             print_three_column(failed)
+             print()
++            with open('mods_failed.txt', 'w') as fh:
++                fh.write(", ".join(failed) + "\n")
+ 
+         if self.failed_on_import:
+             failed = self.failed_on_import[:]
+diff -rupN --no-dereference Python-3.11.6/Modules/selectmodule.c Python-3.11.6-new/Modules/selectmodule.c
+--- Python-3.11.6/Modules/selectmodule.c	2023-10-02 15:29:10.000000000 +0200
++++ Python-3.11.6-new/Modules/selectmodule.c	2023-10-08 11:36:34.690198631 +0200
+@@ -146,9 +146,9 @@ seq2set(PyObject *seq, fd_set *set, pyli
+         v = PyObject_AsFileDescriptor( o );
+         if (v == -1) goto finally;
+ 
+-#if defined(_MSC_VER)
++#if defined(MS_WINDOWS)
+         max = 0;                             /* not used for Win32 */
+-#else  /* !_MSC_VER */
++#else  /* MS_WINDOWS */
+         if (!_PyIsSelectable_fd(v)) {
+             PyErr_SetString(PyExc_ValueError,
+                         "filedescriptor out of range in select()");
+@@ -156,7 +156,7 @@ seq2set(PyObject *seq, fd_set *set, pyli
+         }
+         if (v > max)
+             max = v;
+-#endif /* _MSC_VER */
++#endif /* MS_WINDOWS */
+         FD_SET(v, set);
+ 
+         /* add object and its file descriptor to the list */
+diff -rupN --no-dereference Python-3.11.6/configure.ac Python-3.11.6-new/configure.ac
+--- Python-3.11.6/configure.ac	2023-10-08 11:36:32.098154915 +0200
++++ Python-3.11.6-new/configure.ac	2023-10-08 11:36:34.402193764 +0200
+@@ -4638,8 +4638,8 @@ AC_CHECK_FUNCS([ \
+   faccessat fchmod fchmodat fchown fchownat fdopendir fdwalk fexecve \
+   fork fork1 fpathconf fstatat ftime ftruncate futimens futimes futimesat \
+   gai_strerror getegid getentropy geteuid getgid getgrgid getgrgid_r \
+-  getgrnam_r getgrouplist getgroups gethostname getitimer getloadavg getlogin \
+-  getpeername getpgid getpid getppid getpriority _getpty \
++  getgrnam_r getgrouplist getgroups getitimer getloadavg getlogin \
++  getpgid getpid getppid getpriority _getpty \
+   getpwent getpwnam_r getpwuid getpwuid_r getresgid getresuid getrusage getsid getspent \
+   getspnam getuid getwd if_nameindex initgroups kill killpg lchown linkat \
+   lockf lstat lutimes madvise mbrtowc memrchr mkdirat mkfifo mkfifoat \
+@@ -4881,7 +4881,13 @@ PKG_CHECK_MODULES([LIBLZMA], [liblzma],
+ ])
+ 
+ dnl PY_CHECK_NETDB_FUNC(FUNCTION)
+-AC_DEFUN([PY_CHECK_NETDB_FUNC], [PY_CHECK_FUNC([$1], [#include <netdb.h>])])
++AC_DEFUN([PY_CHECK_NETDB_FUNC], [PY_CHECK_FUNC([$1], [
++#ifdef _WIN32
++#  include <winsock2.h>
++#else
++#  include <netdb.h>
++#endif
++])])
+ 
+ PY_CHECK_NETDB_FUNC([hstrerror])
+ dnl not available in WASI yet
+@@ -4890,13 +4896,18 @@ PY_CHECK_NETDB_FUNC([getservbyport])
+ PY_CHECK_NETDB_FUNC([gethostbyname])
+ PY_CHECK_NETDB_FUNC([gethostbyaddr])
+ PY_CHECK_NETDB_FUNC([getprotobyname])
++PY_CHECK_NETDB_FUNC([gethostname])
+ 
+ dnl PY_CHECK_SOCKET_FUNC(FUNCTION)
+ AC_DEFUN([PY_CHECK_SOCKET_FUNC], [PY_CHECK_FUNC([$1], [
+ #include <sys/types.h>
+-#include <sys/socket.h>
+-#include <netinet/in.h>
+-#include <arpa/inet.h>
++#ifdef _WIN32
++#  include <winsock2.h>
++#else
++#  include <sys/socket.h>
++#  include <netinet/in.h>
++#  include <arpa/inet.h>
++#endif
+ ])])
+ 
+ PY_CHECK_SOCKET_FUNC([inet_aton])
+diff -rupN --no-dereference Python-3.11.6/Modules/Setup Python-3.11.6-new/Modules/Setup
+--- Python-3.11.6/Modules/Setup	2023-10-08 11:36:34.396193662 +0200
++++ Python-3.11.6-new/Modules/Setup	2023-10-08 11:36:34.402193764 +0200
+@@ -144,7 +144,7 @@ PYTHONPATH=$(COREPYTHONPATH)
+ #_pickle _pickle.c
+ #_queue _queuemodule.c
+ #_random _randommodule.c
+-#_socket socketmodule.c
++_socket socketmodule.c -lws2_32 -liphlpapi
+ #_statistics _statisticsmodule.c
+ #_struct _struct.c
+ #_typing _typingmodule.c
+diff -rupN --no-dereference Python-3.11.6/Modules/socketmodule.c Python-3.11.6-new/Modules/socketmodule.c
+--- Python-3.11.6/Modules/socketmodule.c	2023-10-02 15:29:10.000000000 +0200
++++ Python-3.11.6-new/Modules/socketmodule.c	2023-10-08 11:36:34.404193798 +0200
+@@ -274,7 +274,7 @@ shutdown(how) -- shut down traffic in on
+ # endif
+ 
+ /* Macros based on the IPPROTO enum, see: https://bugs.python.org/issue29515 */
+-#ifdef MS_WINDOWS
++#ifdef _MSC_VER
+ #define IPPROTO_ICMP IPPROTO_ICMP
+ #define IPPROTO_IGMP IPPROTO_IGMP
+ #define IPPROTO_GGP IPPROTO_GGP
+@@ -404,6 +404,10 @@ remove_unusable_flags(PyObject *m)
+   /* Do not include addrinfo.h for MSVC7 or greater. 'addrinfo' and
+    * EAI_* constants are defined in (the already included) ws2tcpip.h.
+    */
++#elif defined(__MINGW32__)
++  /* Do not include addrinfo.h as minimum supported version is
++   * _WIN32_WINNT >= WindowsXP(0x0501)
++   */
+ #else
+ #  include "addrinfo.h"
+ #endif
+@@ -8103,7 +8107,7 @@ PyInit__socket(void)
+     PyModule_AddIntMacro(m, IPPROTO_MAX);
+ #endif
+ 
+-#ifdef  MS_WINDOWS
++#ifdef  _MSC_VER
+     PyModule_AddIntMacro(m, IPPROTO_ICLFXBM);
+     PyModule_AddIntMacro(m, IPPROTO_ST);
+     PyModule_AddIntMacro(m, IPPROTO_CBT);
+diff -rupN --no-dereference Python-3.11.6/Makefile.pre.in Python-3.11.6-new/Makefile.pre.in
+--- Python-3.11.6/Makefile.pre.in	2023-10-08 11:36:32.377159612 +0200
++++ Python-3.11.6-new/Makefile.pre.in	2023-10-08 11:36:33.522178907 +0200
+@@ -755,7 +755,7 @@ $(srcdir)/Modules/_blake2/blake2s_impl.c
+ # -s, --silent or --quiet is always the first char.
+ # Under BSD make, MAKEFLAGS might be " -s -v x=y".
+ # Ignore macros passed by GNU make, passed after --
+-sharedmods: $(PYTHON_FOR_BUILD_DEPS) pybuilddir.txt @LIBMPDEC_INTERNAL@ @LIBEXPAT_INTERNAL@
++sharedmods: $(PYTHON_FOR_BUILD_DEPS) pybuilddir.txt @LIBMPDEC_INTERNAL@ @LIBEXPAT_INTERNAL@ $(BUILDPYTHON)
+ 	@case "`echo X $$MAKEFLAGS | sed 's/^X //;s/ -- .*//'`" in \
+ 	    *\ -s*|s*) quiet="-q";; \
+ 	    *) quiet="";; \
+diff -rupN --no-dereference Python-3.11.6/Modules/_ctypes/_ctypes.c Python-3.11.6-new/Modules/_ctypes/_ctypes.c
+--- Python-3.11.6/Modules/_ctypes/_ctypes.c	2023-10-02 15:29:10.000000000 +0200
++++ Python-3.11.6-new/Modules/_ctypes/_ctypes.c	2023-10-08 11:36:33.523178924 +0200
+@@ -109,6 +109,7 @@ bytes(cdata)
+ // windows.h must be included before pycore internal headers
+ #ifdef MS_WIN32
+ #  include <windows.h>
++#  include <dlfcn.h>
+ #endif
+ 
+ #include "pycore_call.h"          // _PyObject_CallNoArgs()
+diff -rupN --no-dereference Python-3.11.6/Modules/_multiprocessing/semaphore.c Python-3.11.6-new/Modules/_multiprocessing/semaphore.c
+--- Python-3.11.6/Modules/_multiprocessing/semaphore.c	2023-10-02 15:29:10.000000000 +0200
++++ Python-3.11.6-new/Modules/_multiprocessing/semaphore.c	2023-10-08 11:36:33.523178924 +0200
+@@ -8,6 +8,9 @@
+  */
+ 
+ #include "multiprocessing.h"
++#ifdef __MINGW32__
++#include <semaphore.h>
++#endif
+ 
+ #ifdef HAVE_MP_SEMAPHORE
+ 
+diff -rupN --no-dereference Python-3.11.6/Modules/Setup Python-3.11.6-new/Modules/Setup
+--- Python-3.11.6/Modules/Setup	2023-10-02 15:29:10.000000000 +0200
++++ Python-3.11.6-new/Modules/Setup	2023-10-08 11:36:33.524178940 +0200
+@@ -154,7 +154,7 @@ PYTHONPATH=$(COREPYTHONPATH)
+ #binascii binascii.c
+ #cmath cmathmodule.c
+ #math mathmodule.c
+-#mmap mmapmodule.c
++mmap mmapmodule.c
+ #select selectmodule.c
+ 
+ # XML
+diff -rupN --no-dereference Python-3.11.6/setup.py Python-3.11.6-new/setup.py
+--- Python-3.11.6/setup.py	2023-10-08 11:36:32.941169108 +0200
++++ Python-3.11.6-new/setup.py	2023-10-08 11:36:33.524178940 +0200
+@@ -976,7 +976,10 @@ class PyBuildExt(build_ext):
+         self.addext(Extension('spwd', ['spwdmodule.c']))
+ 
+         # select(2); not on ancient System V
+-        self.addext(Extension('select', ['selectmodule.c']))
++        select_libs = []
++        if HOST_PLATFORM.startswith(('mingw', 'win')):
++            select_libs += ['ws2_32']
++        self.addext(Extension('select', ['selectmodule.c'], libraries=select_libs))
+ 
+         # Memory-mapped files (also works on Win32).
+         self.addext(Extension('mmap', ['mmapmodule.c']))
+@@ -1008,7 +1011,8 @@ class PyBuildExt(build_ext):
+         self.addext(Extension('_csv', ['_csv.c']))
+ 
+         # POSIX subprocess module helper.
+-        self.addext(Extension('_posixsubprocess', ['_posixsubprocess.c']))
++        # FIXME Force disabled
++        # self.addext(Extension('_posixsubprocess', ['_posixsubprocess.c']))
+ 
+     def detect_test_extensions(self):
+         # Python C API test module
+@@ -1103,6 +1107,8 @@ class PyBuildExt(build_ext):
+                 # readline package
+                 if find_file('readline/rlconf.h', self.inc_dirs, []) is None:
+                     do_readline = False
++        # FIXME Force disabled
++        do_readline = False
+         if do_readline:
+             readline_libs = [readline_lib]
+             if readline_termcap_library:
+@@ -1327,13 +1333,16 @@ class PyBuildExt(build_ext):
+ 
+     def detect_multiprocessing(self):
+         # Richard Oudkerk's multiprocessing module
++        multiproc_libs = []
+         multiprocessing_srcs = ['_multiprocessing/multiprocessing.c']
+         if (
+             sysconfig.get_config_var('HAVE_SEM_OPEN') and not
+             sysconfig.get_config_var('POSIX_SEMAPHORES_NOT_ENABLED')
+         ):
+             multiprocessing_srcs.append('_multiprocessing/semaphore.c')
+-        self.addext(Extension('_multiprocessing', multiprocessing_srcs))
++        if HOST_PLATFORM.startswith(('mingw', 'win')):
++            multiproc_libs += ['ws2_32']
++        self.addext(Extension('_multiprocessing', multiprocessing_srcs, libraries=multiproc_libs))
+         self.addext(Extension('_posixshmem', ['_multiprocessing/posixshmem.c']))
+ 
+     def detect_uuid(self):
+@@ -1373,7 +1382,8 @@ class PyBuildExt(build_ext):
+         self.addext(Extension('xxlimited_35', ['xxlimited_35.c']))
+ 
+     def detect_tkinter(self):
+-        self.addext(Extension('_tkinter', ['_tkinter.c', 'tkappinit.c']))
++        tkinter_libs = ['tcl', 'tk']
++        self.addext(Extension('_tkinter', ['_tkinter.c', 'tkappinit.c'], libraries=tkinter_libs))
+ 
+     def configure_ctypes(self, ext):
+         return True
+@@ -1420,7 +1430,7 @@ class PyBuildExt(build_ext):
+                         sources=sources)
+         self.add(ext)
+         # function my_sqrt() needs libm for sqrt()
+-        self.addext(Extension('_ctypes_test', ['_ctypes/_ctypes_test.c']))
++        self.addext(Extension('_ctypes_test', sources=['_ctypes/_ctypes_test.c'], libraries=['oleaut32']))
+ 
+         ffi_inc = sysconfig.get_config_var("LIBFFI_INCLUDEDIR")
+         ffi_lib = None
+@@ -1471,6 +1481,10 @@ class PyBuildExt(build_ext):
+             # for dlopen, see bpo-32647
+             ext.libraries.append('dl')
+ 
++        ext.libraries.append('ole32')
++        ext.libraries.append('oleaut32')
++        ext.libraries.append('uuid')
++
+     def detect_decimal(self):
+         # Stefan Krah's _decimal module
+         self.addext(
+@@ -1483,7 +1497,10 @@ class PyBuildExt(build_ext):
+         )
+ 
+     def detect_openssl_hashlib(self):
+-        self.addext(Extension('_ssl', ['_ssl.c']))
++        openssl_libs= []
++        if HOST_PLATFORM.startswith(('mingw', 'win')):
++            openssl_libs += ['ws2_32']
++        self.addext(Extension('_ssl', ['_ssl.c'], libraries=openssl_libs))
+         self.addext(Extension('_hashlib', ['_hashopenssl.c']))
+ 
+     def detect_hash_builtins(self):
+diff -rupN --no-dereference Python-3.11.6/config.site-mingw Python-3.11.6-new/config.site-mingw
+--- Python-3.11.6/config.site-mingw	1970-01-01 01:00:00.000000000 +0100
++++ Python-3.11.6-new/config.site-mingw	2023-10-08 11:36:31.212140023 +0200
+@@ -0,0 +1,2 @@
++ac_cv_file__dev_ptmx=no
++ac_cv_file__dev_ptc=no
+diff -rupN --no-dereference Python-3.11.6/configure.ac Python-3.11.6-new/configure.ac
+--- Python-3.11.6/configure.ac	2023-10-02 15:29:10.000000000 +0200
++++ Python-3.11.6-new/configure.ac	2023-10-08 11:36:31.213140040 +0200
+@@ -528,6 +528,15 @@ AC_DEFINE_UNQUOTED(_PYTHONFRAMEWORK, "${
+ # Set name for machine-dependent library files
+ AC_ARG_VAR([MACHDEP], [name for machine-dependent library files])
+ AC_MSG_CHECKING(MACHDEP)
++case $host in
++  *-*-mingw*)
++    test -z "$MACHDEP" && MACHDEP=win32
++
++    dnl Configuration will be based only on "host triplet" as build
++    dnl must not depend from posix compatible environement.
++    ac_sys_system=ignore
++    ;;
++esac
+ if test -z "$MACHDEP"
+ then
+     # avoid using uname for cross builds
+@@ -554,6 +563,8 @@ then
+ 	*-*-wasi)
+ 	    ac_sys_system=WASI
+ 	    ;;
++        *-*-mingw*)
++            ;;
+ 	*)
+ 		# for now, limit cross builds to known configurations
+ 		MACHDEP="unknown"
+@@ -606,12 +617,23 @@ if test "$cross_compiling" = yes; then
+ 	wasm32-*-* | wasm64-*-*)
+ 		_host_cpu=$host_cpu
+ 		;;
++	*-*-mingw*)
++		_host_cpu=
++		;;
+ 	*)
+ 		# for now, limit cross builds to known configurations
+ 		MACHDEP="unknown"
+ 		AC_MSG_ERROR([cross build not supported for $host])
+ 	esac
+ 	_PYTHON_HOST_PLATFORM="$MACHDEP${_host_cpu:+-$_host_cpu}"
++
++	case "$host_os" in
++	mingw*)
++	# As sys.platform() return 'win32' to build python and extantions
++	# we will use 'mingw' (in setup.py and etc.)
++	_PYTHON_HOST_PLATFORM=mingw
++	;;
++	esac
+ fi
+ 
+ # Some systems cannot stand _XOPEN_SOURCE being defined at all; they
+@@ -1518,6 +1540,13 @@ if test $enable_shared = "yes"; then
+ 	;;
+ 
+   esac
++  case $host in
++    *-*-mingw*)
++        LDLIBRARY='libpython$(LDVERSION).dll.a'
++        DLLLIBRARY='libpython$(LDVERSION).dll'
++        BLDLIBRARY='-L. -lpython$(LDVERSION)'
++        ;;
++  esac
+ else # shared is disabled
+   PY_ENABLE_SHARED=0
+   case $ac_sys_system in
+@@ -1526,6 +1555,10 @@ else # shared is disabled
+           LDLIBRARY='libpython$(LDVERSION).dll.a'
+           ;;
+   esac
++  case $host in
++    *-*-mingw*)
++          LDLIBRARY='libpython$(LDVERSION).a';;
++  esac
+ fi
+ 
+ if test "$cross_compiling" = yes; then
+@@ -3093,6 +3126,9 @@ if test -z "$SHLIB_SUFFIX"; then
+ 	CYGWIN*)   SHLIB_SUFFIX=.dll;;
+ 	*)	   SHLIB_SUFFIX=.so;;
+ 	esac
++	case $host_os in
++	mingw*)    SHLIB_SUFFIX=.dll;;
++	esac
+ fi
+ AC_MSG_RESULT($SHLIB_SUFFIX)
+ 
+@@ -3224,6 +3260,12 @@ then
+ 		LDCXXSHARED="g++ -shared -Wl,--enable-auto-image-base";;
+ 	*)	LDSHARED="ld";;
+ 	esac
++	case $host in
++	*-*-mingw*)
++		LDSHARED='$(CC) -shared -Wl,--enable-auto-image-base'
++		LDCXXSHARED='$(CXX) -shared -Wl,--enable-auto-image-base'
++		;;
++	esac
+ fi
+ 
+ dnl Emscripten's emconfigure sets LDSHARED. Set BLDSHARED outside the
+@@ -4559,6 +4601,12 @@ then
+ 	fi
+ 	;;
+ 	esac
++	case $host in
++	*-*-mingw*)
++	DYNLOADFILE="dynload_win.o"
++	extra_machdep_objs="$extra_machdep_objs PC/dl_nt.o"
++	;;
++	esac
+ fi
+ AC_MSG_RESULT($DYNLOADFILE)
+ if test "$DYNLOADFILE" != "dynload_stub.o"
+@@ -4585,7 +4633,7 @@ fi
+ 
+ # checks for library functions
+ AC_CHECK_FUNCS([ \
+-  accept4 alarm bind_textdomain_codeset chmod chown clock close_range confstr \
++  accept4 bind_textdomain_codeset chmod chown clock close_range confstr \
+   copy_file_range ctermid dup dup3 execv explicit_bzero explicit_memset \
+   faccessat fchmod fchmodat fchown fchownat fdopendir fdwalk fexecve \
+   fork fork1 fpathconf fstatat ftime ftruncate futimens futimes futimesat \
+@@ -6254,6 +6302,9 @@ AC_CHECK_TYPE(socklen_t,,
+ #ifdef HAVE_SYS_SOCKET_H
+ #include <sys/socket.h>
+ #endif
++#ifdef __MINGW32__
++#include <ws2tcpip.h>
++#endif
+ ])
+ 
+ AC_CACHE_CHECK([for broken mbstowcs], [ac_cv_broken_mbstowcs],
+@@ -6727,6 +6778,19 @@ WITH_SAVE_ENV([
+   ])
+ ])
+ 
++# For mingw build need additional library for linking
++case $host in
++  *-*-mingw*)
++    LIBS="$LIBS -lversion -lshlwapi -lpathcch -lbcrypt"
++    CFLAGS="$CFLAGS -DMS_WINDOWS -DMS_WIN32"
++  ;&
++  x86_64-*-mingw*)
++    CFLAGS="$CFLAGS -DMS_WIN64";
++  ;;
++  *)
++  ;;
++esac
++
+ # ssl module default cipher suite string
+ AH_TEMPLATE(PY_SSL_DEFAULT_CIPHERS,
+   [Default cipher suites list for ssl module.
+diff -rupN --no-dereference Python-3.11.6/Include/pyport.h Python-3.11.6-new/Include/pyport.h
+--- Python-3.11.6/Include/pyport.h	2023-10-02 15:29:10.000000000 +0200
++++ Python-3.11.6-new/Include/pyport.h	2023-10-08 11:36:31.213140040 +0200
+@@ -347,7 +347,8 @@ extern "C" {
+     _Pragma("clang diagnostic ignored \"-Wdeprecated-declarations\"")
+ #define _Py_COMP_DIAG_POP _Pragma("clang diagnostic pop")
+ #elif defined(__GNUC__) \
+-    && ((__GNUC__ >= 5) || (__GNUC__ == 4) && (__GNUC_MINOR__ >= 6))
++    && ((__GNUC__ >= 5) || (__GNUC__ == 4) && (__GNUC_MINOR__ >= 6)) \
++    && !defined(__MINGW32__)
+ #define _Py_COMP_DIAG_PUSH _Pragma("GCC diagnostic push")
+ #define _Py_COMP_DIAG_IGNORE_DEPR_DECLS \
+     _Pragma("GCC diagnostic ignored \"-Wdeprecated-declarations\"")
+diff -rupN --no-dereference Python-3.11.6/Lib/sysconfig.py Python-3.11.6-new/Lib/sysconfig.py
+--- Python-3.11.6/Lib/sysconfig.py	2023-10-02 15:29:10.000000000 +0200
++++ Python-3.11.6-new/Lib/sysconfig.py	2023-10-08 11:36:31.214140057 +0200
+@@ -737,6 +737,8 @@ def get_platform():
+ 
+     """
+     if os.name == 'nt':
++        if 'GCC' in sys.version:
++            return 'mingw'
+         if 'amd64' in sys.version.lower():
+             return 'win-amd64'
+         if '(arm)' in sys.version.lower():
+diff -rupN --no-dereference Python-3.11.6/Makefile.pre.in Python-3.11.6-new/Makefile.pre.in
+--- Python-3.11.6/Makefile.pre.in	2023-10-02 15:29:10.000000000 +0200
++++ Python-3.11.6-new/Makefile.pre.in	2023-10-08 11:36:31.215140074 +0200
+@@ -118,7 +118,7 @@ CFLAGSFORSHARED=@CFLAGSFORSHARED@
+ # C flags used for building the interpreter object files
+ PY_STDMODULE_CFLAGS= $(PY_CFLAGS) $(PY_CFLAGS_NODIST) $(PY_CPPFLAGS) $(CFLAGSFORSHARED)
+ PY_BUILTIN_MODULE_CFLAGS= $(PY_STDMODULE_CFLAGS) -DPy_BUILD_CORE_BUILTIN
+-PY_CORE_CFLAGS=	$(PY_STDMODULE_CFLAGS) -DPy_BUILD_CORE
++PY_CORE_CFLAGS=	$(PY_STDMODULE_CFLAGS) -DPy_BUILD_CORE -DMS_WINDOWS -DMS_COREDLL -DMS_DLL_ID=\"@VERSION@\" -DPY3_DLLNAME=\"@DLLLIBRARY@\"
+ # Linker flags used for building the interpreter object files
+ PY_CORE_LDFLAGS=$(PY_LDFLAGS) $(PY_LDFLAGS_NODIST)
+ # Strict or non-strict aliasing flags used to compile dtoa.c, see above
+diff -rupN --no-dereference Python-3.11.6/Modules/posixmodule.c Python-3.11.6-new/Modules/posixmodule.c
+--- Python-3.11.6/Modules/posixmodule.c	2023-10-02 15:29:10.000000000 +0200
++++ Python-3.11.6-new/Modules/posixmodule.c	2023-10-08 11:36:31.217140107 +0200
+@@ -337,7 +337,7 @@ corresponding Unix manual entries for mo
+ #  define HAVE_SYSTEM     1
+ #  include <process.h>
+ #else
+-#  ifdef _MSC_VER
++#  ifdef MS_WINDOWS
+      /* Microsoft compiler */
+ #    define HAVE_GETPPID    1
+ #    define HAVE_GETLOGIN   1
+@@ -350,7 +350,7 @@ corresponding Unix manual entries for mo
+ #    define HAVE_CWAIT      1
+ #    define HAVE_FSYNC      1
+ #    define fsync _commit
+-#  endif  /* _MSC_VER */
++#  endif  /* MS_WINDOWS */
+ #endif  /* ! __WATCOMC__ || __QNX__ */
+ 
+ /*[clinic input]
+@@ -428,7 +428,7 @@ extern char        *ctermid_r(char *);
+ #  endif
+ #endif
+ 
+-#ifdef _MSC_VER
++#ifdef MS_WINDOWS
+ #  ifdef HAVE_DIRECT_H
+ #    include <direct.h>
+ #  endif
+@@ -4051,7 +4051,7 @@ os_link_impl(PyObject *module, path_t *s
+ #endif
+ 
+ 
+-#if defined(MS_WINDOWS) && !defined(HAVE_OPENDIR)
++#if defined(MS_WINDOWS)
+ static PyObject *
+ _listdir_windows_no_opendir(path_t *path, PyObject *list)
+ {
+@@ -4292,7 +4292,7 @@ os_listdir_impl(PyObject *module, path_t
+                     path->object ? path->object : Py_None) < 0) {
+         return NULL;
+     }
+-#if defined(MS_WINDOWS) && !defined(HAVE_OPENDIR)
++#if defined(MS_WINDOWS)
+     return _listdir_windows_no_opendir(path, NULL);
+ #else
+     return _posix_listdir(path, NULL);
+diff -rupN --no-dereference Python-3.11.6/Objects/exceptions.c Python-3.11.6-new/Objects/exceptions.c
+--- Python-3.11.6/Objects/exceptions.c	2023-10-02 15:29:10.000000000 +0200
++++ Python-3.11.6-new/Objects/exceptions.c	2023-10-08 11:36:31.218140124 +0200
+@@ -1648,7 +1648,9 @@ MiddlingExtendsException(PyExc_ImportErr
+  */
+ 
+ #ifdef MS_WINDOWS
+-#include "errmap.h"
++#include <winsock2.h>
++#include <windows.h>
++#include "../PC/errmap.h"
+ #endif
+ 
+ /* Where a function has a single filename, such as open() or some
+diff -rupN --no-dereference Python-3.11.6/Python/dynload_win.c Python-3.11.6-new/Python/dynload_win.c
+--- Python-3.11.6/Python/dynload_win.c	2023-10-02 15:29:10.000000000 +0200
++++ Python-3.11.6-new/Python/dynload_win.c	2023-10-08 11:36:31.218140124 +0200
+@@ -21,9 +21,9 @@
+ #endif
+ 
+ #ifdef PYD_PLATFORM_TAG
+-#define PYD_TAGGED_SUFFIX PYD_DEBUG_SUFFIX ".cp" Py_STRINGIFY(PY_MAJOR_VERSION) Py_STRINGIFY(PY_MINOR_VERSION) "-" PYD_PLATFORM_TAG ".pyd"
++#define PYD_TAGGED_SUFFIX PYD_DEBUG_SUFFIX ".cpython-" Py_STRINGIFY(PY_MAJOR_VERSION) Py_STRINGIFY(PY_MINOR_VERSION) "-" PYD_PLATFORM_TAG ".dll"
+ #else
+-#define PYD_TAGGED_SUFFIX PYD_DEBUG_SUFFIX ".cp" Py_STRINGIFY(PY_MAJOR_VERSION) Py_STRINGIFY(PY_MINOR_VERSION) ".pyd"
++#define PYD_TAGGED_SUFFIX PYD_DEBUG_SUFFIX ".cpython-" Py_STRINGIFY(PY_MAJOR_VERSION) Py_STRINGIFY(PY_MINOR_VERSION) ".dll"
+ #endif
+ 
+ #define PYD_UNTAGGED_SUFFIX PYD_DEBUG_SUFFIX ".pyd"
+@@ -170,7 +170,7 @@ static char *GetPythonImport (HINSTANCE
+    Return whether the DLL was found.
+ */
+ extern HMODULE PyWin_DLLhModule;
+-static int
++int
+ _Py_CheckPython3(void)
+ {
+     static int python3_checked = 0;
+diff -rupN --no-dereference Python-3.11.6/Python/sysmodule.c Python-3.11.6-new/Python/sysmodule.c
+--- Python-3.11.6/Python/sysmodule.c	2023-10-02 15:29:10.000000000 +0200
++++ Python-3.11.6-new/Python/sysmodule.c	2023-10-08 11:36:31.219140141 +0200
+@@ -2969,7 +2969,8 @@ _PySys_InitCore(PyThreadState *tstate, P
+             goto type_init_failed;
+         }
+     }
+-
++// FIXME ???? What is VPATH?
++#define VPATH "..\\.."
+     SET_SYS_FROM_STRING("_vpath", VPATH);
+ #endif
+ 
+diff -rupN --no-dereference Python-3.11.6/Lib/site.py Python-3.11.6-new/Lib/site.py
+--- Python-3.11.6/Lib/site.py	2023-10-02 15:29:10.000000000 +0200
++++ Python-3.11.6-new/Lib/site.py	2023-10-08 11:36:33.830184102 +0200
+@@ -361,7 +361,7 @@ def getsitepackages(prefixes=None):
+             continue
+         seen.add(prefix)
+ 
+-        if os.sep == '/':
++        if True: #os.sep == '/':
+             libdirs = [sys.platlibdir]
+             if sys.platlibdir != "lib":
+                 libdirs.append("lib")
+diff -rupN --no-dereference Python-3.11.6/Lib/sysconfig.py Python-3.11.6-new/Lib/sysconfig.py
+--- Python-3.11.6/Lib/sysconfig.py	2023-10-08 11:36:33.517178822 +0200
++++ Python-3.11.6-new/Lib/sysconfig.py	2023-10-08 11:36:33.830184102 +0200
+@@ -48,13 +48,13 @@ _INSTALL_SCHEMES = {
+         'data': '{base}',
+         },
+     'nt': {
+-        'stdlib': '{installed_base}/Lib',
+-        'platstdlib': '{base}/Lib',
+-        'purelib': '{base}/Lib/site-packages',
+-        'platlib': '{base}/Lib/site-packages',
+-        'include': '{installed_base}/Include',
+-        'platinclude': '{installed_base}/Include',
+-        'scripts': '{base}/Scripts',
++        'stdlib': '{installed_base}/lib/python{py_version_short}',
++        'platstdlib': '{base}/lib/python{py_version_short}',
++        'purelib': '{base}/lib/python{py_version_short}/site-packages',
++        'platlib': '{base}/lib/python{py_version_short}/site-packages',
++        'include': '{installed_base}/include/python{py_version_short}',
++        'platinclude': '{installed_base}/include/python{py_version_short}',
++        'scripts': '{base}/bin',
+         'data': '{base}',
+         },
+     # Downstream distributors can overwrite the default install scheme.
+@@ -135,12 +135,12 @@ if _HAS_USER_BASE:
+     _INSTALL_SCHEMES |= {
+         # NOTE: When modifying "purelib" scheme, update site._get_path() too.
+         'nt_user': {
+-            'stdlib': '{userbase}/Python{py_version_nodot_plat}',
+-            'platstdlib': '{userbase}/Python{py_version_nodot_plat}',
+-            'purelib': '{userbase}/Python{py_version_nodot_plat}/site-packages',
+-            'platlib': '{userbase}/Python{py_version_nodot_plat}/site-packages',
+-            'include': '{userbase}/Python{py_version_nodot_plat}/Include',
+-            'scripts': '{userbase}/Python{py_version_nodot_plat}/Scripts',
++            'stdlib': '{userbase}/lib/python{py_version_short}',
++            'platstdlib': '{userbase}/lib/python{py_version_short}',
++            'purelib': '{userbase}/lib/python{py_version_short}/site-packages',
++            'platlib': '{userbase}/lib/python{py_version_short}/site-packages',
++            'include': '{userbase}/include/python{py_version_short}',
++            'scripts': '{userbase}/bin',
+             'data': '{userbase}',
+             },
+         'posix_user': {
+@@ -560,7 +560,7 @@ def _init_non_posix(vars):
+     vars['INCLUDEPY'] = get_path('include')
+     vars['EXT_SUFFIX'] = _imp.extension_suffixes()[0]
+     vars['EXE'] = '.exe'
+-    vars['VERSION'] = _PY_VERSION_SHORT_NO_DOT
++    vars['VERSION'] = _PY_VERSION_SHORT
+     vars['BINDIR'] = os.path.dirname(_safe_realpath(sys.executable))
+     vars['TZPATH'] = ''
+ 
+diff -rupN --no-dereference Python-3.11.6/Modules/getpath.c Python-3.11.6-new/Modules/getpath.c
+--- Python-3.11.6/Modules/getpath.c	2023-10-02 15:29:10.000000000 +0200
++++ Python-3.11.6-new/Modules/getpath.c	2023-10-08 11:36:33.830184102 +0200
+@@ -879,7 +879,11 @@ _PyConfig_InitPathConfig(PyConfig *confi
+ 
+     if (
+ #ifdef MS_WINDOWS
++# ifdef __MINGW32__
++        !decode_to_dict(dict, "os_name", "mingw") ||
++# else
+         !decode_to_dict(dict, "os_name", "nt") ||
++# endif
+ #elif defined(__APPLE__)
+         !decode_to_dict(dict, "os_name", "darwin") ||
+ #else
+diff -rupN --no-dereference Python-3.11.6/Modules/getpath.py Python-3.11.6-new/Modules/getpath.py
+--- Python-3.11.6/Modules/getpath.py	2023-10-02 15:29:10.000000000 +0200
++++ Python-3.11.6-new/Modules/getpath.py	2023-10-08 11:36:33.831184119 +0200
+@@ -186,6 +186,19 @@ if os_name == 'posix' or os_name == 'dar
+     DELIM = ':'
+     SEP = '/'
+ 
++elif os_name == 'mingw':
++    BUILDDIR_TXT = 'pybuilddir.txt'
++    BUILD_LANDMARK = f'Modules\\Setup.local'
++    DEFAULT_PROGRAM_NAME = f'python{VERSION_MAJOR}'
++    STDLIB_SUBDIR = f'{platlibdir}\\python{VERSION_MAJOR}.{VERSION_MINOR}'
++    STDLIB_LANDMARKS = [f'{STDLIB_SUBDIR}\\os.py', f'{STDLIB_SUBDIR}\\os.pyc']
++    PLATSTDLIB_LANDMARK = f'{platlibdir}\\python{VERSION_MAJOR}.{VERSION_MINOR}\\lib-dynload'
++    BUILDSTDLIB_LANDMARKS = ['Lib\\os.py']
++    VENV_LANDMARK = 'pyvenv.cfg'
++    ZIP_LANDMARK = f'{platlibdir}\\python{VERSION_MAJOR}{VERSION_MINOR}.zip'
++    DELIM = ';'
++    SEP = '\\'
++
+ elif os_name == 'nt':
+     BUILDDIR_TXT = 'pybuilddir.txt'
+     BUILD_LANDMARK = f'{VPATH}\\Modules\\Setup.local'
+@@ -456,7 +469,7 @@ if not py_setpath and not home_was_set:
+     # ._pth file, but it cannot override the library's one.
+     for p in [library, executable, real_executable]:
+         if p:
+-            if os_name == 'nt' and (hassuffix(p, 'exe') or hassuffix(p, 'dll')):
++            if (os_name == 'nt' or os_name == 'mingw') and (hassuffix(p, 'exe') or hassuffix(p, 'dll')):
+                 p = p.rpartition('.')[0]
+             p += '._pth'
+             try:
+diff -rupN --no-dereference Python-3.11.6/Python/thread_pthread.h Python-3.11.6-new/Python/thread_pthread.h
+--- Python-3.11.6/Python/thread_pthread.h	2023-10-02 15:29:10.000000000 +0200
++++ Python-3.11.6-new/Python/thread_pthread.h	2023-10-08 11:36:32.383159713 +0200
+@@ -352,6 +352,9 @@ PyThread_get_thread_native_id(void)
+ #elif defined(__NetBSD__)
+     lwpid_t native_id;
+     native_id = _lwp_self();
++#elif defined(__MINGW32__)
++    pthread_t native_id;
++    native_id = pthread_self();
+ #endif
+     return (unsigned long) native_id;
+ }
+diff -rupN --no-dereference Python-3.11.6/Makefile.pre.in Python-3.11.6-new/Makefile.pre.in
+--- Python-3.11.6/Makefile.pre.in	2023-10-08 11:36:32.099154932 +0200
++++ Python-3.11.6-new/Makefile.pre.in	2023-10-08 11:36:32.103154999 +0200
+@@ -284,6 +284,7 @@ LIBOBJS=	@LIBOBJS@
+ 
+ PYTHON=		python$(EXE)
+ BUILDPYTHON=	python$(BUILDEXE)
++BUILDPYTHONW=	pythonw$(BUILDEXE)
+ 
+ HOSTRUNNER= @HOSTRUNNER@
+ 
+@@ -585,7 +586,7 @@ LIBEXPAT_HEADERS= \
+ 
+ # Default target
+ all:		@DEF_MAKE_ALL_RULE@
+-build_all:	check-clean-src $(BUILDPYTHON) platform oldsharedmods sharedmods \
++build_all:	check-clean-src $(BUILDPYTHON) $(BUILDPYTHONW) platform oldsharedmods sharedmods \
+ 		gdbhooks Programs/_testembed python-config
+ build_wasm: check-clean-src $(BUILDPYTHON) platform oldsharedmods python-config
+ 
+@@ -701,9 +702,29 @@ coverage-report: regen-token regen-froze
+ clinic: check-clean-src $(srcdir)/Modules/_blake2/blake2s_impl.c
+ 	$(PYTHON_FOR_REGEN) $(srcdir)/Tools/clinic/clinic.py --make --srcdir $(srcdir)
+ 
++pythonnt_rc.h:
++	# FIXME: FIELD3 not set
++	@echo '#define FIELD3 0' > $@
++	@echo '#define MS_DLL_ID "$(VERSION)"' >> $@
++	@echo '#define PYTHON_DLL_NAME "$(DLLLIBRARY)"' >> $@
++
++python_exe.o: pythonnt_rc.h $(srcdir)/PC/python_exe.rc
++	$(WINDRES) -I$(srcdir)/Include -I$(srcdir)/PC -I. $(srcdir)/PC/python_exe.rc $@
++
++pythonw_exe.o: pythonnt_rc.h $(srcdir)/PC/pythonw_exe.rc
++	$(WINDRES) -I$(srcdir)/Include -I$(srcdir)/PC -I. $(srcdir)/PC/pythonw_exe.rc $@
++
++python_nt.o: pythonnt_rc.h $(srcdir)/PC/python_nt.rc
++	$(WINDRES) -I$(srcdir)/Include -I$(srcdir)/PC -I. $(srcdir)/PC/python_nt.rc $@
++
++$(BUILDPYTHONW): Programs/python.o $(LIBRARY) $(LDLIBRARY) $(PY3LIBRARY) pythonw_exe.o
++	$(LINKCC) $(PY_CORE_LDFLAGS) $(LINKFORSHARED) -municode -mwindows -o $@ Programs/python.o $(BLDLIBRARY) $(LIBS) $(MODLIBS) $(SYSLIBS) $(LDLAST) pythonw_exe.o
++
++
++
+ # Build the interpreter
+-$(BUILDPYTHON):	Programs/python.o $(LINK_PYTHON_DEPS)
+-	$(LINKCC) $(PY_CORE_LDFLAGS) $(LINKFORSHARED) -o $@ Programs/python.o $(LINK_PYTHON_OBJS) $(LIBS) $(MODLIBS) $(SYSLIBS)
++$(BUILDPYTHON):	Programs/python.o $(LINK_PYTHON_DEPS) python_exe.o
++	$(LINKCC) $(PY_CORE_LDFLAGS) $(LINKFORSHARED) -o $@ Programs/python.o $(LINK_PYTHON_OBJS) $(LIBS) $(MODLIBS) $(SYSLIBS) python_exe.o
+ 
+ platform: $(PYTHON_FOR_BUILD_DEPS) pybuilddir.txt
+ 	$(RUNSHARED) $(PYTHON_FOR_BUILD) -c 'import sys ; from sysconfig import get_platform ; print("%s-%d.%d" % (get_platform(), *sys.version_info[:2]))' >platform
+@@ -807,10 +828,10 @@ $(PYTHONFRAMEWORKDIR)/Versions/$(VERSION
+ 
+ # This rule builds the Cygwin Python DLL and import library if configured
+ # for a shared core library; otherwise, this rule is a noop.
+-$(DLLLIBRARY) libpython$(LDVERSION).dll.a: $(LIBRARY_OBJS)
++$(DLLLIBRARY) libpython$(LDVERSION).dll.a: $(LIBRARY_OBJS) python_nt.o
+ 	if test -n "$(DLLLIBRARY)"; then \
+ 		$(LDSHARED) -Wl,--out-implib=$@ -o $(DLLLIBRARY) $^ \
+-			$(LIBS) $(MODLIBS) $(SYSLIBS); \
++			$(LIBS) $(MODLIBS) $(SYSLIBS) python_nt.o; \
+ 	else true; \
+ 	fi
+ 
+@@ -1802,6 +1823,7 @@ altbininstall: $(BUILDPYTHON) @FRAMEWORK
+ 	done
+ 	if test "$(PYTHONFRAMEWORKDIR)" = "no-framework" ; then \
+ 		$(INSTALL_PROGRAM) $(BUILDPYTHON) $(DESTDIR)$(BINDIR)/python$(LDVERSION)$(EXE); \
++		$(INSTALL_PROGRAM) $(BUILDPYTHONW) $(DESTDIR)$(BINDIR)/python3w$(EXE); \
+ 	else \
+ 		$(INSTALL_PROGRAM) $(STRIPFLAG) Mac/pythonw $(DESTDIR)$(BINDIR)/python$(LDVERSION)$(EXE); \
+ 	fi
+diff -rupN --no-dereference Python-3.11.6/PC/python_exe.rc Python-3.11.6-new/PC/python_exe.rc
+--- Python-3.11.6/PC/python_exe.rc	2023-10-02 15:29:10.000000000 +0200
++++ Python-3.11.6-new/PC/python_exe.rc	2023-10-08 11:36:32.103154999 +0200
+@@ -12,7 +12,7 @@
+ // current versions of Windows.
+ 1 RT_MANIFEST "python.manifest"
+ 
+-1 ICON DISCARDABLE "icons\python.ico" 
++1 ICON DISCARDABLE "icons/python.ico"
+ 
+ 
+ /////////////////////////////////////////////////////////////////////////////
+diff -rupN --no-dereference Python-3.11.6/PC/python_nt.rc Python-3.11.6-new/PC/python_nt.rc
+--- Python-3.11.6/PC/python_nt.rc	2023-10-02 15:29:10.000000000 +0200
++++ Python-3.11.6-new/PC/python_nt.rc	2023-10-08 11:36:32.104155016 +0200
+@@ -39,7 +39,7 @@ BEGIN
+             VALUE "FileVersion", PYTHON_VERSION
+             VALUE "InternalName", "Python DLL\0"
+             VALUE "LegalCopyright", PYTHON_COPYRIGHT "\0"
+-            VALUE "OriginalFilename", ORIGINAL_FILENAME "\0"
++            VALUE "OriginalFilename", PYTHON_DLL_NAME "\0"
+             VALUE "ProductName", "Python\0"
+             VALUE "ProductVersion", PYTHON_VERSION
+         END
+diff -rupN --no-dereference Python-3.11.6/PC/python_ver_rc.h Python-3.11.6-new/PC/python_ver_rc.h
+--- Python-3.11.6/PC/python_ver_rc.h	2023-10-02 15:29:10.000000000 +0200
++++ Python-3.11.6-new/PC/python_ver_rc.h	2023-10-08 11:36:32.104155016 +0200
+@@ -3,6 +3,7 @@
+ //
+ #pragma code_page(1252)
+ #include "winver.h"
++#include "pythonnt_rc.h"
+ 
+ #define PYTHON_COMPANY   "Python Software Foundation"
+ #define PYTHON_COPYRIGHT "Copyright \xA9 2001-2023 Python Software Foundation. Copyright \xA9 2000 BeOpen.com. Copyright \xA9 1995-2001 CNRI. Copyright \xA9 1991-1995 SMC."
+diff -rupN --no-dereference Python-3.11.6/PC/pythonw_exe.rc Python-3.11.6-new/PC/pythonw_exe.rc
+--- Python-3.11.6/PC/pythonw_exe.rc	2023-10-02 15:29:10.000000000 +0200
++++ Python-3.11.6-new/PC/pythonw_exe.rc	2023-10-08 11:36:32.104155016 +0200
+@@ -12,7 +12,7 @@
+ // current versions of Windows.
+ 1 RT_MANIFEST "python.manifest"
+ 
+-1 ICON DISCARDABLE "icons\pythonw.ico" 
++1 ICON DISCARDABLE "icons/pythonw.ico"
+ 
+ 
+ /////////////////////////////////////////////////////////////////////////////
+diff -rupN --no-dereference Python-3.11.6/Programs/python.c Python-3.11.6-new/Programs/python.c
+--- Python-3.11.6/Programs/python.c	2023-10-02 15:29:10.000000000 +0200
++++ Python-3.11.6-new/Programs/python.c	2023-10-08 11:36:32.104155016 +0200
+@@ -8,10 +8,9 @@ wmain(int argc, wchar_t **argv)
+ {
+     return Py_Main(argc, argv);
+ }
+-#else
++#endif
+ int
+ main(int argc, char **argv)
+ {
+     return Py_BytesMain(argc, argv);
+ }
+-#endif
+diff -rupN --no-dereference Python-3.11.6/Python/pylifecycle.c Python-3.11.6-new/Python/pylifecycle.c
+--- Python-3.11.6/Python/pylifecycle.c	2023-10-02 15:29:10.000000000 +0200
++++ Python-3.11.6-new/Python/pylifecycle.c	2023-10-08 11:36:31.535145451 +0200
+@@ -61,6 +61,27 @@ extern void _PyIO_Fini(void);
+ 
+ #define PUTS(fd, str) _Py_write_noraise(fd, str, (int)strlen(str))
+ 
++#if defined(__MINGW32__) && defined(PY_COERCE_C_LOCALE)
++#include <windows.h>
++
++static int
++setenv (const char *var, const char *val, int ovr)
++{
++  BOOL b;
++  char c[2];
++  if (!ovr)
++  {
++    DWORD d;
++    d = GetEnvironmentVariableA (var, c, 2);
++    if (0 != d && GetLastError () != ERROR_ENVVAR_NOT_FOUND)
++      return 1;
++  }
++  b = SetEnvironmentVariableA (var, val);
++  if (b)
++    return 0;
++  return 1;
++}
++#endif
+ 
+ #ifdef __cplusplus
+ extern "C" {
+diff -rupN --no-dereference Python-3.11.6/Modules/Setup Python-3.11.6-new/Modules/Setup
+--- Python-3.11.6/Modules/Setup	2023-10-08 11:36:33.825184018 +0200
++++ Python-3.11.6-new/Modules/Setup	2023-10-08 11:36:34.121189015 +0200
+@@ -270,6 +270,12 @@ mmap mmapmodule.c
+ # macOS specific module, needs SystemConfiguration and CoreFoundation framework
+ # _scproxy _scproxy.c
+ 
++# Windows specific modules
++msvcrt ../PC/msvcrtmodule.c
++_winapi _winapi.c
++winsound ../PC/winsound.c -lwinmm
++_overlapped overlapped.c
++
+ # Examples
+ 
+ #xx xxmodule.c
+diff -rupN --no-dereference Python-3.11.6/Modules/Setup.bootstrap.in Python-3.11.6-new/Modules/Setup.bootstrap.in
+--- Python-3.11.6/Modules/Setup.bootstrap.in	2023-10-02 15:29:10.000000000 +0200
++++ Python-3.11.6-new/Modules/Setup.bootstrap.in	2023-10-08 11:36:34.121189015 +0200
+@@ -8,15 +8,15 @@
+ # module C APIs are used in core
+ atexit atexitmodule.c
+ faulthandler faulthandler.c
+-posix posixmodule.c
+-_signal signalmodule.c
++nt posixmodule.c
++_signal signalmodule.c -lws2_32
+ _tracemalloc _tracemalloc.c
+ 
+ # modules used by importlib, deepfreeze, freeze, runpy, and sysconfig
+ _codecs _codecsmodule.c
+ _collections _collectionsmodule.c
+ errno errnomodule.c
+-_io _io/_iomodule.c _io/iobase.c _io/fileio.c _io/bytesio.c _io/bufferedio.c _io/textio.c _io/stringio.c
++_io _io/_iomodule.c _io/iobase.c _io/fileio.c _io/bytesio.c _io/bufferedio.c _io/textio.c _io/stringio.c _io/winconsoleio.c
+ itertools itertoolsmodule.c
+ _sre _sre/sre.c
+ _thread _threadmodule.c
+@@ -33,3 +33,5 @@ _symtable symtablemodule.c
+ 
+ # for systems without $HOME env, used by site._getuserbase()
+ @MODULE_PWD_TRUE@pwd pwdmodule.c
++
++winreg ../PC/winreg.c
+diff -rupN --no-dereference Python-3.11.6/setup.py Python-3.11.6-new/setup.py
+--- Python-3.11.6/setup.py	2023-10-08 11:36:33.825184018 +0200
++++ Python-3.11.6-new/setup.py	2023-10-08 11:36:34.122189032 +0200
+@@ -1381,6 +1381,15 @@ class PyBuildExt(build_ext):
+         self.addext(Extension('xxlimited', ['xxlimited.c']))
+         self.addext(Extension('xxlimited_35', ['xxlimited_35.c']))
+ 
++        # Modules with some Windows dependencies:
++        if HOST_PLATFORM.startswith(('mingw', 'win')):
++            srcdir = sysconfig.get_config_var('srcdir')
++            pc_srcdir = os.path.abspath(os.path.join(srcdir, 'PC'))
++
++            self.add(Extension('_msi', [os.path.join(pc_srcdir, p)
++                for p in ['_msi.c']],
++                libraries=['msi','cabinet','rpcrt4']) ) # To link with lib(msi|cabinet|rpcrt4).a
++
+     def detect_tkinter(self):
+         tkinter_libs = ['tcl', 'tk']
+         self.addext(Extension('_tkinter', ['_tkinter.c', 'tkappinit.c'], libraries=tkinter_libs))

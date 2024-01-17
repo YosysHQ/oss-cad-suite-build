@@ -1,6 +1,8 @@
-FROM fedora:32
+FROM fedora:39
 
-RUN dnf install -y  mingw64-libftdi \
+RUN dnf install -y  mingw64-gcc \
+                    mingw64-gcc-c++ \
+                    mingw64-libftdi \
                     mingw64-boost \
                     mingw64-pkg-config \
                     mingw64-tcl \
@@ -17,6 +19,7 @@ RUN dnf install -y  mingw64-libftdi \
                     git \
                     cmake \
                     autoconf \
+                    autoconf-archive \
                     automake \
                     flex \
                     bison \
@@ -34,7 +37,9 @@ RUN dnf install -y  mingw64-libftdi \
                     diffutils \
                     java-11-openjdk-headless \
                     cpio \
-                    xz
+                    xz \
+                    help2man \
+                    wget boost-devel
 
 ENV CROSS_NAME x86_64-w64-mingw32
 
@@ -51,8 +56,6 @@ ENV PKG_CONFIG_PATH /usr/x86_64-w64-mingw32/sys-root/mingw/lib/pkgconfig
 ENV CROSS_PREFIX /opt/${CROSS_NAME}
 
 RUN cp /usr/include/FlexLexer.h /usr/x86_64-w64-mingw32/sys-root/mingw/include/.
-
-RUN cp /usr/x86_64-w64-mingw32/sys-root/mingw/lib/libpthread.dll.a  /usr/x86_64-w64-mingw32/sys-root/mingw/lib/libpthread.a
 
 COPY Toolchain.cmake ${CROSS_PREFIX}/
 
@@ -73,8 +76,8 @@ RUN rustup target add x86_64-pc-windows-gnu && \
 RUN ln -s /usr/bin/python3 /usr/bin/python
 
 RUN cd /tmp \
-    && curl -L  https://download-ib01.fedoraproject.org/pub/fedora/linux/releases/33/Everything/source/tree/Packages/m/mingw-gmp-6.1.2-9.fc33.src.rpm --output mingw-gmp-6.1.2-9.fc33.src.rpm \
-    && rpm2cpio mingw-gmp-6.1.2-9.fc33.src.rpm | cpio -idmv \
+    && curl -L  https://dl.fedoraproject.org/pub/fedora/linux/development/rawhide/Everything/source/tree/Packages/m/mingw-gmp-6.1.2-16.fc39.src.rpm --output mingw-gmp-6.1.2-16.fc39.src.rpm \
+    && rpm2cpio mingw-gmp-6.1.2-16.fc39.src.rpm | cpio -idmv \
     && tar -xf gmp-6.1.2.tar.xz \
     && cd gmp-6.1.2 \
     && mingw64-configure --disable-shared --enable-cxx --enable-static \
@@ -92,8 +95,9 @@ RUN cd /tmp \
     && rm -rf /tmp/* \
     && true
 
-COPY winsock2.h /usr/x86_64-w64-mingw32/sys-root/mingw/include/
+RUN git clone --recursive https://github.com/gsauthof/pe-util && \
+    cd pe-util && \
+    CC=gcc CXX=g++ LD=g++ cmake . && \
+    make install -j9
 
 WORKDIR /work
-
-#RUN dnf install -y python3-cairo python3-cairo-devel
