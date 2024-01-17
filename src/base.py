@@ -783,16 +783,16 @@ def generateYaml(target, build_arch, write_to_file):
 			yaml_content +="        run: |\n"
 			yaml_content +="          URL=\"{}-{}/{}-{}.tgz\"\n".format(BUCKET_URL, arch, arch, target.name)
 			yaml_content +="          if wget --spider \"${URL}\" 2>/dev/null; then\n"
-			yaml_content +="              wget -qO- \"${URL}\" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -\n"
+			yaml_content +="              wget -qO- \"${URL}\" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -\n"
 			yaml_content +="          else\n"
 			yaml_content +="              echo \"Previous version not found in bucket\"\n"
 			yaml_content +="          fi\n"
 		for n in sorted(needs_download):
 			yaml_content +="      - name: Download {}\n".format(n)
 			if (n.startswith(arch)):
-				yaml_content +="        run: wget -qO- \"{}-{}/{}.tgz\" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -\n".format(BUCKET_URL, arch, n)
+				yaml_content +="        run: wget -qO- \"{}-{}/{}.tgz\" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -\n".format(BUCKET_URL, arch, n)
 			else:
-				yaml_content +="        run: wget -qO- \"{}-{}/{}.tgz\" -retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -\n".format(BUCKET_URL, "linux-x64", n)
+				yaml_content +="        run: wget -qO- \"{}-{}/{}.tgz\" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -\n".format(BUCKET_URL, "linux-x64", n)
 		if target.top_package:
 			yaml_content +="      - name: Build\n"
 			yaml_content +="        run: ./builder.py build --arch={} --target={} --single\n".format(arch, target.name)
