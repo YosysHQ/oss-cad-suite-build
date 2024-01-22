@@ -4,7 +4,7 @@ SourceLocation(
 	name = 'iverilog',
 	vcs = 'git',
 	location = 'https://github.com/steveicarus/iverilog',
-	revision = 'origin/master',
+	revision = '192b6aec96fde982e6ddcb28b346d5893aa8e874',
 	license_file = 'COPYING',
 )
 
