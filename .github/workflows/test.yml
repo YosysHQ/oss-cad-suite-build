@@ -18,5 +18,8 @@ jobs:
           repository: YosysHQ/sby
       - name: Setup test environment
         uses: YosysHQ/setup-oss-cad-suite@v3
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          python-override: true
       - name: Run checks
         run: tabbypip install xmlschema && make ci
