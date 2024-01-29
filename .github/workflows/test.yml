@@ -13,10 +13,10 @@ jobs:
 
     steps:
       - name: Get latest sby sources
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: YosysHQ/sby
       - name: Setup test environment
-        uses: YosysHQ/setup-oss-cad-suite@v1
+        uses: YosysHQ/setup-oss-cad-suite@v3
       - name: Run checks
         run: tabbypip install xmlschema && make ci
