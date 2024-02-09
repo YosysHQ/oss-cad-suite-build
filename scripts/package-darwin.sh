@@ -127,7 +127,7 @@ EOT
 fi
 
 if [ ${PRELOAD} == 'True' ]; then
-    if [ $binfile == "bin/yosys" ] || [ $binfile == "bin/tabbylic" ]; then
+    if [ $binfile == "bin/yosys" ] || [ $binfile == "bin/tabbylic" ] || [ $binfile == "lib/ivl/ivl" ] || [ $binfile == "lib/ivl/ivlpp" ] || [ $binfile == "lib/ivl/vhdlpp" ] || [ $binfile == "bin/iverilog" ] || [ $binfile == "bin/vvp" ]; then
         echo "Skipping"
     else
         cat >> $binfile << EOT
