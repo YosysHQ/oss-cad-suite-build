@@ -41,6 +41,11 @@ RUN dnf install -y  mingw64-gcc \
                     help2man \
                     wget boost-devel
 
+RUN git clone --recursive https://github.com/gsauthof/pe-util && \
+    cd pe-util && \
+    CC=gcc CXX=g++ LD=g++ cmake . && \
+    make install -j9
+
 ENV CROSS_NAME x86_64-w64-mingw32
 
 ENV AS=/usr/bin/${CROSS_NAME}-as \
@@ -76,7 +81,7 @@ RUN rustup target add x86_64-pc-windows-gnu && \
 RUN ln -s /usr/bin/python3 /usr/bin/python
 
 RUN cd /tmp \
-    && curl -L  https://dl.fedoraproject.org/pub/fedora/linux/development/rawhide/Everything/source/tree/Packages/m/mingw-gmp-6.1.2-16.fc39.src.rpm --output mingw-gmp-6.1.2-16.fc39.src.rpm \
+    && curl -L https://dl.fedoraproject.org/pub/fedora/linux/releases/39/Everything/source/tree/Packages/m/mingw-gmp-6.1.2-16.fc39.src.rpm --output mingw-gmp-6.1.2-16.fc39.src.rpm \
     && rpm2cpio mingw-gmp-6.1.2-16.fc39.src.rpm | cpio -idmv \
     && tar -xf gmp-6.1.2.tar.xz \
     && cd gmp-6.1.2 \
@@ -94,10 +99,5 @@ RUN cd /tmp \
     && mingw64-make install \
     && rm -rf /tmp/* \
     && true
-
-RUN git clone --recursive https://github.com/gsauthof/pe-util && \
-    cd pe-util && \
-    CC=gcc CXX=g++ LD=g++ cmake . && \
-    make install -j9
 
 WORKDIR /work
