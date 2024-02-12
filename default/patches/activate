@@ -1,4 +1,4 @@
 echo "Please wait"
-echo "Removing quarantine flag from all files ..."
-sudo find . -type f -exec xattr -d com.apple.quarantine {} 2> /dev/null \;
+echo "Removing quarantine flag from all files and directories..."
+sudo find . -exec xattr -d com.apple.quarantine {} 2> /dev/null \;
 echo "Done"
