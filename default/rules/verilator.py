@@ -11,6 +11,5 @@ SourceLocation(
 Target(
 	name = 'verilator',
 	sources = [ 'verilator' ],
-	patches = [ 'verilator_patches.py' ],
 	package = 'verilator',
 )

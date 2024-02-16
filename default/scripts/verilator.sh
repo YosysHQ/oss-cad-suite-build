@@ -1,5 +1,4 @@
 cd verilator
-python3 ${PATCHES_DIR}/verilator_patches.py
 autoconf
 ./configure --prefix=${INSTALL_PREFIX} --host=${CROSS_NAME}
 if [ ${ARCH_BASE} == 'darwin' ]; then
