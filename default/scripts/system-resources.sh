@@ -2,6 +2,7 @@ source ${WORK_DIR}/default/scripts/system-resources-tabby.sh
 
 if [ ${ARCH_BASE} == 'linux' ]; then
     cp -rv /usr/lib/${CROSS_NAME}/libdl.so.2 ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/.
+    cp -rv /usr/lib/${CROSS_NAME}/libpthread.so.0 ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/.
     cp -rL /usr/lib/${CROSS_NAME}/libGLX_*.so.0 ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/.
     mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/dri
 if [ ${ARCH} == 'linux-x64' ]; then
