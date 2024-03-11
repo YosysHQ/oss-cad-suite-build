@@ -128,7 +128,7 @@ Any macOS 12.00 or later with Intel CPU should use this distribution package.
 Any macOS 12.00 or later with M1/M2 CPU should use this distribution package.
 
 ### windows-x64
-This architecture is supported for Windows 10 and 11, but older 64-bit version of Windows 7, 8, or 8.1 should work. 
+This architecture is supported for Windows 10 and 11. 
 
 ### linux-arm64
 ARM64 based Linux devices using 64bit CPU as in Raspberry Pi 4,5 and 400 (with 64bit version of OS installed), and also laptops like the MNT Reform 2 can use this distribution package.
