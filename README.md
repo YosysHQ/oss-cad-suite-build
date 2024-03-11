@@ -7,10 +7,10 @@
 [![linux-arm64](https://github.com/YosysHQ/oss-cad-suite-build/actions/workflows/linux-arm64.yml/badge.svg)](https://github.com/YosysHQ/oss-cad-suite-build/releases/latest)
 [![darwin-arm64](https://github.com/YosysHQ/oss-cad-suite-build/actions/workflows/darwin-arm64.yml/badge.svg)](https://github.com/YosysHQ/oss-cad-suite-build/releases/latest)
 
-# Introduction
+## Introduction
 
 OSS CAD Suite is a binary software distribution for a number of [open source software](https://en.wikipedia.org/wiki/Open-source_software) used in digital logic design. 
-You will find tools for RTL synthesis, formal hardware verification, place & route, FPGA programming, and testing with support for HDLs like Verilog, Migen and Amaranth.
+You will find tools for RTL synthesis, formal hardware verification, place & route, FPGA programming, and testing with support for HDLs like Verilog, Migen, and Amaranth.
 
 OSS CAD Suite is a component of YosysHQ's Tabby CAD Suite:  
 ![image](https://user-images.githubusercontent.com/59544343/119006798-f8786100-b990-11eb-9535-cef67420ccfb.png)  
@@ -30,10 +30,10 @@ Contact us at contact@yosyshq.com to arrange a free evaluation license.
  * [GHDL plugin](https://github.com/ghdl/ghdl-yosys-plugin) VHDL synthesis based on GHDL (linux-x64 and darwin-x64 platforms only)
 
 ### Formal Tools
- * [sby](https://github.com/YosysHQ/sby) a front-end driver program for Yosys-based formal hardware verification flows.
+ * [sby (SymbiYosys)](https://github.com/YosysHQ/sby) a front-end driver program for Yosys-based formal hardware verification flows.
  * [mcy](https://github.com/YosysHQ/mcy) Mutation Cover with Yosys
  * [eqy](https://github.com/YosysHQ/eqy) Equivalence Checking with Yosys
- * [sby-gui](https://github.com/YosysHQ/sby-gui) GUI for sby
+ * [sby-gui](https://github.com/YosysHQ/sby-gui) GUI for sby (SymbiYosys)
  * [aiger](https://github.com/arminbiere/aiger) AIGER tools including bounded model checker
  * [avy](https://bitbucket.org/arieg/extavy) Interpolating Property Directed Reachability tool
  * [Boolector](https://github.com/Boolector/boolector) SMT solver and BTOR model checker
@@ -43,7 +43,7 @@ Contact us at contact@yosyshq.com to arrange a free evaluation license.
  * [Z3](https://github.com/Z3Prover/z3) SMT solver
  * [Bitwuzla](https://github.com/bitwuzla/bitwuzla) SMT solver
 
-### PnR
+### PnR (Place and Route)
  * [nextpnr](https://github.com/YosysHQ/nextpnr) a portable FPGA place and route tool (generic, ice40, ecp5, machxo2, nexus, gowin)
  * [Project IceStorm](https://github.com/YosysHQ/icestorm) tools for working with Lattice ICE40 bitstreams
  * [Project Trellis](https://github.com/YosysHQ/prjtrellis) tools for working with Lattice ECP5 bitstreams
@@ -76,7 +76,7 @@ Contact us at contact@yosyshq.com to arrange a free evaluation license.
  * [macports](https://www.macports.org/) distribution system for macOS is used to obtain all libraries used, and they are provided in package.
  * [MinGW](https://sourceforge.net/projects/mingw) Minimalist GNU for Windows library packages from Fedora 39 are used in compilation and provided in package.
  
-# Installation
+## Installation
 
 1. Download an archive matching your OS from [the releases page](https://github.com/YosysHQ/oss-cad-suite-build/releases/latest).
 2. Extract the archive to a location of your choice (for Windows it is recommended that path does not contain spaces)
@@ -84,15 +84,16 @@ Contact us at contact@yosyshq.com to arrange a free evaluation license.
 4. Set the environment as described below.
 
 Linux and macOS
-```
+```bash
 export PATH="<extracted_location>/oss-cad-suite/bin:$PATH"
 
-or
+# or
 
 source <extracted_location>/oss-cad-suite/environment
 ```
+
 Windows
-```
+```batch
 from existing CMD prompt:
 <extracted_location>\oss-cad-suite\environment.bat
 
@@ -102,11 +103,11 @@ to create new CMD prompt:
 
 **NOTE:** when environment is set, `python3` from package becomes available as well, this enables usage of *Migen* and *Amaranth* HDL and *LiteX* libraries scripts as usual. When OSS CAD Suite is just added in PATH to use packaged python3 use `tabbypy3` to start python environment. For Windows, there are no wrappers and using environment.bat is only choice.
 
-# Using LiteX
+## Using LiteX
 
 We provide you with Python 3.11 and all required software to be able to use LiteX. After activating `environment` it is possible to perform installation same as usual:
 
-```
+```bash
 mkdir -p litex
 cd litex
 wget https://raw.githubusercontent.com/enjoy-digital/litex/master/litex_setup.py
@@ -114,46 +115,46 @@ python3 litex_setup.py init
 python3 litex_setup.py install
 ```
 
-# Supported architectures
+## Supported Architectures
 
-## linux-x64
-Any personal Linux based computer should just work, no additional packages are needed to be installed on system to make OSS CAD Suite working.
+### linux-x64
+Any personal Linux based computer should just work; no additional packages need to be installed on the system to make OSS CAD Suite work.
 Distributed libraries are based on Ubuntu 20.04, but everything is packaged in such a way so it can be used on any Linux distribution.
 
-## darwin-x64
+### darwin-x64
 Any macOS 12.00 or later with Intel CPU should use this distribution package.
 
-## darwin-arm64
+### darwin-arm64
 Any macOS 12.00 or later with M1/M2 CPU should use this distribution package.
 
-## windows-x64
-This architecture is supported for Windows 10 and 11, but older 64-bit version of Windows 7, 8 or 8.1 should work. 
+### windows-x64
+This architecture is supported for Windows 10 and 11, but older 64-bit version of Windows 7, 8, or 8.1 should work. 
 
-## linux-arm64
+### linux-arm64
 ARM64 based Linux devices using 64bit CPU as in Raspberry Pi 4,5 and 400 (with 64bit version of OS installed), and also laptops like the MNT Reform 2 can use this distribution package.
 
-# Contributing
+## Contributing
 
-To be able to build OSS CAD Suite yourself need to install `docker` (please note this only works on x64 platforms) and `python 3.6` or higher, with `click` library.
+To be able to build OSS CAD Suite yourself, you need to install `docker` (please note this only works on x64 platforms) and `python 3.6` or higher, with the `click` library.
 
 
 After that just running ```./builder.py``` should work fine.
 
 To build default build:
-```
+```bash
 ./builder.py build 
 ```
 
-To skip update of source code you can always:
-```
+To skip update of source code, you can always:
+```bash
 ./builder.py build --no-update
 ```
 
 To build specific target and architecture:
-```
+```bash
 ./builder.py build --target=yosys --arch=linux-arm64
 ```
 
-# Alternatives
+## Alternatives
 
 If your project is primarily written in Python (using tools such as Amaranth or LiteX), and you only need synthesis and PnR tools, you might find [YoWASP](https://yowasp.org) more suited to your needs since it allows managing installation and versioning of these tools in the same way as any other Python package dependencies.
