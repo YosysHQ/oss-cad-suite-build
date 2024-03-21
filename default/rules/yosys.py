@@ -4,7 +4,7 @@ SourceLocation(
 	name = 'yosys',
 	vcs = 'git',
 	location = 'https://github.com/YosysHQ/yosys',
-	revision = 'origin/master',
+	revision = 'origin/main',
 	license_file = 'COPYING',
 )
 

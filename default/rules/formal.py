@@ -12,7 +12,7 @@ SourceLocation(
 	name = 'mcy',
 	vcs = 'git',
 	location = 'https://github.com/YosysHQ/mcy',
-	revision = 'origin/master',
+	revision = 'origin/main',
 	license_file = 'COPYING',
 )
 
@@ -28,7 +28,7 @@ SourceLocation(
 	name = 'sby',
 	vcs = 'git',
 	location = 'https://github.com/YosysHQ/sby',
-	revision = 'origin/master',
+	revision = 'origin/main',
 	license_file = 'COPYING',
 )
 
@@ -36,7 +36,7 @@ SourceLocation(
 	name = 'sby-gui',
 	vcs = 'git',
 	location = 'https://github.com/YosysHQ/sby-gui',
-	revision = 'origin/master',
+	revision = 'origin/main',
 	license_file = 'COPYING',
 )
 
