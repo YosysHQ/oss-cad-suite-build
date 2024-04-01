@@ -74,7 +74,6 @@ Target(
     release_name = 'oss-cad-suite-ci',
     top_package = True,
     dependencies = [
-        'formal',
         'aiger',
         'avy',
         'bitwuzla',
@@ -85,8 +84,6 @@ Target(
         'suprove',
         'pono',
         'z3',
-        'eqy',
-        'gtkwave',
         'iverilog',
     ],
     branding ='OSS CAD Suite',
