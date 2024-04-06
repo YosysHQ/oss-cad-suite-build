@@ -132,7 +132,7 @@ jobs:
           key: cache-sources-yosys
       - name: Download previous build
         run: |
-          URL="https://github.com/lushaylabs/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-yosys.tgz"
+          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-yosys.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
@@ -1298,7 +1298,7 @@ jobs:
               echo "Previous version not found in bucket"
           fi
       - name: Download linux-arm64-yosys
-        run: wget -qO- "https://github.com/lushaylabs/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-yosys.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-yosys.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-arm64 --target=eqy --single --tar
       - uses: ncipollo/release-action@v1
@@ -1680,7 +1680,7 @@ jobs:
       - name: Download linux-arm64-yices
         run: wget -qO- "https://github.com/lushaylabs/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-yices.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-arm64-yosys
-        run: wget -qO- "https://github.com/lushaylabs/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-yosys.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-yosys.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-arm64-z3
         run: wget -qO- "https://github.com/lushaylabs/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-z3.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
