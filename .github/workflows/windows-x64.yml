@@ -363,6 +363,49 @@ jobs:
           tag: bucket-windows-x64
           artifacts: "windows-x64-nextpnr-gowin.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
+  windows-x64-nextpnr-himbaechel:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    needs: windows-x64-python3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: 'yosyshq/oss-cad-suite-build'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v4
+        with:
+          path: _sources
+          key: cache-sources-nextpnr-himbaechel
+      - name: Download previous build
+        run: |
+          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-windows-x64/windows-x64-nextpnr-himbaechel.tgz"
+          if wget --spider "${URL}" 2>/dev/null; then
+              wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+          else
+              echo "Previous version not found in bucket"
+          fi
+      - name: Download linux-x64-apicula-bba
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-apicula-bba.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+      - name: Download linux-x64-nextpnr-bba
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-bba.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+      - name: Download windows-x64-python3
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-windows-x64/windows-x64-python3.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+      - name: Download linux-x64-python3-native
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+      - name: Build
+        run: ./builder.py build --arch=windows-x64 --target=nextpnr-himbaechel --single --tar
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('windows-x64-nextpnr-himbaechel.tgz') != ''
+        with:
+          allowUpdates: True
+          prerelease: True
+          omitBody: True
+          omitBodyDuringUpdate: True
+          omitNameDuringUpdate: True
+          tag: bucket-windows-x64
+          artifacts: "windows-x64-nextpnr-himbaechel.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
   windows-x64-icestorm:
     runs-on: ubuntu-latest
     continue-on-error: true
@@ -1263,7 +1306,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   windows-x64-default:
     runs-on: ubuntu-latest
-    needs: [ windows-x64-apicula, windows-x64-avy, windows-x64-bitwuzla, windows-x64-boolector, windows-x64-cvc4, windows-x64-cvc5, windows-x64-eqy, windows-x64-formal, windows-x64-gtkwave, windows-x64-icestorm, windows-x64-iverilog, windows-x64-nextpnr-ecp5, windows-x64-nextpnr-generic, windows-x64-nextpnr-gowin, windows-x64-nextpnr-ice40, windows-x64-nextpnr-machxo2, windows-x64-nextpnr-nexus, windows-x64-openfpgaloader, windows-x64-pono, windows-x64-prjoxide, windows-x64-prjtrellis, windows-x64-pyhdl, windows-x64-python3, windows-x64-system-resources, windows-x64-utils, windows-x64-verilator, windows-x64-yices, windows-x64-yosys, windows-x64-z3 ]
+    needs: [ windows-x64-apicula, windows-x64-avy, windows-x64-bitwuzla, windows-x64-boolector, windows-x64-cvc4, windows-x64-cvc5, windows-x64-eqy, windows-x64-formal, windows-x64-gtkwave, windows-x64-icestorm, windows-x64-iverilog, windows-x64-nextpnr-ecp5, windows-x64-nextpnr-generic, windows-x64-nextpnr-gowin, windows-x64-nextpnr-himbaechel, windows-x64-nextpnr-ice40, windows-x64-nextpnr-machxo2, windows-x64-nextpnr-nexus, windows-x64-openfpgaloader, windows-x64-pono, windows-x64-prjoxide, windows-x64-prjtrellis, windows-x64-pyhdl, windows-x64-python3, windows-x64-system-resources, windows-x64-utils, windows-x64-verilator, windows-x64-yices, windows-x64-yosys, windows-x64-z3 ]
     steps:
       - name: Get current date
         id: date
@@ -1299,6 +1342,8 @@ jobs:
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-windows-x64/windows-x64-nextpnr-generic.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download windows-x64-nextpnr-gowin
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-windows-x64/windows-x64-nextpnr-gowin.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+      - name: Download windows-x64-nextpnr-himbaechel
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-windows-x64/windows-x64-nextpnr-himbaechel.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download windows-x64-nextpnr-ice40
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-windows-x64/windows-x64-nextpnr-ice40.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download windows-x64-nextpnr-machxo2
