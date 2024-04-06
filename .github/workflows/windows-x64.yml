@@ -1365,7 +1365,7 @@ jobs:
       - name: Download windows-x64-system-resources
         run: wget -qO- "https://github.com/lushaylabs/oss-cad-suite-build/releases/download/bucket-windows-x64/windows-x64-system-resources.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download windows-x64-utils
-        run: wget -qO- "https://github.com/lushaylabs/oss-cad-suite-build/releases/download/bucket-windows-x64/windows-x64-utils.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-windows-x64/windows-x64-utils.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download windows-x64-verilator
         run: wget -qO- "https://github.com/lushaylabs/oss-cad-suite-build/releases/download/bucket-windows-x64/windows-x64-verilator.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download windows-x64-yices
