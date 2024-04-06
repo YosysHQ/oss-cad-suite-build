@@ -1,9 +1,6 @@
 name: linux-x64
 
-on:
-  workflow_dispatch:
-  schedule:
-    - cron: '30 0 * * *'
+on: 'push'
 
 jobs:
   linux-x64-abc:
