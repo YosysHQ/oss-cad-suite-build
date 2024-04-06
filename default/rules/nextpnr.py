@@ -70,6 +70,15 @@ Target(
 	package = 'gowin',
 )
 
+Target(
+	name = 'nextpnr-himbaechel',
+	sources = [ 'nextpnr' ],
+	dependencies = [ 'python3', 'nextpnr-bba', 'apicula-bba', 'python3-native'],
+	patches = [ 'python3_package.sh' ],
+	resources = [ 'python3' ],
+	package = 'gowin',
+)
+
 # architecture specific
 SourceLocation(
 	name = 'icestorm',

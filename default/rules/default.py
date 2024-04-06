@@ -15,6 +15,7 @@ Target(
         'nextpnr-machxo2',
         'nextpnr-nexus',
         'nextpnr-gowin',
+        'nextpnr-himbaechel',
         'icestorm',
         'prjtrellis',
         'prjoxide',
