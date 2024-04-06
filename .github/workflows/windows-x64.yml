@@ -1212,7 +1212,7 @@ jobs:
           key: cache-sources-utils
       - name: Download previous build
         run: |
-          URL="https://github.com/lushaylabs/oss-cad-suite-build/releases/download/bucket-windows-x64/windows-x64-utils.tgz"
+          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-windows-x64/windows-x64-utils.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
