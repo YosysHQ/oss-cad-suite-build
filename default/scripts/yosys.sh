@@ -11,7 +11,7 @@ elif [ ${ARCH} == 'windows-x64' ]; then
 	sed 's|PYTHON := \$(shell cygpath -w -m \$(PREFIX)/bin/python3)|PYTHON := /usr/bin/python3|g' -i backends/smt2/Makefile.inc
 else
 	make config-gcc
-	sed -i -re "s,CXX = g++,CXX = ${CXX},g" Makefile
+	sed -i -re "s,CXX = g\+\+,CXX = ${CXX},g" Makefile
 fi
 make PREFIX=${INSTALL_PREFIX} DESTDIR=${OUTPUT_DIR} install -j${NPROC}
 pushd ${OUTPUT_DIR}${INSTALL_PREFIX} 
