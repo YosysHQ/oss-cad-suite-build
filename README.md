@@ -92,6 +92,15 @@ export PATH="<extracted_location>/oss-cad-suite/bin:$PATH"
 source <extracted_location>/oss-cad-suite/environment
 ```
 
+Linux and macOS (fish shell)
+```bash
+fish_add_path "<extracted_location>/oss-cad-suite/bin"
+
+# or
+
+source <extracted_location>/oss-cad-suite/environment.fish
+```
+
 Windows
 ```batch
 from existing CMD prompt:
