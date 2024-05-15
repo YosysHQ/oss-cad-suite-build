@@ -1,6 +1,7 @@
 source ${WORK_DIR}/default/scripts/system-resources-tabby.sh
 
 if [ ${ARCH_BASE} == 'linux' ]; then
+    cp ${PATCHES_DIR}/environment.fish ${OUTPUT_DIR}${INSTALL_PREFIX}/.
     cp -rv /usr/lib/${CROSS_NAME}/libdl.so.2 ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/.
     cp -rv /usr/lib/${CROSS_NAME}/libpthread.so.0 ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/.
     cp -rL /usr/lib/${CROSS_NAME}/libGLX_*.so.0 ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/.
@@ -76,4 +77,8 @@ if [ ${ARCH} == 'linux-arm64' ]; then
     ln -s nouveau_vieux_dri.so radeon_dri.so
     popd
 fi
+fi
+
+if [ ${ARCH_BASE} == 'darwin' ]; then
+    cp ${PATCHES_DIR}/environment.fish ${OUTPUT_DIR}${INSTALL_PREFIX}/.
 fi
