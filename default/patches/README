@@ -16,6 +16,9 @@ Linux and macOS
 ---------------
 export PATH="<extracted_location>/oss-cad-suite/bin:$PATH"
 
+with fish shell:
+fish_add_path "<extracted_location>/oss-cad-suite/bin"
+
 Windows
 -------
 from existing shell:
@@ -32,3 +35,7 @@ If you want to use the bundled version of Python, for example with nmigen, nextp
 We also provide a virtual environment that you can setup like this:
 
 source <extracted_location>/oss-cad-suite/environment
+
+or with fish shell:
+
+source <extracted_location>/oss-cad-suite/environment.fish
