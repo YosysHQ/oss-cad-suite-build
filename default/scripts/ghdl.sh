@@ -12,7 +12,7 @@ elif [ ${ARCH} == 'darwin-x64' ]; then
     wget https://github.com/ghdl/ghdl/releases/download/nightly/ghdl-macos-11-mcode.tgz
     mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}
     tar xvfz ghdl-macos-11-mcode.tgz -C ${OUTPUT_DIR}${INSTALL_PREFIX}
-    install_name_tool -id @executable_path/../lib/libghdl-4_0_0_dev.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libghdl-4_0_0_dev.dylib
+    install_name_tool -id @executable_path/../lib/libghdl-5_0_0_dev.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libghdl-5_0_0_dev.dylib
     wget https://github.com/mmicko/macos-resources/releases/download/v2/libgnat-2019.dylib
     cp libgnat-2019.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/.
     exit 0
