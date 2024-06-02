@@ -32,6 +32,7 @@ deactivate () {
     fi
 
     unset VIRTUAL_ENV
+    unset VIRTUAL_ENV_PROMPT
     unset VERILATOR_ROOT
     unset GHDL_PREFIX
     if [ ! "${1-}" = "nondestructive" ] ; then
@@ -55,7 +56,8 @@ else
     release_topdir_abs="$(realpath "$release_current_dir")"
 fi
 
-export VIRTUAL_ENV='___BRANDING___'
+export VIRTUAL_ENV="$release_topdir_abs"
+export VIRTUAL_ENV_PROMPT='___BRANDING___'
 
 _OLD_ENVIRONMENT_PATH="$PATH"
 PATH="$release_topdir_abs/bin:$release_topdir_abs/py3bin:$PATH"
@@ -70,9 +72,9 @@ fi
 _OLD_ENVIRONMENT_PS1="${PS1-}"
 if [ -n "${ZSH_VERSION-}" ] ; then
     autoload -U colors && colors
-    PS1="%{$fg[magenta]%}(${VIRTUAL_ENV})%{$reset_color%} ${PS1-}"
+    PS1="%{$fg[magenta]%}(${VIRTUAL_ENV_PROMPT})%{$reset_color%} ${PS1-}"
 else
-    PS1="\[\033[1;35m\]\342\246\227${VIRTUAL_ENV}\342\246\230\[\033[0m\] ${PS1-}"
+    PS1="\[\033[1;35m\]\342\246\227${VIRTUAL_ENV_PROMPT}\342\246\230\[\033[0m\] ${PS1-}"
 fi
 export PS1
 

@@ -13,6 +13,7 @@ function deactivate -d "Deactivate the ___BRANDING___ virtual environment"
     end
 
     set --erase VIRTUAL_ENV
+    set --erase VIRTUAL_ENV_PROMPT
     set --erase VERILATOR_ROOT
     set --erase GHDL_PREFIX
 
@@ -38,7 +39,8 @@ else
     set --global release_topdir_abs (realpath $release_current_dir)
 end
 
-set --export VIRTUAL_ENV '___BRANDING___'
+set --export VIRTUAL_ENV "$release_topdir_abs"
+set --export VIRTUAL_ENV_PROMPT '___BRANDING___'
 
 set --global _OLD_ENVIRONMENT_PATH "$PATH"
 set --export PATH "$release_topdir_abs/bin:$release_topdir_abs/py3bin:$PATH"
@@ -51,7 +53,7 @@ end
 functions --copy fish_prompt _old_environment_fish_prompt
 function fish_prompt -d "Write out the prompt"
     set_color magenta
-    echo -n -s '(' $VIRTUAL_ENV ') '
+    echo -n -s '(' $VIRTUAL_ENV_PROMPT ') '
     set_color normal
     _old_environment_fish_prompt
 end
