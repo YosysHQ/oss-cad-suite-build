@@ -63,20 +63,11 @@ Target(
 )
 
 Target(
-	name = 'nextpnr-gowin',
-	sources = [ 'nextpnr' ],
-	dependencies = [ 'python3', 'nextpnr-bba', 'apicula-bba'],
-	resources = [ 'python3' ],
-	package = 'gowin',
-)
-
-Target(
 	name = 'nextpnr-himbaechel',
 	sources = [ 'nextpnr' ],
-	dependencies = [ 'python3', 'nextpnr-bba', 'apicula-bba', 'python3-native'],
+	dependencies = [ 'python3', 'nextpnr-bba', 'python3-native'],
 	patches = [ 'python3_package.sh' ],
 	resources = [ 'python3' ],
-	package = 'gowin',
 )
 
 # architecture specific
@@ -172,9 +163,10 @@ Target(
 )
 
 Target(
-	name = 'apicula-bba',
+	name = 'nextpnr-himbaechel-gowin',
 	sources = [ 'nextpnr' ],
-	dependencies = [ 'apicula', 'python3-native' ],
-	gitrev = [ ('nextpnr', 'gowin') ],
+	dependencies = ['python3-native', 'apicula'],
+	gitrev = [ ('nextpnr', 'himbaechel') ],
+	package = 'gowin',
 	build_native = True,
 )

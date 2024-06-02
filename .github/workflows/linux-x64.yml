@@ -746,6 +746,47 @@ jobs:
           tag: bucket-linux-x64
           artifacts: "linux-x64-nextpnr-nexus.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
+  linux-x64-nextpnr-himbaechel:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    needs: [ linux-x64-nextpnr-bba, linux-x64-python3, linux-x64-python3-native ]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: 'yosyshq/oss-cad-suite-build'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v4
+        with:
+          path: _sources
+          key: cache-sources-nextpnr-himbaechel
+      - name: Download previous build
+        run: |
+          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-himbaechel.tgz"
+          if wget --spider "${URL}" 2>/dev/null; then
+              wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+          else
+              echo "Previous version not found in bucket"
+          fi
+      - name: Download linux-x64-nextpnr-bba
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-bba.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+      - name: Download linux-x64-python3
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+      - name: Download linux-x64-python3-native
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+      - name: Build
+        run: ./builder.py build --arch=linux-x64 --target=nextpnr-himbaechel --single --tar
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('linux-x64-nextpnr-himbaechel.tgz') != ''
+        with:
+          allowUpdates: True
+          prerelease: True
+          omitBody: True
+          omitBodyDuringUpdate: True
+          omitNameDuringUpdate: True
+          tag: bucket-linux-x64
+          artifacts: "linux-x64-nextpnr-himbaechel.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-apicula:
     runs-on: ubuntu-latest
     continue-on-error: true
@@ -785,7 +826,7 @@ jobs:
           tag: bucket-linux-x64
           artifacts: "linux-x64-apicula.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
-  linux-x64-apicula-bba:
+  linux-x64-nextpnr-himbaechel-gowin:
     runs-on: ubuntu-latest
     continue-on-error: true
     needs: [ linux-x64-apicula, linux-x64-python3-native ]
@@ -798,10 +839,10 @@ jobs:
         uses: actions/cache@v4
         with:
           path: _sources
-          key: cache-sources-apicula-bba
+          key: cache-sources-nextpnr-himbaechel-gowin
       - name: Download previous build
         run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-apicula-bba.tgz"
+          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-himbaechel-gowin.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
@@ -812,9 +853,9 @@ jobs:
       - name: Download linux-x64-python3-native
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
-        run: ./builder.py build --arch=linux-x64 --target=apicula-bba --single --tar
+        run: ./builder.py build --arch=linux-x64 --target=nextpnr-himbaechel-gowin --single --tar
       - uses: ncipollo/release-action@v1
-        if: hashFiles('linux-x64-apicula-bba.tgz') != ''
+        if: hashFiles('linux-x64-nextpnr-himbaechel-gowin.tgz') != ''
         with:
           allowUpdates: True
           prerelease: True
@@ -822,91 +863,7 @@ jobs:
           omitBodyDuringUpdate: True
           omitNameDuringUpdate: True
           tag: bucket-linux-x64
-          artifacts: "linux-x64-apicula-bba.tgz"
-          token: ${{ secrets.GITHUB_TOKEN }}
-  linux-x64-nextpnr-gowin:
-    runs-on: ubuntu-latest
-    continue-on-error: true
-    needs: [ linux-x64-apicula-bba, linux-x64-nextpnr-bba, linux-x64-python3 ]
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          repository: 'yosyshq/oss-cad-suite-build'
-      - name: Cache sources
-        id: cache-sources
-        uses: actions/cache@v4
-        with:
-          path: _sources
-          key: cache-sources-nextpnr-gowin
-      - name: Download previous build
-        run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-gowin.tgz"
-          if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
-          else
-              echo "Previous version not found in bucket"
-          fi
-      - name: Download linux-x64-apicula-bba
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-apicula-bba.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
-      - name: Download linux-x64-nextpnr-bba
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-bba.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
-      - name: Download linux-x64-python3
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
-      - name: Build
-        run: ./builder.py build --arch=linux-x64 --target=nextpnr-gowin --single --tar
-      - uses: ncipollo/release-action@v1
-        if: hashFiles('linux-x64-nextpnr-gowin.tgz') != ''
-        with:
-          allowUpdates: True
-          prerelease: True
-          omitBody: True
-          omitBodyDuringUpdate: True
-          omitNameDuringUpdate: True
-          tag: bucket-linux-x64
-          artifacts: "linux-x64-nextpnr-gowin.tgz"
-          token: ${{ secrets.GITHUB_TOKEN }}
-  linux-x64-nextpnr-himbaechel:
-    runs-on: ubuntu-latest
-    continue-on-error: true
-    needs: [ linux-x64-apicula-bba, linux-x64-nextpnr-bba, linux-x64-python3, linux-x64-python3-native ]
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          repository: 'yosyshq/oss-cad-suite-build'
-      - name: Cache sources
-        id: cache-sources
-        uses: actions/cache@v4
-        with:
-          path: _sources
-          key: cache-sources-nextpnr-himbaechel
-      - name: Download previous build
-        run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-himbaechel.tgz"
-          if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
-          else
-              echo "Previous version not found in bucket"
-          fi
-      - name: Download linux-x64-apicula-bba
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-apicula-bba.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
-      - name: Download linux-x64-nextpnr-bba
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-bba.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
-      - name: Download linux-x64-python3
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
-      - name: Download linux-x64-python3-native
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
-      - name: Build
-        run: ./builder.py build --arch=linux-x64 --target=nextpnr-himbaechel --single --tar
-      - uses: ncipollo/release-action@v1
-        if: hashFiles('linux-x64-nextpnr-himbaechel.tgz') != ''
-        with:
-          allowUpdates: True
-          prerelease: True
-          omitBody: True
-          omitBodyDuringUpdate: True
-          omitNameDuringUpdate: True
-          tag: bucket-linux-x64
-          artifacts: "linux-x64-nextpnr-himbaechel.tgz"
+          artifacts: "linux-x64-nextpnr-himbaechel-gowin.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-prjtrellis:
     runs-on: ubuntu-latest
@@ -1992,7 +1949,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-default:
     runs-on: ubuntu-latest
-    needs: [ linux-x64-aiger, linux-x64-apicula, linux-x64-avy, linux-x64-bitwuzla, linux-x64-boolector, linux-x64-cocotb, linux-x64-cvc4, linux-x64-cvc5, linux-x64-eqy, linux-x64-formal, linux-x64-ghdl, linux-x64-ghdl-yosys-plugin, linux-x64-graphviz, linux-x64-gtkwave, linux-x64-icestorm, linux-x64-iverilog, linux-x64-nextpnr-ecp5, linux-x64-nextpnr-generic, linux-x64-nextpnr-gowin, linux-x64-nextpnr-himbaechel, linux-x64-nextpnr-ice40, linux-x64-nextpnr-machxo2, linux-x64-nextpnr-nexus, linux-x64-openfpgaloader, linux-x64-pono, linux-x64-prjoxide, linux-x64-prjtrellis, linux-x64-pyhdl, linux-x64-python-programmers, linux-x64-python2, linux-x64-python3, linux-x64-suprove, linux-x64-system-resources, linux-x64-utils, linux-x64-verilator, linux-x64-xdot, linux-x64-yices, linux-x64-yosys, linux-x64-z3 ]
+    needs: [ linux-x64-aiger, linux-x64-apicula, linux-x64-avy, linux-x64-bitwuzla, linux-x64-boolector, linux-x64-cocotb, linux-x64-cvc4, linux-x64-cvc5, linux-x64-eqy, linux-x64-formal, linux-x64-ghdl, linux-x64-ghdl-yosys-plugin, linux-x64-graphviz, linux-x64-gtkwave, linux-x64-icestorm, linux-x64-iverilog, linux-x64-nextpnr-ecp5, linux-x64-nextpnr-generic, linux-x64-nextpnr-himbaechel, linux-x64-nextpnr-himbaechel-gowin, linux-x64-nextpnr-ice40, linux-x64-nextpnr-machxo2, linux-x64-nextpnr-nexus, linux-x64-openfpgaloader, linux-x64-pono, linux-x64-prjoxide, linux-x64-prjtrellis, linux-x64-pyhdl, linux-x64-python-programmers, linux-x64-python2, linux-x64-python3, linux-x64-suprove, linux-x64-system-resources, linux-x64-utils, linux-x64-verilator, linux-x64-xdot, linux-x64-yices, linux-x64-yosys, linux-x64-z3 ]
     steps:
       - name: Get current date
         id: date
@@ -2036,10 +1993,10 @@ jobs:
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-ecp5.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-nextpnr-generic
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-generic.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
-      - name: Download linux-x64-nextpnr-gowin
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-gowin.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-nextpnr-himbaechel
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-himbaechel.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+      - name: Download linux-x64-nextpnr-himbaechel-gowin
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-himbaechel-gowin.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-nextpnr-ice40
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-ice40.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-nextpnr-machxo2

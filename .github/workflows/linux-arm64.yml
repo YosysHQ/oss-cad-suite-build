@@ -395,47 +395,6 @@ jobs:
           tag: bucket-linux-arm64
           artifacts: "linux-arm64-nextpnr-nexus.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
-  linux-arm64-nextpnr-gowin:
-    runs-on: ubuntu-latest
-    continue-on-error: true
-    needs: linux-arm64-python3
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          repository: 'yosyshq/oss-cad-suite-build'
-      - name: Cache sources
-        id: cache-sources
-        uses: actions/cache@v4
-        with:
-          path: _sources
-          key: cache-sources-nextpnr-gowin
-      - name: Download previous build
-        run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-nextpnr-gowin.tgz"
-          if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
-          else
-              echo "Previous version not found in bucket"
-          fi
-      - name: Download linux-arm64-python3
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-python3.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
-      - name: Download linux-x64-apicula-bba
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-apicula-bba.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
-      - name: Download linux-x64-nextpnr-bba
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-bba.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
-      - name: Build
-        run: ./builder.py build --arch=linux-arm64 --target=nextpnr-gowin --single --tar
-      - uses: ncipollo/release-action@v1
-        if: hashFiles('linux-arm64-nextpnr-gowin.tgz') != ''
-        with:
-          allowUpdates: True
-          prerelease: True
-          omitBody: True
-          omitBodyDuringUpdate: True
-          omitNameDuringUpdate: True
-          tag: bucket-linux-arm64
-          artifacts: "linux-arm64-nextpnr-gowin.tgz"
-          token: ${{ secrets.GITHUB_TOKEN }}
   linux-arm64-nextpnr-himbaechel:
     runs-on: ubuntu-latest
     continue-on-error: true
@@ -460,8 +419,6 @@ jobs:
           fi
       - name: Download linux-arm64-python3
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-python3.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
-      - name: Download linux-x64-apicula-bba
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-apicula-bba.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-nextpnr-bba
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-bba.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-python3-native
@@ -1601,7 +1558,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-arm64-default:
     runs-on: ubuntu-latest
-    needs: [ linux-arm64-aiger, linux-arm64-apicula, linux-arm64-avy, linux-arm64-bitwuzla, linux-arm64-boolector, linux-arm64-cocotb, linux-arm64-cvc4, linux-arm64-cvc5, linux-arm64-eqy, linux-arm64-formal, linux-arm64-graphviz, linux-arm64-gtkwave, linux-arm64-icestorm, linux-arm64-iverilog, linux-arm64-nextpnr-ecp5, linux-arm64-nextpnr-generic, linux-arm64-nextpnr-gowin, linux-arm64-nextpnr-himbaechel, linux-arm64-nextpnr-ice40, linux-arm64-nextpnr-machxo2, linux-arm64-nextpnr-nexus, linux-arm64-openfpgaloader, linux-arm64-pono, linux-arm64-prjoxide, linux-arm64-prjtrellis, linux-arm64-pyhdl, linux-arm64-python-programmers, linux-arm64-python2, linux-arm64-python3, linux-arm64-suprove, linux-arm64-system-resources, linux-arm64-utils, linux-arm64-verilator, linux-arm64-xdot, linux-arm64-yices, linux-arm64-yosys, linux-arm64-z3 ]
+    needs: [ linux-arm64-aiger, linux-arm64-apicula, linux-arm64-avy, linux-arm64-bitwuzla, linux-arm64-boolector, linux-arm64-cocotb, linux-arm64-cvc4, linux-arm64-cvc5, linux-arm64-eqy, linux-arm64-formal, linux-arm64-graphviz, linux-arm64-gtkwave, linux-arm64-icestorm, linux-arm64-iverilog, linux-arm64-nextpnr-ecp5, linux-arm64-nextpnr-generic, linux-arm64-nextpnr-himbaechel, linux-arm64-nextpnr-ice40, linux-arm64-nextpnr-machxo2, linux-arm64-nextpnr-nexus, linux-arm64-openfpgaloader, linux-arm64-pono, linux-arm64-prjoxide, linux-arm64-prjtrellis, linux-arm64-pyhdl, linux-arm64-python-programmers, linux-arm64-python2, linux-arm64-python3, linux-arm64-suprove, linux-arm64-system-resources, linux-arm64-utils, linux-arm64-verilator, linux-arm64-xdot, linux-arm64-yices, linux-arm64-yosys, linux-arm64-z3 ]
     steps:
       - name: Get current date
         id: date
@@ -1641,8 +1598,6 @@ jobs:
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-nextpnr-ecp5.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-arm64-nextpnr-generic
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-nextpnr-generic.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
-      - name: Download linux-arm64-nextpnr-gowin
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-nextpnr-gowin.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-arm64-nextpnr-himbaechel
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-nextpnr-himbaechel.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-arm64-nextpnr-ice40
@@ -1683,6 +1638,8 @@ jobs:
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-yosys.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-arm64-z3
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-arm64/linux-arm64-z3.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+      - name: Download linux-x64-nextpnr-himbaechel-gowin
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-himbaechel-gowin.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-arm64 --target=default --single
       - uses: ncipollo/release-action@v1
