@@ -31,8 +31,10 @@ for script in bin/* py3bin/*; do
     fi
 done
 
-cp -f py3bin/* lib/.
-rm -rf py3bin
+if [ -d "py3bin" ]; then
+	cp -f py3bin/* lib/.
+	rm -rf py3bin
+fi
 
 # Remove general purpose launcher
 rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/win-launcher.exe
