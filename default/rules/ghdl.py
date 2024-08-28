@@ -11,5 +11,5 @@ SourceLocation(
 Target(
 	name = 'ghdl',
 	sources = [ 'ghdl' ],
-	arch = [ 'linux-x64', 'darwin-x64' ],
+	arch = [ 'linux-x64', 'darwin-x64', 'darwin-arm64' ],
 )
