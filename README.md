@@ -21,13 +21,13 @@ See [Tabby CAD Datasheet](https://www.yosyshq.com/tabby-cad-datasheet) for detai
  * [Amaranth](https://github.com/amaranth-lang/amaranth) refreshed Python toolbox for building complex digital hardware
  * [Migen](https://github.com/m-labs/migen) Python toolbox for building complex digital hardware
  * [ABC](https://people.eecs.berkeley.edu/~alanmi/abc/) A System for Sequential Synthesis and Verification
- * [GHDL](https://github.com/ghdl/ghdl) VHDL 2008/93/87 simulator (linux-x64 and darwin-x64 platforms only)
+ * [GHDL](https://github.com/ghdl/ghdl) VHDL 2008/93/87 simulator (linux-x64, darwin-x64 and darwin-arm64 platforms only)
  
 Did you know that the Tabby CAD version of yosys supports industry standard SystemVerilog, VHDL and SVA? 
 Contact us at contact@yosyshq.com to arrange a free evaluation license.
 
 ### Plugins
- * [GHDL plugin](https://github.com/ghdl/ghdl-yosys-plugin) VHDL synthesis based on GHDL (linux-x64 and darwin-x64 platforms only)
+ * [GHDL plugin](https://github.com/ghdl/ghdl-yosys-plugin) VHDL synthesis based on GHDL (linux-x64, darwin-x64 and darwin-arm64 platforms only)
 
 ### Formal Tools
  * [sby (formerly SymbiYosys)](https://github.com/YosysHQ/sby) a front-end driver program for Yosys-based formal hardware verification flows.
