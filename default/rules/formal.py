@@ -40,10 +40,23 @@ SourceLocation(
 	license_file = 'COPYING',
 )
 
+SourceLocation(
+	name = 'imctk',
+	vcs = 'git',
+	location = 'https://github.com/YosysHQ/imctk',
+	revision = 'origin/main',
+	license_file = 'COPYRIGHT',
+)
+
 Target(
 	name = 'formal',
 	sources = [ 'mau', 'mcy', 'scy', 'sby', 'sby-gui', 'yosys' ],
 	dependencies = [ 'python3', 'python3-native' ],
 	resources = [ 'python3' ],
 	patches = [ 'python3_package.sh' ],
+)
+
+Target(
+	name = 'imctk',
+	sources = [ 'imctk' ],
 )
