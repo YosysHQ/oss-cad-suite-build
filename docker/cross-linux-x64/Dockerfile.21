@@ -1,0 +1,4 @@
+FROM yosyshq/cross-linux-x64:2.0
+
+RUN RUSTUP_HOME=/opt/rust/rustup CARGO_HOME=/opt/rust/cargo rustup toolchain install nightly
+RUN RUSTUP_HOME=/opt/rust/rustup CARGO_HOME=/opt/rust/cargo rustup override set nightly

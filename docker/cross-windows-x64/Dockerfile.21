@@ -1,0 +1,6 @@
+FROM yosyshq/cross-windows-x64:2.0
+
+RUN RUSTUP_HOME=/opt/rust/rustup CARGO_HOME=/opt/rust/cargo rustup toolchain install nightly
+RUN RUSTUP_HOME=/opt/rust/rustup CARGO_HOME=/opt/rust/cargo rustup override set nightly
+RUN RUSTUP_HOME=/opt/rust/rustup CARGO_HOME=/opt/rust/cargo rustup target add x86_64-pc-windows-gnu
+RUN dnf install -y  openssl
