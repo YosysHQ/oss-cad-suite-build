@@ -1,6 +1,10 @@
 source ${PATCHES_DIR}/python3_package.sh
 python3_package_setup
-sed -i -re "s,sys.platform == \"darwin\",sysconfig.get_platform() == \"darwin-x64\",g" cocotb/cocotb_build_libs.py
+if [ ${ARCH} == 'darwin-x64' ]; then
+    sed -i -re "s,sys.platform == \"darwin\",sysconfig.get_platform() == \"darwin-x64\",g" cocotb/cocotb_build_libs.py
+elif [ ${ARCH} == 'darwin-arm64' ]; then
+    sed -i -re "s,sys.platform == \"darwin\",sysconfig.get_platform() == \"darwin-aarch64\",g" cocotb/cocotb_build_libs.py
+fi
 pushd cocotb
 python3_package_install
 python3_package_pth "cocotb"
