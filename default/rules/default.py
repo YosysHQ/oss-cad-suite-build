@@ -10,6 +10,7 @@ Target(
         'imctk',
         'ghdl',
         'ghdl-yosys-plugin',
+        'yosys-slang-plugin',
         'nextpnr-generic',
         'nextpnr-ice40',
         'nextpnr-ecp5',
