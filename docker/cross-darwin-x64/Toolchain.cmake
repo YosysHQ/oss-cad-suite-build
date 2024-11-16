@@ -11,7 +11,7 @@ SET(CMAKE_RANLIB $ENV{RANLIB} CACHE FILEPATH "Ranlib")
 
 set(CMAKE_ASM_COMPILER ${CMAKE_C_COMPILER})
 
-SET(CMAKE_OSX_SYSROOT /usr/local/osxcross/target/SDK/MacOSX12.3.sdk/)
+SET(CMAKE_OSX_SYSROOT /usr/local/osxcross/target/SDK/MacOSX13.3.sdk/)
 SET(CMAKE_EXE_LINKER_FLAGS "-v" CACHE STRING "Flags")
 
 SET(CMAKE_FIND_ROOT_PATH /usr/local/osxcross/target/macports/pkgs/opt/local/)
