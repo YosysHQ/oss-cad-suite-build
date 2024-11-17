@@ -28,6 +28,7 @@ Contact us at contact@yosyshq.com to arrange a free evaluation license.
 
 ### Plugins
  * [GHDL plugin](https://github.com/ghdl/ghdl-yosys-plugin) VHDL synthesis based on GHDL (linux-x64, darwin-x64 and darwin-arm64 platforms only)
+ * [Slang plugin](https://github.com/povik/yosys-slang) SystemVerilog synthesis based on Slang
 
 ### Formal Tools
  * [sby (formerly SymbiYosys)](https://github.com/YosysHQ/sby) a front-end driver program for Yosys-based formal hardware verification flows.
