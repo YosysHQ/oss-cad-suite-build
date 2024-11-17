@@ -14,7 +14,9 @@ if [ ${ARCH_BASE} == 'windows' ]; then
         sed -i.orig "s/#include <cstdio>/#include <cstdio>\\n#include <inttypes.h>/" {} +
 fi
 sed -i  "s,add_subdirectory(test/polyxx),add_subdirectory(test/polyxx EXCLUDE_FROM_ALL),g" CMakeLists.txt
- 
+if [ ${ARCH_BASE} == 'darwin' ]; then 
+    sed -i "s,-Wall -Werror -Wextra,-Wall -Wextra,g" src/CMakeLists.txt 
+fi
 cmake -DCMAKE_BUILD_TYPE=Release \
       -DCMAKE_INSTALL_PREFIX=${INSTALL_PREFIX} \
       -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE} \

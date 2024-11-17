@@ -12,6 +12,9 @@ if [ ${ARCH_BASE} == 'darwin' ]; then
 fi
 patch -p1 < ${PATCHES_DIR}/graphviz_fix.diff
 ./autogen.sh NOCONFIG
+if [ ${ARCH_BASE} == 'darwin' ]; then
+    export CFLAGS="-Wno-incompatible-function-pointer-types"
+fi
 ./configure --prefix=${INSTALL_PREFIX} --host=${CROSS_NAME} --build=`gcc -dumpmachine` --enable-shared=no --enable-static=yes --enable-ltdl=no --with-qt=no
 if [ ${ARCH} == 'windows-x64' ]; then
     echo $'\n#undef GVDLL\n' >> config.h
