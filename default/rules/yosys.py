@@ -82,7 +82,6 @@ Target(
 	name = 'yosys-slang-plugin',
 	sources = [ 'yosys-slang-plugin' ],
 	dependencies = [ 'yosys' ],
-	arch = [ 'linux-x64', 'linux-arm64', 'windows-x64' ],
 )
 
 SourceLocation(
