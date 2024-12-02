@@ -64,6 +64,7 @@ RUN set -eux \
     && echo "${OSX_SDK_SUM}  ./tarballs/MacOSX${OSX_SDK_VERSION}.sdk.tar.xz" \
         | sha256sum -c - \
     && env UNATTENDED=yes OSX_VERSION_MIN=${OSX_VERSION_MIN} ./build.sh \
+    && env ENABLE_COMPILER_RT_INSTALL=1 ./build_compiler_rt.sh \
     && rm -rf *~ taballs *.tar.xz \
     && rm -rf /tmp/* \
     && true
