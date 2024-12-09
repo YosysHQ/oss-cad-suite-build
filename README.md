@@ -107,6 +107,9 @@ Windows
 from existing CMD prompt:
 <extracted_location>\oss-cad-suite\environment.bat
 
+from existing PowerShell prompt:
+. <extracted_location>\oss-cad-suite\environment.ps1
+
 to create new CMD prompt:
 <extracted_location>\oss-cad-suite\start.bat
 ```
