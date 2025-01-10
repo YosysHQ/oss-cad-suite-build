@@ -186,7 +186,6 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-yosys:
     runs-on: ubuntu-latest
-    continue-on-error: true
     needs: linux-x64-abc
     steps:
       - uses: actions/checkout@v4
@@ -223,7 +222,6 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-formal:
     runs-on: ubuntu-latest
-    continue-on-error: true
     needs: [ linux-x64-python3, linux-x64-python3-native ]
     steps:
       - uses: actions/checkout@v4
@@ -369,7 +367,6 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-yosys-slang-plugin:
     runs-on: ubuntu-latest
-    continue-on-error: true
     needs: linux-x64-yosys
     steps:
       - uses: actions/checkout@v4

@@ -10,7 +10,6 @@ on:
 jobs:
   windows-x64-yosys:
     runs-on: ubuntu-latest
-    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
         with:
@@ -82,7 +81,6 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   windows-x64-formal:
     runs-on: ubuntu-latest
-    continue-on-error: true
     needs: windows-x64-python3
     steps:
       - uses: actions/checkout@v4
@@ -155,7 +153,6 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   windows-x64-yosys-slang-plugin:
     runs-on: ubuntu-latest
-    continue-on-error: true
     needs: windows-x64-yosys
     steps:
       - uses: actions/checkout@v4

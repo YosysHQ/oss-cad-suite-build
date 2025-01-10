@@ -119,7 +119,6 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   darwin-arm64-yosys:
     runs-on: ubuntu-latest
-    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
         with:
@@ -155,7 +154,6 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   darwin-arm64-formal:
     runs-on: ubuntu-latest
-    continue-on-error: true
     needs: darwin-arm64-python3
     steps:
       - uses: actions/checkout@v4
@@ -301,7 +299,6 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   darwin-arm64-yosys-slang-plugin:
     runs-on: ubuntu-latest
-    continue-on-error: true
     needs: darwin-arm64-yosys
     steps:
       - uses: actions/checkout@v4
