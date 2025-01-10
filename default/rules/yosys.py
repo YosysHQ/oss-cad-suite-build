@@ -62,6 +62,7 @@ Target(
 	sources = [ 'yosys'],
 	resources = [ 'xdot', 'graphviz' ],
 	dependencies = [ 'abc' ],
+	critical = True,
 )
 
 Target(
@@ -82,6 +83,7 @@ Target(
 	name = 'yosys-slang-plugin',
 	sources = [ 'yosys-slang-plugin' ],
 	dependencies = [ 'yosys' ],
+    critical = True,
 )
 
 SourceLocation(
