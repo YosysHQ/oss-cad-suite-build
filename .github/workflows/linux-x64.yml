@@ -438,7 +438,7 @@ jobs:
   linux-x64-nextpnr-generic:
     runs-on: ubuntu-latest
     continue-on-error: true
-    needs: [ linux-x64-nextpnr-bba, linux-x64-python3 ]
+    needs: [ linux-x64-nextpnr-bba, linux-x64-python3, linux-x64-python3-native ]
     steps:
       - uses: actions/checkout@v4
         with:
@@ -461,6 +461,8 @@ jobs:
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-bba.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-python3
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+      - name: Download linux-x64-python3-native
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-x64 --target=nextpnr-generic --single --tar
       - uses: ncipollo/release-action@v1
@@ -548,7 +550,7 @@ jobs:
   linux-x64-nextpnr-ice40:
     runs-on: ubuntu-latest
     continue-on-error: true
-    needs: [ linux-x64-icestorm-bba, linux-x64-nextpnr-bba, linux-x64-python3 ]
+    needs: [ linux-x64-icestorm-bba, linux-x64-nextpnr-bba, linux-x64-python3, linux-x64-python3-native ]
     steps:
       - uses: actions/checkout@v4
         with:
@@ -573,6 +575,8 @@ jobs:
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-bba.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-python3
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+      - name: Download linux-x64-python3-native
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-x64 --target=nextpnr-ice40 --single --tar
       - uses: ncipollo/release-action@v1
@@ -623,7 +627,7 @@ jobs:
   linux-x64-nextpnr-ecp5:
     runs-on: ubuntu-latest
     continue-on-error: true
-    needs: [ linux-x64-nextpnr-bba, linux-x64-prjtrellis-bba, linux-x64-python3 ]
+    needs: [ linux-x64-nextpnr-bba, linux-x64-prjtrellis-bba, linux-x64-python3, linux-x64-python3-native ]
     steps:
       - uses: actions/checkout@v4
         with:
@@ -648,6 +652,8 @@ jobs:
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-prjtrellis-bba.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-python3
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+      - name: Download linux-x64-python3-native
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-x64 --target=nextpnr-ecp5 --single --tar
       - uses: ncipollo/release-action@v1
@@ -664,7 +670,7 @@ jobs:
   linux-x64-nextpnr-machxo2:
     runs-on: ubuntu-latest
     continue-on-error: true
-    needs: [ linux-x64-nextpnr-bba, linux-x64-prjtrellis-bba, linux-x64-python3 ]
+    needs: [ linux-x64-nextpnr-bba, linux-x64-prjtrellis-bba, linux-x64-python3, linux-x64-python3-native ]
     steps:
       - uses: actions/checkout@v4
         with:
@@ -689,6 +695,8 @@ jobs:
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-prjtrellis-bba.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-python3
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+      - name: Download linux-x64-python3-native
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-x64 --target=nextpnr-machxo2 --single --tar
       - uses: ncipollo/release-action@v1
@@ -776,7 +784,7 @@ jobs:
   linux-x64-nextpnr-nexus:
     runs-on: ubuntu-latest
     continue-on-error: true
-    needs: [ linux-x64-nextpnr-bba, linux-x64-prjoxide-bba, linux-x64-python3 ]
+    needs: [ linux-x64-nextpnr-bba, linux-x64-prjoxide-bba, linux-x64-python3, linux-x64-python3-native ]
     steps:
       - uses: actions/checkout@v4
         with:
@@ -801,6 +809,8 @@ jobs:
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-prjoxide-bba.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-python3
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+      - name: Download linux-x64-python3-native
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-x64 --target=nextpnr-nexus --single --tar
       - uses: ncipollo/release-action@v1

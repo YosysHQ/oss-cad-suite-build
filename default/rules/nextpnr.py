@@ -19,14 +19,14 @@ Target(
 Target(
 	name = 'nextpnr-generic',
 	sources = [ 'nextpnr' ],
-	dependencies = [ 'python3', 'nextpnr-bba'],
+	dependencies = [ 'python3', 'nextpnr-bba', 'python3-native'],
 	resources = [ 'python3' ],
 )
 
 Target(
 	name = 'nextpnr-ice40',
 	sources = [ 'nextpnr' ],
-	dependencies = [ 'python3', 'nextpnr-bba', 'icestorm-bba'],
+	dependencies = [ 'python3', 'nextpnr-bba', 'icestorm-bba', 'python3-native'],
 	resources = [ 'python3' ],
 	package = 'ice40',
 )
@@ -34,7 +34,7 @@ Target(
 Target(
 	name = 'nextpnr-ecp5',
 	sources = [ 'nextpnr' ],
-	dependencies = [ 'python3', 'nextpnr-bba', 'prjtrellis-bba'],
+	dependencies = [ 'python3', 'nextpnr-bba', 'prjtrellis-bba', 'python3-native'],
 	resources = [ 'python3' ],
 	package = 'ecp5',
 )
@@ -42,7 +42,7 @@ Target(
 Target(
 	name = 'nextpnr-machxo2',
 	sources = [ 'nextpnr' ],
-	dependencies = [ 'python3', 'nextpnr-bba', 'prjtrellis-bba'],
+	dependencies = [ 'python3', 'nextpnr-bba', 'prjtrellis-bba', 'python3-native'],
 	resources = [ 'python3' ],
 	package = 'ecp5', # using same prjtrellis base
 )
@@ -50,7 +50,7 @@ Target(
 Target(
 	name = 'nextpnr-nexus',
 	sources = [ 'nextpnr' ],
-	dependencies = [ 'python3', 'nextpnr-bba', 'prjoxide-bba' ],
+	dependencies = [ 'python3', 'nextpnr-bba', 'prjoxide-bba', 'python3-native'],
 	resources = [ 'python3' ],
 	package = 'nexus',
 )
@@ -58,7 +58,7 @@ Target(
 Target(
 	name = 'nextpnr-mistral',
 	sources = [ 'nextpnr', 'mistral' ],
-	dependencies = [ 'python3', 'nextpnr-bba' ],
+	dependencies = [ 'python3', 'nextpnr-bba', 'python3-native'],
 	resources = [ 'python3' ],
 )
 
