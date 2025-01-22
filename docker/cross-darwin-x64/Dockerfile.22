@@ -38,8 +38,8 @@ RUN wget https://apt.llvm.org/llvm.sh && chmod +x llvm.sh && ./llvm.sh 18 && \
 # Taken from https://github.com/joseluisq/rust-linux-darwin-builder
 
 # Mac OS X SDK version
-ARG OSX_SDK_VERSION=13.3
-ARG OSX_SDK_SUM=518e35eae6039b3f64e8025f4525c1c43786cc5cf39459d609852faf091e34be
+ARG OSX_SDK_VERSION=14.5
+ARG OSX_SDK_SUM=6e146275d19f027faa2e8354da5e0267513abf013b8f16ad65a231653a2b1c5d
 ARG OSX_VERSION_MIN=11.0
 
 # OS X Cross
@@ -70,7 +70,7 @@ RUN set -eux \
     && true
 
 
-ENV CROSS_NAME x86_64-apple-darwin22.4
+ENV CROSS_NAME x86_64-apple-darwin23.5
 
 ENV CROSS_PREFIX /opt/${CROSS_NAME}
 
@@ -87,8 +87,8 @@ ENV PATH /usr/local/osxcross/target/bin:$PATH
 RUN rustup target add x86_64-apple-darwin && \
     mkdir -p /.cargo && \
     echo "[target.x86_64-apple-darwin]" > /.cargo/config && \
-    echo "linker = \"x86_64-apple-darwin22.4-clang\"" >> /.cargo/config && \
-    echo "ar = \"x86_64-apple-darwin22.4-ar\"" >> /.cargo/config
+    echo "linker = \"x86_64-apple-darwin23.5-clang\"" >> /.cargo/config && \
+    echo "ar = \"x86_64-apple-darwin23.5-ar\"" >> /.cargo/config
 
 
 COPY Toolchain.cmake ${CROSS_PREFIX}/
