@@ -9,23 +9,16 @@ if [ ${ARCH} == 'linux-arm64' ]; then
     param=--with-llvm-config='llvm-config'
     LDFLAGS=-L/usr/lib/${CROSS_NAME}
 elif [ ${ARCH} == 'darwin-x64' ]; then
-    wget https://github.com/ghdl/ghdl/releases/download/nightly/ghdl-macos-11-mcode.tgz
+    wget https://github.com/ghdl/ghdl/releases/download/nightly/ghdl-llvm-5.0.0-dev-macos13-x86_64.tar.gz
     mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}
-    tar xvfz ghdl-macos-11-mcode.tgz -C ${OUTPUT_DIR}${INSTALL_PREFIX}
+    tar xvfz ghdl-llvm-5.0.0-dev-macos13-x86_64.tar.gz -C ${OUTPUT_DIR}${INSTALL_PREFIX} --strip-components=1
     install_name_tool -id @executable_path/../lib/libghdl-5_0_0_dev.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libghdl-5_0_0_dev.dylib
-    wget https://github.com/mmicko/macos-resources/releases/download/v2/libgnat-2019.dylib
-    cp libgnat-2019.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/.
     exit 0
 elif [ ${ARCH} == 'darwin-arm64' ]; then
-    wget https://github.com/ghdl/ghdl/releases/download/nightly/ghdl-macos14-ARM64-llvm-jit.tgz
+    wget https://github.com/ghdl/ghdl/releases/download/nightly/ghdl-llvm-5.0.0-dev-macos14-aarch64.tar.gz
     mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}
-    tar xvfz ghdl-macos14-ARM64-llvm-jit.tgz -C ${OUTPUT_DIR}${INSTALL_PREFIX}
+    tar xvfz ghdl-llvm-5.0.0-dev-macos14-aarch64.tar.gz -C ${OUTPUT_DIR}${INSTALL_PREFIX} --strip-components=1
     install_name_tool -id @executable_path/../lib/libghdl-5_0_0_dev.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libghdl-5_0_0_dev.dylib
-    GNAT_NATIVE_VERSION="14.2.0"
-    wget https://github.com/alire-project/GNAT-FSF-builds/releases/download/gnat-${GNAT_NATIVE_VERSION}-1/gnat-aarch64-darwin-${GNAT_NATIVE_VERSION}-1.tar.gz
-    tar xvfz gnat-aarch64-darwin-${GNAT_NATIVE_VERSION}-1.tar.gz
-    cp gnat-aarch64-darwin-${GNAT_NATIVE_VERSION}-1/lib/libgcc_s.1.1.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/.
-    cp gnat-aarch64-darwin-${GNAT_NATIVE_VERSION}-1/lib/gcc/aarch64-apple-darwin23.6.0/${GNAT_NATIVE_VERSION}/adalib/libgnat-14.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/.
     exit 0
 elif [ ${ARCH} == 'windows-x64' ]; then
     sed -i 's,grt-all libs.vhdl.llvm all.vpi,grt-all all.vpi,g' Makefile.in
