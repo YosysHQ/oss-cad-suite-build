@@ -5,7 +5,6 @@ cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${INSTALL_PREFIX} \
 make -j${NPROC} pytrellis
 popd
 pushd nextpnr
-sed -i 's,'3.25','3.22',g' CMakeLists.txt
 cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE} \
       -DTRELLIS_LIBDIR=${BUILD_DIR}/prjtrellis/libtrellis \
       -DTRELLIS_DATADIR=${BUILD_DIR}/prjtrellis \
