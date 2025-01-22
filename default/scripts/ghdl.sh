@@ -13,12 +13,32 @@ elif [ ${ARCH} == 'darwin-x64' ]; then
     mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}
     tar xvfz ghdl-llvm-5.0.0-dev-macos13-x86_64.tar.gz -C ${OUTPUT_DIR}${INSTALL_PREFIX} --strip-components=1
     install_name_tool -id @executable_path/../lib/libghdl-5_0_0_dev.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libghdl-5_0_0_dev.dylib
+    install_name_tool -id @executable_path/../lib/libghdlvpi.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libghdlvpi.dylib
+    install_name_tool -id @executable_path/../lib/libgnat-14.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libgnat-14.dylib
+    install_name_tool -id @executable_path/../lib/libgcc_s.1.1.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libgcc_s.1.1.dylib
+    install_name_tool -change @rpath/libgnat-14.dylib @executable_path/../lib/libgnat-14.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libghdl-5_0_0_dev.dylib
+    install_name_tool -change @rpath/libgcc_s.1.1.dylib @executable_path/../lib/libgcc_s.1.1.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libghdl-5_0_0_dev.dylib
+    install_name_tool -change @rpath/libgcc_s.1.1.dylib @executable_path/../lib/libgcc_s.1.1.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libgnat-14.dylib
+    rcodesign sign ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libghdl-5_0_0_dev.dylib
+    rcodesign sign ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libghdlvpi.dylib
+    rcodesign sign ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libgnat-14.dylib
+    rcodesign sign ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libgcc_s.1.1.dylib
     exit 0
 elif [ ${ARCH} == 'darwin-arm64' ]; then
     wget https://github.com/ghdl/ghdl/releases/download/nightly/ghdl-llvm-5.0.0-dev-macos14-aarch64.tar.gz
     mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}
     tar xvfz ghdl-llvm-5.0.0-dev-macos14-aarch64.tar.gz -C ${OUTPUT_DIR}${INSTALL_PREFIX} --strip-components=1
     install_name_tool -id @executable_path/../lib/libghdl-5_0_0_dev.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libghdl-5_0_0_dev.dylib
+    install_name_tool -id @executable_path/../lib/libghdlvpi.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libghdlvpi.dylib
+    install_name_tool -id @executable_path/../lib/libgnat-14.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libgnat-14.dylib
+    install_name_tool -id @executable_path/../lib/libgcc_s.1.1.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libgcc_s.1.1.dylib
+    install_name_tool -change @rpath/libgnat-14.dylib @executable_path/../lib/libgnat-14.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libghdl-5_0_0_dev.dylib
+    install_name_tool -change @rpath/libgcc_s.1.1.dylib @executable_path/../lib/libgcc_s.1.1.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libghdl-5_0_0_dev.dylib
+    install_name_tool -change @rpath/libgcc_s.1.1.dylib @executable_path/../lib/libgcc_s.1.1.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libgnat-14.dylib
+    rcodesign sign ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libghdl-5_0_0_dev.dylib
+    rcodesign sign ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libghdlvpi.dylib
+    rcodesign sign ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libgnat-14.dylib
+    rcodesign sign ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libgcc_s.1.1.dylib
     exit 0
 elif [ ${ARCH} == 'windows-x64' ]; then
     sed -i 's,grt-all libs.vhdl.llvm all.vpi,grt-all all.vpi,g' Makefile.in
