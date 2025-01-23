@@ -570,6 +570,8 @@ jobs:
           fi
       - name: Download darwin-x64-python3
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-darwin-x64/darwin-x64-python3.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+      - name: Download linux-x64-apicula-bba
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-apicula-bba.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-nextpnr-bba
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-bba.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-python3-native
@@ -1720,8 +1722,6 @@ jobs:
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-darwin-x64/darwin-x64-yosys-slang-plugin.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download darwin-x64-z3
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-darwin-x64/darwin-x64-z3.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
-      - name: Download linux-x64-nextpnr-himbaechel-gowin
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-himbaechel-gowin.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=darwin-x64 --target=default --single
       - uses: ncipollo/release-action@v1
