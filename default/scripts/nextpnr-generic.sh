@@ -8,6 +8,10 @@ cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${INSTALL_PREFIX} -DCMAK
       -DPython3_INCLUDE_DIR=${BUILD_DIR}/python3${INSTALL_PREFIX}/include/python3.11 \
       -DPython3_LIBRARY=${BUILD_DIR}/python3${INSTALL_PREFIX}/lib/libpython3.11${SHARED_EXT} \
       -DARCH=generic \
-      -DBUILD_GUI=${build_gui} -DUSE_IPO=OFF . -DBBA_IMPORT=${BUILD_DIR}/nextpnr-bba/nextpnr/bba/bba-export.cmake
-make DESTDIR=${OUTPUT_DIR} -j${NPROC} install
+      -DBUILD_GUI=${build_gui} -DUSE_IPO=OFF \
+      -DBBA_IMPORT=${BUILD_DIR}/nextpnr-bba/nextpnr/bba/bba-export.cmake \
+      -B build
+
+make -C build DESTDIR=${OUTPUT_DIR} -j${NPROC} install
+
 ${STRIP} ${OUTPUT_DIR}${INSTALL_PREFIX}/bin/nextpnr-generic${EXE}

@@ -4,21 +4,11 @@ cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${INSTALL_PREFIX} \
       .
 make -j${NPROC} pytrellis
 popd
-pushd nextpnr
+cd nextpnr
 cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE} \
       -DTRELLIS_LIBDIR=${BUILD_DIR}/prjtrellis/libtrellis \
       -DTRELLIS_DATADIR=${BUILD_DIR}/prjtrellis \
-      -DARCH=ecp5 .
-make chipdb-ecp5-bbas
-mkdir -p ${OUTPUT_DIR}/ecp5/chipdb
-cp ecp5/chipdb/* ${OUTPUT_DIR}/ecp5/chipdb/.
-popd
-pushd nextpnr
-cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE} \
-      -DTRELLIS_LIBDIR=${BUILD_DIR}/prjtrellis/libtrellis \
-      -DTRELLIS_DATADIR=${BUILD_DIR}/prjtrellis \
-      -DARCH=machxo2 .
-make chipdb-machxo2-bbas
-mkdir -p ${OUTPUT_DIR}/machxo2/chipdb
-cp machxo2/chipdb/* ${OUTPUT_DIR}/machxo2/chipdb/.
-popd
+      -DARCH="ecp5;machxo2" \
+      -DEXPORT_BBA_FILES=${OUTPUT_DIR}/bba-files \
+      -B build
+make -C build nextpnr-all-bba

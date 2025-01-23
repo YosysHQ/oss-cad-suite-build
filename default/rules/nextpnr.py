@@ -65,7 +65,7 @@ Target(
 Target(
 	name = 'nextpnr-himbaechel',
 	sources = [ 'nextpnr' ],
-	dependencies = [ 'python3', 'nextpnr-bba', 'python3-native'],
+	dependencies = [ 'python3', 'nextpnr-bba', 'apicula-bba', 'python3-native'],
 	patches = [ 'python3_package.sh' ],
 	resources = [ 'python3' ],
 )
@@ -163,7 +163,7 @@ Target(
 )
 
 Target(
-	name = 'nextpnr-himbaechel-gowin',
+	name = 'apicula-bba',
 	sources = [ 'nextpnr' ],
 	dependencies = ['python3-native', 'apicula'],
 	gitrev = [ ('nextpnr', 'himbaechel') ],
