@@ -44,11 +44,6 @@ release_topdir_abs="\$(readlink -f "\$release_bindir/$rel_path")"
 export PATH="\$release_bindir_abs:\$PATH"
 EOT
 
-        if [ $bindir == 'py3bin' ]; then
-            cat >> $binfile << EOT
-export PYTHONEXECUTABLE="\$release_topdir_abs/bin/tabbypy3"
-EOT
-        fi
         if [ ! -z "$(basename $binfile | grep verilator)" ]; then
             cat >> $binfile << EOT
 export VERILATOR_ROOT="\$release_topdir_abs/share/verilator"
@@ -66,7 +61,6 @@ EOT
         fi
         if [ ! -z "$(basename $binfile | grep vvp)" ]; then
             cat >> $binfile << EOT
-export PYTHONEXECUTABLE="\$release_topdir_abs/bin/tabbypy3"
 export PYTHONHOME="\$release_topdir_abs"
 EOT
         fi
@@ -169,7 +163,7 @@ done
 if [ ${PRELOAD} == 'True' ]; then
     if $found; then
         cat >> $binfile << EOT
-exec "\$release_topdir_abs"/lib/$ldlinuxname --inhibit-cache --inhibit-rpath "" --library-path "\$release_topdir_abs"/lib --preload "\$release_topdir_abs"/lib/preload.o "\$release_topdir_abs"/libexec/$(basename $binfile) "\$@"
+exec "\$release_topdir_abs"/lib/$ldlinuxname --inhibit-cache --inhibit-rpath "" --library-path "\$release_topdir_abs"/lib --preload "\$release_topdir_abs"/lib/preload.o --argv0 "\$0" "\$release_topdir_abs"/libexec/$(basename $binfile) "\$@"
 EOT
         chmod +x $binfile
         continue
@@ -178,7 +172,7 @@ EOT
     fi
 fi
         cat >> $binfile << EOT
-exec "\$release_topdir_abs"/lib/$ldlinuxname --inhibit-cache --inhibit-rpath "" --library-path "\$release_topdir_abs"/lib "\$release_topdir_abs"/libexec/$(basename $binfile) "\$@"
+exec "\$release_topdir_abs"/lib/$ldlinuxname --inhibit-cache --inhibit-rpath "" --library-path "\$release_topdir_abs"/lib --argv0 "\$0" "\$release_topdir_abs"/libexec/$(basename $binfile) "\$@"
 EOT
         chmod +x $binfile
     done
@@ -200,7 +194,6 @@ release_bindir="\$(dirname "\${BASH_SOURCE[0]}")"
 release_bindir_abs="\$(readlink -f "\$release_bindir/../bin")"
 release_topdir_abs="\$(readlink -f "\$release_bindir/$rel_path")"
 export PATH="\$release_bindir_abs:\$PATH"
-export PYTHONEXECUTABLE="\$release_bindir_abs/tabbypy3"
 EOT
         is_using_fonts=false
         if [ $script == 'bin/xdot' ]; then
