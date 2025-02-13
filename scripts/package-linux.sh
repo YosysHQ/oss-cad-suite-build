@@ -28,6 +28,21 @@ preload_tools=(
     "bin/sby-gui"
 )
 
+resolve_bindir=$(cat << EOT
+# Find this script's location, resolving any symlinks along the way.
+# https://stackoverflow.com/a/246128
+source=\${BASH_SOURCE[0]}
+while [ -L "\$source" ]; do  # resolve \$source until the file is no longer a symlink
+    release_bindir=\$( cd -P "\$( dirname "\$source" )" >/dev/null 2>&1 && pwd )
+    source=\$(readlink "\$source")
+    # if \$source was a relative symlink, we need to resolve it relative to the path
+    # where the symlink file was located
+    [[ \$source != /* ]] && source=\$release_bindir/\$source
+done
+release_bindir=\$( cd -P "\$( dirname "\$source" )" >/dev/null 2>&1 && pwd )
+EOT
+)
+
 for bindir in bin py2bin py3bin super_prove/bin share/verilator/bin lib/ivl; do
     for binfile in $(file $bindir/* | grep ELF | grep dynamically | grep interpreter | cut -f1 -d:); do
         rel_path=$(realpath --relative-to=$bindir .)
@@ -38,7 +53,7 @@ for bindir in bin py2bin py3bin super_prove/bin share/verilator/bin lib/ivl; do
         is_using_fonts=false
         cat > $binfile << EOT
 #!/usr/bin/env bash
-release_bindir="\$(dirname "\${BASH_SOURCE[0]}")"
+$resolve_bindir
 release_bindir_abs="\$(readlink -f "\$release_bindir")"
 release_topdir_abs="\$(readlink -f "\$release_bindir/$rel_path")"
 export PATH="\$release_bindir_abs:\$PATH"
@@ -190,7 +205,7 @@ for script in bin/* py3bin/*; do
         mv "${script}" libexec
         cat > "${script}" <<EOT
 #!/usr/bin/env bash
-release_bindir="\$(dirname "\${BASH_SOURCE[0]}")"
+$resolve_bindir
 release_bindir_abs="\$(readlink -f "\$release_bindir/../bin")"
 release_topdir_abs="\$(readlink -f "\$release_bindir/$rel_path")"
 export PATH="\$release_bindir_abs:\$PATH"
@@ -264,7 +279,7 @@ if [ -f "bin/yosys-config" ]; then
     mv bin/yosys-config bin/yosys-config.orig
     cat > bin/yosys-config << EOT
 #!/usr/bin/env bash
-release_bindir="\$(dirname "\${BASH_SOURCE[0]}")"
+$resolve_bindir
 release_bindir_abs="\$(readlink -f "\$release_bindir")"
 release_topdir_abs="\$(readlink -f "\$release_bindir/$rel_path")"
 EOT
