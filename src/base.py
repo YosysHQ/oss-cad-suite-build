@@ -624,6 +624,8 @@ def buildCode(build_target, build_arch, nproc, force, dry, pack_sources, single,
 			metadata = dict({'version' : version_meta, 'packages' : package_meta, 'tools' : tools_meta })
 			with open(os.path.join(output_dir, "yosyshq", "share", "manifest.json"), "w") as manifest_file:
 				json.dump(metadata, manifest_file)
+			with open(os.path.join(output_dir, "yosyshq", "VERSION"), "w") as version_file:
+				version_file.write(version_string)
 
 		code = executeBuild(target, arch, prefix, build_dir if not target.top_package else output_dir, output_dir, nproc, pack_sources)
 		if code!=0:
