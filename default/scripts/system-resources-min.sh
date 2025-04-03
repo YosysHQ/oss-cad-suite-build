@@ -26,6 +26,7 @@ if [ ${ARCH_BASE} == 'windows' ]; then
 
     cp ${PATCHES_DIR}/environment.bat ${OUTPUT_DIR}${INSTALL_PREFIX}/.
     cp ${PATCHES_DIR}/environment.ps1 ${OUTPUT_DIR}${INSTALL_PREFIX}/.
+    cp ${PATCHES_DIR}/environment_system.ps1 ${OUTPUT_DIR}${INSTALL_PREFIX}/.
     cp ${PATCHES_DIR}/start.bat ${OUTPUT_DIR}${INSTALL_PREFIX}/.
 
     mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/etc
