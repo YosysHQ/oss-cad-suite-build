@@ -1,4 +1,5 @@
 cd prjtrellis/libtrellis
+sed -i 's,3.31,3.20,g' CMakeLists.txt
 cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${INSTALL_PREFIX} \
       -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE} -DBUILD_PYTHON=OFF -DBUILD_SHARED=OFF \
       .
