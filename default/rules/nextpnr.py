@@ -65,7 +65,7 @@ Target(
 Target(
 	name = 'nextpnr-himbaechel',
 	sources = [ 'nextpnr' ],
-	dependencies = [ 'python3', 'nextpnr-bba', 'apicula-bba', 'python3-native'],
+	dependencies = [ 'python3', 'nextpnr-bba', 'apicula-bba', 'gatemate-bba', 'python3-native'],
 	patches = [ 'python3_package.sh' ],
 	resources = [ 'python3' ],
 )
@@ -109,6 +109,14 @@ SourceLocation(
 	location = 'https://github.com/YosysHQ/apicula',
 	revision = 'origin/master',
 	license_file = 'LICENSE',
+)
+
+SourceLocation(
+	name = 'prjpeppercorn',
+	vcs = 'git',
+	location = 'https://github.com/YosysHQ/prjpeppercorn',
+	revision = 'origin/main',
+	license_file = 'COPYING',
 )
 
 Target(
@@ -168,5 +176,13 @@ Target(
 	dependencies = ['python3-native', 'apicula'],
 	gitrev = [ ('nextpnr', 'himbaechel') ],
 	package = 'gowin',
+	build_native = True,
+)
+
+Target(
+	name = 'gatemate-bba',
+	sources = [ 'nextpnr', 'prjpeppercorn' ],
+	dependencies = ['python3-native'],
+	gitrev = [ ('nextpnr', 'himbaechel') ],
 	build_native = True,
 )

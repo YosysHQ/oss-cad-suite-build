@@ -50,6 +50,7 @@ Contact us at contact@yosyshq.com to arrange a free evaluation license.
  * [Project Trellis](https://github.com/YosysHQ/prjtrellis) tools for working with Lattice ECP5 bitstreams
  * [Project Oxide](https://github.com/gatecat/prjoxide) tools for working with Lattice Nexus bitstreams
  * [Project Apicula](https://github.com/YosysHQ/apicula) tools for working with Gowin bitstreams
+ * [Project Peppercorn](https://github.com/YosysHQ/prjpeppercorn) tools for working with Cologne Chip GateMate bitstreams
  
 ### FPGA board programming tools
  * [openFPGALoader](https://github.com/trabucayre/openFPGALoader) universal utility for programming FPGA

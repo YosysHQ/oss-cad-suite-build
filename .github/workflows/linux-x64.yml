@@ -902,10 +902,47 @@ jobs:
           tag: bucket-linux-x64
           artifacts: "linux-x64-apicula-bba.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
+  linux-x64-gatemate-bba:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    needs: linux-x64-python3-native
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: 'yosyshq/oss-cad-suite-build'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v4
+        with:
+          path: _sources
+          key: cache-sources-gatemate-bba
+      - name: Download previous build
+        run: |
+          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-gatemate-bba.tgz"
+          if wget --spider "${URL}" 2>/dev/null; then
+              wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+          else
+              echo "Previous version not found in bucket"
+          fi
+      - name: Download linux-x64-python3-native
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+      - name: Build
+        run: ./builder.py build --arch=linux-x64 --target=gatemate-bba --single --tar
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('linux-x64-gatemate-bba.tgz') != ''
+        with:
+          allowUpdates: True
+          prerelease: True
+          omitBody: True
+          omitBodyDuringUpdate: True
+          omitNameDuringUpdate: True
+          tag: bucket-linux-x64
+          artifacts: "linux-x64-gatemate-bba.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-nextpnr-himbaechel:
     runs-on: ubuntu-latest
     continue-on-error: true
-    needs: [ linux-x64-apicula-bba, linux-x64-nextpnr-bba, linux-x64-python3, linux-x64-python3-native ]
+    needs: [ linux-x64-apicula-bba, linux-x64-gatemate-bba, linux-x64-nextpnr-bba, linux-x64-python3, linux-x64-python3-native ]
     steps:
       - uses: actions/checkout@v4
         with:
@@ -926,6 +963,8 @@ jobs:
           fi
       - name: Download linux-x64-apicula-bba
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-apicula-bba.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+      - name: Download linux-x64-gatemate-bba
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-gatemate-bba.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-nextpnr-bba
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-bba.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-python3
