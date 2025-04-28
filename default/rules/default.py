@@ -19,6 +19,7 @@ Target(
         'nextpnr-himbaechel',
         'icestorm',
         'prjtrellis',
+        'prjpeppercorn',
         'prjoxide',
         'apicula',
         'openfpgaloader',

@@ -145,6 +145,12 @@ Target(
 	package = 'gowin',
 )
 
+Target(
+	name = 'prjpeppercorn',
+	sources = [ 'prjpeppercorn' ],
+	package = 'gatemate',
+)
+
 # chip databases
 
 Target(
