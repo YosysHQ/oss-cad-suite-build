@@ -115,7 +115,13 @@ to create new CMD prompt:
 <extracted_location>\oss-cad-suite\start.bat
 ```
 
-**NOTE:** when environment is set, `python3` from package becomes available as well, this enables usage of *Migen* and *Amaranth* HDL and *LiteX* libraries scripts as usual. When OSS CAD Suite is just added in PATH to use packaged python3 use `tabbypy3` to start python environment. For Windows, there are no wrappers and using environment.bat is only choice.
+Or to **permanantly modify your Windows system environment**, run the following in an administrator powershell session:
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Unrestricted
+. <extracted_location>\oss-cad-suite\environment_system.ps1
+```
+
+**NOTE:** when environment is set, `python3` from package becomes available as well, this enables usage of *Migen* and *Amaranth* HDL and *LiteX* libraries scripts as usual. When OSS CAD Suite is just added in PATH to use packaged python3 use `tabbypy3` to start python environment. 
 
 ## Using LiteX
 
