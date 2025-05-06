@@ -16,6 +16,12 @@ if [ -f "${OUTPUT_DIR}${INSTALL_PREFIX}/bin/tabbyadm" ]; then
     sed "s|___BRANDING___|${BRANDING}|g" -i ${OUTPUT_DIR}${INSTALL_PREFIX}/bin/tabbyadm
 fi
 
+preload_tools=(
+    "py3bin/python3.11"
+    "bin/mcy-gui"
+    "bin/sby-gui"
+)
+
 for bindir in bin py3bin super_prove/bin share/verilator/bin lib/ivl; do
     for binfile in $(file -h $bindir/* | grep Mach-O | grep executable | cut -f1 -d:); do
         rel_path=$(realpath --relative-to=$bindir .)
@@ -129,15 +135,24 @@ export TERMINFO="\$release_topdir_abs/share/terminfo"
 EOT
 fi
 
+found=false
+
+for path in "${preload_tools[@]}"; do
+    if [[ "$binfile" == "$path" ]]; then
+        found=true
+        break
+    fi
+done
+
 if [ ${PRELOAD} == 'True' ]; then
-    if [ $binfile == "bin/yosys" ] || [ $binfile == "bin/tabbylic" ] || [ $binfile == "lib/ivl/ivl" ] || [ $binfile == "lib/ivl/ivlpp" ] || [ $binfile == "lib/ivl/vhdlpp" ] || [ $binfile == "bin/iverilog" ] || [ $binfile == "bin/vvp" ]; then
-        echo "Skipping"
-    else
+    if $found; then
         cat >> $binfile << EOT
 DYLD_INSERT_LIBRARIES="\$release_topdir_abs"/lib/preload.o exec "\$release_topdir_abs"/libexec/$(basename $binfile) "\$@"
 EOT
         chmod +x $binfile
         continue
+    else
+        echo "Skipping"
     fi
 fi
         cat >> $binfile << EOT
