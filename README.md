@@ -149,7 +149,7 @@ ARM64 based Linux devices using 64bit CPU as in Raspberry Pi 4,5 and 400 (with 6
 
 ## Contributing
 
-To be able to build OSS CAD Suite yourself, you need to install `docker` (please note this only works on x64 platforms) and `python 3.6` or higher, with the `click` library.
+To be able to build OSS CAD Suite yourself, you need to install `docker` (please note this only works on x64 platforms or under rosetta on macos-arm) and `python 3.6` or higher, with the `click` library.
 
 
 After that just running ```./builder.py``` should work fine.
