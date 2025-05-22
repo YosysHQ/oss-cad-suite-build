@@ -419,6 +419,12 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, nproc, pack_source
 		'-v', '{}:/work'.format(cwd),
 		'-w', os.path.join('/work', os.path.relpath(build_dir, os.getcwd())),
 	]
+
+	if not scriptfile.name.startswith("/tmp"):
+		params += ['-v', f'{scriptfile.name}:{scriptfile.name}']
+	if platform.system() == "Darwin" and platform.processor() == "arm":
+		params += ['--platform', 'linux/amd64']
+
 	for i, j in env.items():
 		if i.endswith('_DIR'):
 			params += ['-e', '{}={}'.format(i, os.path.join('/work', os.path.relpath(j, os.getcwd())))]
