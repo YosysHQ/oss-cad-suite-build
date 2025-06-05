@@ -1,3 +1,6 @@
+pushd prjpeppercorn
+sh delay.sh
+popd
 cd nextpnr
 cp ${BUILD_DIR}/python3-native${INSTALL_PREFIX}/bin/python3.11 ${BUILD_DIR}/python3-native${INSTALL_PREFIX}/bin/python
 cmake -DPython3_EXECUTABLE=${BUILD_DIR}/python3-native${INSTALL_PREFIX}/bin/python3.11 \
