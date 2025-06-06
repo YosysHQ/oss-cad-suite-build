@@ -193,6 +193,23 @@ Target(
 	dependencies = [ 'smt-switch', 'cvc5', 'boolector' ],
 )
 
+# rIC3
+
+SourceLocation(
+	name = 'ric3',
+	vcs = 'git',
+	location = 'https://github.com/gipsyh/rIC3',
+	revision = 'v1.3.6',
+	license_file = 'LICENSE',
+)
+
+Target(
+	name = 'ric3',
+	sources = [ 'ric3' ],
+	dependencies = [ ],
+)
+
+
 # suprove
 
 SourceLocation(
