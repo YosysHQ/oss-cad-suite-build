@@ -1,11 +1,11 @@
 # OSS CAD Suite
 
-[![linux-x64](https://github.com/YosysHQ/oss-cad-suite-build/actions/workflows/linux-x64.yml/badge.svg)](https://github.com/YosysHQ/oss-cad-suite-build/releases/latest)
-[![darwin-x64](https://github.com/YosysHQ/oss-cad-suite-build/actions/workflows/darwin-x64.yml/badge.svg)](https://github.com/YosysHQ/oss-cad-suite-build/releases/latest)
-[![windows-x64](https://github.com/YosysHQ/oss-cad-suite-build/actions/workflows/windows-x64.yml/badge.svg)](https://github.com/YosysHQ/oss-cad-suite-build/releases/latest)
+[![linux-x64](https://github.com/jmi2k/oss-cad-suite-build/actions/workflows/linux-x64.yml/badge.svg)](https://github.com/jmi2k/oss-cad-suite-build/releases/latest)
+[![darwin-x64](https://github.com/jmi2k/oss-cad-suite-build/actions/workflows/darwin-x64.yml/badge.svg)](https://github.com/jmi2k/oss-cad-suite-build/releases/latest)
+[![windows-x64](https://github.com/jmi2k/oss-cad-suite-build/actions/workflows/windows-x64.yml/badge.svg)](https://github.com/jmi2k/oss-cad-suite-build/releases/latest)
 
-[![linux-arm64](https://github.com/YosysHQ/oss-cad-suite-build/actions/workflows/linux-arm64.yml/badge.svg)](https://github.com/YosysHQ/oss-cad-suite-build/releases/latest)
-[![darwin-arm64](https://github.com/YosysHQ/oss-cad-suite-build/actions/workflows/darwin-arm64.yml/badge.svg)](https://github.com/YosysHQ/oss-cad-suite-build/releases/latest)
+[![linux-arm64](https://github.com/jmi2k/oss-cad-suite-build/actions/workflows/linux-arm64.yml/badge.svg)](https://github.com/jmi2k/oss-cad-suite-build/releases/latest)
+[![darwin-arm64](https://github.com/jmi2k/oss-cad-suite-build/actions/workflows/darwin-arm64.yml/badge.svg)](https://github.com/jmi2k/oss-cad-suite-build/releases/latest)
 
 ## Introduction
 
@@ -14,7 +14,7 @@ You will find tools for RTL synthesis, formal hardware verification, place & rou
 
 OSS CAD Suite is a component of YosysHQ's Tabby CAD Suite:  
 ![image](https://user-images.githubusercontent.com/59544343/119006798-f8786100-b990-11eb-9535-cef67420ccfb.png)  
-See [Tabby CAD Datasheet](https://www.yosyshq.com/tabby-cad-datasheet) for details on Tabby CAD Suite; see [OSS CAD Suite GitHub](https://github.com/YosysHQ/oss-cad-suite-build/) (this page) for details on OSS CAD Suite.
+See [Tabby CAD Datasheet](https://www.yosyshq.com/tabby-cad-datasheet) for details on Tabby CAD Suite; see [OSS CAD Suite GitHub](https://github.com/jmi2k/oss-cad-suite-build/) (this page) for details on OSS CAD Suite.
 
 ### RTL Synthesis 
  * [Yosys](https://github.com/YosysHQ/yosys) RTL synthesis with extensive Verilog 2005 support
@@ -80,7 +80,7 @@ Contact us at contact@yosyshq.com to arrange a free evaluation license.
  
 ## Installation
 
-1. Download an archive matching your OS from [the releases page](https://github.com/YosysHQ/oss-cad-suite-build/releases/latest).
+1. Download an archive matching your OS from [the releases page](https://github.com/jmi2k/oss-cad-suite-build/releases/latest).
 2. Extract the archive to a location of your choice (for Windows it is recommended that path does not contain spaces)
 3. On macOS to allow execution of quarantined files ```xattr -d com.apple.quarantine oss-cad-suite-darwin-x64-yyymmdd.tgz``` on downloaded file, or run: ```./activate``` in extracted location once.
 4. Set the environment as described below.

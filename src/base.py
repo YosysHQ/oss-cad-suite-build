@@ -731,7 +731,7 @@ def generateYaml(target, build_arch, write_to_file):
 						"      - completed\n\n".format(arch_chain[build_arch])
 	yaml_content += "jobs:\n"
 
-	BUCKET_URL = "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket"
+	BUCKET_URL = "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket"
 	for t in build_order:
 		arch = t[0]
 		target = targets[t[1]]
@@ -781,7 +781,7 @@ def generateYaml(target, build_arch, write_to_file):
 			yaml_content +="        run: echo \"date=$(date +'%Y-%m-%d')\" >> $GITHUB_OUTPUT\n"
 		yaml_content +="      - uses: actions/checkout@v4\n"
 		yaml_content +="        with:\n"
-		yaml_content +="          repository: 'yosyshq/oss-cad-suite-build'\n"
+		yaml_content +="          repository: 'jmi2k/oss-cad-suite-build'\n"
 		if not target.top_package:
 			yaml_content +="      - name: Cache sources\n"
 			yaml_content +="        id: cache-sources\n"

@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: 'yosyshq/oss-cad-suite-build'
+          repository: 'jmi2k/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
         uses: actions/cache@v4
@@ -21,7 +21,7 @@ jobs:
           key: cache-sources-abc
       - name: Download previous build
         run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-abc.tgz"
+          URL="https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-abc.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
@@ -46,7 +46,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: 'yosyshq/oss-cad-suite-build'
+          repository: 'jmi2k/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
         uses: actions/cache@v4
@@ -55,7 +55,7 @@ jobs:
           key: cache-sources-python3-native
       - name: Download previous build
         run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz"
+          URL="https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
@@ -81,7 +81,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: 'yosyshq/oss-cad-suite-build'
+          repository: 'jmi2k/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
         uses: actions/cache@v4
@@ -90,14 +90,14 @@ jobs:
           key: cache-sources-python3
       - name: Download previous build
         run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3.tgz"
+          URL="https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
       - name: Download linux-x64-python3-native
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-x64 --target=python3 --single --tar
       - uses: ncipollo/release-action@v1
@@ -118,7 +118,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: 'yosyshq/oss-cad-suite-build'
+          repository: 'jmi2k/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
         uses: actions/cache@v4
@@ -127,16 +127,16 @@ jobs:
           key: cache-sources-xdot
       - name: Download previous build
         run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-xdot.tgz"
+          URL="https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-xdot.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
       - name: Download linux-x64-python3
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-python3-native
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-x64 --target=xdot --single --tar
       - uses: ncipollo/release-action@v1
@@ -156,7 +156,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: 'yosyshq/oss-cad-suite-build'
+          repository: 'jmi2k/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
         uses: actions/cache@v4
@@ -165,7 +165,7 @@ jobs:
           key: cache-sources-graphviz
       - name: Download previous build
         run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-graphviz.tgz"
+          URL="https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-graphviz.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
@@ -190,7 +190,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: 'yosyshq/oss-cad-suite-build'
+          repository: 'jmi2k/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
         uses: actions/cache@v4
@@ -199,14 +199,14 @@ jobs:
           key: cache-sources-yosys
       - name: Download previous build
         run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-yosys.tgz"
+          URL="https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-yosys.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
       - name: Download linux-x64-abc
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-abc.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-abc.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-x64 --target=yosys --single --tar
       - uses: ncipollo/release-action@v1
@@ -226,7 +226,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: 'yosyshq/oss-cad-suite-build'
+          repository: 'jmi2k/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
         uses: actions/cache@v4
@@ -235,16 +235,16 @@ jobs:
           key: cache-sources-formal
       - name: Download previous build
         run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-formal.tgz"
+          URL="https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-formal.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
       - name: Download linux-x64-python3
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-python3-native
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-x64 --target=formal --single --tar
       - uses: ncipollo/release-action@v1
@@ -264,7 +264,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: 'yosyshq/oss-cad-suite-build'
+          repository: 'jmi2k/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
         uses: actions/cache@v4
@@ -273,7 +273,7 @@ jobs:
           key: cache-sources-imctk
       - name: Download previous build
         run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-imctk.tgz"
+          URL="https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-imctk.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
@@ -298,7 +298,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: 'yosyshq/oss-cad-suite-build'
+          repository: 'jmi2k/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
         uses: actions/cache@v4
@@ -307,7 +307,7 @@ jobs:
           key: cache-sources-ghdl
       - name: Download previous build
         run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-ghdl.tgz"
+          URL="https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-ghdl.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
@@ -333,7 +333,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: 'yosyshq/oss-cad-suite-build'
+          repository: 'jmi2k/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
         uses: actions/cache@v4
@@ -342,16 +342,16 @@ jobs:
           key: cache-sources-ghdl-yosys-plugin
       - name: Download previous build
         run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-ghdl-yosys-plugin.tgz"
+          URL="https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-ghdl-yosys-plugin.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
       - name: Download linux-x64-ghdl
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-ghdl.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-ghdl.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-yosys
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-yosys.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-yosys.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-x64 --target=ghdl-yosys-plugin --single --tar
       - uses: ncipollo/release-action@v1
@@ -371,7 +371,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: 'yosyshq/oss-cad-suite-build'
+          repository: 'jmi2k/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
         uses: actions/cache@v4
@@ -380,14 +380,14 @@ jobs:
           key: cache-sources-yosys-slang-plugin
       - name: Download previous build
         run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-yosys-slang-plugin.tgz"
+          URL="https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-yosys-slang-plugin.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
       - name: Download linux-x64-yosys
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-yosys.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-yosys.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-x64 --target=yosys-slang-plugin --single --tar
       - uses: ncipollo/release-action@v1
@@ -407,7 +407,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: 'yosyshq/oss-cad-suite-build'
+          repository: 'jmi2k/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
         uses: actions/cache@v4
@@ -416,7 +416,7 @@ jobs:
           key: cache-sources-nextpnr-bba
       - name: Download previous build
         run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-bba.tgz"
+          URL="https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-bba.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
@@ -442,7 +442,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: 'yosyshq/oss-cad-suite-build'
+          repository: 'jmi2k/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
         uses: actions/cache@v4
@@ -451,18 +451,18 @@ jobs:
           key: cache-sources-nextpnr-generic
       - name: Download previous build
         run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-generic.tgz"
+          URL="https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-generic.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
       - name: Download linux-x64-nextpnr-bba
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-bba.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-bba.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-python3
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-python3-native
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-x64 --target=nextpnr-generic --single --tar
       - uses: ncipollo/release-action@v1
@@ -482,7 +482,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: 'yosyshq/oss-cad-suite-build'
+          repository: 'jmi2k/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
         uses: actions/cache@v4
@@ -491,7 +491,7 @@ jobs:
           key: cache-sources-icestorm
       - name: Download previous build
         run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-icestorm.tgz"
+          URL="https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-icestorm.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
@@ -517,7 +517,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: 'yosyshq/oss-cad-suite-build'
+          repository: 'jmi2k/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
         uses: actions/cache@v4
@@ -526,14 +526,14 @@ jobs:
           key: cache-sources-icestorm-bba
       - name: Download previous build
         run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-icestorm-bba.tgz"
+          URL="https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-icestorm-bba.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
       - name: Download linux-x64-icestorm
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-icestorm.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-icestorm.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-x64 --target=icestorm-bba --single --tar
       - uses: ncipollo/release-action@v1
@@ -554,7 +554,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: 'yosyshq/oss-cad-suite-build'
+          repository: 'jmi2k/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
         uses: actions/cache@v4
@@ -563,20 +563,20 @@ jobs:
           key: cache-sources-nextpnr-ice40
       - name: Download previous build
         run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-ice40.tgz"
+          URL="https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-ice40.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
       - name: Download linux-x64-icestorm-bba
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-icestorm-bba.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-icestorm-bba.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-nextpnr-bba
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-bba.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-bba.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-python3
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-python3-native
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-x64 --target=nextpnr-ice40 --single --tar
       - uses: ncipollo/release-action@v1
@@ -596,7 +596,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: 'yosyshq/oss-cad-suite-build'
+          repository: 'jmi2k/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
         uses: actions/cache@v4
@@ -605,7 +605,7 @@ jobs:
           key: cache-sources-prjtrellis-bba
       - name: Download previous build
         run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-prjtrellis-bba.tgz"
+          URL="https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-prjtrellis-bba.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
@@ -631,7 +631,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: 'yosyshq/oss-cad-suite-build'
+          repository: 'jmi2k/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
         uses: actions/cache@v4
@@ -640,20 +640,20 @@ jobs:
           key: cache-sources-nextpnr-ecp5
       - name: Download previous build
         run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-ecp5.tgz"
+          URL="https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-ecp5.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
       - name: Download linux-x64-nextpnr-bba
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-bba.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-bba.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-prjtrellis-bba
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-prjtrellis-bba.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-prjtrellis-bba.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-python3
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-python3-native
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-x64 --target=nextpnr-ecp5 --single --tar
       - uses: ncipollo/release-action@v1
@@ -674,7 +674,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: 'yosyshq/oss-cad-suite-build'
+          repository: 'jmi2k/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
         uses: actions/cache@v4
@@ -683,20 +683,20 @@ jobs:
           key: cache-sources-nextpnr-machxo2
       - name: Download previous build
         run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-machxo2.tgz"
+          URL="https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-machxo2.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
       - name: Download linux-x64-nextpnr-bba
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-bba.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-bba.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-prjtrellis-bba
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-prjtrellis-bba.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-prjtrellis-bba.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-python3
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-python3-native
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-x64 --target=nextpnr-machxo2 --single --tar
       - uses: ncipollo/release-action@v1
@@ -716,7 +716,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: 'yosyshq/oss-cad-suite-build'
+          repository: 'jmi2k/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
         uses: actions/cache@v4
@@ -725,7 +725,7 @@ jobs:
           key: cache-sources-prjoxide
       - name: Download previous build
         run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-prjoxide.tgz"
+          URL="https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-prjoxide.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
@@ -751,7 +751,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: 'yosyshq/oss-cad-suite-build'
+          repository: 'jmi2k/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
         uses: actions/cache@v4
@@ -760,14 +760,14 @@ jobs:
           key: cache-sources-prjoxide-bba
       - name: Download previous build
         run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-prjoxide-bba.tgz"
+          URL="https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-prjoxide-bba.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
       - name: Download linux-x64-prjoxide
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-prjoxide.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-prjoxide.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-x64 --target=prjoxide-bba --single --tar
       - uses: ncipollo/release-action@v1
@@ -788,7 +788,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: 'yosyshq/oss-cad-suite-build'
+          repository: 'jmi2k/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
         uses: actions/cache@v4
@@ -797,20 +797,20 @@ jobs:
           key: cache-sources-nextpnr-nexus
       - name: Download previous build
         run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-nexus.tgz"
+          URL="https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-nexus.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
       - name: Download linux-x64-nextpnr-bba
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-bba.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-bba.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-prjoxide-bba
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-prjoxide-bba.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-prjoxide-bba.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-python3
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-python3-native
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-x64 --target=nextpnr-nexus --single --tar
       - uses: ncipollo/release-action@v1
@@ -831,7 +831,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: 'yosyshq/oss-cad-suite-build'
+          repository: 'jmi2k/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
         uses: actions/cache@v4
@@ -840,16 +840,16 @@ jobs:
           key: cache-sources-apicula
       - name: Download previous build
         run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-apicula.tgz"
+          URL="https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-apicula.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
       - name: Download linux-x64-python3
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-python3-native
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-x64 --target=apicula --single --tar
       - uses: ncipollo/release-action@v1
@@ -870,7 +870,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: 'yosyshq/oss-cad-suite-build'
+          repository: 'jmi2k/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
         uses: actions/cache@v4
@@ -879,16 +879,16 @@ jobs:
           key: cache-sources-apicula-bba
       - name: Download previous build
         run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-apicula-bba.tgz"
+          URL="https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-apicula-bba.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
       - name: Download linux-x64-apicula
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-apicula.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-apicula.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-python3-native
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-x64 --target=apicula-bba --single --tar
       - uses: ncipollo/release-action@v1
@@ -909,7 +909,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: 'yosyshq/oss-cad-suite-build'
+          repository: 'jmi2k/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
         uses: actions/cache@v4
@@ -918,14 +918,14 @@ jobs:
           key: cache-sources-gatemate-bba
       - name: Download previous build
         run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-gatemate-bba.tgz"
+          URL="https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-gatemate-bba.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
       - name: Download linux-x64-python3-native
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-x64 --target=gatemate-bba --single --tar
       - uses: ncipollo/release-action@v1
@@ -946,7 +946,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: 'yosyshq/oss-cad-suite-build'
+          repository: 'jmi2k/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
         uses: actions/cache@v4
@@ -955,22 +955,22 @@ jobs:
           key: cache-sources-nextpnr-himbaechel
       - name: Download previous build
         run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-himbaechel.tgz"
+          URL="https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-himbaechel.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
       - name: Download linux-x64-apicula-bba
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-apicula-bba.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-apicula-bba.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-gatemate-bba
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-gatemate-bba.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-gatemate-bba.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-nextpnr-bba
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-bba.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-bba.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-python3
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-python3-native
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-x64 --target=nextpnr-himbaechel --single --tar
       - uses: ncipollo/release-action@v1
@@ -990,7 +990,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: 'yosyshq/oss-cad-suite-build'
+          repository: 'jmi2k/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
         uses: actions/cache@v4
@@ -999,7 +999,7 @@ jobs:
           key: cache-sources-prjtrellis
       - name: Download previous build
         run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-prjtrellis.tgz"
+          URL="https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-prjtrellis.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
@@ -1024,7 +1024,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: 'yosyshq/oss-cad-suite-build'
+          repository: 'jmi2k/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
         uses: actions/cache@v4
@@ -1033,7 +1033,7 @@ jobs:
           key: cache-sources-prjpeppercorn
       - name: Download previous build
         run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-prjpeppercorn.tgz"
+          URL="https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-prjpeppercorn.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
@@ -1058,7 +1058,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: 'yosyshq/oss-cad-suite-build'
+          repository: 'jmi2k/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
         uses: actions/cache@v4
@@ -1067,7 +1067,7 @@ jobs:
           key: cache-sources-openfpgaloader
       - name: Download previous build
         run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-openfpgaloader.tgz"
+          URL="https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-openfpgaloader.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
@@ -1092,7 +1092,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: 'yosyshq/oss-cad-suite-build'
+          repository: 'jmi2k/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
         uses: actions/cache@v4
@@ -1101,7 +1101,7 @@ jobs:
           key: cache-sources-picosat
       - name: Download previous build
         run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-picosat.tgz"
+          URL="https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-picosat.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
@@ -1127,7 +1127,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: 'yosyshq/oss-cad-suite-build'
+          repository: 'jmi2k/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
         uses: actions/cache@v4
@@ -1136,14 +1136,14 @@ jobs:
           key: cache-sources-aiger
       - name: Download previous build
         run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-aiger.tgz"
+          URL="https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-aiger.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
       - name: Download linux-x64-picosat
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-picosat.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-picosat.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-x64 --target=aiger --single --tar
       - uses: ncipollo/release-action@v1
@@ -1163,7 +1163,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: 'yosyshq/oss-cad-suite-build'
+          repository: 'jmi2k/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
         uses: actions/cache@v4
@@ -1172,7 +1172,7 @@ jobs:
           key: cache-sources-avy
       - name: Download previous build
         run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-avy.tgz"
+          URL="https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-avy.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
@@ -1197,7 +1197,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: 'yosyshq/oss-cad-suite-build'
+          repository: 'jmi2k/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
         uses: actions/cache@v4
@@ -1206,7 +1206,7 @@ jobs:
           key: cache-sources-lingeling
       - name: Download previous build
         run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-lingeling.tgz"
+          URL="https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-lingeling.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
@@ -1231,7 +1231,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: 'yosyshq/oss-cad-suite-build'
+          repository: 'jmi2k/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
         uses: actions/cache@v4
@@ -1240,7 +1240,7 @@ jobs:
           key: cache-sources-cadical
       - name: Download previous build
         run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-cadical.tgz"
+          URL="https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-cadical.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
@@ -1265,7 +1265,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: 'yosyshq/oss-cad-suite-build'
+          repository: 'jmi2k/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
         uses: actions/cache@v4
@@ -1274,7 +1274,7 @@ jobs:
           key: cache-sources-btor2tools
       - name: Download previous build
         run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-btor2tools.tgz"
+          URL="https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-btor2tools.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
@@ -1299,7 +1299,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: 'yosyshq/oss-cad-suite-build'
+          repository: 'jmi2k/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
         uses: actions/cache@v4
@@ -1308,7 +1308,7 @@ jobs:
           key: cache-sources-symfpu
       - name: Download previous build
         run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-symfpu.tgz"
+          URL="https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-symfpu.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
@@ -1334,7 +1334,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: 'yosyshq/oss-cad-suite-build'
+          repository: 'jmi2k/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
         uses: actions/cache@v4
@@ -1343,20 +1343,20 @@ jobs:
           key: cache-sources-bitwuzla
       - name: Download previous build
         run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-bitwuzla.tgz"
+          URL="https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-bitwuzla.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
       - name: Download linux-x64-btor2tools
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-btor2tools.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-btor2tools.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-cadical
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-cadical.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-cadical.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-lingeling
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-lingeling.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-lingeling.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-symfpu
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-symfpu.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-symfpu.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-x64 --target=bitwuzla --single --tar
       - uses: ncipollo/release-action@v1
@@ -1377,7 +1377,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: 'yosyshq/oss-cad-suite-build'
+          repository: 'jmi2k/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
         uses: actions/cache@v4
@@ -1386,18 +1386,18 @@ jobs:
           key: cache-sources-boolector
       - name: Download previous build
         run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-boolector.tgz"
+          URL="https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-boolector.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
       - name: Download linux-x64-btor2tools
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-btor2tools.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-btor2tools.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-cadical
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-cadical.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-cadical.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-lingeling
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-lingeling.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-lingeling.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-x64 --target=boolector --single --tar
       - uses: ncipollo/release-action@v1
@@ -1417,7 +1417,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: 'yosyshq/oss-cad-suite-build'
+          repository: 'jmi2k/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
         uses: actions/cache@v4
@@ -1426,7 +1426,7 @@ jobs:
           key: cache-sources-cvc4
       - name: Download previous build
         run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-cvc4.tgz"
+          URL="https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-cvc4.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
@@ -1451,7 +1451,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: 'yosyshq/oss-cad-suite-build'
+          repository: 'jmi2k/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
         uses: actions/cache@v4
@@ -1460,7 +1460,7 @@ jobs:
           key: cache-sources-libpoly
       - name: Download previous build
         run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-libpoly.tgz"
+          URL="https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-libpoly.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
@@ -1486,7 +1486,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: 'yosyshq/oss-cad-suite-build'
+          repository: 'jmi2k/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
         uses: actions/cache@v4
@@ -1495,18 +1495,18 @@ jobs:
           key: cache-sources-cvc5
       - name: Download previous build
         run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-cvc5.tgz"
+          URL="https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-cvc5.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
       - name: Download linux-x64-cadical
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-cadical.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-cadical.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-libpoly
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-libpoly.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-libpoly.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-symfpu
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-symfpu.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-symfpu.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-x64 --target=cvc5 --single --tar
       - uses: ncipollo/release-action@v1
@@ -1526,7 +1526,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: 'yosyshq/oss-cad-suite-build'
+          repository: 'jmi2k/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
         uses: actions/cache@v4
@@ -1535,7 +1535,7 @@ jobs:
           key: cache-sources-yices
       - name: Download previous build
         run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-yices.tgz"
+          URL="https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-yices.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
@@ -1560,7 +1560,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: 'yosyshq/oss-cad-suite-build'
+          repository: 'jmi2k/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
         uses: actions/cache@v4
@@ -1569,7 +1569,7 @@ jobs:
           key: cache-sources-python2-native
       - name: Download previous build
         run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python2-native.tgz"
+          URL="https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python2-native.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
@@ -1595,7 +1595,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: 'yosyshq/oss-cad-suite-build'
+          repository: 'jmi2k/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
         uses: actions/cache@v4
@@ -1604,14 +1604,14 @@ jobs:
           key: cache-sources-python2
       - name: Download previous build
         run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python2.tgz"
+          URL="https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python2.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
       - name: Download linux-x64-python2-native
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python2-native.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python2-native.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-x64 --target=python2 --single --tar
       - uses: ncipollo/release-action@v1
@@ -1632,7 +1632,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: 'yosyshq/oss-cad-suite-build'
+          repository: 'jmi2k/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
         uses: actions/cache@v4
@@ -1641,14 +1641,14 @@ jobs:
           key: cache-sources-suprove
       - name: Download previous build
         run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-suprove.tgz"
+          URL="https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-suprove.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
       - name: Download linux-x64-python2
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python2.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python2.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-x64 --target=suprove --single --tar
       - uses: ncipollo/release-action@v1
@@ -1669,7 +1669,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: 'yosyshq/oss-cad-suite-build'
+          repository: 'jmi2k/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
         uses: actions/cache@v4
@@ -1678,16 +1678,16 @@ jobs:
           key: cache-sources-smt-switch
       - name: Download previous build
         run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-smt-switch.tgz"
+          URL="https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-smt-switch.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
       - name: Download linux-x64-boolector
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-boolector.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-boolector.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-cvc5
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-cvc5.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-cvc5.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-x64 --target=smt-switch --single --tar
       - uses: ncipollo/release-action@v1
@@ -1708,7 +1708,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: 'yosyshq/oss-cad-suite-build'
+          repository: 'jmi2k/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
         uses: actions/cache@v4
@@ -1717,18 +1717,18 @@ jobs:
           key: cache-sources-pono
       - name: Download previous build
         run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-pono.tgz"
+          URL="https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-pono.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
       - name: Download linux-x64-boolector
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-boolector.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-boolector.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-cvc5
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-cvc5.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-cvc5.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-smt-switch
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-smt-switch.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-smt-switch.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-x64 --target=pono --single --tar
       - uses: ncipollo/release-action@v1
@@ -1748,7 +1748,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: 'yosyshq/oss-cad-suite-build'
+          repository: 'jmi2k/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
         uses: actions/cache@v4
@@ -1757,7 +1757,7 @@ jobs:
           key: cache-sources-z3
       - name: Download previous build
         run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-z3.tgz"
+          URL="https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-z3.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
@@ -1783,7 +1783,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: 'yosyshq/oss-cad-suite-build'
+          repository: 'jmi2k/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
         uses: actions/cache@v4
@@ -1792,14 +1792,14 @@ jobs:
           key: cache-sources-eqy
       - name: Download previous build
         run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-eqy.tgz"
+          URL="https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-eqy.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
       - name: Download linux-x64-yosys
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-yosys.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-yosys.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-x64 --target=eqy --single --tar
       - uses: ncipollo/release-action@v1
@@ -1819,7 +1819,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: 'yosyshq/oss-cad-suite-build'
+          repository: 'jmi2k/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
         uses: actions/cache@v4
@@ -1828,7 +1828,7 @@ jobs:
           key: cache-sources-gtkwave
       - name: Download previous build
         run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-gtkwave.tgz"
+          URL="https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-gtkwave.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
@@ -1853,7 +1853,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: 'yosyshq/oss-cad-suite-build'
+          repository: 'jmi2k/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
         uses: actions/cache@v4
@@ -1862,7 +1862,7 @@ jobs:
           key: cache-sources-verilator
       - name: Download previous build
         run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-verilator.tgz"
+          URL="https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-verilator.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
@@ -1887,7 +1887,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: 'yosyshq/oss-cad-suite-build'
+          repository: 'jmi2k/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
         uses: actions/cache@v4
@@ -1896,7 +1896,7 @@ jobs:
           key: cache-sources-iverilog
       - name: Download previous build
         run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-iverilog.tgz"
+          URL="https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-iverilog.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
@@ -1922,7 +1922,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: 'yosyshq/oss-cad-suite-build'
+          repository: 'jmi2k/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
         uses: actions/cache@v4
@@ -1931,16 +1931,16 @@ jobs:
           key: cache-sources-python-programmers
       - name: Download previous build
         run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python-programmers.tgz"
+          URL="https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python-programmers.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
       - name: Download linux-x64-python3
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-python3-native
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-x64 --target=python-programmers --single --tar
       - uses: ncipollo/release-action@v1
@@ -1960,7 +1960,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: 'yosyshq/oss-cad-suite-build'
+          repository: 'jmi2k/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
         uses: actions/cache@v4
@@ -1969,7 +1969,7 @@ jobs:
           key: cache-sources-utils
       - name: Download previous build
         run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-utils.tgz"
+          URL="https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-utils.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
@@ -1995,7 +1995,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: 'yosyshq/oss-cad-suite-build'
+          repository: 'jmi2k/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
         uses: actions/cache@v4
@@ -2004,16 +2004,16 @@ jobs:
           key: cache-sources-pyhdl
       - name: Download previous build
         run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-pyhdl.tgz"
+          URL="https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-pyhdl.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
       - name: Download linux-x64-python3
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-python3-native
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-x64 --target=pyhdl --single --tar
       - uses: ncipollo/release-action@v1
@@ -2034,7 +2034,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: 'yosyshq/oss-cad-suite-build'
+          repository: 'jmi2k/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
         uses: actions/cache@v4
@@ -2043,16 +2043,16 @@ jobs:
           key: cache-sources-cocotb
       - name: Download previous build
         run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-cocotb.tgz"
+          URL="https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-cocotb.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
       - name: Download linux-x64-python3
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-python3-native
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-x64 --target=cocotb --single --tar
       - uses: ncipollo/release-action@v1
@@ -2072,7 +2072,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: 'yosyshq/oss-cad-suite-build'
+          repository: 'jmi2k/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
         uses: actions/cache@v4
@@ -2081,7 +2081,7 @@ jobs:
           key: cache-sources-system-resources
       - name: Download previous build
         run: |
-          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-system-resources.tgz"
+          URL="https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-system-resources.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
           else
@@ -2109,89 +2109,89 @@ jobs:
         run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
       - uses: actions/checkout@v4
         with:
-          repository: 'yosyshq/oss-cad-suite-build'
+          repository: 'jmi2k/oss-cad-suite-build'
       - name: Download linux-x64-aiger
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-aiger.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-aiger.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-apicula
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-apicula.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-apicula.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-avy
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-avy.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-avy.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-bitwuzla
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-bitwuzla.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-bitwuzla.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-boolector
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-boolector.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-boolector.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-cocotb
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-cocotb.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-cocotb.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-cvc4
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-cvc4.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-cvc4.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-cvc5
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-cvc5.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-cvc5.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-eqy
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-eqy.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-eqy.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-formal
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-formal.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-formal.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-ghdl
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-ghdl.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-ghdl.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-ghdl-yosys-plugin
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-ghdl-yosys-plugin.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-ghdl-yosys-plugin.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-graphviz
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-graphviz.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-graphviz.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-gtkwave
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-gtkwave.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-gtkwave.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-icestorm
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-icestorm.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-icestorm.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-imctk
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-imctk.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-imctk.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-iverilog
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-iverilog.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-iverilog.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-nextpnr-ecp5
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-ecp5.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-ecp5.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-nextpnr-generic
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-generic.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-generic.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-nextpnr-himbaechel
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-himbaechel.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-himbaechel.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-nextpnr-ice40
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-ice40.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-ice40.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-nextpnr-machxo2
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-machxo2.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-machxo2.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-nextpnr-nexus
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-nexus.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-nexus.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-openfpgaloader
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-openfpgaloader.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-openfpgaloader.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-pono
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-pono.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-pono.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-prjoxide
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-prjoxide.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-prjoxide.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-prjpeppercorn
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-prjpeppercorn.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-prjpeppercorn.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-prjtrellis
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-prjtrellis.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-prjtrellis.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-pyhdl
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-pyhdl.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-pyhdl.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-python-programmers
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python-programmers.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python-programmers.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-python2
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python2.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python2.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-python3
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-suprove
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-suprove.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-suprove.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-system-resources
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-system-resources.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-system-resources.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-utils
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-utils.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-utils.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-verilator
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-verilator.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-verilator.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-xdot
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-xdot.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-xdot.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-yices
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-yices.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-yices.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-yosys
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-yosys.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-yosys.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-yosys-slang-plugin
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-yosys-slang-plugin.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-yosys-slang-plugin.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-z3
-        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-z3.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+        run: wget -qO- "https://github.com/jmi2k/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-z3.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-x64 --target=default --single
       - uses: ncipollo/release-action@v1
