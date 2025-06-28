@@ -576,6 +576,8 @@ jobs:
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-gatemate-bba.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-nextpnr-bba
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-nextpnr-bba.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+      - name: Download linux-x64-xilinx-bba
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-xilinx-bba.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-python3-native
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
@@ -658,6 +660,45 @@ jobs:
           omitNameDuringUpdate: True
           tag: bucket-darwin-x64
           artifacts: "darwin-x64-prjtrellis.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
+  darwin-x64-prjxray:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    needs: darwin-x64-python3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: 'yosyshq/oss-cad-suite-build'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v4
+        with:
+          path: _sources
+          key: cache-sources-prjxray
+      - name: Download previous build
+        run: |
+          URL="https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-darwin-x64/darwin-x64-prjxray.tgz"
+          if wget --spider "${URL}" 2>/dev/null; then
+              wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+          else
+              echo "Previous version not found in bucket"
+          fi
+      - name: Download darwin-x64-python3
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-darwin-x64/darwin-x64-python3.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+      - name: Download linux-x64-python3-native
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+      - name: Build
+        run: ./builder.py build --arch=darwin-x64 --target=prjxray --single --tar
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('darwin-x64-prjxray.tgz') != ''
+        with:
+          allowUpdates: True
+          prerelease: True
+          omitBody: True
+          omitBodyDuringUpdate: True
+          omitNameDuringUpdate: True
+          tag: bucket-darwin-x64
+          artifacts: "darwin-x64-prjxray.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   darwin-x64-prjpeppercorn:
     runs-on: ubuntu-latest
@@ -1674,7 +1715,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   darwin-x64-default:
     runs-on: ubuntu-latest
-    needs: [ darwin-x64-aiger, darwin-x64-apicula, darwin-x64-avy, darwin-x64-bitwuzla, darwin-x64-boolector, darwin-x64-cocotb, darwin-x64-cvc4, darwin-x64-cvc5, darwin-x64-eqy, darwin-x64-formal, darwin-x64-ghdl, darwin-x64-ghdl-yosys-plugin, darwin-x64-graphviz, darwin-x64-gtkwave, darwin-x64-icestorm, darwin-x64-imctk, darwin-x64-iverilog, darwin-x64-nextpnr-ecp5, darwin-x64-nextpnr-generic, darwin-x64-nextpnr-himbaechel, darwin-x64-nextpnr-ice40, darwin-x64-nextpnr-machxo2, darwin-x64-nextpnr-nexus, darwin-x64-openfpgaloader, darwin-x64-pono, darwin-x64-prjoxide, darwin-x64-prjpeppercorn, darwin-x64-prjtrellis, darwin-x64-pyhdl, darwin-x64-python-programmers, darwin-x64-python3, darwin-x64-system-resources, darwin-x64-utils, darwin-x64-verilator, darwin-x64-xdot, darwin-x64-yices, darwin-x64-yosys, darwin-x64-yosys-slang-plugin, darwin-x64-z3 ]
+    needs: [ darwin-x64-aiger, darwin-x64-apicula, darwin-x64-avy, darwin-x64-bitwuzla, darwin-x64-boolector, darwin-x64-cocotb, darwin-x64-cvc4, darwin-x64-cvc5, darwin-x64-eqy, darwin-x64-formal, darwin-x64-ghdl, darwin-x64-ghdl-yosys-plugin, darwin-x64-graphviz, darwin-x64-gtkwave, darwin-x64-icestorm, darwin-x64-imctk, darwin-x64-iverilog, darwin-x64-nextpnr-ecp5, darwin-x64-nextpnr-generic, darwin-x64-nextpnr-himbaechel, darwin-x64-nextpnr-ice40, darwin-x64-nextpnr-machxo2, darwin-x64-nextpnr-nexus, darwin-x64-openfpgaloader, darwin-x64-pono, darwin-x64-prjoxide, darwin-x64-prjpeppercorn, darwin-x64-prjtrellis, darwin-x64-prjxray, darwin-x64-pyhdl, darwin-x64-python-programmers, darwin-x64-python3, darwin-x64-system-resources, darwin-x64-utils, darwin-x64-verilator, darwin-x64-xdot, darwin-x64-yices, darwin-x64-yosys, darwin-x64-yosys-slang-plugin, darwin-x64-z3 ]
     steps:
       - name: Get current date
         id: date
@@ -1738,6 +1779,8 @@ jobs:
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-darwin-x64/darwin-x64-prjpeppercorn.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download darwin-x64-prjtrellis
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-darwin-x64/darwin-x64-prjtrellis.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+      - name: Download darwin-x64-prjxray
+        run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-darwin-x64/darwin-x64-prjxray.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download darwin-x64-pyhdl
         run: wget -qO- "https://github.com/yosyshq/oss-cad-suite-build/releases/download/bucket-darwin-x64/darwin-x64-pyhdl.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download darwin-x64-python-programmers

@@ -65,7 +65,7 @@ Target(
 Target(
 	name = 'nextpnr-himbaechel',
 	sources = [ 'nextpnr' ],
-	dependencies = [ 'python3', 'nextpnr-bba', 'apicula-bba', 'gatemate-bba', 'python3-native'],
+	dependencies = [ 'python3', 'nextpnr-bba', 'apicula-bba', 'gatemate-bba', 'xilinx-bba', 'python3-native'],
 	patches = [ 'python3_package.sh' ],
 	resources = [ 'python3' ],
 )
@@ -119,6 +119,22 @@ SourceLocation(
 	license_file = 'COPYING',
 )
 
+SourceLocation(
+	name = 'prjxray',
+	vcs = 'git',
+	location = 'https://github.com/f4pga/prjxray',
+	revision = 'origin/master',
+	license_file = 'LICENSE',
+)
+
+SourceLocation(
+	name = 'prjxray-db',
+	vcs = 'git',
+	location = 'https://github.com/f4pga/prjxray-db',
+	revision = 'origin/master',
+	license_file = 'LICENSE',
+)
+
 Target(
 	name = 'icestorm',
 	sources = [ 'icestorm' ],
@@ -149,6 +165,14 @@ Target(
 	name = 'prjpeppercorn',
 	sources = [ 'prjpeppercorn' ],
 	package = 'gatemate',
+)
+
+Target(
+	name = 'prjxray',
+	sources = [ 'prjxray', 'prjxray-db' ],
+	dependencies = [ 'python3', 'python3-native' ],
+	resources = [ 'python3' ],
+	package = 'xilinx',
 )
 
 # chip databases
@@ -188,6 +212,14 @@ Target(
 Target(
 	name = 'gatemate-bba',
 	sources = [ 'nextpnr', 'prjpeppercorn' ],
+	dependencies = ['python3-native'],
+	gitrev = [ ('nextpnr', 'himbaechel') ],
+	build_native = True,
+)
+
+Target(
+	name = 'xilinx-bba',
+	sources = [ 'nextpnr', 'prjxray-db' ],
 	dependencies = ['python3-native'],
 	gitrev = [ ('nextpnr', 'himbaechel') ],
 	build_native = True,
