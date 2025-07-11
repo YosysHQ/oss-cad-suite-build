@@ -13,3 +13,17 @@ Target(
 	sources = [ 'gtkwave' ],
 	package = 'gtkwave',
 )
+
+SourceLocation(
+	name = 'surfer',
+	vcs = 'git',
+	location = 'https://gitlab.com/surfer-project/surfer',
+	revision = 'origin/main',
+	license_file = 'LICENSE-EUPL-1.2.txt',
+)
+
+Target(
+	name = 'surfer',
+	sources = [ 'surfer' ],
+	package = 'surfer',
+)
