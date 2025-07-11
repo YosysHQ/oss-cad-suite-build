@@ -93,6 +93,16 @@ export TCL_LIBRARY="\$release_topdir_abs/lib/tcl8.6"
 export TK_LIBRARY="\$release_topdir_abs/lib/tk8.6"
 EOT
         fi
+        if [ ! -z "$(basename $binfile | grep verilator)" ]; then
+            cat >> $binfile << EOT
+export VERILATOR_ROOT="\$release_topdir_abs/share/verilator"
+EOT
+        fi
+        if [ ! -z "$(basename $binfile | grep surfer)" ]; then
+            cat >> $binfile << EOT
+exec "\$release_topdir_abs"/libexec/$(basename $binfile) "\$@"
+EOT
+        fi
         if [ ! -z "$(lddtree -l libexec/$(basename $binfile) | grep Qt5)" ]; then
             is_using_fonts=true
             cat >> $binfile << EOT

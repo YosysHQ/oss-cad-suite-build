@@ -46,6 +46,11 @@ EOT
 export VERILATOR_ROOT="\$release_topdir_abs/share/verilator"
 EOT
         fi
+        if [ ! -z "$(basename $binfile | grep surfer)" ]; then
+            cat >> $binfile << EOT
+exec "\$release_topdir_abs"/libexec/$(basename $binfile) "\$@"
+EOT
+        fi
         if [ ! -z "$(basename $binfile | grep openFPGALoader)" ]; then
             cat >> $binfile << EOT
 export OPENFPGALOADER_SOJ_DIR="\$release_topdir_abs/share/openFPGALoader"
