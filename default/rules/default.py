@@ -41,6 +41,7 @@ Target(
         'utils',
         'pyhdl',
         'cocotb',
+        'surfer',
     ],
     branding = 'OSS CAD Suite',
     readme = 'README',

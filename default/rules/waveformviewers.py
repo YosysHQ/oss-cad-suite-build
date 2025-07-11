@@ -26,4 +26,5 @@ Target(
 	name = 'surfer',
 	sources = [ 'surfer' ],
 	package = 'surfer',
+	arch = [ 'linux-x64', 'darwin-x64', 'darwin-arm64', 'windows-x64' ],
 )
