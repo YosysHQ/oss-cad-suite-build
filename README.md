@@ -67,6 +67,7 @@ Contact us at contact@yosyshq.com to arrange a free evaluation license.
  
 ### Simulation/Testing
  * [GTK Wave](https://github.com/gtkwave/gtkwave) fully featured GTK+ based wave viewer
+ * [Surfer](https://gitlab.com/surfer-project/surfer) A waveform viewer with a focus on a snappy usable interface, and extensibility.
  * [verilator](https://github.com/verilator/verilator) Verilog/SystemVerilog simulator
  * [iverilog](https://github.com/steveicarus/iverilog) Verilog compilation system
  * [cocotb](https://github.com/cocotb/cocotb) coroutine based cosimulation library for writing VHDL and Verilog testbenches in Python
