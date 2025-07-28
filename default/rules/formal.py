@@ -58,6 +58,15 @@ Target(
 )
 
 Target(
+	name = 'sby',
+	sources = [ 'sby' ],
+	dependencies = [ 'python3', 'python3-native' ],
+	resources = [ 'python3' ],
+	patches = [ 'python3_package.sh' ],
+    critical = True,
+)
+
+Target(
 	name = 'imctk',
 	sources = [ 'imctk' ],
 )
