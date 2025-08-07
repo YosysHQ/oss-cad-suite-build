@@ -5,6 +5,7 @@ wget https://files.pythonhosted.org/packages/ac/4a/f24ddf1d20cc4b56affc7921e2992
 tar xvfz PyGObject-3.46.0.tar.gz
 cd PyGObject-3.46.0
 python3_package_install
+python3_package_pth "xdot"
 mv ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/python3.11/site-packages/bin ${OUTPUT_DIR}${INSTALL_PREFIX}
 if [ ${ARCH_BASE} == 'linux' ]; then
 	cp -r /usr/lib/x86_64-linux-gnu/girepository-1.0 ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/.

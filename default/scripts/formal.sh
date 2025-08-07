@@ -19,6 +19,7 @@ rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/python3.11/site-packages/bin
 # mau
 cd ${BUILD_DIR}/mau
 python3_package_install
+python3_package_pth "formal"
 
 # mcy
 cd  ${BUILD_DIR}/mcy
