@@ -87,7 +87,7 @@ SourceLocation(
 	name = 'btor2tools',
 	vcs = 'git',
 	location = 'https://github.com/Boolector/btor2tools',
-	revision = 'origin/master',
+	revision = 'd381aefa4560d245a371c1915b1fb89b691d9489',
 	license_file = 'LICENSE.txt',
 	license_build_only = True,
 )
