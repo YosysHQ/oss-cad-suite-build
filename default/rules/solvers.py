@@ -235,6 +235,7 @@ SourceLocation(
 	location = 'https://github.com/Z3Prover/z3',
 	revision = 'origin/master',
 	license_file = 'LICENSE.txt',
+    no_submodules = True,
 )
 
 Target(
