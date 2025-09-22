@@ -283,4 +283,20 @@ EOT
     chmod +x bin/yosys-config
 fi
 
+if [ -f "bin/iverilog-vpi" ]; then
+    mv bin/iverilog-vpi bin/iverilog-vpi.orig
+    cat > bin/iverilog-vpi << EOT
+#!/usr/bin/env bash
+release_bindir="\$(dirname "\${BASH_SOURCE[0]}")"
+release_bindir_abs="\$(readlink -f "\$release_bindir")"
+release_topdir_abs="\$(readlink -f "\$release_bindir/$rel_path")"
+EOT
+    cat bin/iverilog-vpi.orig >> bin/iverilog-vpi
+    rm bin/iverilog-vpi.orig
+    sed -i "s,\"/yosyshq,\${release_topdir_abs}\",g" bin/iverilog-vpi
+    sed -i "s,'/yosyshq,\${release_topdir_abs}',g" bin/iverilog-vpi
+    sed -i "s,/yosyshq,\${release_topdir_abs},g" bin/iverilog-vpi
+    chmod +x bin/iverilog-vpi
+fi
+
 chmod -R u=rwX,go=rX *

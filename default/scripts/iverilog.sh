@@ -15,3 +15,7 @@ fi
 make DESTDIR=${OUTPUT_DIR} -j${NPROC} install
 sed -i -re 's|^flag:VVP_EXECUTABLE=.*$||g' ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/ivl/vvp.conf
 sed -i -re 's|^flag:VVP_EXECUTABLE=.*$||g' ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/ivl/vvp-s.conf
+if [ ${ARCH_BASE} == 'darwin' ]; then
+    sed -i 's,CC="'${CC}',CC="clang",g' ${OUTPUT_DIR}${INSTALL_PREFIX}/bin/iverilog-vpi
+    sed -i 's,CXX="'${CXX}'",CXX="clang++",g' ${OUTPUT_DIR}${INSTALL_PREFIX}/bin/iverilog-vpi
+fi
