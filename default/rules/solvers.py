@@ -135,8 +135,8 @@ SourceLocation(
 SourceLocation(
 	name = 'cvc4',
 	vcs = 'git',
-	location = 'https://github.com/CVC4/CVC4.git',
-	revision = '3dda54ba7e6952060766775c56969ab920430a8a',
+	location = 'https://github.com/cvc5/cvc5',
+	revision = '5247901077efbc7b9016ba35fded7a6ab459a379',
 	license_file = 'COPYING',
 	license_build_only = True,
 )
