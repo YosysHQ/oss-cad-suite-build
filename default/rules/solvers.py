@@ -154,7 +154,7 @@ SourceLocation(
 	name = 'libpoly',
 	vcs = 'git',
 	location = 'https://github.com/SRI-CSL/libpoly',
-	revision = '1383809f2aa5005ef20110fec84b66959518f697',
+	revision = 'fc54e31f37cbdb5fc72416ad1c2b5e44551ccd7f',
 	license_file = 'LICENCE',
 	license_build_only = True,
 )
