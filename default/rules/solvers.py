@@ -118,8 +118,8 @@ Target(
 SourceLocation(
 	name = 'smt-switch',
 	vcs = 'git',
-	location = 'https://github.com/makaimann/smt-switch',
-	revision = 'f2d7d3d6dfccc0b4d6b604563acd34629bac884d',
+	location = 'https://github.com/stanford-centaur/smt-switch',
+	revision = '758e9e125dd76bc72b39add7adf8332992c0c527',
 	license_file = 'LICENSE',
 	license_build_only = True,
 )
@@ -182,7 +182,7 @@ Target(
 Target(
 	name = 'smt-switch',
 	sources = [ 'smt-switch' ],
-	dependencies = [ 'cvc5', 'boolector'],
+	dependencies = [ 'cvc5', 'boolector', 'cadical'],
 	patches = [ 'smt-switch-win32.diff', 'Toolchain-mingw64.cmake' ],
 	license_build_only = True,
 )

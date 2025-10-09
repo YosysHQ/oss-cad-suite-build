@@ -17,7 +17,7 @@ if [ ${ARCH_BASE} == 'darwin' ]; then
     sed -i -re 's,darwin,linux,g' scripts/repack-static-lib.sh 
     sed -i -re 's,libtool,x86_64-apple-darwin23.5-libtool,g' scripts/repack-static-lib.sh 
 fi
-./configure.sh --cvc5 --cvc5-home=${BUILD_DIR}/cvc5/dev --btor-home=${BUILD_DIR}/boolector/dev --prefix=${INSTALL_PREFIX} --static --smtlib-reader
+./configure.sh --cvc5 --cvc5-home=${BUILD_DIR}/cvc5/dev --btor-home=${BUILD_DIR}/boolector/dev -DCADICAL:FILEPATH=${BUILD_DIR}/cadical${INSTALL_PREFIX}/lib --prefix=${INSTALL_PREFIX} --static --smtlib-reader
 cd build
 make DESTDIR=${OUTPUT_DIR} -j${NPROC}
 make DESTDIR=${OUTPUT_DIR} install
