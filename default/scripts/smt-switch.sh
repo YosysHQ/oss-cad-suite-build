@@ -20,8 +20,9 @@ fi
 
 mkdir -p ${BUILD_DIR}/smt-switch/deps/install/lib
 cp ${BUILD_DIR}/cadical${INSTALL_PREFIX}/lib/libcadical.a ${BUILD_DIR}/smt-switch/deps/install/lib/libcadical.a
+cp -R ${BUILD_DIR}/bitwuzla/dev/include/* ${BUILD_DIR}/smt-switch/bitwuzla/include/
 
-./configure.sh --cvc5 --cvc5-home=${BUILD_DIR}/cvc5/dev --btor-home=${BUILD_DIR}/boolector/dev -DCADICAL:FILEPATH=${BUILD_DIR}/cadical${INSTALL_PREFIX}/lib/libcadical.a --prefix=${INSTALL_PREFIX} --static --smtlib-reader
+./configure.sh --bitwuzla --bitwuzla-dir=${BUILD_DIR}/bitwuzla/dev --cvc5 --cvc5-home=${BUILD_DIR}/cvc5/dev --btor-home=${BUILD_DIR}/boolector/dev -DCADICAL:FILEPATH=${BUILD_DIR}/cadical${INSTALL_PREFIX}/lib/libcadical.a --prefix=${INSTALL_PREFIX} --static --smtlib-reader
 cd build
 make DESTDIR=${OUTPUT_DIR} -j${NPROC}
 make DESTDIR=${OUTPUT_DIR} install

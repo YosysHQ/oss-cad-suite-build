@@ -38,7 +38,7 @@ SourceLocation(
 	name = 'bitwuzla',
 	vcs = 'git',
 	location = 'https://github.com/bitwuzla/bitwuzla',
-	revision = '6e46391816b4baf8c9fc0b8c0c1d2fbe63b6f30e',
+	revision = '532ca9729136969008960481167ab55696a9cc52',
 	license_file = 'COPYING',
 )
 
@@ -127,8 +127,8 @@ SourceLocation(
 SourceLocation(
 	name = 'pono',
 	vcs = 'git',
-	location = 'https://github.com/upscale-project/pono',
-	revision = 'b243cef7ea0c98840e7e012f5ce30f3430b1edcc',
+    location = 'https://github.com/stanford-centaur/pono',
+	revision = 'd307bc1539992275c74b594968c91967abeafe17',
 	license_file = 'LICENSE',
 )
 
@@ -182,7 +182,7 @@ Target(
 Target(
 	name = 'smt-switch',
 	sources = [ 'smt-switch' ],
-	dependencies = [ 'cvc5', 'boolector', 'cadical'],
+	dependencies = [ 'cvc5', 'boolector', 'cadical', 'bitwuzla'],
 	patches = [ 'smt-switch-win32.diff', 'Toolchain-mingw64.cmake' ],
 	license_build_only = True,
 )
@@ -190,7 +190,7 @@ Target(
 Target(
 	name = 'pono',
 	sources = [ 'pono' ],
-	dependencies = [ 'smt-switch', 'cvc5', 'boolector' ],
+	dependencies = [ 'smt-switch', 'cvc5', 'boolector', 'bitwuzla' ],
 )
 
 # suprove

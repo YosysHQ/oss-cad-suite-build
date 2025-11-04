@@ -15,6 +15,7 @@ RUN set -e -x ;\
         git \
         pkg-config \
         python3 \
+        python3-venv \
         adwaita-icon-theme-full \
         cmake \
         wget \

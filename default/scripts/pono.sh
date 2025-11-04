@@ -1,9 +1,11 @@
 mkdir -p pono/deps/smt-switch/local
 mkdir -p pono/deps/btor2tools/build/lib
+mkdir -p pono/deps/bitwuzla
 cp -R ${BUILD_DIR}/smt-switch${INSTALL_PREFIX}/* pono/deps/smt-switch/local/.
 cp -R ${BUILD_DIR}/boolector/dev/deps/btor2tools/src pono/deps/btor2tools/.
 cp -R pono/deps/smt-switch/local/cmake pono/deps/smt-switch/.
-cp boolector/dev/deps/btor2tools/build/libbtor2parser.a pono/deps/btor2tools/build/lib/.
+cp -R ${BUILD_DIR}/bitwuzla/dev/lib/x86_64-linux-gnu/* pono/deps/bitwuzla/.
+cp boolector/dev/deps/btor2tools/build/lib/libbtor2parser.a pono/deps/btor2tools/build/lib/.
 cp boolector/dev/deps/lingeling/build/liblgl.a pono/deps/smt-switch/local/lib/.
 cp boolector/dev/deps/cadical/build/libcadical.a pono/deps/smt-switch/local/lib/.
 cd pono
@@ -17,7 +19,10 @@ if [ ${ARCH_BASE} == 'windows' ]; then
     sed -i -re 's,FMT_USE_WINDOWS_H 1,FMT_USE_WINDOWS_H 0,g' contrib/fmt/format.h
     sed -i -re 's,SIGALRM,SIGABRT,g' pono.cpp
 fi
-./configure.sh --static-lib
+export LDFLAGS="-L${BUILD_DIR}/pono/deps/bitwuzla $LDFLAGS"
+export CMAKE_PREFIX_PATH="${BUILD_DIR}/pono/deps/bitwuzla:$CMAKE_PREFIX_PATH"
+export PKG_CONFIG_PATH="${BUILD_DIR}/pono/deps/bitwuzla/pkgconfig:$PKG_CONFIG_PATH"
+./configure.sh --static-lib --prefix=${INSTALL_PREFIX}
 cd build
 make -j${NPROC}
 mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/bin
