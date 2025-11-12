@@ -32,6 +32,7 @@ pushd lib/ortho && make && popd
 pushd lib/gvc && make && popd
 
 pushd plugin/core && make && popd
+pushd plugin/webp && make && popd
 pushd lib/neatogen && make && popd
 pushd lib/twopigen && make && popd
 pushd lib/patchwork && make && popd
@@ -48,5 +49,5 @@ pushd plugin/pango && make && popd
 pushd cmd/dot && make dot_static${EXE} && popd
 
 mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/bin
+find . -name "dot_static"
 cp cmd/dot/dot_static${EXE} ${OUTPUT_DIR}${INSTALL_PREFIX}/bin/dot${EXE}
-

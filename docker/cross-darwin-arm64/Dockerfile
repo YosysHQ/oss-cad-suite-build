@@ -9,7 +9,7 @@ RUN cd /tmp \
     && sed -i "s,CXXFLAGS=-O2 -std=c++11,CXXFLAGS=-O2 -std=c++11 -static-libstdc++ -static-libgcc,g" Makefile \
     && make 
 
-FROM yosyshq/cross-base:2.0
+FROM yosyshq/cross-base:3.0
 
 RUN set -e -x ;\
     apt -y update ;\

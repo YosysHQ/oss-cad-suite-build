@@ -63,7 +63,7 @@ SourceLocation(
 SourceLocation(
 	name = 'openocd',
 	vcs = 'git',
-	location = 'https://repo.or.cz/openocd.git',
+    location = 'https://git.code.sf.net/p/openocd/code',
 	revision = 'b6ee13720688a9860f3397bb89ea171b0fc5ccce',
 	license_file = 'COPYING',
 )
