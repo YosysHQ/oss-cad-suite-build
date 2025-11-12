@@ -1,47 +1,7 @@
-if [ -z "$__BASH500_BOOTSTRAPPED" ]; then
-  set -eu
-
-  export __BASH500_BOOTSTRAPPED=1
-  : "${BASH_500_PREFIX:="$(mktemp -d /tmp/bash-5.0.XXXXXXXX)"}"
-  : "${BASH_500_VERSION:=5.0}"
-  : "${BASH_500_TARBALL:=bash-${BASH_500_VERSION}.tar.gz}"
-  : "${BASH_500_URL:=https://ftp.gnu.org/gnu/bash/${BASH_500_TARBALL}}"
-
-  if command -v apt-get >/dev/null 2>&1 && [ "$(id -u)" -eq 0 ]; then
-    apt-get update -y >/dev/null 2>&1 || true
-    apt-get install -y build-essential wget curl libncurses-dev >/dev/null 2>&1 || true
-  fi
-
-  tmpbuild="$(mktemp -d /tmp/bash-5.0-src.XXXXXXXX)"
-  (
-    set -e
-    cd "$tmpbuild"
-    if command -v wget >/dev/null 2>&1; then
-      wget -q "$BASH_500_URL"
-    else
-      curl -fsSL -o "$BASH_500_TARBALL" "$BASH_500_URL"
-    fi
-    tar xzf "$BASH_500_TARBALL"
-    cd "bash-${BASH_500_VERSION}"
-    ./configure --prefix="$BASH_500_PREFIX" >/dev/null
-    make -j"$(getconf _NPROCESSORS_ONLN 2>/dev/null || echo 1)" >/dev/null
-    make install >/dev/null
-  )
-  rm -rf "$tmpbuild"
-
-  exec env \
-    BASH_500_PREFIX="$BASH_500_PREFIX" \
-    __BASH500_CLEANUP=1 \
-    PATH="$BASH_500_PREFIX/bin:$PATH" \
-    "$BASH_500_PREFIX/bin/bash" "$0" "$@"
-fi
-
-if [ -n "${__BASH500_CLEANUP:-}" ]; then
-  trap 'rm -rf -- "$BASH_500_PREFIX" >/dev/null 2>&1 || true' EXIT
-  export PATH="$BASH_500_PREFIX/bin:$PATH"
-fi
-
 cd cvc4
+for f in src/expr/mkexpr src/expr/mkkind src/expr/mkmetakind; do
+    sed -i '1a shopt -u patsub_replacement' "$f"
+done
 export MACHINE_TYPE=x86_64
 if [ "${ARCH_BASE}" != 'windows' ]; then
     sed -i -re 's,rm -rf src/antlr3debughandlers.c \&\& touch src/antlr3debughandlers.c,rm -rf src/antlr3debughandlers.c \&\& touch src/antlr3debughandlers.c \&\& cp  /usr/share/misc/config.* . ,g' ./contrib/get-antlr-3.4
