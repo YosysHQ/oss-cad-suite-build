@@ -4,7 +4,7 @@ SourceLocation(
 	name = 'cocotb',
 	vcs = 'git',
 	location = 'https://github.com/cocotb/cocotb',
-	revision = 'origin/master',
+	revision = '41564633538c4e7abbd9a397492addf35ec7c7ac',
 	license_file = 'LICENSE',
 )
 
