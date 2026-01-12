@@ -336,7 +336,7 @@ async def run_process(command, cwd, env):
 	return process.returncode
 
 def run_live(command, cwd=None, env=None):
-	return asyncio.get_event_loop().run_until_complete(run_process(command, cwd, env))
+	return asyncio.run(run_process(command, cwd, env))
 
 def calculateHash(target, arch, build_order):
 	data = []
