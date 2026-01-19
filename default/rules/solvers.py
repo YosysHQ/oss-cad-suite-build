@@ -233,7 +233,7 @@ SourceLocation(
 	name = 'z3',
 	vcs = 'git',
 	location = 'https://github.com/Z3Prover/z3',
-	revision = 'origin/master',
+	revision = '76182c7e663d68e8a29eda36442cded9c5eabec1',
 	license_file = 'LICENSE.txt',
     no_submodules = True,
 )
