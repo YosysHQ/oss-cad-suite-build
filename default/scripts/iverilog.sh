@@ -1,5 +1,8 @@
 cd iverilog
 sh autoconf.sh
+# remove "Add CPPFLAGS & LDFLAGS for building version.exe & draw_tt build targets"
+# breaks cross compiling builds
+git -c user.name="temp" -c user.email="temp@example.com" revert 964878382d3fa77285b73d4657be5bbf95a9aacd -m 1
 if [ ${ARCH} == 'windows-x64' ]; then
     sed -i 's,@EXEEXT@,.exe,g' vvp/Makefile.in
     sed -i 's,@EXEEXT@,.exe,g' ivlpp/Makefile.in
@@ -11,9 +14,6 @@ fi
 if [ ${ARCH_BASE} == 'darwin' ]; then
     export CFLAGS="-Wno-implicit-function-declaration"
 fi
-# remove "Add CPPFLAGS & LDFLAGS for building version.exe & draw_tt build targets"
-# breaks cross compiling builds
-git -c user.name="temp" -c user.email="temp@example.com" revert 964878382d3fa77285b73d4657be5bbf95a9aacd -m 1
 ./configure --prefix=${INSTALL_PREFIX} --host=${CROSS_NAME}
 make DESTDIR=${OUTPUT_DIR} -j${NPROC} install
 sed -i -re 's|^flag:VVP_EXECUTABLE=.*$||g' ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/ivl/vvp.conf
