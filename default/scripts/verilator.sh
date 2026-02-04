@@ -1,4 +1,6 @@
 cd verilator
+# for cross compile
+sed -i 's,AC_RUN_IFELSE,AC_LINK_IFELSE,g' configure.ac
 autoconf
 ./configure --prefix=${INSTALL_PREFIX} --host=${CROSS_NAME}
 if [ ${ARCH_BASE} == 'darwin' ]; then
