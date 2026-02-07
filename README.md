@@ -134,7 +134,7 @@ python3 litex_setup.py install
 
 ### linux-x64
 Any personal Linux based computer should just work; no additional packages need to be installed on the system to make OSS CAD Suite work.
-Distributed libraries are based on Ubuntu 20.04, but everything is packaged in such a way so it can be used on any Linux distribution.
+Distributed libraries are based on Ubuntu 24.04, but everything is packaged in such a way so it can be used on any Linux distribution.
 
 ### darwin-x64
 Any macOS 12.00 or later with Intel CPU should use this distribution package.
