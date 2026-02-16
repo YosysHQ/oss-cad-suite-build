@@ -179,7 +179,7 @@ Target(
 Target(
 	name = 'apicula-bba',
 	sources = [ 'nextpnr' ],
-	dependencies = ['python3-native', 'apicula'],
+	dependencies = ['python3-native', 'python3', 'apicula'],
 	gitrev = [ ('nextpnr', 'himbaechel') ],
 	package = 'gowin',
 	build_native = True,
