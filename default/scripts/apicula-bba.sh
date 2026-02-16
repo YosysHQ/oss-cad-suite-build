@@ -1,7 +1,4 @@
 cd nextpnr
-source ${PATCHES_DIR}/python3_package.sh
-python3_package_setup
-python3_package_pip_install "msgspec"
 cp -R ${BUILD_DIR}/apicula${INSTALL_PREFIX}/lib/python3.11/site-packages/*  ${BUILD_DIR}/python3-native${INSTALL_PREFIX}/lib/python3.11/site-packages/.
 cp ${BUILD_DIR}/python3-native${INSTALL_PREFIX}/bin/python3.11 ${BUILD_DIR}/python3-native${INSTALL_PREFIX}/bin/python
 cmake -DPython3_EXECUTABLE=${BUILD_DIR}/python3-native${INSTALL_PREFIX}/bin/python3.11 \
