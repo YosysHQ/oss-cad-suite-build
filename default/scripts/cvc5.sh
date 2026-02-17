@@ -32,7 +32,8 @@ mkdir -p ${OUTPUT_DIR}/dev
 mkdir -p ${OUTPUT_DIR}/dev/build/deps/lib
 cp -r src ${OUTPUT_DIR}/dev/.
 cp -r build/src ${OUTPUT_DIR}/dev/build/.
-rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/include
+cp -r ${OUTPUT_DIR}${INSTALL_PREFIX}/include ${OUTPUT_DIR}/dev/build/include
 rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/lib
+rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/include
 cp -r ${BUILD_DIR}/libpoly/yosyshq/lib/*.a ${OUTPUT_DIR}/dev/build/deps/lib/.
 cp -r ${BUILD_DIR}/cadical/yosyshq/lib/*.a ${OUTPUT_DIR}/dev/build/deps/lib/.

@@ -8,7 +8,6 @@ if [ ${ARCH_BASE} == 'linux' ]; then
     mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/dri
 if [ ${ARCH} == 'linux-x64' ]; then
     cp /usr/lib/${CROSS_NAME}/dri/crocus_dri.so ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/dri/.
-    cp /usr/lib/${CROSS_NAME}/dri/i965_dri.so ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/dri/.
     pushd ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/dri
     ln -s crocus_dri.so d3d12_dri.so
     ln -s crocus_dri.so i915_dri.so
@@ -22,6 +21,7 @@ if [ ${ARCH} == 'linux-x64' ]; then
     ln -s crocus_dri.so virtio_gpu_dri.so
     ln -s crocus_dri.so vmwgfx_dri.so
     ln -s crocus_dri.so zink_dri.so 
+    ln -s crocus_dri.so i965_dri.so # crocus now handles i965_dri (ubuntu 24.04)
     ln -s i965_dri.so nouveau_vieux_dri.so
     ln -s i965_dri.so r200_dri.so
     ln -s i965_dri.so radeon_dri.so 

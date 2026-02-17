@@ -38,7 +38,7 @@ SourceLocation(
 	name = 'bitwuzla',
 	vcs = 'git',
 	location = 'https://github.com/bitwuzla/bitwuzla',
-	revision = '6e46391816b4baf8c9fc0b8c0c1d2fbe63b6f30e',
+	revision = '532ca9729136969008960481167ab55696a9cc52',
 	license_file = 'COPYING',
 )
 
@@ -118,8 +118,8 @@ Target(
 SourceLocation(
 	name = 'smt-switch',
 	vcs = 'git',
-	location = 'https://github.com/makaimann/smt-switch',
-	revision = 'f2d7d3d6dfccc0b4d6b604563acd34629bac884d',
+	location = 'https://github.com/stanford-centaur/smt-switch',
+	revision = '758e9e125dd76bc72b39add7adf8332992c0c527',
 	license_file = 'LICENSE',
 	license_build_only = True,
 )
@@ -127,16 +127,16 @@ SourceLocation(
 SourceLocation(
 	name = 'pono',
 	vcs = 'git',
-	location = 'https://github.com/upscale-project/pono',
-	revision = 'b243cef7ea0c98840e7e012f5ce30f3430b1edcc',
+    location = 'https://github.com/stanford-centaur/pono',
+	revision = 'd307bc1539992275c74b594968c91967abeafe17',
 	license_file = 'LICENSE',
 )
 
 SourceLocation(
 	name = 'cvc4',
 	vcs = 'git',
-	location = 'https://github.com/CVC4/CVC4.git',
-	revision = '3dda54ba7e6952060766775c56969ab920430a8a',
+	location = 'https://github.com/cvc5/cvc5',
+	revision = '5247901077efbc7b9016ba35fded7a6ab459a379',
 	license_file = 'COPYING',
 	license_build_only = True,
 )
@@ -145,7 +145,7 @@ SourceLocation(
 	name = 'cvc5',
 	vcs = 'git',
 	location = 'https://github.com/cvc5/cvc5',
-	revision = '77d0bec48a745e3c4acd65085f9c59bdfceed6c0',
+	revision = '435f2d44f1bb37c4c17d2b59615b7323039b7a62',
 	license_file = 'COPYING',
 	license_build_only = True,
 )
@@ -154,7 +154,7 @@ SourceLocation(
 	name = 'libpoly',
 	vcs = 'git',
 	location = 'https://github.com/SRI-CSL/libpoly',
-	revision = '1383809f2aa5005ef20110fec84b66959518f697',
+	revision = 'fc54e31f37cbdb5fc72416ad1c2b5e44551ccd7f',
 	license_file = 'LICENCE',
 	license_build_only = True,
 )
@@ -182,7 +182,7 @@ Target(
 Target(
 	name = 'smt-switch',
 	sources = [ 'smt-switch' ],
-	dependencies = [ 'cvc5', 'boolector'],
+	dependencies = [ 'cvc5', 'boolector', 'cadical', 'bitwuzla'],
 	patches = [ 'smt-switch-win32.diff', 'Toolchain-mingw64.cmake' ],
 	license_build_only = True,
 )
@@ -190,7 +190,7 @@ Target(
 Target(
 	name = 'pono',
 	sources = [ 'pono' ],
-	dependencies = [ 'smt-switch', 'cvc5', 'boolector' ],
+	dependencies = [ 'smt-switch', 'cvc5', 'boolector', 'bitwuzla' ],
 )
 
 # suprove

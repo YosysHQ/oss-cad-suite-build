@@ -9,7 +9,7 @@ RUN cd /tmp \
     && sed -i "s,CXXFLAGS=-O2 -std=c++11,CXXFLAGS=-O2 -std=c++11 -static-libstdc++ -static-libgcc,g" Makefile \
     && make 
 
-FROM yosyshq/cross-base:2.0
+FROM yosyshq/cross-base:3.0
 
 RUN set -e -x ;\
     apt -y update ;\
@@ -303,11 +303,3 @@ COPY gschemas.compiled /opt/local/share/glib-2.0/schemas/
 RUN RUSTUP_HOME=/opt/rust/rustup CARGO_HOME=/opt/rust/cargo rustup toolchain install nightly
 RUN RUSTUP_HOME=/opt/rust/rustup CARGO_HOME=/opt/rust/cargo rustup override set nightly
 RUN RUSTUP_HOME=/opt/rust/rustup CARGO_HOME=/opt/rust/cargo rustup target add x86_64-apple-darwin
-
-RUN apt purge --auto-remove cmake -y ;\
-    wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | gpg --dearmor - | tee /usr/share/keyrings/kitware-archive-keyring.gpg >/dev/null ;\
-    echo 'deb [signed-by=/usr/share/keyrings/kitware-archive-keyring.gpg] https://apt.kitware.com/ubuntu/ jammy main' | tee /etc/apt/sources.list.d/kitware.list >/dev/null ;\
-    apt-get update -y ;\
-    apt-get install cmake -y;\
-    apt -y autoremove ;\
-    rm -rf /var/lib/apt/lists/*
