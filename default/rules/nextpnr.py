@@ -5,7 +5,7 @@ SourceLocation(
 	name = 'nextpnr',
 	vcs = 'git',
 	location = 'https://github.com/YosysHQ/nextpnr',
-	revision = 'origin/master',
+	revision = 'origin/main',
 	license_file = 'COPYING',
 )
 
