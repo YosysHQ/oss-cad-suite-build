@@ -75,7 +75,7 @@ SourceLocation(
 	name = 'icestorm',
 	vcs = 'git',
 	location = 'https://github.com/YosysHQ/icestorm',
-	revision = 'origin/master',
+	revision = 'origin/main',
 	license_file = 'COPYING',
 )
 
@@ -83,7 +83,7 @@ SourceLocation(
 	name = 'prjtrellis',
 	vcs = 'git',
 	location = 'https://github.com/YosysHQ/prjtrellis',
-	revision = 'origin/master',
+	revision = 'origin/main',
 	license_file = 'COPYING',
 )
 
@@ -91,7 +91,7 @@ SourceLocation(
 	name = 'prjoxide',
 	vcs = 'git',
 	location = 'https://github.com/gatecat/prjoxide',
-	revision = 'origin/master',
+	revision = 'origin/main',
 	license_file = 'COPYING',
 )
 
