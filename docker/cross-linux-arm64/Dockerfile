@@ -1,4 +1,4 @@
-FROM yosyshq/cross-base:2.0
+FROM yosyshq/cross-base:3.0
 
 ENV CROSS_NAME aarch64-linux-gnu
 
