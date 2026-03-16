@@ -431,7 +431,7 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, nproc, pack_source
 		else:
 			params += ['-e', '{}={}'.format(i, j)]
 	params += [
-		'yosyshq/cross-'+ arch + ':2.2',
+		'yosyshq/cross-'+ arch + ':2.3',
 		'bash', scriptfile.name
 	]
 	return run_live(params, cwd=build_dir)
