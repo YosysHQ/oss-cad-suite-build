@@ -11,10 +11,10 @@ jobs:
   windows-x64-yosys:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: _sources
           key: cache-sources-yosys
@@ -45,10 +45,10 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: _sources
           key: cache-sources-python3
@@ -79,10 +79,10 @@ jobs:
     runs-on: ubuntu-latest
     needs: windows-x64-python3
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: _sources
           key: cache-sources-formal
@@ -115,10 +115,10 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: _sources
           key: cache-sources-imctk
@@ -147,10 +147,10 @@ jobs:
     runs-on: ubuntu-latest
     needs: windows-x64-yosys
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: _sources
           key: cache-sources-yosys-slang-plugin
@@ -182,10 +182,10 @@ jobs:
     continue-on-error: true
     needs: windows-x64-python3
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: _sources
           key: cache-sources-nextpnr-generic
@@ -221,10 +221,10 @@ jobs:
     continue-on-error: true
     needs: windows-x64-python3
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: _sources
           key: cache-sources-nextpnr-ice40
@@ -262,10 +262,10 @@ jobs:
     continue-on-error: true
     needs: windows-x64-python3
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: _sources
           key: cache-sources-nextpnr-ecp5
@@ -303,10 +303,10 @@ jobs:
     continue-on-error: true
     needs: windows-x64-python3
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: _sources
           key: cache-sources-nextpnr-machxo2
@@ -344,10 +344,10 @@ jobs:
     continue-on-error: true
     needs: windows-x64-python3
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: _sources
           key: cache-sources-nextpnr-nexus
@@ -385,10 +385,10 @@ jobs:
     continue-on-error: true
     needs: windows-x64-python3
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: _sources
           key: cache-sources-nextpnr-himbaechel
@@ -427,10 +427,10 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: _sources
           key: cache-sources-icestorm
@@ -459,10 +459,10 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: _sources
           key: cache-sources-prjtrellis
@@ -491,10 +491,10 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: _sources
           key: cache-sources-prjpeppercorn
@@ -523,10 +523,10 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: _sources
           key: cache-sources-prjoxide
@@ -556,10 +556,10 @@ jobs:
     continue-on-error: true
     needs: windows-x64-python3
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: _sources
           key: cache-sources-apicula
@@ -592,10 +592,10 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: _sources
           key: cache-sources-openfpgaloader
@@ -624,10 +624,10 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: _sources
           key: cache-sources-avy
@@ -656,10 +656,10 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: _sources
           key: cache-sources-lingeling
@@ -688,10 +688,10 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: _sources
           key: cache-sources-cadical
@@ -720,10 +720,10 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: _sources
           key: cache-sources-btor2tools
@@ -753,10 +753,10 @@ jobs:
     continue-on-error: true
     needs: [ windows-x64-btor2tools, windows-x64-cadical, windows-x64-lingeling ]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: _sources
           key: cache-sources-bitwuzla
@@ -794,10 +794,10 @@ jobs:
     continue-on-error: true
     needs: [ windows-x64-btor2tools, windows-x64-cadical, windows-x64-lingeling ]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: _sources
           key: cache-sources-boolector
@@ -832,10 +832,10 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: _sources
           key: cache-sources-cvc4
@@ -864,10 +864,10 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: _sources
           key: cache-sources-libpoly
@@ -897,10 +897,10 @@ jobs:
     continue-on-error: true
     needs: [ windows-x64-cadical, windows-x64-libpoly ]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: _sources
           key: cache-sources-cvc5
@@ -935,10 +935,10 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: _sources
           key: cache-sources-yices
@@ -968,10 +968,10 @@ jobs:
     continue-on-error: true
     needs: [ windows-x64-boolector, windows-x64-cvc5 ]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: _sources
           key: cache-sources-smt-switch
@@ -1005,10 +1005,10 @@ jobs:
     continue-on-error: true
     needs: [ windows-x64-boolector, windows-x64-cvc5, windows-x64-smt-switch ]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: _sources
           key: cache-sources-pono
@@ -1043,10 +1043,10 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: _sources
           key: cache-sources-z3
@@ -1076,10 +1076,10 @@ jobs:
     continue-on-error: true
     needs: windows-x64-yosys
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: _sources
           key: cache-sources-eqy
@@ -1110,10 +1110,10 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: _sources
           key: cache-sources-gtkwave
@@ -1142,10 +1142,10 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: _sources
           key: cache-sources-verilator
@@ -1174,10 +1174,10 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: _sources
           key: cache-sources-iverilog
@@ -1206,10 +1206,10 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: _sources
           key: cache-sources-utils
@@ -1239,10 +1239,10 @@ jobs:
     continue-on-error: true
     needs: windows-x64-python3
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: _sources
           key: cache-sources-pyhdl
@@ -1275,10 +1275,10 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: _sources
           key: cache-sources-surfer
@@ -1307,10 +1307,10 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Cache sources
         id: cache-sources
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: _sources
           key: cache-sources-system-resources
@@ -1342,7 +1342,7 @@ jobs:
       - name: Get current date
         id: date
         run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Download windows-x64-apicula
         run: wget -qO- "https://github.com/${{ github.repository }}/releases/download/bucket-windows-x64/windows-x64-apicula.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download windows-x64-avy
