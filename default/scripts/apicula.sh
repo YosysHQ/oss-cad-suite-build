@@ -1,8 +1,8 @@
 cd apicula
 source ${PATCHES_DIR}/python3_package.sh
 python3_package_setup
-python3_package_pip_install "crc"
-python3_package_pip_install "msgspec"
+export MSGPACK_PUREPYTHON=1
+python3_package_pip_install "msgpack cattrs"
 curl -L https://github.com/YosysHQ/apicula/releases/download/0.0.0.dev/linux-x64-gowin-data.tgz > linux-x64-gowin-data.tgz
 tar xvfz linux-x64-gowin-data.tgz
-python3_package_install --old-and-unmanageable
+python3_package_pip_install "--no-deps ."
