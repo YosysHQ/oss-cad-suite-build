@@ -10,6 +10,8 @@ RUN dnf install -y  mingw64-gcc \
                     mingw64-tk \
                     mingw64-xz \
                     mingw64-gtk3 \
+                    mingw64-gtk4 \
+                    mingw64-json-glib \
                     mingw64-qt5-qtbase \
                     mingw64-eigen3 \
                     mingw64-dlfcn \
