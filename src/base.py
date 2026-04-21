@@ -714,7 +714,7 @@ def buildCode(build_target, build_arch, nproc, force, dry, pack_sources, single,
 			if os.path.exists(build_dir):
 				shutil.rmtree(build_dir, onerror=removeError)
 
-def generateYaml(target, build_arch, write_to_file):
+def generateYaml(target, build_arch, write_to_file, rules):
 	log_info_triple("Creating yml for ", target, " [ {} ] architecture ...".format(build_arch))
 
 	build_order = createBuildOrder(target, build_arch, getArchitecture(), True)
@@ -803,7 +803,7 @@ def generateYaml(target, build_arch, write_to_file):
 				yaml_content +="        run: wget -qO- \"{}-{}/{}.tgz\" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -\n".format(BUCKET_URL, "linux-x64", n)
 		if target.top_package:
 			yaml_content +="      - name: Build\n"
-			yaml_content +="        run: ./builder.py build --arch={} --target={} --single\n".format(arch, target.name)
+			yaml_content +="        run: ./builder.py build --arch={} --target={} --rules={} --single\n".format(arch, target.name, rules)
 			yaml_content +="      - uses: ncipollo/release-action@v1\n"
 			yaml_content +="        if: hashFiles('_outputs/{}/{}/*.{}') != ''\n".format(arch, target.name, "exe" if arch=="windows-x64" else "tgz")
 			yaml_content +="        with:\n"
@@ -816,7 +816,7 @@ def generateYaml(target, build_arch, write_to_file):
 			yaml_content +="          token: ${{ secrets.GITHUB_TOKEN }}\n"
 		else:
 			yaml_content +="      - name: Build\n"
-			yaml_content +="        run: ./builder.py build --arch={} --target={} --single --tar\n".format(arch, target.name)
+			yaml_content +="        run: ./builder.py build --arch={} --target={} --rules={} --single --tar\n".format(arch, target.name, rules)
 			yaml_content +="      - uses: ncipollo/release-action@v1\n"
 			yaml_content +="        if: hashFiles('{}-{}.tgz') != ''\n".format(arch, target.name)
 			yaml_content +="        with:\n"
