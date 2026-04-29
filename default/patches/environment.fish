@@ -50,11 +50,17 @@ if set --query PYTHONHOME
     set --erase PYTHONHOME
 end
 
+function _restore_status
+    return $argv[1]
+end
+
 functions --copy fish_prompt _old_environment_fish_prompt
 function fish_prompt -d "Write out the prompt"
+    set -l last_status $status
     set_color magenta
     echo -n -s '(' $VIRTUAL_ENV_PROMPT ') '
     set_color normal
+    _restore_status $last_status
     _old_environment_fish_prompt
 end
 
