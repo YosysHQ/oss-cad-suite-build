@@ -2,7 +2,9 @@ cd iverilog
 sh autoconf.sh
 # remove "Add CPPFLAGS & LDFLAGS for building version.exe & draw_tt build targets"
 # breaks cross compiling builds
-git -c user.name="temp" -c user.email="temp@example.com" revert 964878382d3fa77285b73d4657be5bbf95a9aacd -m 1
+# revert 964878382d3fa77285b73d4657be5bbf95a9aacd
+sed -i 's,$(BUILDCC) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS),$(BUILDCC) $(CFLAGS),g' Makefile.in
+sed -i 's,$(BUILDCC) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS),$(BUILDCC) $(CFLAGS),g' vvp/Makefile.in
 if [ ${ARCH} == 'windows-x64' ]; then
     sed -i 's,@EXEEXT@,.exe,g' vvp/Makefile.in
     sed -i 's,@EXEEXT@,.exe,g' ivlpp/Makefile.in
