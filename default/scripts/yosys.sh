@@ -13,7 +13,7 @@ else
 	make config-gcc
 	sed -i -re "s,CXX = g\+\+,CXX = ${CXX},g" Makefile
 fi
-make PREFIX=${INSTALL_PREFIX} DESTDIR=${OUTPUT_DIR} install -j${NPROC}
+make PREFIX=${INSTALL_PREFIX} DESTDIR=${OUTPUT_DIR} ENABLE_LIBYOSYS=1 install -j${NPROC}
 pushd ${OUTPUT_DIR}${INSTALL_PREFIX} 
 if [ ${ARCH} != 'windows-x64' ]; then
 	mkdir -p lib
