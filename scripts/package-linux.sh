@@ -28,6 +28,21 @@ preload_tools=(
     "bin/sby-gui"
 )
 
+resolve_bindir=$(cat << EOT
+# Find this script's location, resolving any symlinks along the way.
+# https://stackoverflow.com/a/246128
+source=\${BASH_SOURCE[0]}
+while [ -L "\$source" ]; do  # resolve \$source until the file is no longer a symlink
+    release_bindir=\$( cd -P "\$( dirname "\$source" )" >/dev/null 2>&1 && pwd )
+    source=\$(readlink "\$source")
+    # if \$source was a relative symlink, we need to resolve it relative to the path
+    # where the symlink file was located
+    [[ \$source != /* ]] && source=\$release_bindir/\$source
+done
+release_bindir=\$( cd -P "\$( dirname "\$source" )" >/dev/null 2>&1 && pwd )
+EOT
+)
+
 for bindir in bin py2bin py3bin super_prove/bin share/verilator/bin lib/ivl; do
     for binfile in $(file $bindir/* | grep ELF | grep dynamically | grep interpreter | cut -f1 -d:); do
         rel_path=$(realpath --relative-to=$bindir .)
@@ -38,17 +53,12 @@ for bindir in bin py2bin py3bin super_prove/bin share/verilator/bin lib/ivl; do
         is_using_fonts=false
         cat > $binfile << EOT
 #!/usr/bin/env bash
-release_bindir="\$(dirname "\${BASH_SOURCE[0]}")"
+$resolve_bindir
 release_bindir_abs="\$(readlink -f "\$release_bindir")"
 release_topdir_abs="\$(readlink -f "\$release_bindir/$rel_path")"
 export PATH="\$release_bindir_abs:\$PATH"
 EOT
 
-        if [ $bindir == 'py3bin' ]; then
-            cat >> $binfile << EOT
-export PYTHONEXECUTABLE="\$release_topdir_abs/bin/tabbypy3"
-EOT
-        fi
         if [ ! -z "$(basename $binfile | grep verilator)" ]; then
             cat >> $binfile << EOT
 export VERILATOR_ROOT="\$release_topdir_abs/share/verilator"
@@ -66,7 +76,6 @@ EOT
         fi
         if [ ! -z "$(basename $binfile | grep vvp)" ]; then
             cat >> $binfile << EOT
-export PYTHONEXECUTABLE="\$release_topdir_abs/bin/tabbypy3"
 export PYTHONHOME="\$release_topdir_abs"
 EOT
         fi
@@ -169,7 +178,7 @@ done
 if [ ${PRELOAD} == 'True' ]; then
     if $found; then
         cat >> $binfile << EOT
-exec "\$release_topdir_abs"/lib/$ldlinuxname --inhibit-cache --inhibit-rpath "" --library-path "\$release_topdir_abs"/lib --preload "\$release_topdir_abs"/lib/preload.o "\$release_topdir_abs"/libexec/$(basename $binfile) "\$@"
+exec "\$release_topdir_abs"/lib/$ldlinuxname --inhibit-cache --inhibit-rpath "" --library-path "\$release_topdir_abs"/lib --preload "\$release_topdir_abs"/lib/preload.o --argv0 "\$0" "\$release_topdir_abs"/libexec/$(basename $binfile) "\$@"
 EOT
         chmod +x $binfile
         continue
@@ -178,7 +187,7 @@ EOT
     fi
 fi
         cat >> $binfile << EOT
-exec "\$release_topdir_abs"/lib/$ldlinuxname --inhibit-cache --inhibit-rpath "" --library-path "\$release_topdir_abs"/lib "\$release_topdir_abs"/libexec/$(basename $binfile) "\$@"
+exec "\$release_topdir_abs"/lib/$ldlinuxname --inhibit-cache --inhibit-rpath "" --library-path "\$release_topdir_abs"/lib --argv0 "\$0" "\$release_topdir_abs"/libexec/$(basename $binfile) "\$@"
 EOT
         chmod +x $binfile
     done
@@ -196,11 +205,10 @@ for script in bin/* py3bin/*; do
         mv "${script}" libexec
         cat > "${script}" <<EOT
 #!/usr/bin/env bash
-release_bindir="\$(dirname "\${BASH_SOURCE[0]}")"
+$resolve_bindir
 release_bindir_abs="\$(readlink -f "\$release_bindir/../bin")"
 release_topdir_abs="\$(readlink -f "\$release_bindir/$rel_path")"
 export PATH="\$release_bindir_abs:\$PATH"
-export PYTHONEXECUTABLE="\$release_bindir_abs/tabbypy3"
 EOT
         is_using_fonts=false
         if [ $script == 'bin/xdot' ]; then
@@ -271,7 +279,7 @@ if [ -f "bin/yosys-config" ]; then
     mv bin/yosys-config bin/yosys-config.orig
     cat > bin/yosys-config << EOT
 #!/usr/bin/env bash
-release_bindir="\$(dirname "\${BASH_SOURCE[0]}")"
+$resolve_bindir
 release_bindir_abs="\$(readlink -f "\$release_bindir")"
 release_topdir_abs="\$(readlink -f "\$release_bindir/$rel_path")"
 EOT
