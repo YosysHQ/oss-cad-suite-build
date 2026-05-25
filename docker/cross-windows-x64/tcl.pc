@@ -1,0 +1,11 @@
+prefix=/usr/x86_64-w64-mingw32/sys-root/mingw
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: Tcl
+Description: Tcl scripting language (MinGW cross build)
+Version: 8.6
+
+Cflags: -I${includedir}
+Libs: -L${libdir} -ltcl86
