@@ -69,7 +69,7 @@ Target(
 	name = 'ghdl-yosys-plugin',
 	sources = [ 'ghdl-yosys-plugin' ],
 	dependencies = [ 'ghdl', 'yosys' ],
-	arch = [ 'linux-x64', 'darwin-x64', 'darwin-arm64' ],
+	arch = [ 'linux-x64', 'darwin-arm64' ],
 )
 
 Target(
