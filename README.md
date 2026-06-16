@@ -43,6 +43,7 @@ Contact us at contact@yosyshq.com to arrange a free evaluation license.
  * [Pono](https://github.com/upscale-project/pono) an SMT-based model checker built on [smt-switch](https://github.com/makaimann/smt-switch)
  * [Z3](https://github.com/Z3Prover/z3) SMT solver
  * [Bitwuzla](https://github.com/bitwuzla/bitwuzla) SMT solver
+ * [rIC3](https://github.com/gipsyh/rIC3) SMT solver
 
 ### PnR (Place and Route)
  * [nextpnr](https://github.com/YosysHQ/nextpnr) a portable FPGA place and route tool (generic, ice40, ecp5, machxo2, nexus, gowin)

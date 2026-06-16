@@ -274,3 +274,17 @@ Target(
 	dependencies = [ 'picosat' ],
 	arch = [ 'linux-x64', 'linux-arm64', 'darwin-x64', 'darwin-arm64' ],
 )
+
+SourceLocation(
+	name = 'ric3',
+	vcs = 'git',
+	location = 'https://github.com/gipsyh/rIC3',
+	revision = 'origin/master',
+	license_file = 'LICENSE',
+)
+
+Target(
+	name = 'ric3',
+	sources = [ 'ric3' ],
+    arch = [ 'linux-x64', 'linux-arm64', 'darwin-x64', 'darwin-arm64' ],
+)
