@@ -1,0 +1,10 @@
+prefix=/usr/x86_64-w64-mingw32/sys-root/mingw
+exec_prefix=${prefix}
+libdir=${prefix}/lib
+includedir=${prefix}/include
+
+Name: GMP
+Description: GNU Multiple Precision Arithmetic Library (MinGW)
+Version: 6.2.1
+Libs: -L${libdir} -lgmp
+Cflags: -I${includedir}

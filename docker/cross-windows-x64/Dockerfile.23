@@ -7,3 +7,7 @@ RUN RUSTUP_HOME=/opt/rust/rustup CARGO_HOME=/opt/rust/cargo rustup target add x8
 COPY tcl.pc /usr/x86_64-w64-mingw32/sys-root/mingw/lib/pkgconfig/tcl.pc
 
 RUN sudo dnf upgrade -y cmake libuv
+
+RUN dnf install -y meson ninja-build mingw64-gmp mingw64-mpfr
+
+COPY gmp.pc /usr/x86_64-w64-mingw32/sys-root/mingw/lib/pkgconfig/gmp.pc
