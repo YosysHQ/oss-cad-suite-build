@@ -22,4 +22,74 @@ fi
 sed -i 's/\[ \$closefrom = no \] && //g' configure
 popd
 
+pushd deps/bitwuzla-rs/bitwuzla
+
+# update GMP and MPFR
+sed -i 's/>=6\.3/>=6.2/g' src/meson.build
+sed -i 's/>=4\.2\.1/>=4.0/g' src/meson.build
+
+arch_gen=
+# Build Bitwuzla
+if [ ${ARCH} == 'darwin-arm64' ]; then
+    arch_gen=--arm64
+    cat > x86_64-linux-aarch64.txt <<'EOF'
+[binaries]
+pkg-config = 'aarch64-apple-darwin23.5-pkg-config'
+
+[host_machine]
+system = 'darwin'
+cpu_family = 'aarch64'
+cpu = 'arm64'
+endian = 'little'
+
+[properties]
+needs_exe_wrapper = true
+EOF
+fi
+
+if [ ${ARCH} == 'darwin-x64' ]; then
+    arch_gen=--arm64
+    cat > x86_64-linux-aarch64.txt <<'EOF'
+[binaries]
+pkg-config = 'x86_64-apple-darwin23.5-pkg-config'
+
+[host_machine]
+system = 'darwin'
+cpu_family = 'x86_64'
+cpu = 'x86_64'
+endian = 'little'
+
+[properties]
+needs_exe_wrapper = true
+EOF
+fi
+
+if [ ${ARCH} == 'linux-arm64' ]; then
+    arch_gen=--arm64
+    cat > x86_64-linux-aarch64.txt <<'EOF'
+[binaries]
+pkg-config = 'aarch64-linux-gnu-pkg-config'
+
+[host_machine]
+system = 'linux'
+cpu_family = 'aarch64'
+cpu = 'arm64'
+endian = 'little'
+
+[properties]
+needs_exe_wrapper = true
+EOF
+fi
+
+if [ ${ARCH} != 'linux-x64' ]; then
+    sed -i 's/\.arg("configure\.py")/\.arg("configure.py").arg("--arm64")/g' ../build.rs
+fi
+if [ ${ARCH_BASE} == 'darwin' ]; then
+    sed -i 's/stdc++/c++/g' ../build.rs
+fi
+if [ ${ARCH} == 'linux-arm64' ]; then
+    sed -i 's/\*const i8/\*const std::ffi::c_char/g' ../src/lib.rs
+fi
+popd
+
 cargo install --no-track --path . --root ${OUTPUT_DIR}${INSTALL_PREFIX} --target=${CARGO_TARGET}

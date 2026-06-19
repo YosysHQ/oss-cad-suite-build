@@ -279,7 +279,7 @@ SourceLocation(
 	name = 'ric3',
 	vcs = 'git',
 	location = 'https://github.com/gipsyh/rIC3',
-	revision = 'origin/master',
+	revision = '02c12ff1407b3474b7eb85c4531a06ad2eb86933', # v1.5.2
 	license_file = 'LICENSE',
 )
 
