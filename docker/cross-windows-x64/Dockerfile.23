@@ -8,6 +8,28 @@ COPY tcl.pc /usr/x86_64-w64-mingw32/sys-root/mingw/lib/pkgconfig/tcl.pc
 
 RUN sudo dnf upgrade -y cmake libuv
 
-RUN dnf install -y meson ninja-build mingw64-gmp mingw64-mpfr
+RUN dnf install -y meson ninja-build
 
-COPY gmp.pc /usr/x86_64-w64-mingw32/sys-root/mingw/lib/pkgconfig/gmp.pc
+RUN wget https://gmplib.org/download/gmp/gmp-6.3.0.tar.xz && \
+    tar -xf gmp-6.3.0.tar.xz && \
+    cd gmp-6.3.0 && \
+    ./configure \
+    --host=x86_64-w64-mingw32 \
+    --prefix=/usr/x86_64-w64-mingw32/sys-root/mingw \
+    --enable-static \
+    --disable-shared \
+    --with-pic && \
+    make -j$(nproc) && \
+    sudo make install
+
+RUN wget https://www.mpfr.org/mpfr-4.2.1/mpfr-4.2.1.tar.xz && \
+    tar xf mpfr-4.2.1.tar.xz && \
+    cd mpfr-4.2.1 && \
+    ./configure \
+    --host=x86_64-w64-mingw32 \
+    --prefix=/usr/x86_64-w64-mingw32/sys-root/mingw \
+    --disable-shared \
+    --enable-static \
+    --with-gmp=/usr/x86_64-w64-mingw32/sys-root/mingw && \
+    make -j$(nproc) && \
+    sudo make install
