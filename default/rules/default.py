@@ -37,6 +37,7 @@ Target(
         'gtkwave',
         'verilator',
         'iverilog',
+        'nvc',
         'python-programmers',
         'utils',
         'pyhdl',
