@@ -38,15 +38,13 @@ SourceLocation(
 	name = 'bitwuzla',
 	vcs = 'git',
 	location = 'https://github.com/bitwuzla/bitwuzla',
-	revision = '6e46391816b4baf8c9fc0b8c0c1d2fbe63b6f30e',
+	revision = '8d1eb01093ae54d9b4586456b69c3bf31000a4c2', # version 0.9.1
 	license_file = 'COPYING',
 )
 
 Target(
 	name = 'bitwuzla',
 	sources = [ 'bitwuzla' ],
-	dependencies = [ 'lingeling', 'cadical', 'btor2tools', 'symfpu' ],
-	patches = [ 'Toolchain-mingw64.cmake' ],
 )
 
 # boolector
