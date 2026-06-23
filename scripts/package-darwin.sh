@@ -46,6 +46,11 @@ EOT
 export VERILATOR_ROOT="\$release_topdir_abs/share/verilator"
 EOT
         fi
+        if [ ! -z "$(basename $binfile | grep rIC3)" ]; then
+            cat >> $binfile << EOT
+export RIC3_EXE="\$release_topdir_abs/bin/rIC3"
+EOT
+        fi
         if [ ! -z "$(basename $binfile | grep surfer)" ]; then
             cat >> $binfile << EOT
 exec "\$release_topdir_abs"/libexec/$(basename $binfile) "\$@"

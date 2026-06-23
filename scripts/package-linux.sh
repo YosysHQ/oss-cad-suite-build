@@ -54,6 +54,11 @@ EOT
 export VERILATOR_ROOT="\$release_topdir_abs/share/verilator"
 EOT
         fi
+        if [ ! -z "$(basename $binfile | grep rIC3)" ]; then
+            cat >> $binfile << EOT
+export RIC3_EXE="\$release_topdir_abs/bin/rIC3"
+EOT
+        fi
         if [ ! -z "$(basename $binfile | grep openFPGALoader)" ]; then
             cat >> $binfile << EOT
 export OPENFPGALOADER_SOJ_DIR="\$release_topdir_abs/share/openFPGALoader"

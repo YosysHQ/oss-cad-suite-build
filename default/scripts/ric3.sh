@@ -92,4 +92,6 @@ if [ ${ARCH} == 'linux-arm64' ]; then
 fi
 popd
 
+sed -i -E 's|Command::new\(current_exe\(\)\.unwrap\(\)\)|Command::new(std::env::var("RIC3_EXE").map(std::path::PathBuf::from).unwrap_or_else(\|_\| std::env::current_exe().unwrap()))|g' src/portfolio/mod.rs
+
 cargo install --no-track --path . --root ${OUTPUT_DIR}${INSTALL_PREFIX} --target=${CARGO_TARGET}
