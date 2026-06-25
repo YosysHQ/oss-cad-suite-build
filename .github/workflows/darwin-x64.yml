@@ -30,7 +30,7 @@ jobs:
       - name: Download linux-x64-python3-native
         run: wget -qO- "https://github.com/${{ github.repository }}/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
-        run: ./builder.py build --arch=darwin-x64 --target=python3 --single --tar
+        run: ./builder.py build --arch=darwin-x64 --target=python3 --rules=default --single --tar
       - uses: ncipollo/release-action@v1
         if: hashFiles('darwin-x64-python3.tgz') != ''
         with:
@@ -67,7 +67,7 @@ jobs:
       - name: Download linux-x64-python3-native
         run: wget -qO- "https://github.com/${{ github.repository }}/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
-        run: ./builder.py build --arch=darwin-x64 --target=xdot --single --tar
+        run: ./builder.py build --arch=darwin-x64 --target=xdot --rules=default --single --tar
       - uses: ncipollo/release-action@v1
         if: hashFiles('darwin-x64-xdot.tgz') != ''
         with:
@@ -99,7 +99,7 @@ jobs:
               echo "Previous version not found in bucket"
           fi
       - name: Build
-        run: ./builder.py build --arch=darwin-x64 --target=graphviz --single --tar
+        run: ./builder.py build --arch=darwin-x64 --target=graphviz --rules=default --single --tar
       - uses: ncipollo/release-action@v1
         if: hashFiles('darwin-x64-graphviz.tgz') != ''
         with:
@@ -132,7 +132,7 @@ jobs:
       - name: Download linux-x64-abc
         run: wget -qO- "https://github.com/${{ github.repository }}/releases/download/bucket-linux-x64/linux-x64-abc.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
-        run: ./builder.py build --arch=darwin-x64 --target=yosys --single --tar
+        run: ./builder.py build --arch=darwin-x64 --target=yosys --rules=default --single --tar
       - uses: ncipollo/release-action@v1
         if: hashFiles('darwin-x64-yosys.tgz') != ''
         with:
@@ -168,7 +168,7 @@ jobs:
       - name: Download linux-x64-python3-native
         run: wget -qO- "https://github.com/${{ github.repository }}/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
-        run: ./builder.py build --arch=darwin-x64 --target=formal --single --tar
+        run: ./builder.py build --arch=darwin-x64 --target=formal --rules=default --single --tar
       - uses: ncipollo/release-action@v1
         if: hashFiles('darwin-x64-formal.tgz') != ''
         with:
@@ -200,7 +200,7 @@ jobs:
               echo "Previous version not found in bucket"
           fi
       - name: Build
-        run: ./builder.py build --arch=darwin-x64 --target=imctk --single --tar
+        run: ./builder.py build --arch=darwin-x64 --target=imctk --rules=default --single --tar
       - uses: ncipollo/release-action@v1
         if: hashFiles('darwin-x64-imctk.tgz') != ''
         with:
@@ -234,7 +234,7 @@ jobs:
       - name: Download darwin-x64-yosys
         run: wget -qO- "https://github.com/${{ github.repository }}/releases/download/bucket-darwin-x64/darwin-x64-yosys.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
-        run: ./builder.py build --arch=darwin-x64 --target=yosys-slang-plugin --single --tar
+        run: ./builder.py build --arch=darwin-x64 --target=yosys-slang-plugin --rules=default --single --tar
       - uses: ncipollo/release-action@v1
         if: hashFiles('darwin-x64-yosys-slang-plugin.tgz') != ''
         with:
@@ -273,7 +273,7 @@ jobs:
       - name: Download linux-x64-python3-native
         run: wget -qO- "https://github.com/${{ github.repository }}/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
-        run: ./builder.py build --arch=darwin-x64 --target=nextpnr-generic --single --tar
+        run: ./builder.py build --arch=darwin-x64 --target=nextpnr-generic --rules=default --single --tar
       - uses: ncipollo/release-action@v1
         if: hashFiles('darwin-x64-nextpnr-generic.tgz') != ''
         with:
@@ -314,7 +314,7 @@ jobs:
       - name: Download linux-x64-python3-native
         run: wget -qO- "https://github.com/${{ github.repository }}/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
-        run: ./builder.py build --arch=darwin-x64 --target=nextpnr-ice40 --single --tar
+        run: ./builder.py build --arch=darwin-x64 --target=nextpnr-ice40 --rules=default --single --tar
       - uses: ncipollo/release-action@v1
         if: hashFiles('darwin-x64-nextpnr-ice40.tgz') != ''
         with:
@@ -355,7 +355,7 @@ jobs:
       - name: Download linux-x64-python3-native
         run: wget -qO- "https://github.com/${{ github.repository }}/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
-        run: ./builder.py build --arch=darwin-x64 --target=nextpnr-ecp5 --single --tar
+        run: ./builder.py build --arch=darwin-x64 --target=nextpnr-ecp5 --rules=default --single --tar
       - uses: ncipollo/release-action@v1
         if: hashFiles('darwin-x64-nextpnr-ecp5.tgz') != ''
         with:
@@ -396,7 +396,7 @@ jobs:
       - name: Download linux-x64-python3-native
         run: wget -qO- "https://github.com/${{ github.repository }}/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
-        run: ./builder.py build --arch=darwin-x64 --target=nextpnr-machxo2 --single --tar
+        run: ./builder.py build --arch=darwin-x64 --target=nextpnr-machxo2 --rules=default --single --tar
       - uses: ncipollo/release-action@v1
         if: hashFiles('darwin-x64-nextpnr-machxo2.tgz') != ''
         with:
@@ -437,7 +437,7 @@ jobs:
       - name: Download linux-x64-python3-native
         run: wget -qO- "https://github.com/${{ github.repository }}/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
-        run: ./builder.py build --arch=darwin-x64 --target=nextpnr-nexus --single --tar
+        run: ./builder.py build --arch=darwin-x64 --target=nextpnr-nexus --rules=default --single --tar
       - uses: ncipollo/release-action@v1
         if: hashFiles('darwin-x64-nextpnr-nexus.tgz') != ''
         with:
@@ -480,7 +480,7 @@ jobs:
       - name: Download linux-x64-python3-native
         run: wget -qO- "https://github.com/${{ github.repository }}/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
-        run: ./builder.py build --arch=darwin-x64 --target=nextpnr-himbaechel --single --tar
+        run: ./builder.py build --arch=darwin-x64 --target=nextpnr-himbaechel --rules=default --single --tar
       - uses: ncipollo/release-action@v1
         if: hashFiles('darwin-x64-nextpnr-himbaechel.tgz') != ''
         with:
@@ -512,7 +512,7 @@ jobs:
               echo "Previous version not found in bucket"
           fi
       - name: Build
-        run: ./builder.py build --arch=darwin-x64 --target=icestorm --single --tar
+        run: ./builder.py build --arch=darwin-x64 --target=icestorm --rules=default --single --tar
       - uses: ncipollo/release-action@v1
         if: hashFiles('darwin-x64-icestorm.tgz') != ''
         with:
@@ -544,7 +544,7 @@ jobs:
               echo "Previous version not found in bucket"
           fi
       - name: Build
-        run: ./builder.py build --arch=darwin-x64 --target=prjtrellis --single --tar
+        run: ./builder.py build --arch=darwin-x64 --target=prjtrellis --rules=default --single --tar
       - uses: ncipollo/release-action@v1
         if: hashFiles('darwin-x64-prjtrellis.tgz') != ''
         with:
@@ -576,7 +576,7 @@ jobs:
               echo "Previous version not found in bucket"
           fi
       - name: Build
-        run: ./builder.py build --arch=darwin-x64 --target=prjpeppercorn --single --tar
+        run: ./builder.py build --arch=darwin-x64 --target=prjpeppercorn --rules=default --single --tar
       - uses: ncipollo/release-action@v1
         if: hashFiles('darwin-x64-prjpeppercorn.tgz') != ''
         with:
@@ -608,7 +608,7 @@ jobs:
               echo "Previous version not found in bucket"
           fi
       - name: Build
-        run: ./builder.py build --arch=darwin-x64 --target=prjoxide --single --tar
+        run: ./builder.py build --arch=darwin-x64 --target=prjoxide --rules=default --single --tar
       - uses: ncipollo/release-action@v1
         if: hashFiles('darwin-x64-prjoxide.tgz') != ''
         with:
@@ -645,7 +645,7 @@ jobs:
       - name: Download linux-x64-python3-native
         run: wget -qO- "https://github.com/${{ github.repository }}/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
-        run: ./builder.py build --arch=darwin-x64 --target=apicula --single --tar
+        run: ./builder.py build --arch=darwin-x64 --target=apicula --rules=default --single --tar
       - uses: ncipollo/release-action@v1
         if: hashFiles('darwin-x64-apicula.tgz') != ''
         with:
@@ -677,7 +677,7 @@ jobs:
               echo "Previous version not found in bucket"
           fi
       - name: Build
-        run: ./builder.py build --arch=darwin-x64 --target=openfpgaloader --single --tar
+        run: ./builder.py build --arch=darwin-x64 --target=openfpgaloader --rules=default --single --tar
       - uses: ncipollo/release-action@v1
         if: hashFiles('darwin-x64-openfpgaloader.tgz') != ''
         with:
@@ -709,7 +709,7 @@ jobs:
               echo "Previous version not found in bucket"
           fi
       - name: Build
-        run: ./builder.py build --arch=darwin-x64 --target=picosat --single --tar
+        run: ./builder.py build --arch=darwin-x64 --target=picosat --rules=default --single --tar
       - uses: ncipollo/release-action@v1
         if: hashFiles('darwin-x64-picosat.tgz') != ''
         with:
@@ -744,7 +744,7 @@ jobs:
       - name: Download darwin-x64-picosat
         run: wget -qO- "https://github.com/${{ github.repository }}/releases/download/bucket-darwin-x64/darwin-x64-picosat.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
-        run: ./builder.py build --arch=darwin-x64 --target=aiger --single --tar
+        run: ./builder.py build --arch=darwin-x64 --target=aiger --rules=default --single --tar
       - uses: ncipollo/release-action@v1
         if: hashFiles('darwin-x64-aiger.tgz') != ''
         with:
@@ -776,7 +776,7 @@ jobs:
               echo "Previous version not found in bucket"
           fi
       - name: Build
-        run: ./builder.py build --arch=darwin-x64 --target=avy --single --tar
+        run: ./builder.py build --arch=darwin-x64 --target=avy --rules=default --single --tar
       - uses: ncipollo/release-action@v1
         if: hashFiles('darwin-x64-avy.tgz') != ''
         with:
@@ -808,7 +808,7 @@ jobs:
               echo "Previous version not found in bucket"
           fi
       - name: Build
-        run: ./builder.py build --arch=darwin-x64 --target=bitwuzla --single --tar
+        run: ./builder.py build --arch=darwin-x64 --target=bitwuzla --rules=default --single --tar
       - uses: ncipollo/release-action@v1
         if: hashFiles('darwin-x64-bitwuzla.tgz') != ''
         with:
@@ -840,7 +840,7 @@ jobs:
               echo "Previous version not found in bucket"
           fi
       - name: Build
-        run: ./builder.py build --arch=darwin-x64 --target=lingeling --single --tar
+        run: ./builder.py build --arch=darwin-x64 --target=lingeling --rules=default --single --tar
       - uses: ncipollo/release-action@v1
         if: hashFiles('darwin-x64-lingeling.tgz') != ''
         with:
@@ -872,7 +872,7 @@ jobs:
               echo "Previous version not found in bucket"
           fi
       - name: Build
-        run: ./builder.py build --arch=darwin-x64 --target=cadical --single --tar
+        run: ./builder.py build --arch=darwin-x64 --target=cadical --rules=default --single --tar
       - uses: ncipollo/release-action@v1
         if: hashFiles('darwin-x64-cadical.tgz') != ''
         with:
@@ -904,7 +904,7 @@ jobs:
               echo "Previous version not found in bucket"
           fi
       - name: Build
-        run: ./builder.py build --arch=darwin-x64 --target=btor2tools --single --tar
+        run: ./builder.py build --arch=darwin-x64 --target=btor2tools --rules=default --single --tar
       - uses: ncipollo/release-action@v1
         if: hashFiles('darwin-x64-btor2tools.tgz') != ''
         with:
@@ -943,7 +943,7 @@ jobs:
       - name: Download darwin-x64-lingeling
         run: wget -qO- "https://github.com/${{ github.repository }}/releases/download/bucket-darwin-x64/darwin-x64-lingeling.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
-        run: ./builder.py build --arch=darwin-x64 --target=boolector --single --tar
+        run: ./builder.py build --arch=darwin-x64 --target=boolector --rules=default --single --tar
       - uses: ncipollo/release-action@v1
         if: hashFiles('darwin-x64-boolector.tgz') != ''
         with:
@@ -975,7 +975,7 @@ jobs:
               echo "Previous version not found in bucket"
           fi
       - name: Build
-        run: ./builder.py build --arch=darwin-x64 --target=cvc4 --single --tar
+        run: ./builder.py build --arch=darwin-x64 --target=cvc4 --rules=default --single --tar
       - uses: ncipollo/release-action@v1
         if: hashFiles('darwin-x64-cvc4.tgz') != ''
         with:
@@ -1007,7 +1007,7 @@ jobs:
               echo "Previous version not found in bucket"
           fi
       - name: Build
-        run: ./builder.py build --arch=darwin-x64 --target=libpoly --single --tar
+        run: ./builder.py build --arch=darwin-x64 --target=libpoly --rules=default --single --tar
       - uses: ncipollo/release-action@v1
         if: hashFiles('darwin-x64-libpoly.tgz') != ''
         with:
@@ -1046,7 +1046,7 @@ jobs:
       - name: Download linux-x64-symfpu
         run: wget -qO- "https://github.com/${{ github.repository }}/releases/download/bucket-linux-x64/linux-x64-symfpu.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
-        run: ./builder.py build --arch=darwin-x64 --target=cvc5 --single --tar
+        run: ./builder.py build --arch=darwin-x64 --target=cvc5 --rules=default --single --tar
       - uses: ncipollo/release-action@v1
         if: hashFiles('darwin-x64-cvc5.tgz') != ''
         with:
@@ -1078,7 +1078,7 @@ jobs:
               echo "Previous version not found in bucket"
           fi
       - name: Build
-        run: ./builder.py build --arch=darwin-x64 --target=yices --single --tar
+        run: ./builder.py build --arch=darwin-x64 --target=yices --rules=default --single --tar
       - uses: ncipollo/release-action@v1
         if: hashFiles('darwin-x64-yices.tgz') != ''
         with:
@@ -1115,7 +1115,7 @@ jobs:
       - name: Download darwin-x64-cvc5
         run: wget -qO- "https://github.com/${{ github.repository }}/releases/download/bucket-darwin-x64/darwin-x64-cvc5.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
-        run: ./builder.py build --arch=darwin-x64 --target=smt-switch --single --tar
+        run: ./builder.py build --arch=darwin-x64 --target=smt-switch --rules=default --single --tar
       - uses: ncipollo/release-action@v1
         if: hashFiles('darwin-x64-smt-switch.tgz') != ''
         with:
@@ -1154,7 +1154,7 @@ jobs:
       - name: Download darwin-x64-smt-switch
         run: wget -qO- "https://github.com/${{ github.repository }}/releases/download/bucket-darwin-x64/darwin-x64-smt-switch.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
-        run: ./builder.py build --arch=darwin-x64 --target=pono --single --tar
+        run: ./builder.py build --arch=darwin-x64 --target=pono --rules=default --single --tar
       - uses: ncipollo/release-action@v1
         if: hashFiles('darwin-x64-pono.tgz') != ''
         with:
@@ -1186,7 +1186,7 @@ jobs:
               echo "Previous version not found in bucket"
           fi
       - name: Build
-        run: ./builder.py build --arch=darwin-x64 --target=z3 --single --tar
+        run: ./builder.py build --arch=darwin-x64 --target=z3 --rules=default --single --tar
       - uses: ncipollo/release-action@v1
         if: hashFiles('darwin-x64-z3.tgz') != ''
         with:
@@ -1221,7 +1221,7 @@ jobs:
       - name: Download darwin-x64-yosys
         run: wget -qO- "https://github.com/${{ github.repository }}/releases/download/bucket-darwin-x64/darwin-x64-yosys.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
-        run: ./builder.py build --arch=darwin-x64 --target=eqy --single --tar
+        run: ./builder.py build --arch=darwin-x64 --target=eqy --rules=default --single --tar
       - uses: ncipollo/release-action@v1
         if: hashFiles('darwin-x64-eqy.tgz') != ''
         with:
@@ -1253,7 +1253,7 @@ jobs:
               echo "Previous version not found in bucket"
           fi
       - name: Build
-        run: ./builder.py build --arch=darwin-x64 --target=gtkwave --single --tar
+        run: ./builder.py build --arch=darwin-x64 --target=gtkwave --rules=default --single --tar
       - uses: ncipollo/release-action@v1
         if: hashFiles('darwin-x64-gtkwave.tgz') != ''
         with:
@@ -1285,7 +1285,7 @@ jobs:
               echo "Previous version not found in bucket"
           fi
       - name: Build
-        run: ./builder.py build --arch=darwin-x64 --target=verilator --single --tar
+        run: ./builder.py build --arch=darwin-x64 --target=verilator --rules=default --single --tar
       - uses: ncipollo/release-action@v1
         if: hashFiles('darwin-x64-verilator.tgz') != ''
         with:
@@ -1317,7 +1317,7 @@ jobs:
               echo "Previous version not found in bucket"
           fi
       - name: Build
-        run: ./builder.py build --arch=darwin-x64 --target=iverilog --single --tar
+        run: ./builder.py build --arch=darwin-x64 --target=iverilog --rules=default --single --tar
       - uses: ncipollo/release-action@v1
         if: hashFiles('darwin-x64-iverilog.tgz') != ''
         with:
@@ -1354,7 +1354,7 @@ jobs:
       - name: Download linux-x64-python3-native
         run: wget -qO- "https://github.com/${{ github.repository }}/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
-        run: ./builder.py build --arch=darwin-x64 --target=python-programmers --single --tar
+        run: ./builder.py build --arch=darwin-x64 --target=python-programmers --rules=default --single --tar
       - uses: ncipollo/release-action@v1
         if: hashFiles('darwin-x64-python-programmers.tgz') != ''
         with:
@@ -1386,7 +1386,7 @@ jobs:
               echo "Previous version not found in bucket"
           fi
       - name: Build
-        run: ./builder.py build --arch=darwin-x64 --target=utils --single --tar
+        run: ./builder.py build --arch=darwin-x64 --target=utils --rules=default --single --tar
       - uses: ncipollo/release-action@v1
         if: hashFiles('darwin-x64-utils.tgz') != ''
         with:
@@ -1423,7 +1423,7 @@ jobs:
       - name: Download linux-x64-python3-native
         run: wget -qO- "https://github.com/${{ github.repository }}/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
-        run: ./builder.py build --arch=darwin-x64 --target=pyhdl --single --tar
+        run: ./builder.py build --arch=darwin-x64 --target=pyhdl --rules=default --single --tar
       - uses: ncipollo/release-action@v1
         if: hashFiles('darwin-x64-pyhdl.tgz') != ''
         with:
@@ -1460,7 +1460,7 @@ jobs:
       - name: Download linux-x64-python3-native
         run: wget -qO- "https://github.com/${{ github.repository }}/releases/download/bucket-linux-x64/linux-x64-python3-native.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
-        run: ./builder.py build --arch=darwin-x64 --target=cocotb --single --tar
+        run: ./builder.py build --arch=darwin-x64 --target=cocotb --rules=default --single --tar
       - uses: ncipollo/release-action@v1
         if: hashFiles('darwin-x64-cocotb.tgz') != ''
         with:
@@ -1492,7 +1492,7 @@ jobs:
               echo "Previous version not found in bucket"
           fi
       - name: Build
-        run: ./builder.py build --arch=darwin-x64 --target=surfer --single --tar
+        run: ./builder.py build --arch=darwin-x64 --target=surfer --rules=default --single --tar
       - uses: ncipollo/release-action@v1
         if: hashFiles('darwin-x64-surfer.tgz') != ''
         with:
@@ -1524,7 +1524,7 @@ jobs:
               echo "Previous version not found in bucket"
           fi
       - name: Build
-        run: ./builder.py build --arch=darwin-x64 --target=ric3 --single --tar
+        run: ./builder.py build --arch=darwin-x64 --target=ric3 --rules=default --single --tar
       - uses: ncipollo/release-action@v1
         if: hashFiles('darwin-x64-ric3.tgz') != ''
         with:
@@ -1556,7 +1556,7 @@ jobs:
               echo "Previous version not found in bucket"
           fi
       - name: Build
-        run: ./builder.py build --arch=darwin-x64 --target=system-resources --single --tar
+        run: ./builder.py build --arch=darwin-x64 --target=system-resources --rules=default --single --tar
       - uses: ncipollo/release-action@v1
         if: hashFiles('darwin-x64-system-resources.tgz') != ''
         with:
@@ -1655,7 +1655,7 @@ jobs:
       - name: Download darwin-x64-z3
         run: wget -qO- "https://github.com/${{ github.repository }}/releases/download/bucket-darwin-x64/darwin-x64-z3.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
-        run: ./builder.py build --arch=darwin-x64 --target=default --single
+        run: ./builder.py build --arch=darwin-x64 --target=default --rules=default --single
       - uses: ncipollo/release-action@v1
         if: hashFiles('_outputs/darwin-x64/default/*.tgz') != ''
         with:
