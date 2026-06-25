@@ -5,7 +5,7 @@ SourceLocation(
 	name = 'libusb',
 	vcs = 'git',
 	location = 'https://github.com/libusb/libusb',
-	revision = 'tags/v1.0.24',
+	revision = 'tags/v1.0.28',
 	license_file = 'COPYING',
 )
 
