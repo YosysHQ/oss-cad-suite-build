@@ -16,7 +16,7 @@ fi
 if [ ${ARCH_BASE} == 'darwin' ]; then
     export CFLAGS="-Wno-implicit-function-declaration"
 fi
-./configure --prefix=${INSTALL_PREFIX} --host=${CROSS_NAME}
+./configure --prefix=${INSTALL_PREFIX} --host=${CROSS_NAME} --enable-libvvp
 make DESTDIR=${OUTPUT_DIR} -j${NPROC} install
 sed -i -re 's|^flag:VVP_EXECUTABLE=.*$||g' ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/ivl/vvp.conf
 sed -i -re 's|^flag:VVP_EXECUTABLE=.*$||g' ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/ivl/vvp-s.conf
