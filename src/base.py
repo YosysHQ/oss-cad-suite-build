@@ -779,14 +779,13 @@ def generateYaml(target, build_arch, write_to_file, rules):
 			yaml_content +="      - name: Get current date\n"
 			yaml_content +="        id: date\n"
 			yaml_content +="        run: echo \"date=$(date +'%Y-%m-%d')\" >> $GITHUB_OUTPUT\n"
-		yaml_content +="      - uses: actions/checkout@v5\n"
+		yaml_content +="      - uses: actions/checkout@v7\n"
 		if not target.top_package:
 			yaml_content +="      - name: Cache sources\n"
-			yaml_content +="        id: cache-sources\n"
-			yaml_content +="        uses: actions/cache@v5\n"
+			yaml_content +="        uses: actions/cache{}@v5\n".format("" if arch=="linux-x64" else "/restore")
 			yaml_content +="        with:\n"
-			yaml_content +="          path: _sources\n"
 			yaml_content +="          key: cache-sources-{}".format(target.name) + "\n"
+			yaml_content +="          path: _sources\n"
 			yaml_content +="      - name: Download previous build\n"
 			yaml_content +="        run: |\n"
 			yaml_content +="          URL=\"{}-{}/{}-{}.tgz\"\n".format(BUCKET_URL, arch, arch, target.name)

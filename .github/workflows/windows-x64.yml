@@ -11,13 +11,12 @@ jobs:
   windows-x64-yosys:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: Cache sources
-        id: cache-sources
-        uses: actions/cache@v5
+        uses: actions/cache/restore@v5
         with:
-          path: _sources
           key: cache-sources-yosys
+          path: _sources
       - name: Download previous build
         run: |
           URL="https://github.com/${{ github.repository }}/releases/download/bucket-windows-x64/windows-x64-yosys.tgz"
@@ -45,13 +44,12 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: Cache sources
-        id: cache-sources
-        uses: actions/cache@v5
+        uses: actions/cache/restore@v5
         with:
-          path: _sources
           key: cache-sources-python3
+          path: _sources
       - name: Download previous build
         run: |
           URL="https://github.com/${{ github.repository }}/releases/download/bucket-windows-x64/windows-x64-python3.tgz"
@@ -79,13 +77,12 @@ jobs:
     runs-on: ubuntu-latest
     needs: windows-x64-python3
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: Cache sources
-        id: cache-sources
-        uses: actions/cache@v5
+        uses: actions/cache/restore@v5
         with:
-          path: _sources
           key: cache-sources-formal
+          path: _sources
       - name: Download previous build
         run: |
           URL="https://github.com/${{ github.repository }}/releases/download/bucket-windows-x64/windows-x64-formal.tgz"
@@ -115,13 +112,12 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: Cache sources
-        id: cache-sources
-        uses: actions/cache@v5
+        uses: actions/cache/restore@v5
         with:
-          path: _sources
           key: cache-sources-imctk
+          path: _sources
       - name: Download previous build
         run: |
           URL="https://github.com/${{ github.repository }}/releases/download/bucket-windows-x64/windows-x64-imctk.tgz"
@@ -147,13 +143,12 @@ jobs:
     runs-on: ubuntu-latest
     needs: windows-x64-yosys
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: Cache sources
-        id: cache-sources
-        uses: actions/cache@v5
+        uses: actions/cache/restore@v5
         with:
-          path: _sources
           key: cache-sources-yosys-slang-plugin
+          path: _sources
       - name: Download previous build
         run: |
           URL="https://github.com/${{ github.repository }}/releases/download/bucket-windows-x64/windows-x64-yosys-slang-plugin.tgz"
@@ -182,13 +177,12 @@ jobs:
     continue-on-error: true
     needs: windows-x64-python3
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: Cache sources
-        id: cache-sources
-        uses: actions/cache@v5
+        uses: actions/cache/restore@v5
         with:
-          path: _sources
           key: cache-sources-nextpnr-generic
+          path: _sources
       - name: Download previous build
         run: |
           URL="https://github.com/${{ github.repository }}/releases/download/bucket-windows-x64/windows-x64-nextpnr-generic.tgz"
@@ -221,13 +215,12 @@ jobs:
     continue-on-error: true
     needs: windows-x64-python3
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: Cache sources
-        id: cache-sources
-        uses: actions/cache@v5
+        uses: actions/cache/restore@v5
         with:
-          path: _sources
           key: cache-sources-nextpnr-ice40
+          path: _sources
       - name: Download previous build
         run: |
           URL="https://github.com/${{ github.repository }}/releases/download/bucket-windows-x64/windows-x64-nextpnr-ice40.tgz"
@@ -262,13 +255,12 @@ jobs:
     continue-on-error: true
     needs: windows-x64-python3
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: Cache sources
-        id: cache-sources
-        uses: actions/cache@v5
+        uses: actions/cache/restore@v5
         with:
-          path: _sources
           key: cache-sources-nextpnr-ecp5
+          path: _sources
       - name: Download previous build
         run: |
           URL="https://github.com/${{ github.repository }}/releases/download/bucket-windows-x64/windows-x64-nextpnr-ecp5.tgz"
@@ -303,13 +295,12 @@ jobs:
     continue-on-error: true
     needs: windows-x64-python3
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: Cache sources
-        id: cache-sources
-        uses: actions/cache@v5
+        uses: actions/cache/restore@v5
         with:
-          path: _sources
           key: cache-sources-nextpnr-machxo2
+          path: _sources
       - name: Download previous build
         run: |
           URL="https://github.com/${{ github.repository }}/releases/download/bucket-windows-x64/windows-x64-nextpnr-machxo2.tgz"
@@ -344,13 +335,12 @@ jobs:
     continue-on-error: true
     needs: windows-x64-python3
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: Cache sources
-        id: cache-sources
-        uses: actions/cache@v5
+        uses: actions/cache/restore@v5
         with:
-          path: _sources
           key: cache-sources-nextpnr-nexus
+          path: _sources
       - name: Download previous build
         run: |
           URL="https://github.com/${{ github.repository }}/releases/download/bucket-windows-x64/windows-x64-nextpnr-nexus.tgz"
@@ -385,13 +375,12 @@ jobs:
     continue-on-error: true
     needs: windows-x64-python3
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: Cache sources
-        id: cache-sources
-        uses: actions/cache@v5
+        uses: actions/cache/restore@v5
         with:
-          path: _sources
           key: cache-sources-nextpnr-himbaechel
+          path: _sources
       - name: Download previous build
         run: |
           URL="https://github.com/${{ github.repository }}/releases/download/bucket-windows-x64/windows-x64-nextpnr-himbaechel.tgz"
@@ -427,13 +416,12 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: Cache sources
-        id: cache-sources
-        uses: actions/cache@v5
+        uses: actions/cache/restore@v5
         with:
-          path: _sources
           key: cache-sources-icestorm
+          path: _sources
       - name: Download previous build
         run: |
           URL="https://github.com/${{ github.repository }}/releases/download/bucket-windows-x64/windows-x64-icestorm.tgz"
@@ -459,13 +447,12 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: Cache sources
-        id: cache-sources
-        uses: actions/cache@v5
+        uses: actions/cache/restore@v5
         with:
-          path: _sources
           key: cache-sources-prjtrellis
+          path: _sources
       - name: Download previous build
         run: |
           URL="https://github.com/${{ github.repository }}/releases/download/bucket-windows-x64/windows-x64-prjtrellis.tgz"
@@ -491,13 +478,12 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: Cache sources
-        id: cache-sources
-        uses: actions/cache@v5
+        uses: actions/cache/restore@v5
         with:
-          path: _sources
           key: cache-sources-prjpeppercorn
+          path: _sources
       - name: Download previous build
         run: |
           URL="https://github.com/${{ github.repository }}/releases/download/bucket-windows-x64/windows-x64-prjpeppercorn.tgz"
@@ -523,13 +509,12 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: Cache sources
-        id: cache-sources
-        uses: actions/cache@v5
+        uses: actions/cache/restore@v5
         with:
-          path: _sources
           key: cache-sources-prjoxide
+          path: _sources
       - name: Download previous build
         run: |
           URL="https://github.com/${{ github.repository }}/releases/download/bucket-windows-x64/windows-x64-prjoxide.tgz"
@@ -556,13 +541,12 @@ jobs:
     continue-on-error: true
     needs: windows-x64-python3
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: Cache sources
-        id: cache-sources
-        uses: actions/cache@v5
+        uses: actions/cache/restore@v5
         with:
-          path: _sources
           key: cache-sources-apicula
+          path: _sources
       - name: Download previous build
         run: |
           URL="https://github.com/${{ github.repository }}/releases/download/bucket-windows-x64/windows-x64-apicula.tgz"
@@ -592,13 +576,12 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: Cache sources
-        id: cache-sources
-        uses: actions/cache@v5
+        uses: actions/cache/restore@v5
         with:
-          path: _sources
           key: cache-sources-openfpgaloader
+          path: _sources
       - name: Download previous build
         run: |
           URL="https://github.com/${{ github.repository }}/releases/download/bucket-windows-x64/windows-x64-openfpgaloader.tgz"
@@ -624,13 +607,12 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: Cache sources
-        id: cache-sources
-        uses: actions/cache@v5
+        uses: actions/cache/restore@v5
         with:
-          path: _sources
           key: cache-sources-avy
+          path: _sources
       - name: Download previous build
         run: |
           URL="https://github.com/${{ github.repository }}/releases/download/bucket-windows-x64/windows-x64-avy.tgz"
@@ -656,13 +638,12 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: Cache sources
-        id: cache-sources
-        uses: actions/cache@v5
+        uses: actions/cache/restore@v5
         with:
-          path: _sources
           key: cache-sources-bitwuzla
+          path: _sources
       - name: Download previous build
         run: |
           URL="https://github.com/${{ github.repository }}/releases/download/bucket-windows-x64/windows-x64-bitwuzla.tgz"
@@ -688,13 +669,12 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: Cache sources
-        id: cache-sources
-        uses: actions/cache@v5
+        uses: actions/cache/restore@v5
         with:
-          path: _sources
           key: cache-sources-lingeling
+          path: _sources
       - name: Download previous build
         run: |
           URL="https://github.com/${{ github.repository }}/releases/download/bucket-windows-x64/windows-x64-lingeling.tgz"
@@ -720,13 +700,12 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: Cache sources
-        id: cache-sources
-        uses: actions/cache@v5
+        uses: actions/cache/restore@v5
         with:
-          path: _sources
           key: cache-sources-cadical
+          path: _sources
       - name: Download previous build
         run: |
           URL="https://github.com/${{ github.repository }}/releases/download/bucket-windows-x64/windows-x64-cadical.tgz"
@@ -752,13 +731,12 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: Cache sources
-        id: cache-sources
-        uses: actions/cache@v5
+        uses: actions/cache/restore@v5
         with:
-          path: _sources
           key: cache-sources-btor2tools
+          path: _sources
       - name: Download previous build
         run: |
           URL="https://github.com/${{ github.repository }}/releases/download/bucket-windows-x64/windows-x64-btor2tools.tgz"
@@ -785,13 +763,12 @@ jobs:
     continue-on-error: true
     needs: [ windows-x64-btor2tools, windows-x64-cadical, windows-x64-lingeling ]
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: Cache sources
-        id: cache-sources
-        uses: actions/cache@v5
+        uses: actions/cache/restore@v5
         with:
-          path: _sources
           key: cache-sources-boolector
+          path: _sources
       - name: Download previous build
         run: |
           URL="https://github.com/${{ github.repository }}/releases/download/bucket-windows-x64/windows-x64-boolector.tgz"
@@ -823,13 +800,12 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: Cache sources
-        id: cache-sources
-        uses: actions/cache@v5
+        uses: actions/cache/restore@v5
         with:
-          path: _sources
           key: cache-sources-cvc4
+          path: _sources
       - name: Download previous build
         run: |
           URL="https://github.com/${{ github.repository }}/releases/download/bucket-windows-x64/windows-x64-cvc4.tgz"
@@ -855,13 +831,12 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: Cache sources
-        id: cache-sources
-        uses: actions/cache@v5
+        uses: actions/cache/restore@v5
         with:
-          path: _sources
           key: cache-sources-libpoly
+          path: _sources
       - name: Download previous build
         run: |
           URL="https://github.com/${{ github.repository }}/releases/download/bucket-windows-x64/windows-x64-libpoly.tgz"
@@ -888,13 +863,12 @@ jobs:
     continue-on-error: true
     needs: [ windows-x64-cadical, windows-x64-libpoly ]
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: Cache sources
-        id: cache-sources
-        uses: actions/cache@v5
+        uses: actions/cache/restore@v5
         with:
-          path: _sources
           key: cache-sources-cvc5
+          path: _sources
       - name: Download previous build
         run: |
           URL="https://github.com/${{ github.repository }}/releases/download/bucket-windows-x64/windows-x64-cvc5.tgz"
@@ -926,13 +900,12 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: Cache sources
-        id: cache-sources
-        uses: actions/cache@v5
+        uses: actions/cache/restore@v5
         with:
-          path: _sources
           key: cache-sources-yices
+          path: _sources
       - name: Download previous build
         run: |
           URL="https://github.com/${{ github.repository }}/releases/download/bucket-windows-x64/windows-x64-yices.tgz"
@@ -959,13 +932,12 @@ jobs:
     continue-on-error: true
     needs: [ windows-x64-boolector, windows-x64-cvc5 ]
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: Cache sources
-        id: cache-sources
-        uses: actions/cache@v5
+        uses: actions/cache/restore@v5
         with:
-          path: _sources
           key: cache-sources-smt-switch
+          path: _sources
       - name: Download previous build
         run: |
           URL="https://github.com/${{ github.repository }}/releases/download/bucket-windows-x64/windows-x64-smt-switch.tgz"
@@ -996,13 +968,12 @@ jobs:
     continue-on-error: true
     needs: [ windows-x64-boolector, windows-x64-cvc5, windows-x64-smt-switch ]
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: Cache sources
-        id: cache-sources
-        uses: actions/cache@v5
+        uses: actions/cache/restore@v5
         with:
-          path: _sources
           key: cache-sources-pono
+          path: _sources
       - name: Download previous build
         run: |
           URL="https://github.com/${{ github.repository }}/releases/download/bucket-windows-x64/windows-x64-pono.tgz"
@@ -1034,13 +1005,12 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: Cache sources
-        id: cache-sources
-        uses: actions/cache@v5
+        uses: actions/cache/restore@v5
         with:
-          path: _sources
           key: cache-sources-z3
+          path: _sources
       - name: Download previous build
         run: |
           URL="https://github.com/${{ github.repository }}/releases/download/bucket-windows-x64/windows-x64-z3.tgz"
@@ -1067,13 +1037,12 @@ jobs:
     continue-on-error: true
     needs: windows-x64-yosys
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: Cache sources
-        id: cache-sources
-        uses: actions/cache@v5
+        uses: actions/cache/restore@v5
         with:
-          path: _sources
           key: cache-sources-eqy
+          path: _sources
       - name: Download previous build
         run: |
           URL="https://github.com/${{ github.repository }}/releases/download/bucket-windows-x64/windows-x64-eqy.tgz"
@@ -1101,13 +1070,12 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: Cache sources
-        id: cache-sources
-        uses: actions/cache@v5
+        uses: actions/cache/restore@v5
         with:
-          path: _sources
           key: cache-sources-gtkwave
+          path: _sources
       - name: Download previous build
         run: |
           URL="https://github.com/${{ github.repository }}/releases/download/bucket-windows-x64/windows-x64-gtkwave.tgz"
@@ -1133,13 +1101,12 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: Cache sources
-        id: cache-sources
-        uses: actions/cache@v5
+        uses: actions/cache/restore@v5
         with:
-          path: _sources
           key: cache-sources-verilator
+          path: _sources
       - name: Download previous build
         run: |
           URL="https://github.com/${{ github.repository }}/releases/download/bucket-windows-x64/windows-x64-verilator.tgz"
@@ -1165,13 +1132,12 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: Cache sources
-        id: cache-sources
-        uses: actions/cache@v5
+        uses: actions/cache/restore@v5
         with:
-          path: _sources
           key: cache-sources-iverilog
+          path: _sources
       - name: Download previous build
         run: |
           URL="https://github.com/${{ github.repository }}/releases/download/bucket-windows-x64/windows-x64-iverilog.tgz"
@@ -1197,13 +1163,12 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: Cache sources
-        id: cache-sources
-        uses: actions/cache@v5
+        uses: actions/cache/restore@v5
         with:
-          path: _sources
           key: cache-sources-utils
+          path: _sources
       - name: Download previous build
         run: |
           URL="https://github.com/${{ github.repository }}/releases/download/bucket-windows-x64/windows-x64-utils.tgz"
@@ -1230,13 +1195,12 @@ jobs:
     continue-on-error: true
     needs: windows-x64-python3
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: Cache sources
-        id: cache-sources
-        uses: actions/cache@v5
+        uses: actions/cache/restore@v5
         with:
-          path: _sources
           key: cache-sources-pyhdl
+          path: _sources
       - name: Download previous build
         run: |
           URL="https://github.com/${{ github.repository }}/releases/download/bucket-windows-x64/windows-x64-pyhdl.tgz"
@@ -1266,13 +1230,12 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: Cache sources
-        id: cache-sources
-        uses: actions/cache@v5
+        uses: actions/cache/restore@v5
         with:
-          path: _sources
           key: cache-sources-surfer
+          path: _sources
       - name: Download previous build
         run: |
           URL="https://github.com/${{ github.repository }}/releases/download/bucket-windows-x64/windows-x64-surfer.tgz"
@@ -1298,13 +1261,12 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: Cache sources
-        id: cache-sources
-        uses: actions/cache@v5
+        uses: actions/cache/restore@v5
         with:
-          path: _sources
           key: cache-sources-system-resources
+          path: _sources
       - name: Download previous build
         run: |
           URL="https://github.com/${{ github.repository }}/releases/download/bucket-windows-x64/windows-x64-system-resources.tgz"
@@ -1333,7 +1295,7 @@ jobs:
       - name: Get current date
         id: date
         run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: Download windows-x64-apicula
         run: wget -qO- "https://github.com/${{ github.repository }}/releases/download/bucket-windows-x64/windows-x64-apicula.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download windows-x64-avy
