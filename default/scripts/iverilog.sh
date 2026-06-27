@@ -23,7 +23,6 @@ sed -i -re 's|^flag:VVP_EXECUTABLE=.*$||g' ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/iv
 if [ ${ARCH_BASE} == 'darwin' ]; then
     sed -i 's,CC="'${CC}',CC="clang",g' ${OUTPUT_DIR}${INSTALL_PREFIX}/bin/iverilog-vpi
     sed -i 's,CXX="'${CXX}'",CXX="clang++",g' ${OUTPUT_DIR}${INSTALL_PREFIX}/bin/iverilog-vpi
-    rsync -L ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/*.dylib .
-    rm  -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/*.dylib
-    cp -f *.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/.
+    install_name_tool -id ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libvvp.1.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libvvp.1.dylib
+    install_name_tool -change ${INSTALL_PREFIX}/lib/libvvp.1.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libvvp.1.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/bin/vvp    
 fi
