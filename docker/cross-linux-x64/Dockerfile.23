@@ -5,3 +5,9 @@ RUN RUSTUP_HOME=/opt/rust/rustup CARGO_HOME=/opt/rust/cargo rustup override set 
 RUN apt -y update ;\
     apt -y install python3-pip libmpfr-dev ninja-build; \
     pip install meson
+
+# Build dependencies for NVC (VHDL simulator)
+RUN apt -y update ;\
+    apt -y install automake llvm-18-dev zlib1g-dev libdw-dev libzstd-dev check ;\
+    apt -y autoremove ;\
+    rm -rf /var/lib/apt/lists/*
