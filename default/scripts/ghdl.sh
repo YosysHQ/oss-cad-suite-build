@@ -1,5 +1,47 @@
 cd ghdl
 param=--with-llvm-config="llvm-config"
+GHDL_NIGHTLY_API="https://api.github.com/repos/ghdl/ghdl/releases/tags/nightly"
+
+get_release_asset_name() {
+    local pattern="$1"
+    printf '%s\n' "${GHDL_RELEASE_JSON}" \
+        | grep -o '"name": "[^"]*"' \
+        | cut -d '"' -f 4 \
+        | grep -E "${pattern}" \
+        | head -n1
+}
+
+configure_darwin_ghdl_libs() {
+    local lib_dir="$1"
+    local libghdl
+    local libghdlvpi
+    local libgnat
+    local libgcc
+
+    libghdl=$(ls "${lib_dir}"/libghdl-*.dylib 2>/dev/null | head -n1)
+    libghdlvpi=$(ls "${lib_dir}"/libghdlvpi*.dylib 2>/dev/null | head -n1)
+    libgnat=$(ls "${lib_dir}"/libgnat-*.dylib 2>/dev/null | head -n1)
+    libgcc=$(ls "${lib_dir}"/libgcc_s*.dylib 2>/dev/null | head -n1)
+
+    if [ -z "${libghdl}" ] || [ -z "${libghdlvpi}" ] || [ -z "${libgnat}" ] || [ -z "${libgcc}" ]; then
+        echo "Failed to locate required Darwin GHDL libraries in ${lib_dir}" >&2
+        exit 1
+    fi
+
+    install_name_tool -id "@executable_path/../lib/$(basename "${libghdl}")" "${libghdl}"
+    install_name_tool -id "@executable_path/../lib/$(basename "${libghdlvpi}")" "${libghdlvpi}"
+    install_name_tool -id "@executable_path/../lib/$(basename "${libgnat}")" "${libgnat}"
+    install_name_tool -id "@executable_path/../lib/$(basename "${libgcc}")" "${libgcc}"
+    install_name_tool -change "@rpath/$(basename "${libgnat}")" "@executable_path/../lib/$(basename "${libgnat}")" "${libghdl}"
+    install_name_tool -change "@rpath/$(basename "${libgcc}")" "@executable_path/../lib/$(basename "${libgcc}")" "${libghdl}"
+    install_name_tool -change "@rpath/$(basename "${libgcc}")" "@executable_path/../lib/$(basename "${libgcc}")" "${libgnat}"
+
+    rcodesign sign "${libghdl}"
+    rcodesign sign "${libghdlvpi}"
+    rcodesign sign "${libgnat}"
+    rcodesign sign "${libgcc}"
+}
+
 sed -i 's,ghdl1-llvm,../bin/ghdl1-llvm,g' configure
 if [ ${ARCH} == 'linux-arm64' ]; then
     sed -i 's,grt-all libs.vhdl.llvm all.vpi,grt-all all.vpi,g' Makefile.in
@@ -9,36 +51,31 @@ if [ ${ARCH} == 'linux-arm64' ]; then
     param=--with-llvm-config='llvm-config'
     LDFLAGS=-L/usr/lib/${CROSS_NAME}
 elif [ ${ARCH} == 'darwin-x64' ]; then
-    wget https://github.com/ghdl/ghdl/releases/download/nightly/ghdl-llvm-6.0.0-dev-macos13-x86_64.tar.gz
+    GHDL_RELEASE_JSON=$(curl -fsSL "${GHDL_NIGHTLY_API}")
+    GHDL_DARWIN_ASSET=$(get_release_asset_name '^ghdl-llvm-.*-macos[0-9]+-x86_64\.tar\.gz$')
+    if [ -z "${GHDL_DARWIN_ASSET}" ]; then
+        echo "No darwin-x64 LLVM artifact found in GHDL nightly release" >&2
+        exit 1
+    fi
+    wget "https://github.com/ghdl/ghdl/releases/download/nightly/${GHDL_DARWIN_ASSET}"
     mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}
-    tar xvfz ghdl-llvm-6.0.0-dev-macos13-x86_64.tar.gz -C ${OUTPUT_DIR}${INSTALL_PREFIX} --strip-components=1
-    install_name_tool -id @executable_path/../lib/libghdl-6_0_0_dev.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libghdl-6_0_0_dev.dylib
-    install_name_tool -id @executable_path/../lib/libghdlvpi.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libghdlvpi.dylib
-    install_name_tool -id @executable_path/../lib/libgnat-14.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libgnat-14.dylib
-    install_name_tool -id @executable_path/../lib/libgcc_s.1.1.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libgcc_s.1.1.dylib
-    install_name_tool -change @rpath/libgnat-14.dylib @executable_path/../lib/libgnat-14.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libghdl-6_0_0_dev.dylib
-    install_name_tool -change @rpath/libgcc_s.1.1.dylib @executable_path/../lib/libgcc_s.1.1.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libghdl-6_0_0_dev.dylib
-    install_name_tool -change @rpath/libgcc_s.1.1.dylib @executable_path/../lib/libgcc_s.1.1.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libgnat-14.dylib
-    rcodesign sign ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libghdl-6_0_0_dev.dylib
-    rcodesign sign ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libghdlvpi.dylib
-    rcodesign sign ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libgnat-14.dylib
-    rcodesign sign ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libgcc_s.1.1.dylib
+    tar xvfz "${GHDL_DARWIN_ASSET}" -C ${OUTPUT_DIR}${INSTALL_PREFIX} --strip-components=1
+    configure_darwin_ghdl_libs "${OUTPUT_DIR}${INSTALL_PREFIX}/lib"
     exit 0
 elif [ ${ARCH} == 'darwin-arm64' ]; then
-    wget https://github.com/ghdl/ghdl/releases/download/nightly/ghdl-llvm-7.0.0-dev-macos14-aarch64.tar.gz
+    GHDL_RELEASE_JSON=$(curl -fsSL "${GHDL_NIGHTLY_API}")
+    GHDL_DARWIN_ASSET=$(get_release_asset_name '^ghdl-llvm-.*-macos14-aarch64\.tar\.gz$')
+    if [ -z "${GHDL_DARWIN_ASSET}" ]; then
+        GHDL_DARWIN_ASSET=$(get_release_asset_name '^ghdl-llvm-.*-macos[0-9]+-aarch64\.tar\.gz$')
+    fi
+    if [ -z "${GHDL_DARWIN_ASSET}" ]; then
+        echo "No darwin-arm64 LLVM artifact found in GHDL nightly release" >&2
+        exit 1
+    fi
+    wget "https://github.com/ghdl/ghdl/releases/download/nightly/${GHDL_DARWIN_ASSET}"
     mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}
-    tar xvfz ghdl-llvm-7.0.0-dev-macos14-aarch64.tar.gz -C ${OUTPUT_DIR}${INSTALL_PREFIX} --strip-components=1
-    install_name_tool -id @executable_path/../lib/libghdl-7_0_0_dev.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libghdl-7_0_0_dev.dylib
-    install_name_tool -id @executable_path/../lib/libghdlvpi.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libghdlvpi.dylib
-    install_name_tool -id @executable_path/../lib/libgnat-14.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libgnat-14.dylib
-    install_name_tool -id @executable_path/../lib/libgcc_s.1.1.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libgcc_s.1.1.dylib
-    install_name_tool -change @rpath/libgnat-14.dylib @executable_path/../lib/libgnat-14.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libghdl-7_0_0_dev.dylib
-    install_name_tool -change @rpath/libgcc_s.1.1.dylib @executable_path/../lib/libgcc_s.1.1.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libghdl-7_0_0_dev.dylib
-    install_name_tool -change @rpath/libgcc_s.1.1.dylib @executable_path/../lib/libgcc_s.1.1.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libgnat-14.dylib
-    rcodesign sign ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libghdl-7_0_0_dev.dylib
-    rcodesign sign ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libghdlvpi.dylib
-    rcodesign sign ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libgnat-14.dylib
-    rcodesign sign ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libgcc_s.1.1.dylib
+    tar xvfz "${GHDL_DARWIN_ASSET}" -C ${OUTPUT_DIR}${INSTALL_PREFIX} --strip-components=1
+    configure_darwin_ghdl_libs "${OUTPUT_DIR}${INSTALL_PREFIX}/lib"
     exit 0
 elif [ ${ARCH} == 'windows-x64' ]; then
     sed -i 's,grt-all libs.vhdl.llvm all.vpi,grt-all all.vpi,g' Makefile.in
