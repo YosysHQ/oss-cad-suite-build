@@ -5,6 +5,17 @@ if [ ${ARCH} == 'linux-x64' ]; then
 else
 	touch Configuration.cmake
 fi
+if [ ${ARCH_BASE} == 'darwin' ]; then
+sed -i '/auto allEdgeLists() const { return map | std::views::values | std::views::join;/c\
+    auto allEdgeLists() const {\
+        SmallVector<EdgeList> out;\
+        for (const auto& [_, vec] : map)\
+            for (const auto& e : vec)\
+                out.push_back(e);\
+        return out;\
+    }
+' libs/slang/source/analysis/ConstraintAnalysis.h 
+fi
 cmake -C Configuration.cmake -B build . \
 	-DCMAKE_INSTALL_PREFIX=${INSTALL_PREFIX} \
 	-DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE} \
