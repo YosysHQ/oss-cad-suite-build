@@ -19,7 +19,8 @@ fi
 cmake -C Configuration.cmake -B build . \
 	-DCMAKE_INSTALL_PREFIX=${INSTALL_PREFIX} \
 	-DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE} \
-	-DCMAKE_BUILD_TYPE=Release
+	-DCMAKE_BUILD_TYPE=Release \
+	-DSLANG_INCLUDE_TOOLS=ON
 cmake --build build -j${NPROC}
 DESTDIR=${OUTPUT_DIR} cmake --install build	--strip
 

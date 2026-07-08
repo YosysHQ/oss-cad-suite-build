@@ -22,6 +22,7 @@ See [Tabby CAD Datasheet](https://www.yosyshq.com/tabby-cad-datasheet) for detai
  * [Migen](https://github.com/m-labs/migen) Python toolbox for building complex digital hardware
  * [ABC](https://people.eecs.berkeley.edu/~alanmi/abc/) A System for Sequential Synthesis and Verification
  * [GHDL](https://github.com/ghdl/ghdl) VHDL 2008/93/87 simulator (linux-x64 and darwin-arm64 platforms only)
+ * [Slang](https://github.com/MikePopoloski/slang) SystemVerilog Language Services
  
 Did you know that the Tabby CAD version of yosys supports industry standard SystemVerilog, VHDL and SVA? 
 Contact us at contact@yosyshq.com to arrange a free evaluation license.
