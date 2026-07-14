@@ -2,7 +2,7 @@ cd verilator
 # for cross compile
 sed -i 's,AC_RUN_IFELSE,AC_LINK_IFELSE,g' configure.ac
 autoconf
-./configure --prefix=${INSTALL_PREFIX} --host=${CROSS_NAME}
+./configure --prefix=${INSTALL_PREFIX} --host=${CROSS_NAME} --enable-light-debug
 if [ ${ARCH_BASE} == 'darwin' ]; then
     make DESTDIR=${OUTPUT_DIR} -j2
     make DESTDIR=${OUTPUT_DIR} prefix=${INSTALL_PREFIX} install
