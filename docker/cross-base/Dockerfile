@@ -1,4 +1,4 @@
-FROM ubuntu:22.04
+FROM ubuntu:26.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -27,6 +27,9 @@ RUN set -e -x ;\
         libtool \
         help2man \
         llvm \
+        cmake \
+        meson \
+        ninja-build \
         default-jre-headless; \
     apt -y autoremove ;\
     rm -rf /var/lib/apt/lists/*
