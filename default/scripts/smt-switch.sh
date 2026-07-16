@@ -2,6 +2,7 @@ cd smt-switch
 sed -i -re 's,target_link_libraries\(smt-switch-btor smt-switch\),target_link_libraries\(smt-switch-btor smt-switch\)\ntarget_link_libraries(smt-switch-btor \"\$\{BTOR_HOME\}/deps/lingeling/build/liblgl.a\"),g' btor/CMakeLists.txt
 sed -i -re 's,cmake \"\$root_dir\" \$cmake_opts,cmake \"\$root_dir\" \$cmake_opts -DCMAKE_TOOLCHAIN_FILE=\$\{CMAKE_TOOLCHAIN_FILE\},g' configure.sh
 sed -i 's,add_subdirectory(tests),#add_subdirectory(tests),g' CMakeLists.txt 
+sed -i '1i#include <cstdint>' include/ops.h
 if [ ${ARCH_BASE} == 'windows' ]; then
     sed -i 's,#include <string>,#include <string>\n#include <cstdint>,g' include/ops.h
     patch -p1 < ${PATCHES_DIR}/smt-switch-win32.diff
