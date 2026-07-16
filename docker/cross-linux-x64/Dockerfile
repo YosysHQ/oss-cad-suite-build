@@ -1,4 +1,4 @@
-FROM yosyshq/cross-base:2.0
+FROM yosyshq/cross-base:4.0
 
 ENV CROSS_NAME x86_64-linux-gnu
 
@@ -8,6 +8,10 @@ RUN set -e -x ;\
     apt -y update ;\
     apt -y upgrade ;\
     apt -y install \
+        lsb-release \
+        wget \
+        software-properties-common \
+        gnupg \
         gcc \
         g++ \
         clang \
@@ -29,7 +33,7 @@ RUN set -e -x ;\
         libssl-dev \
         tcl-dev \
         tk-dev \
-        qtbase5-dev \
+        qt6-base-dev \
         libbison-dev \
         libhidapi-dev \
         libcurl4-openssl-dev \
@@ -47,11 +51,28 @@ ENV AS=/usr/bin/${CROSS_NAME}-as \
     LD=/usr/bin/${CROSS_NAME}-ld \
     STRIP=/usr/bin/${CROSS_NAME}-strip
 
-RUN wget http://archive.ubuntu.com/ubuntu/pool/main/g/gobject-introspection/libgirepository1.0-dev_1.72.0-1_amd64.deb && \
-    dpkg-deb -xv libgirepository1.0-dev_1.72.0-1_amd64.deb / && \
-    rm -rf libgirepository1.0-dev_1.72.0-1_amd64.deb && \
-    wget http://archive.ubuntu.com/ubuntu/pool/main/g/gobject-introspection/gir1.2-glib-2.0_1.72.0-1_amd64.deb && \
-    dpkg-deb -xv gir1.2-glib-2.0_1.72.0-1_amd64.deb / && \
-    rm -rf gir1.2-glib-2.0_1.72.0-1_amd64.deb
-
+#RUN wget http://archive.ubuntu.com/ubuntu/pool/main/g/gobject-introspection/libgirepository1.0-dev_1.72.0-1_amd64.deb && \
+#    dpkg-deb -xv libgirepository1.0-dev_1.72.0-1_amd64.deb / && \
+#    rm -rf libgirepository1.0-dev_1.72.0-1_amd64.deb && \
+#    wget http://archive.ubuntu.com/ubuntu/pool/main/g/gobject-introspection/gir1.2-glib-2.0_1.72.0-1_amd64.deb && \
+#    dpkg-deb -xv gir1.2-glib-2.0_1.72.0-1_amd64.deb / && \
+#    rm -rf gir1.2-glib-2.0_1.72.0-1_amd64.deb
+#
 RUN ln -s /lib64/ld-linux-x86-64.so.2 /lib64/ld-lsb-x86-64.so.3
+
+RUN RUSTUP_HOME=/opt/rust/rustup CARGO_HOME=/opt/rust/cargo rustup toolchain install nightly
+RUN RUSTUP_HOME=/opt/rust/rustup CARGO_HOME=/opt/rust/cargo rustup override set nightly
+#
+#RUN apt purge --auto-remove cmake -y ;\
+#    wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | gpg --dearmor - | tee /usr/share/keyrings/kitware-archive-keyring.gpg >/dev/null ;\
+#    echo 'deb [signed-by=/usr/share/keyrings/kitware-archive-keyring.gpg] https://apt.kitware.com/ubuntu/ jammy main' | tee /etc/apt/sources.list.d/kitware.list >/dev/null ;\
+#    apt-get update -y ;\
+#    apt-get install cmake -y;\
+#    apt -y autoremove ;\
+#    rm -rf /var/lib/apt/lists/*
+
+ENV CMAKE_POLICY_VERSION_MINIMUM=3.5
+ENV PIP_BREAK_SYSTEM_PACKAGES=1
+RUN apt update && apt -y install python3-pip libmpfr-dev ninja-build pandoc \
+        libgtk-4-dev libjudy-dev libgirepository1.0-dev libjson-glib-dev desktop-file-utils  && \
+    pip install meson
