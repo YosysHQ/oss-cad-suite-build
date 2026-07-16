@@ -11,6 +11,7 @@ if [ ${ARCH_BASE} == 'darwin' ]; then
     sed -i 's,stdc++,c++,g' configure.ac
 fi
 patch -p1 < ${PATCHES_DIR}/graphviz_fix.diff
+export CFLAGS="-Wno-incompatible-pointer-types"
 ./autogen.sh NOCONFIG
 if [ ${ARCH_BASE} == 'darwin' ]; then
     export CFLAGS="-Wno-incompatible-function-pointer-types"
