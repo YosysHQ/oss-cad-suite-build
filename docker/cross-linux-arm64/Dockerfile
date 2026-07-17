@@ -32,6 +32,9 @@ RUN set -e -x ;\
         libftdi1-dev:arm64 \
         libgmp-dev:arm64 \
         libgtk-3-dev:arm64 \
+        libgtk-4-dev:arm64 \
+        libjson-glib-dev:arm64 \
+        desktop-file-utils \
         liblzma-dev:arm64 \
         libreadline-dev:arm64 \
         libsqlite3-dev:arm64 \

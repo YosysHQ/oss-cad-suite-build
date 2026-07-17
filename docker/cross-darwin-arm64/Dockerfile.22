@@ -266,6 +266,27 @@ RUN cd /opt \
   && ln -s /opt/local /usr/local/osxcross/target/macports/pkgs/opt \
   && cp /opt/local/lib/pkgconfig/gtk-mac-integration-gtk3.pc /opt/local/lib/pkgconfig/gtk-mac-integration.pc
 
+# Additional packages for gtkwave (GTK4 + json-glib)
+RUN cd /tmp \
+  && wget https://packages.macports.org/json-glib/json-glib-1.10.8_0.darwin_21.arm64.tbz2 \
+  && tar xfj json-glib-1.10.8_0.darwin_21.arm64.tbz2 \
+  && wget https://packages.macports.org/graphene/graphene-1.10.8_1.darwin_21.arm64.tbz2 \
+  && tar xfj graphene-1.10.8_1.darwin_21.arm64.tbz2 \
+  && wget https://packages.macports.org/gtk4/gtk4-4.14.3_0+x11.darwin_21.arm64.tbz2 \
+  && tar xfj gtk4-4.14.3_0+x11.darwin_21.arm64.tbz2 \
+  && wget https://packages.macports.org/xorg-libXi/xorg-libXi-1.8.2_0.darwin_21.arm64.tbz2 \
+  && tar xfj xorg-libXi-1.8.2_0.darwin_21.arm64.tbz2 \
+  && wget https://packages.macports.org/xorg-libXrandr/xorg-libXrandr-1.5.4_0.darwin_21.arm64.tbz2 \
+  && tar xfj xorg-libXrandr-1.5.4_0.darwin_21.arm64.tbz2 \
+  && wget https://packages.macports.org/xorg-libXcursor/xorg-libXcursor-1.2.3_0.darwin_21.arm64.tbz2 \
+  && tar xfj xorg-libXcursor-1.2.3_0.darwin_21.arm64.tbz2 \
+  && wget https://packages.macports.org/xorg-libXinerama/xorg-libXinerama-1.1.5_0.darwin_21.arm64.tbz2 \
+  && tar xfj xorg-libXinerama-1.1.5_0.darwin_21.arm64.tbz2 \
+  && wget https://packages.macports.org/xrender/xrender-0.9.12_0.darwin_21.arm64.tbz2 \
+  && tar xfj xrender-0.9.12_0.darwin_21.arm64.tbz2 \
+  && cp /opt/local/share/pkgconfig/* /opt/local/lib/pkgconfig/. 2>/dev/null || true \
+  && rm -rf /tmp/*
+
 COPY --from=builder /tmp/macdylibbundler/dylibbundler /usr/local/bin/dylibbundler
 COPY --from=builder /root/.cargo/bin/rcodesign /usr/local/bin/rcodesign
 RUN chmod +x /usr/local/bin/dylibbundler
