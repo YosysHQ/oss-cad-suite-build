@@ -108,11 +108,11 @@ EOT
 exec "\$release_topdir_abs"/libexec/$(basename $binfile) "\$@"
 EOT
         fi
-        if [ ! -z "$(lddtree -l libexec/$(basename $binfile) | grep Qt5)" ]; then
+        if [ ! -z "$(lddtree -l libexec/$(basename $binfile) | grep Qt6)" ]; then
             is_using_fonts=true
             cat >> $binfile << EOT
 export LIBGL_DRIVERS_PATH="\$release_topdir_abs/lib/dri"
-export QT_PLUGIN_PATH="\$release_topdir_abs/lib/qt5/plugins"
+export QT_PLUGIN_PATH="\$release_topdir_abs/lib/qt6/plugins"
 export QT_LOGGING_RULES="*=false"
 unset QT_QPA_PLATFORMTHEME
 unset QT_STYLE_OVERRIDE
