@@ -92,9 +92,12 @@ RUN chmod +x /usr/local/osxcross/target/bin/uname
 RUN rustup target add aarch64-apple-darwin && \
     mkdir -p /.cargo && \
     echo "[target.aarch64-apple-darwin]" > /.cargo/config && \
-    echo "linker = \"aarch64-apple-darwin21.4-clang\"" >> /.cargo/config && \
-    echo "ar = \"aarch64-apple-darwin21.4-ar\"" >> /.cargo/config
+    echo "linker = \"aarch64-apple-darwin25.5-clang\"" >> /.cargo/config && \
+    echo "ar = \"aarch64-apple-darwin25.5-ar\"" >> /.cargo/config
 
+RUN RUSTUP_HOME=/opt/rust/rustup CARGO_HOME=/opt/rust/cargo rustup toolchain install nightly
+RUN RUSTUP_HOME=/opt/rust/rustup CARGO_HOME=/opt/rust/cargo rustup override set nightly
+RUN RUSTUP_HOME=/opt/rust/rustup CARGO_HOME=/opt/rust/cargo rustup target add aarch64-apple-darwin
 
 COPY Toolchain.cmake ${CROSS_PREFIX}/
 
