@@ -1,4 +1,4 @@
-FROM fedora:39
+FROM fedora:45
 
 RUN dnf install -y  mingw64-gcc \
                     mingw64-gcc-c++ \
@@ -9,8 +9,8 @@ RUN dnf install -y  mingw64-gcc \
                     mingw64-readline \
                     mingw64-tk \
                     mingw64-xz \
-                    mingw64-gtk3 \
-                    mingw64-qt5-qtbase \
+                    mingw64-gtk4 \
+                    mingw64-qt6-qtbase \
                     mingw64-eigen3 \
                     mingw64-dlfcn \
                     mingw64-hidapi \
@@ -35,9 +35,8 @@ RUN dnf install -y  mingw64-gcc \
                     libtool \
                     libtool-ltdl-devel \
                     diffutils \
-                    java-11-openjdk-headless \
+                    java-latest-openjdk-headless \
                     cpio \
-                    xz \
                     help2man \
                     wget boost-devel
 
@@ -60,7 +59,7 @@ ENV PKG_CONFIG_PATH /usr/x86_64-w64-mingw32/sys-root/mingw/lib/pkgconfig
 
 ENV CROSS_PREFIX /opt/${CROSS_NAME}
 
-RUN cp /usr/include/FlexLexer.h /usr/x86_64-w64-mingw32/sys-root/mingw/include/.
+#RUN cp /usr/include/FlexLexer.h /usr/x86_64-w64-mingw32/sys-root/mingw/include/.
 
 COPY Toolchain.cmake ${CROSS_PREFIX}/
 
@@ -78,26 +77,63 @@ RUN rustup target add x86_64-pc-windows-gnu && \
     echo "linker = \"x86_64-w64-mingw32-gcc\"" >> /.cargo/config && \
     echo "ar = \"x86_64-w64-mingw32-ar\"" >> /.cargo/config
 
-RUN ln -s /usr/bin/python3 /usr/bin/python
 
-RUN cd /tmp \
-    && curl -L https://dl.fedoraproject.org/pub/fedora/linux/releases/39/Everything/source/tree/Packages/m/mingw-gmp-6.1.2-16.fc39.src.rpm --output mingw-gmp-6.1.2-16.fc39.src.rpm \
-    && rpm2cpio mingw-gmp-6.1.2-16.fc39.src.rpm | cpio -idmv \
-    && tar -xf gmp-6.1.2.tar.xz \
-    && cd gmp-6.1.2 \
-    && mingw64-configure --disable-shared --enable-cxx --enable-static \
-    && mingw64-make -j9 \
-    && mingw64-make install \
-    && curl http://ftp.gnu.org/gnu/bison/bison-3.5.tar.gz --output /tmp/bison-3.5.tar.gz \
-    && curl -L https://raw.githubusercontent.com/reactos/RosBE/master/Patches/bison-3.5-reactos-fix-win32-build.patch --output /tmp/bison.patch \
-    && cd /tmp \
-    && tar -xzf bison-3.5.tar.gz \
-    && cd bison-3.5 \
-    && patch -p1 < /tmp/bison.patch \
-    && mingw64-configure \
-    && mingw64-make -j9 \
-    && mingw64-make install \
-    && rm -rf /tmp/* \
-    && true
+#RUN cd /tmp \
+#    && curl -L https://dl.fedoraproject.org/pub/fedora/linux/releases/39/Everything/source/tree/Packages/m/mingw-gmp-6.1.2-16.fc39.src.rpm --output mingw-gmp-6.1.2-16.fc39.src.rpm \
+#    && rpm2cpio mingw-gmp-6.1.2-16.fc39.src.rpm | cpio -idmv \
+#    && tar -xf gmp-6.1.2.tar.xz \
+#    && cd gmp-6.1.2 \
+#    && mingw64-configure --disable-shared --enable-cxx --enable-static \
+#    && mingw64-make -j9 \
+#    && mingw64-make install \
+#    && curl http://ftp.gnu.org/gnu/bison/bison-3.5.tar.gz --output /tmp/bison-3.5.tar.gz \
+#    && curl -L https://raw.githubusercontent.com/reactos/RosBE/master/Patches/bison-3.5-reactos-fix-win32-build.patch --output /tmp/bison.patch \
+#    && cd /tmp \
+#    && tar -xzf bison-3.5.tar.gz \
+#    && cd bison-3.5 \
+#    && patch -p1 < /tmp/bison.patch \
+#    && mingw64-configure \
+#    && mingw64-make -j9 \
+#    && mingw64-make install \
+#    && rm -rf /tmp/* \
+#    && true
+#
 
+RUN RUSTUP_HOME=/opt/rust/rustup CARGO_HOME=/opt/rust/cargo rustup toolchain install nightly
+RUN RUSTUP_HOME=/opt/rust/rustup CARGO_HOME=/opt/rust/cargo rustup override set nightly
+RUN RUSTUP_HOME=/opt/rust/rustup CARGO_HOME=/opt/rust/cargo rustup target add x86_64-pc-windows-gnu
+
+COPY tcl.pc /usr/x86_64-w64-mingw32/sys-root/mingw/lib/pkgconfig/tcl.pc
+
+RUN sudo dnf upgrade -y cmake libuv
+
+RUN dnf install -y meson ninja-build
+#
+#RUN wget https://gmplib.org/download/gmp/gmp-6.3.0.tar.xz && \
+#    tar -xf gmp-6.3.0.tar.xz && \
+#    cd gmp-6.3.0 && \
+#    ./configure \
+#    --build=x86_64-redhat-linux-gnu \
+#    --host=x86_64-w64-mingw32 \
+#    --prefix=/usr/x86_64-w64-mingw32/sys-root/mingw \
+#    --enable-static \
+#    --disable-shared \
+#    --with-pic && \
+#    make -j$(nproc) && \
+#    sudo make install
+#
+#RUN wget https://www.mpfr.org/mpfr-4.2.1/mpfr-4.2.1.tar.xz && \
+#    tar xf mpfr-4.2.1.tar.xz && \
+#    cd mpfr-4.2.1 && \
+#    ./configure \
+#    --build=x86_64-redhat-linux-gnu \
+#    --host=x86_64-w64-mingw32 \
+#    --prefix=/usr/x86_64-w64-mingw32/sys-root/mingw \
+#    --disable-shared \
+#    --enable-static \
+#    --with-gmp=/usr/x86_64-w64-mingw32/sys-root/mingw && \
+#    make -j$(nproc) && \
+#    sudo make install
+
+ENV CMAKE_POLICY_VERSION_MINIMUM=3.5
 WORKDIR /work
