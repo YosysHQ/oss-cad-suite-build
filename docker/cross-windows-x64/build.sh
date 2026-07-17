@@ -1,1 +1,1 @@
-docker build -t="yosyshq/cross-windows-x64:2.3" -f Dockerfile.23 .
+docker build -t="yosyshq/cross-windows-x64:4.0" -f Dockerfile .
