@@ -1,8 +1,8 @@
-FROM yosyshq/cross-base:2.0
+FROM yosyshq/cross-base:4.0
 
-ENV CROSS_NAME aarch64-linux-gnu
+ENV CROSS_NAME=aarch64-linux-gnu
 
-ENV CROSS_PREFIX /opt/${CROSS_NAME}
+ENV CROSS_PREFIX=/opt/${CROSS_NAME}
 
 RUN set -e -x ;\
     apt -y update ;\
@@ -10,14 +10,15 @@ RUN set -e -x ;\
     apt -y install \
         gcc-aarch64-linux-gnu \
         g++-aarch64-linux-gnu \
-        gnat-9-aarch64-linux-gnu \
+        gnat-16-aarch64-linux-gnu \
         libc6-dev-arm64-cross; \
-    echo 'deb [arch=amd64] http://archive.ubuntu.com/ubuntu/ jammy main multiverse restricted universe' > /etc/apt/sources.list ; \
-    echo 'deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ jammy main multiverse restricted universe' >> /etc/apt/sources.list ; \
-    echo 'deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ jammy-updates main multiverse restricted universe' >> /etc/apt/sources.list ; \
-    echo 'deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ jammy-security main multiverse restricted universe' >> /etc/apt/sources.list ; \
-    echo 'deb [arch=amd64] http://archive.ubuntu.com/ubuntu/ jammy-updates main multiverse restricted universe' >> /etc/apt/sources.list ; \
-    echo 'deb [arch=amd64] http://security.ubuntu.com/ubuntu/ jammy-security main multiverse restricted universe' >> /etc/apt/sources.list ; \
+    rm -f /etc/apt/sources.list.d/ubuntu.sources; \
+    echo 'deb [arch=amd64] http://archive.ubuntu.com/ubuntu/ resolute main multiverse restricted universe' > /etc/apt/sources.list ; \
+    echo 'deb [arch=amd64] http://archive.ubuntu.com/ubuntu/ resolute-updates main multiverse restricted universe' >> /etc/apt/sources.list ; \
+    echo 'deb [arch=amd64] http://security.ubuntu.com/ubuntu/ resolute-security main multiverse restricted universe' >> /etc/apt/sources.list; \
+    echo 'deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ resolute main multiverse restricted universe' >> /etc/apt/sources.list ; \
+    echo 'deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ resolute-updates main multiverse restricted universe' >> /etc/apt/sources.list ; \
+    echo 'deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ resolute-security main multiverse restricted universe' >> /etc/apt/sources.list ; \
     dpkg --add-architecture arm64 ;\
     apt -y update ;\
     apt -y upgrade ;\
@@ -32,19 +33,25 @@ RUN set -e -x ;\
         libftdi1-dev:arm64 \
         libgmp-dev:arm64 \
         libgtk-3-dev:arm64 \
+        libgtk-4-dev:arm64 \
+        libjudy-dev:arm64 \
+        libgirepository1.0-dev:arm64 \
+        libjson-glib-dev:arm64 \
+        desktop-file-utils:arm64 \
         liblzma-dev:arm64 \
         libreadline-dev:arm64 \
         libsqlite3-dev:arm64 \
         libssl-dev:arm64 \
         tcl-dev:arm64 \
         tk-dev:arm64 \
-        qtbase5-dev:arm64 \
+        qt6-base-dev:arm64 \
         libbison-dev:arm64 \
         libhidapi-dev:arm64 \
         libcurl4-openssl-dev:arm64 \
         libbz2-dev:arm64 \
-        libllvm14:arm64 \
+        libllvm21:arm64 \
         libltdl-dev:arm64 \
+        libmpfr-dev:arm64 \
         libedit-dev:arm64; \
     apt -y autoremove ;\
     rm -rf /var/lib/apt/lists/*
@@ -59,18 +66,24 @@ ENV AS=/usr/bin/${CROSS_NAME}-as \
 
 COPY Toolchain.cmake ${CROSS_PREFIX}/
 
-ENV CMAKE_TOOLCHAIN_FILE ${CROSS_PREFIX}/Toolchain.cmake
+ENV CMAKE_TOOLCHAIN_FILE=${CROSS_PREFIX}/Toolchain.cmake
 
-ENV PKG_CONFIG_PATH /usr/lib/aarch64-linux-gnu/pkgconfig
+ENV PKG_CONFIG_PATH=/usr/lib/aarch64-linux-gnu/pkgconfig
 
 RUN rustup target add aarch64-unknown-linux-gnu && \
     mkdir -p /.cargo && \
     echo "[target.aarch64-unknown-linux-gnu]" > /.cargo/config && \
     echo "linker = \"aarch64-linux-gnu-gcc\"" >> /.cargo/config
 
-RUN wget http://ports.ubuntu.com/pool/main/g/gobject-introspection/libgirepository1.0-dev_1.72.0-1_arm64.deb && \
-    dpkg-deb -xv libgirepository1.0-dev_1.72.0-1_arm64.deb / && \
-    rm -rf libgirepository1.0-dev_1.72.0-1_arm64.deb && \
-    wget http://ports.ubuntu.com/pool/main/g/gobject-introspection/gir1.2-glib-2.0_1.72.0-1_arm64.deb && \
-    dpkg-deb -xv gir1.2-glib-2.0_1.72.0-1_arm64.deb / && \
-    rm -rf gir1.2-glib-2.0_1.72.0-1_arm64.deb
+#RUN wget http://ports.ubuntu.com/pool/main/g/gobject-introspection/libgirepository1.0-dev_1.72.0-1_arm64.deb && \
+#    dpkg-deb -xv libgirepository1.0-dev_1.72.0-1_arm64.deb / && \
+#    rm -rf libgirepository1.0-dev_1.72.0-1_arm64.deb && \
+#    wget http://ports.ubuntu.com/pool/main/g/gobject-introspection/gir1.2-glib-2.0_1.72.0-1_arm64.deb && \
+#    dpkg-deb -xv gir1.2-glib-2.0_1.72.0-1_arm64.deb / && \
+#    rm -rf gir1.2-glib-2.0_1.72.0-1_arm64.deb
+
+RUN RUSTUP_HOME=/opt/rust/rustup CARGO_HOME=/opt/rust/cargo rustup toolchain install nightly
+RUN RUSTUP_HOME=/opt/rust/rustup CARGO_HOME=/opt/rust/cargo rustup override set nightly
+RUN RUSTUP_HOME=/opt/rust/rustup CARGO_HOME=/opt/rust/cargo rustup target add aarch64-unknown-linux-gnu
+ENV CMAKE_POLICY_VERSION_MINIMUM=3.5
+ENV PIP_BREAK_SYSTEM_PACKAGES=1
