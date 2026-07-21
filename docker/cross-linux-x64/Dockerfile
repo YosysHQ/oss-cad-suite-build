@@ -1,8 +1,8 @@
 FROM yosyshq/cross-base:4.0
 
-ENV CROSS_NAME x86_64-linux-gnu
+ENV CROSS_NAME=x86_64-linux-gnu
 
-ENV CROSS_PREFIX /opt/${CROSS_NAME}
+ENV CROSS_PREFIX=/opt/${CROSS_NAME}
 
 RUN set -e -x ;\
     apt -y update ;\
@@ -73,6 +73,5 @@ RUN RUSTUP_HOME=/opt/rust/rustup CARGO_HOME=/opt/rust/cargo rustup override set 
 
 ENV CMAKE_POLICY_VERSION_MINIMUM=3.5
 ENV PIP_BREAK_SYSTEM_PACKAGES=1
-RUN apt update && apt -y install python3-pip libmpfr-dev ninja-build pandoc \
-        libgtk-4-dev libjudy-dev libgirepository1.0-dev libjson-glib-dev desktop-file-utils  && \
-    pip install meson
+RUN apt update && apt -y install python3-pip libmpfr-dev pandoc \
+        libgtk-4-dev libjudy-dev libgirepository1.0-dev libjson-glib-dev desktop-file-utils

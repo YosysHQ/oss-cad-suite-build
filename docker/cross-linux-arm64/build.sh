@@ -1,1 +1,1 @@
-docker build -t="yosyshq/cross-linux-arm64:2.3" -f Dockerfile.23 .
+docker build -t="yosyshq/cross-linux-arm64:4.0" -f Dockerfile .
