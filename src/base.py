@@ -393,7 +393,7 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, nproc, pack_source
 		env['SHARED_EXT'] = '.dll'
 	if (arch == 'darwin-x64') or (arch == 'darwin-arm64'):
 		env['SHARED_EXT'] = '.dylib'
-	env['LC_ALL'] = 'C'
+	env['LC_ALL'] = 'C.UTF-8'
 	env['INSTALL_PREFIX'] = prefix
 	if (target.branding):
 		env['BRANDING'] = str(target.branding)
