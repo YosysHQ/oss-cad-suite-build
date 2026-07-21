@@ -22,8 +22,8 @@ RUN set -e -x ;\
         autoconf \
         curl \
         pax-utils \
-        qt5-qmake \
-        qtbase5-dev-tools \
+        qmake6 \
+        qt6-base-dev-tools \
         libtool \
         help2man \
         llvm \
@@ -34,9 +34,9 @@ RUN set -e -x ;\
     apt -y autoremove ;\
     rm -rf /var/lib/apt/lists/*
 
-ENV RUSTUP_HOME /opt/rust/rustup
+ENV RUSTUP_HOME=/opt/rust/rustup
 
-ENV PATH ${PATH}:/opt/rust/cargo/bin
+ENV PATH=${PATH}:/opt/rust/cargo/bin
 
 RUN curl https://sh.rustup.rs -sSf | RUSTUP_HOME=/opt/rust/rustup CARGO_HOME=/opt/rust/cargo bash -s -- --default-toolchain stable --profile default --no-modify-path -y
 
