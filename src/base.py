@@ -165,7 +165,7 @@ def validateRules():
 				log_error("Unknown source {} in {} target.".format(s,t.name))
 		for d in t.dependencies:
 			if d not in targets.keys():
-				log_error("Unknown dependancy {} in {} target.".format(d,t.name))
+				log_error("Unknown dependency {} in {} target.".format(d,t.name))
 			if d == t.name:
 				log_error("Target {} dependent on itself.".format(t.name))
 		for d in t.resources:
@@ -683,7 +683,7 @@ def buildCode(build_target, build_arch, nproc, force, dry, pack_sources, single,
 				if target.name == src.name:
 					for dep in target.dependencies:
 						dep_license_dir = os.path.join(build_dir, dep + prefix, "license")
-						log_step("Adding dependancy license file for {} ...".format(dep))
+						log_step("Adding dependency license file for {} ...".format(dep))
 						if os.path.exists(dep_license_dir):
 							run(['rsync','-a', dep_license_dir+"/", license_dir])
 
