@@ -15,8 +15,12 @@ if [ ${ARCH_BASE} == 'windows' ]; then
 fi
 if [ ${ARCH_BASE} == 'darwin' ]; then
     sed -i -re 's,linux,l1nux,g' scripts/repack-static-lib.sh 
-    sed -i -re 's,darwin,linux,g' scripts/repack-static-lib.sh 
-    sed -i -re 's,libtool,x86_64-apple-darwin23.5-libtool,g' scripts/repack-static-lib.sh 
+    sed -i -re 's,darwin,linux,g' scripts/repack-static-lib.sh
+if [ ${ARCH} == 'darwin-arm64' ]; then 
+    sed -i -re 's,libtool,arm64-apple-darwin25.5-libtool,g' scripts/repack-static-lib.sh 
+else
+    sed -i -re 's,libtool,x86_64-apple-darwin25.5-libtool,g' scripts/repack-static-lib.sh 
+fi
 fi
 ./configure.sh --cvc5 --cvc5-home=${BUILD_DIR}/cvc5/dev --btor-home=${BUILD_DIR}/boolector/dev --prefix=${INSTALL_PREFIX} --static --smtlib-reader
 cd build

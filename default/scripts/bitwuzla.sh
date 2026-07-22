@@ -10,7 +10,7 @@ if [ ${ARCH} == 'darwin-arm64' ]; then
     arch_gen=--arm64
     cat > x86_64-linux-aarch64.txt <<'EOF'
 [binaries]
-pkg-config = 'aarch64-apple-darwin23.5-pkg-config'
+pkg-config = 'pkg-config'
 
 [host_machine]
 system = 'darwin'
@@ -27,7 +27,7 @@ if [ ${ARCH} == 'darwin-x64' ]; then
     arch_gen=--arm64
     cat > x86_64-linux-aarch64.txt <<'EOF'
 [binaries]
-pkg-config = 'x86_64-apple-darwin23.5-pkg-config'
+pkg-config = 'pkg-config'
 
 [host_machine]
 system = 'darwin'
