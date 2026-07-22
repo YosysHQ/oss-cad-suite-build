@@ -316,7 +316,7 @@ def cleanBuild(arch, full):
 async def run_process(command, cwd, env):
 	# based on https://stackoverflow.com/questions/45664626/use-pythons-pty-to-create-a-live-console
 	process = await asyncio.create_subprocess_exec(*command, cwd=cwd, env=env,
-			stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE, bufsize=0)
+			stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE, bufsize=0, limit=1024 * 1024)
 	# Schedule reading from stdout and stderr as asynchronous tasks.
 	stdout_f = asyncio.ensure_future(process.stdout.readline())
 	stderr_f = asyncio.ensure_future(process.stderr.readline())
