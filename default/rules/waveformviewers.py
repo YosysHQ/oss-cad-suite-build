@@ -4,8 +4,8 @@ SourceLocation(
 	name = 'gtkwave',
 	vcs = 'git',
 	location = 'https://github.com/gtkwave/gtkwave',
-	revision = '10cfae614ed8be80b5bb64e8c2194e7dffcd297a',
-	license_file = 'LICENSE',
+	revision = 'origin/lts',
+	license_file = 'gtkwave3-gtk3/LICENSE.TXT',
 )
 
 Target(
