@@ -32,7 +32,7 @@ for bindir in bin py2bin py3bin super_prove/bin share/verilator/bin lib/ivl; do
     for binfile in $(file $bindir/* | grep ELF | grep dynamically | grep interpreter | cut -f1 -d:); do
         rel_path=$(realpath --relative-to=$bindir .)
         for lib in $(lddtree -l $binfile | tail -n +2 | grep ^/ ); do
-            cp -fL "${lib}" lib/
+            cp -fL "$lib" lib/ 2>/dev/null || true
         done
         mv $binfile libexec
         is_using_fonts=false
@@ -262,7 +262,7 @@ done
 for libdir in lib; do
     for libfile in $(find $libdir -type f | xargs file | grep ELF | grep dynamically | cut -f1 -d:); do
         for lib in $(lddtree -l $libfile | tail -n +2 | grep ^/ ); do
-            cp -fL "${lib}" lib/
+            cp -fL "${lib}" lib/ 2>/dev/null || true
         done
     done
 done
