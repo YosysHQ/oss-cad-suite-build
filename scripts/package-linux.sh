@@ -116,6 +116,8 @@ export QT_PLUGIN_PATH="\$release_topdir_abs/lib/qt6/plugins"
 export QT_LOGGING_RULES="*=false"
 unset QT_QPA_PLATFORMTHEME
 unset QT_STYLE_OVERRIDE
+unset WAYLAND_DISPLAY
+export QT_QPA_PLATFORM=xcb
 export XDG_DATA_DIRS="\$release_topdir_abs"/share
 export XDG_CONFIG_DIRS="\$release_topdir_abs"
 export XDG_CONFIG_HOME=\$HOME/.config/yosyshq
@@ -303,5 +305,7 @@ EOT
     sed -i "s,/yosyshq,\${release_topdir_abs},g" bin/iverilog-vpi
     chmod +x bin/iverilog-vpi
 fi
+
+sed -i 's|/usr/share/fontconfig/conf\.avail|../etc/fonts/conf.avail\o000\o000\o000\o000\o000\o000\o000\o000\o000|g' lib/libfontconfig.so.1
 
 chmod -R u=rwX,go=rX *

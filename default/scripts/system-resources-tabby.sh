@@ -11,6 +11,12 @@ if [ ${ARCH_BASE} == 'linux' ]; then
     cp -r /etc/fonts/.   ${OUTPUT_DIR}${INSTALL_PREFIX}/etc/fonts
     rm ${OUTPUT_DIR}${INSTALL_PREFIX}/etc/fonts/fonts.conf
     cp ${PATCHES_DIR}/fonts.conf.template ${OUTPUT_DIR}${INSTALL_PREFIX}/etc/fonts/.
+    rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/etc/fonts/conf.d
+    mkdir ${OUTPUT_DIR}${INSTALL_PREFIX}/etc/fonts/conf.d
+    for f in "${OUTPUT_DIR}${INSTALL_PREFIX}"/etc/fonts/conf.avail/*.conf; do
+        ln -sf "../conf.avail/$(basename "$f")" \
+            "${OUTPUT_DIR}${INSTALL_PREFIX}/etc/fonts/conf.d/$(basename "$f")"
+    done
     cp ${PATCHES_DIR}/cacert.pem ${OUTPUT_DIR}${INSTALL_PREFIX}/etc/.
 
     mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/lib
