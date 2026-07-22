@@ -96,7 +96,7 @@ EOT
                 rcodesign sign libexec/$(basename $binfile)
             fi
             cat >> $binfile << EOT
-export QT_PLUGIN_PATH="\$release_topdir_abs/lib/qt5/plugins"
+export QT_PLUGIN_PATH="\$release_topdir_abs/lib/qt6/plugins"
 export QT_LOGGING_RULES="*=false"
 unset QT_QPA_PLATFORMTHEME
 unset QT_STYLE_OVERRIDE
@@ -116,7 +116,7 @@ EOT
             cat >> $binfile << EOT
 unset GTK_MODULES
 unset GTK2_MODULES
-#unset GTK3_MODULES
+unset GTK3_MODULES
 export GTK_PATH="\$release_topdir_abs/lib"
 export GTK_IM_MODULE=""
 export GTK_IM_MODULE_FILE="/dev/null"
@@ -124,7 +124,7 @@ export GTK2_RC_FILES="\$release_topdir_abs/lib/gtkrc"
 export GTK_EXE_PREFIX="\$release_topdir_abs"
 export GTK_DATA_PREFIX="\$release_topdir_abs"
 export GDK_PIXBUF_MODULEDIR="\$release_topdir_abs/lib/gdk-pixbuf-2.0/loaders"
-#export GTK_THEME="Adwaita"
+export GTK_THEME="Adwaita"
 export XDG_DATA_DIRS="\$release_topdir_abs"/share
 export XDG_CONFIG_DIRS="\$release_topdir_abs"
 export XDG_CONFIG_HOME=\$HOME/.config/yosyshq
