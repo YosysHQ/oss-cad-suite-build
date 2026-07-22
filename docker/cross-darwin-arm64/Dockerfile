@@ -314,3 +314,10 @@ RUN printf '%s\n' \
     'exit 1' \
     > /opt/Qt6.10.2/bin/macdeployqt && \
     chmod +x /opt/Qt6.10.2/bin/macdeployqt
+
+COPY mpfr-4.2.2_0.darwin_21.arm64.tbz2 /tmp/.
+RUN cd / \
+  && echo "Unpack mpfr-4.2.2_0.darwin_21.arm64.tbz2" \
+  && tar xfj /tmp/mpfr-4.2.2_0.darwin_21.arm64.tbz2 \
+  && rm -rf /tmp/*
+

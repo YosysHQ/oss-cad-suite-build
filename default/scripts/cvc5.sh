@@ -1,4 +1,11 @@
 cd cvc5
+if [ ${ARCH_BASE} == 'darwin' ]; then
+sed -i \
+  -e 's/iterator operator-(difference_type p) {/iterator operator-(difference_type p) const {/' \
+  -e 's/difference_type operator-(iterator i) {/difference_type operator-(iterator i) const {/' \
+  src/expr/node_value.h
+fi
+
 cp ${PATCHES_DIR}/get-antlr-3.4 contrib/.
 mkdir -p deps/install
 cp -r ${BUILD_DIR}/libpoly/yosyshq/* deps/install/. 

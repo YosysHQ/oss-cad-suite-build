@@ -7,24 +7,65 @@ if [ ${ARCH_BASE} == 'linux' ]; then
     cp -rL /usr/lib/${CROSS_NAME}/libGLX_*.so.0 ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/.
     mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/dri
 if [ ${ARCH} == 'linux-x64' ]; then
-    cp /usr/lib/${CROSS_NAME}/dri/crocus_dri.so ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/dri/.
-    cp /usr/lib/${CROSS_NAME}/dri/i965_dri.so ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/dri/.
+    cp /usr/lib/${CROSS_NAME}/dri/libdril_dri.so ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/dri/.
+    cp /usr/lib/${CROSS_NAME}/libgallium-26.0.3-1ubuntu1.so ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/.
     pushd ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/dri
-    ln -s crocus_dri.so d3d12_dri.so
-    ln -s crocus_dri.so i915_dri.so
-    ln -s crocus_dri.so iris_dri.so
-    ln -s crocus_dri.so kms_swrast_dri.so
-    ln -s crocus_dri.so nouveau_dri.so
-    ln -s crocus_dri.so r300_dri.so
-    ln -s crocus_dri.so r600_dri.so
-    ln -s crocus_dri.so radeonsi_dri.so
-    ln -s crocus_dri.so swrast_dri.so
-    ln -s crocus_dri.so virtio_gpu_dri.so
-    ln -s crocus_dri.so vmwgfx_dri.so
-    ln -s crocus_dri.so zink_dri.so 
-    ln -s i965_dri.so nouveau_vieux_dri.so
-    ln -s i965_dri.so r200_dri.so
-    ln -s i965_dri.so radeon_dri.so 
+    ln -sf libdril_dri.so apple_dri.so
+    ln -sf libdril_dri.so armada-drm_dri.so
+    ln -sf libdril_dri.so asahi_dri.so
+    ln -sf libdril_dri.so crocus_dri.so
+    ln -sf libdril_dri.so d3d12_dri.so
+    ln -sf ../libgallium-26.0.3-1ubuntu1.so d3d12_drv_video.so
+    ln -sf libdril_dri.so exynos_dri.so
+    ln -sf libdril_dri.so gm12u320_dri.so
+    ln -sf libdril_dri.so hdlcd_dri.so
+    ln -sf libdril_dri.so hx8357d_dri.so
+    ln -sf libdril_dri.so i915_dri.so
+    ln -sf libdril_dri.so ili9163_dri.so
+    ln -sf libdril_dri.so ili9225_dri.so
+    ln -sf libdril_dri.so ili9341_dri.so
+    ln -sf libdril_dri.so ili9486_dri.so
+    ln -sf libdril_dri.so imx-dcss_dri.so
+    ln -sf libdril_dri.so imx-drm_dri.so
+    ln -sf libdril_dri.so imx-lcdif_dri.so
+    ln -sf libdril_dri.so ingenic-drm_dri.so
+    ln -sf libdril_dri.so iris_dri.so
+    ln -sf libdril_dri.so kirin_dri.so
+    ln -sf libdril_dri.so kms_swrast_dri.so
+    ln -sf libdril_dri.so komeda_dri.so
+    ln -sf libdril_dri.so mali-dp_dri.so
+    ln -sf libdril_dri.so mcde_dri.so
+    ln -sf libdril_dri.so mediatek_dri.so
+    ln -sf libdril_dri.so meson_dri.so
+    ln -sf libdril_dri.so mi0283qt_dri.so
+    ln -sf libdril_dri.so mxsfb-drm_dri.so
+    ln -sf libdril_dri.so nouveau_dri.so
+    ln -sf ../libgallium-26.0.3-1ubuntu1.so nouveau_drv_video.so
+    ln -sf libdril_dri.so panel-mipi-dbi_dri.so
+    ln -sf libdril_dri.so pl111_dri.so
+    ln -sf libdril_dri.so r300_dri.so
+    ln -sf libdril_dri.so r600_dri.so
+    ln -sf ../libgallium-26.0.3-1ubuntu1.so r600_drv_video.so
+    ln -sf libdril_dri.so radeonsi_dri.so
+    ln -sf ../libgallium-26.0.3-1ubuntu1.so radeonsi_drv_video.so
+    ln -sf libdril_dri.so rcar-du_dri.so
+    ln -sf libdril_dri.so repaper_dri.so
+    ln -sf libdril_dri.so rockchip_dri.so
+    ln -sf libdril_dri.so rzg2l-du_dri.so
+    ln -sf libdril_dri.so ssd130x_dri.so
+    ln -sf libdril_dri.so st7586_dri.so
+    ln -sf libdril_dri.so st7735r_dri.so
+    ln -sf libdril_dri.so sti_dri.so
+    ln -sf libdril_dri.so stm_dri.so
+    ln -sf libdril_dri.so sun4i-drm_dri.so
+    ln -sf libdril_dri.so swrast_dri.so
+    ln -sf libdril_dri.so udl_dri.so
+    ln -sf libdril_dri.so virtio_gpu_dri.so
+    ln -sf ../libgallium-26.0.3-1ubuntu1.so virtio_gpu_drv_video.so
+    ln -sf libdril_dri.so vkms_dri.so
+    ln -sf libdril_dri.so vmwgfx_dri.so
+    ln -sf libdril_dri.so zink_dri.so
+    ln -sf libdril_dri.so zynqmp-dpsub_dri.so
     popd
 fi
 if [ ${ARCH} == 'linux-arm64' ]; then
