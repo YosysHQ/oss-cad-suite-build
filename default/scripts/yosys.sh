@@ -5,6 +5,7 @@ if [ ${ARCH} == 'linux-x64' ]; then
 else
 	touch Configuration.cmake
 fi
+sed -i 's/${CMAKE_EXECUTABLE_SUFFIX}//g' cmake/YosysLinkTarget.cmake
 cmake -C Configuration.cmake -B build . \
 	-DCMAKE_INSTALL_PREFIX=${INSTALL_PREFIX} \
 	-DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE} \
