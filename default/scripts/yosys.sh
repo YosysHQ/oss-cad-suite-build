@@ -16,6 +16,7 @@ sed -i '/auto allEdgeLists() const { return map | std::views::values | std::view
     }
 ' libs/slang/source/analysis/ConstraintAnalysis.h 
 fi
+sed -i 's/${CMAKE_EXECUTABLE_SUFFIX}//g' cmake/YosysLinkTarget.cmake
 cmake -C Configuration.cmake -B build . \
 	-DCMAKE_INSTALL_PREFIX=${INSTALL_PREFIX} \
 	-DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE} \
