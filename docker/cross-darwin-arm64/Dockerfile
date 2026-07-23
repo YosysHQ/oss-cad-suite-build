@@ -305,6 +305,5 @@ RUN cd / \
   && tar xfj /tmp/mpfr-4.2.2_0.darwin_21.arm64.tbz2 \
   && rm -rf /tmp/*
 
-
 ENV CMAKE_POLICY_VERSION_MINIMUM=3.5
 ENV PIP_BREAK_SYSTEM_PACKAGES=1
