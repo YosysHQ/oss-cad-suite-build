@@ -137,6 +137,8 @@ RUN cd /tmp && \
     mingw64-make install && \
     rm -rf /tmp/*
 
+RUN sed -i '/#include <sha512intrin.h>/s/^/#if 0\n/; /#include <sha512intrin.h>/a #endif' /usr/lib/gcc/x86_64-w64-mingw32/15.2.1/include/immintrin.h
+
 ENV CMAKE_POLICY_VERSION_MINIMUM=3.5
 ENV PIP_BREAK_SYSTEM_PACKAGES=1
 
