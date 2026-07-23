@@ -664,7 +664,7 @@ diff -rupN --no-dereference Python-3.11.6/configure.ac Python-3.11.6-new/configu
 +    CFLAGS="$CFLAGS -DMS_WINDOWS -DMS_WIN32"
 +  ;&
 +  x86_64-*-mingw*)
-+    CFLAGS="$CFLAGS -DMS_WIN64";
++    CFLAGS="$CFLAGS -DMS_WIN64 -Wno-incompatible-pointer-types";
 +  ;;
 +  *)
 +  ;;

@@ -12,7 +12,7 @@ function Prompt {
 $env:SSL_CERT_FILE = Join-Path $env:YOSYSHQ_ROOT "etc\cacert.pem"
 $env:PATH = "$($env:YOSYSHQ_ROOT)bin;$($env:YOSYSHQ_ROOT)lib;$env:PATH"
 $env:PYTHON_EXECUTABLE = Join-Path $env:YOSYSHQ_ROOT "lib\python3.exe"
-$env:QT_PLUGIN_PATH = Join-Path $env:YOSYSHQ_ROOT "lib\qt5\plugins"
+$env:QT_PLUGIN_PATH = Join-Path $env:YOSYSHQ_ROOT "lib\qt6\plugins"
 $env:QT_LOGGING_RULES = "*=false"
 $env:GTK_EXE_PREFIX = $env:YOSYSHQ_ROOT
 $env:GTK_DATA_PREFIX = $env:YOSYSHQ_ROOT

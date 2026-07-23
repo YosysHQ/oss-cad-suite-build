@@ -112,7 +112,7 @@ if [ ${ARCH_BASE} == 'windows' ]; then
     rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/tcl8.6/tclConfig.sh
     rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/tk8.6/tkConfig.sh
 
-    cp -rv /usr/x86_64-w64-mingw32/sys-root/mingw/lib/qt5/plugins/* ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/qt5/plugins/.
+    cp -rv /usr/x86_64-w64-mingw32/sys-root/mingw/lib/qt6/plugins/* ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/qt6/plugins/.
 
 	mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/lib
     cp -rf /usr/x86_64-w64-mingw32/sys-root/mingw/lib/gdk-pixbuf-2.0 ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/.
