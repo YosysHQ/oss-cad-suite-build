@@ -1,0 +1,11 @@
+prefix=/usr/x86_64-w64-mingw32/sys-root/mingw
+exec_prefix=/usr/x86_64-w64-mingw32/sys-root/mingw
+libdir=/usr/x86_64-w64-mingw32/sys-root/mingw/lib
+includedir=/usr/x86_64-w64-mingw32/sys-root/mingw/include
+
+Name: Readline
+Description: Gnu Readline library for command line editing
+URL: http://tiswww.cwru.edu/php/chet/readline/rltop.html
+Version: 8.3
+Libs: -L${libdir} -lreadline
+Cflags: -I${includedir}
