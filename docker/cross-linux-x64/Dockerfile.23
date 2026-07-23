@@ -1,7 +1,0 @@
-FROM yosyshq/cross-linux-x64:2.2
-
-RUN RUSTUP_HOME=/opt/rust/rustup CARGO_HOME=/opt/rust/cargo rustup toolchain install nightly
-RUN RUSTUP_HOME=/opt/rust/rustup CARGO_HOME=/opt/rust/cargo rustup override set nightly
-RUN apt -y update ;\
-    apt -y install python3-pip libmpfr-dev ninja-build; \
-    pip install meson

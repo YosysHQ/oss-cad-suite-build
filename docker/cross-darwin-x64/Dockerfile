@@ -1,7 +1,6 @@
-FROM yosyshq/cross-linux-x64:4.0 AS builder
+FROM yosyshq/cross-base:4.0 AS builder
 
 RUN cd /tmp \
-    && RUSTUP_HOME=/opt/rust/rustup CARGO_HOME=/opt/rust/cargo rustup update \
     && cargo install --git https://github.com/indygreg/apple-platform-rs --branch main --bin rcodesign apple-codesign
 RUN cd /tmp \
     && git clone https://github.com/mmicko/macdylibbundler \
@@ -10,6 +9,11 @@ RUN cd /tmp \
     && make 
 
 FROM yosyshq/cross-base:4.0
+
+COPY --from=builder /tmp/macdylibbundler/dylibbundler /usr/local/bin/dylibbundler
+COPY --from=builder /opt/rust/cargo/bin/rcodesign /usr/local/bin/rcodesign
+RUN chmod +x /usr/local/bin/dylibbundler
+RUN chmod +x /usr/local/bin/rcodesign
 
 RUN set -e -x ;\
     apt -y update ;\
@@ -57,10 +61,9 @@ RUN set -eux \
     && echo "${OSX_SDK_SUM}  ./tarballs/MacOSX${OSX_SDK_VERSION}.sdk.tar.xz" \
         | sha256sum -c - \
     && env UNATTENDED=yes OSX_VERSION_MIN=${OSX_VERSION_MIN} ./build.sh \
-    && rm -rf *~ taballs *.tar.xz \
+    && find /usr/local/osxcross -mindepth 1 -maxdepth 1 ! -name target -exec rm -rf {} + \
     && rm -rf /tmp/* \
     && true
-
 
 ENV CROSS_NAME=x86_64-apple-darwin25.5
 
@@ -72,14 +75,9 @@ ENV AS=/usr/local/osxcross/target/bin/${CROSS_NAME}-as \
     CXX=/usr/local/osxcross/target/bin/${CROSS_NAME}-clang++ \
     LD=/usr/local/osxcross/target/bin/${CROSS_NAME}-ld \ 
     RANLIB=/usr/local/osxcross/target/bin/${CROSS_NAME}-ranlib \
-    STRIP=/usr/local/osxcross/target/bin/${CROSS_NAME}-strip
-
-ENV PATH=/usr/local/osxcross/target/bin:$PATH
-
-COPY --from=builder /tmp/macdylibbundler/dylibbundler /usr/local/bin/dylibbundler
-COPY --from=builder /root/.cargo/bin/rcodesign /usr/local/bin/rcodesign
-RUN chmod +x /usr/local/bin/dylibbundler
-RUN chmod +x /usr/local/bin/rcodesign
+    STRIP=/usr/local/osxcross/target/bin/${CROSS_NAME}-strip \
+    PKG_CONFIG_PATH=/opt/local/lib/pkgconfig \
+    PATH=/usr/local/osxcross/target/bin:$PATH
 
 RUN cp /usr/local/osxcross/target/bin/${CROSS_NAME}-otool /usr/local/osxcross/target/bin/otool \
   && cp /usr/local/osxcross/target/bin/${CROSS_NAME}-install_name_tool /usr/local/osxcross/target/bin/install_name_tool \
@@ -89,15 +87,12 @@ RUN cp /usr/local/osxcross/target/bin/${CROSS_NAME}-otool /usr/local/osxcross/ta
 COPY uname /usr/local/osxcross/target/bin/
 RUN chmod +x /usr/local/osxcross/target/bin/uname
 
-RUN rustup target add x86_64-apple-darwin && \
+RUN rustup target add --toolchain stable x86_64-apple-darwin && \
+    rustup target add --toolchain nightly x86_64-apple-darwin && \
     mkdir -p /.cargo && \
     echo "[target.x86_64-apple-darwin]" > /.cargo/config && \
     echo "linker = \"x86_64-apple-darwin25.5-clang\"" >> /.cargo/config && \
     echo "ar = \"x86_64-apple-darwin25.5-ar\"" >> /.cargo/config
-
-RUN RUSTUP_HOME=/opt/rust/rustup CARGO_HOME=/opt/rust/cargo rustup toolchain install nightly
-RUN RUSTUP_HOME=/opt/rust/rustup CARGO_HOME=/opt/rust/cargo rustup override set nightly
-RUN RUSTUP_HOME=/opt/rust/rustup CARGO_HOME=/opt/rust/cargo rustup target add x86_64-apple-darwin
 
 COPY Toolchain.cmake ${CROSS_PREFIX}/
 
@@ -108,10 +103,6 @@ ENV CMAKE_TOOLCHAIN_FILE=${CROSS_PREFIX}/Toolchain.cmake
 ENV OSXCROSS_PKG_CONFIG_USE_NATIVE_VARIABLES=1
 
 ENV OSXCROSS_MP_INC=1 
-
-ENV PKG_CONFIG_PATH=/opt/local/lib/pkgconfig
-
-ENV CMAKE_POLICY_VERSION_MINIMUM=3.5
 
 RUN cd /opt \
   && wget https://github.com/mmicko/macos-resources/releases/download/v4/Qt6.10.2-x86_64.tar.gz \
@@ -299,10 +290,11 @@ RUN cd /opt \
 #
 #COPY gschemas.compiled /opt/local/share/glib-2.0/schemas/
 #
+COPY mpfr-4.2.2_0.darwin_21.x86_64.tbz2 /tmp/.
+RUN cd / \
+  && echo "Unpack mpfr-4.2.2_0.darwin_21.x86_64.tbz2" \
+  && tar xfj /tmp/mpfr-4.2.2_0.darwin_21.x86_64.tbz2 \
+  && rm -rf /tmp/*
 
-RUN printf '%s\n' \
-    '#!/bin/sh' \
-    'echo "macdeployqt not available in this Qt installation"' \
-    'exit 1' \
-    > /opt/Qt6.10.2/bin/macdeployqt && \
-    chmod +x /opt/Qt6.10.2/bin/macdeployqt
+ENV CMAKE_POLICY_VERSION_MINIMUM=3.5
+ENV PIP_BREAK_SYSTEM_PACKAGES=1

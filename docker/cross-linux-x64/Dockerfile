@@ -27,6 +27,10 @@ RUN set -e -x ;\
         libftdi1-dev \
         libgmp-dev \
         libgtk-3-dev \
+        libjudy-dev \
+        libgirepository1.0-dev \
+        libjson-glib-dev \
+        desktop-file-utils \
         liblzma-dev \
         libreadline-dev \
         libsqlite3-dev \
@@ -39,9 +43,11 @@ RUN set -e -x ;\
         libcurl4-openssl-dev \
         libbz2-dev \
         libltdl-dev \
+        libmpfr-dev \
         libedit-dev; \
     apt -y autoremove ;\
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/* ;\
+    ln -s /lib64/ld-linux-x86-64.so.2 /lib64/ld-lsb-x86-64.so.3
 
 ENV AS=/usr/bin/${CROSS_NAME}-as \
     AR=/usr/bin/${CROSS_NAME}-ar \
@@ -51,27 +57,5 @@ ENV AS=/usr/bin/${CROSS_NAME}-as \
     LD=/usr/bin/${CROSS_NAME}-ld \
     STRIP=/usr/bin/${CROSS_NAME}-strip
 
-#RUN wget http://archive.ubuntu.com/ubuntu/pool/main/g/gobject-introspection/libgirepository1.0-dev_1.72.0-1_amd64.deb && \
-#    dpkg-deb -xv libgirepository1.0-dev_1.72.0-1_amd64.deb / && \
-#    rm -rf libgirepository1.0-dev_1.72.0-1_amd64.deb && \
-#    wget http://archive.ubuntu.com/ubuntu/pool/main/g/gobject-introspection/gir1.2-glib-2.0_1.72.0-1_amd64.deb && \
-#    dpkg-deb -xv gir1.2-glib-2.0_1.72.0-1_amd64.deb / && \
-#    rm -rf gir1.2-glib-2.0_1.72.0-1_amd64.deb
-#
-RUN ln -s /lib64/ld-linux-x86-64.so.2 /lib64/ld-lsb-x86-64.so.3
-
-RUN RUSTUP_HOME=/opt/rust/rustup CARGO_HOME=/opt/rust/cargo rustup toolchain install nightly
-RUN RUSTUP_HOME=/opt/rust/rustup CARGO_HOME=/opt/rust/cargo rustup override set nightly
-#
-#RUN apt purge --auto-remove cmake -y ;\
-#    wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | gpg --dearmor - | tee /usr/share/keyrings/kitware-archive-keyring.gpg >/dev/null ;\
-#    echo 'deb [signed-by=/usr/share/keyrings/kitware-archive-keyring.gpg] https://apt.kitware.com/ubuntu/ jammy main' | tee /etc/apt/sources.list.d/kitware.list >/dev/null ;\
-#    apt-get update -y ;\
-#    apt-get install cmake -y;\
-#    apt -y autoremove ;\
-#    rm -rf /var/lib/apt/lists/*
-
 ENV CMAKE_POLICY_VERSION_MINIMUM=3.5
 ENV PIP_BREAK_SYSTEM_PACKAGES=1
-RUN apt update && apt -y install python3-pip libmpfr-dev pandoc \
-        libgtk-4-dev libjudy-dev libgirepository1.0-dev libjson-glib-dev desktop-file-utils

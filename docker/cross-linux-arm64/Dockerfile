@@ -5,13 +5,6 @@ ENV CROSS_NAME=aarch64-linux-gnu
 ENV CROSS_PREFIX=/opt/${CROSS_NAME}
 
 RUN set -e -x ;\
-    apt -y update ;\
-    apt -y upgrade ;\
-    apt -y install \
-        gcc-aarch64-linux-gnu \
-        g++-aarch64-linux-gnu \
-        gnat-16-aarch64-linux-gnu \
-        libc6-dev-arm64-cross; \
     rm -f /etc/apt/sources.list.d/ubuntu.sources; \
     echo 'deb [arch=amd64] http://archive.ubuntu.com/ubuntu/ resolute main multiverse restricted universe' > /etc/apt/sources.list ; \
     echo 'deb [arch=amd64] http://archive.ubuntu.com/ubuntu/ resolute-updates main multiverse restricted universe' >> /etc/apt/sources.list ; \
@@ -23,6 +16,10 @@ RUN set -e -x ;\
     apt -y update ;\
     apt -y upgrade ;\
     apt -y install \
+        gcc-aarch64-linux-gnu \
+        g++-aarch64-linux-gnu \
+        gnat-16-aarch64-linux-gnu \
+        libc6-dev-arm64-cross \
         libboost-dev:arm64 \
         libboost-filesystem-dev:arm64 \
         libboost-thread-dev:arm64 \
@@ -33,7 +30,6 @@ RUN set -e -x ;\
         libftdi1-dev:arm64 \
         libgmp-dev:arm64 \
         libgtk-3-dev:arm64 \
-        libgtk-4-dev:arm64 \
         libjudy-dev:arm64 \
         libgirepository1.0-dev:arm64 \
         libjson-glib-dev:arm64 \
@@ -62,15 +58,15 @@ ENV AS=/usr/bin/${CROSS_NAME}-as \
     CPP=/usr/bin/${CROSS_NAME}-cpp \
     CXX=/usr/bin/${CROSS_NAME}-g++ \
     LD=/usr/bin/${CROSS_NAME}-ld \
-    STRIP=/usr/bin/${CROSS_NAME}-strip
+    STRIP=/usr/bin/${CROSS_NAME}-strip \
+    PKG_CONFIG_PATH=/usr/lib/aarch64-linux-gnu/pkgconfig
 
 COPY Toolchain.cmake ${CROSS_PREFIX}/
 
 ENV CMAKE_TOOLCHAIN_FILE=${CROSS_PREFIX}/Toolchain.cmake
 
-ENV PKG_CONFIG_PATH=/usr/lib/aarch64-linux-gnu/pkgconfig
-
-RUN rustup target add aarch64-unknown-linux-gnu && \
+RUN rustup target add --toolchain stable aarch64-unknown-linux-gnu && \
+    rustup target add --toolchain nightly aarch64-unknown-linux-gnu && \
     mkdir -p /.cargo && \
     echo "[target.aarch64-unknown-linux-gnu]" > /.cargo/config && \
     echo "linker = \"aarch64-linux-gnu-gcc\"" >> /.cargo/config
@@ -82,8 +78,5 @@ RUN rustup target add aarch64-unknown-linux-gnu && \
 #    dpkg-deb -xv gir1.2-glib-2.0_1.72.0-1_arm64.deb / && \
 #    rm -rf gir1.2-glib-2.0_1.72.0-1_arm64.deb
 
-RUN RUSTUP_HOME=/opt/rust/rustup CARGO_HOME=/opt/rust/cargo rustup toolchain install nightly
-RUN RUSTUP_HOME=/opt/rust/rustup CARGO_HOME=/opt/rust/cargo rustup override set nightly
-RUN RUSTUP_HOME=/opt/rust/rustup CARGO_HOME=/opt/rust/cargo rustup target add aarch64-unknown-linux-gnu
 ENV CMAKE_POLICY_VERSION_MINIMUM=3.5
 ENV PIP_BREAK_SYSTEM_PACKAGES=1
