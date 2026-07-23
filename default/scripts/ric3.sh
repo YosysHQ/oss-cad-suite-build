@@ -1,5 +1,5 @@
 cd ric3
-
+export RUSTUP_TOOLCHAIN=nightly-2026-01-01
 sed -i 's/\.env("CXX", "clang++")/\/\/.env("CXX", "clang++")/g' deps/cadical-rs/build.rs
 sed -i 's/Config::new(bindings)\.build();/Config::new(bindings).define("CMAKE_TRY_COMPILE_TARGET_TYPE", "STATIC_LIBRARY").build();/g' deps/cadical-rs/build.rs
 sed -i 's/\.env("CC", "clang")/\/\/.env("CC", "clang")/g' deps/kissat-rs/build.rs 
@@ -31,10 +31,11 @@ sed -i 's/>=4\.2\.1/>=4.0/g' src/meson.build
 arch_gen=
 # Build Bitwuzla
 if [ ${ARCH} == 'darwin-arm64' ]; then
+    rustup target add aarch64-apple-darwin
     arch_gen=--arm64
     cat > x86_64-linux-aarch64.txt <<'EOF'
 [binaries]
-pkg-config = 'aarch64-apple-darwin23.5-pkg-config'
+pkg-config = 'aarch64-apple-darwin25.5-pkg-config'
 
 [host_machine]
 system = 'darwin'
@@ -48,10 +49,11 @@ EOF
 fi
 
 if [ ${ARCH} == 'darwin-x64' ]; then
+    rustup target add x86_64-apple-darwin
     arch_gen=--arm64
     cat > x86_64-linux-aarch64.txt <<'EOF'
 [binaries]
-pkg-config = 'x86_64-apple-darwin23.5-pkg-config'
+pkg-config = 'x86_64-apple-darwin25.5-pkg-config'
 
 [host_machine]
 system = 'darwin'
@@ -65,6 +67,7 @@ EOF
 fi
 
 if [ ${ARCH} == 'linux-arm64' ]; then
+    rustup target add aarch64-unknown-linux-gnu
     arch_gen=--arm64
     cat > x86_64-linux-aarch64.txt <<'EOF'
 [binaries]
