@@ -153,6 +153,7 @@ export LC_ALL="C"
 export GDK_PIXBUF_MODULE_FILE="\$XDG_CACHE_HOME/loaders.cache"
 mkdir -p \$XDG_CONFIG_HOME \$XDG_CACHE_HOME \$XDG_DATA_HOME
 "\$release_topdir_abs"/lib/$ldlinuxname --inhibit-cache --inhibit-rpath "" --library-path "\$release_topdir_abs"/lib "\$release_topdir_abs"/libexec/gdk-pixbuf-query-loaders --update-cache
+mkdir -p "\$XDG_DATA_HOME/glycin-loaders/2+/conf.d"; for f in "\$release_topdir_abs"/share/glycin-loaders/2+/conf.d/*.conf; do sed "s|/usr|\$release_topdir_abs|g" "\$f" >| "\$XDG_DATA_HOME/glycin-loaders/2+/conf.d/\$(basename "\$f")"; done
 EOT
         fi
 
@@ -238,6 +239,7 @@ mkdir -p \$XDG_CONFIG_HOME \$XDG_CACHE_HOME \$XDG_DATA_HOME
 "\$release_topdir_abs"/lib/$ldlinuxname --inhibit-cache --inhibit-rpath "" --library-path "\$release_topdir_abs"/lib "\$release_topdir_abs"/libexec/gdk-pixbuf-query-loaders --update-cache
 export LC_ALL="C"
 export GI_TYPELIB_PATH="\$release_topdir_abs/lib/girepository-1.0"
+mkdir -p "\$XDG_DATA_HOME/glycin-loaders/2+/conf.d"; for f in "\$release_topdir_abs"/share/glycin-loaders/2+/conf.d/*.conf; do sed "s|/usr|\$release_topdir_abs|g" "\$f" >| "\$XDG_DATA_HOME/glycin-loaders/2+/conf.d/\$(basename "\$f")"; done
 EOT
         fi
         if $is_using_fonts; then
