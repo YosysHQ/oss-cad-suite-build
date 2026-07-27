@@ -32,8 +32,13 @@ if [ ${ARCH_BASE} == 'linux' ]; then
     mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/libexec/glycin-loaders/2+
     cp /usr/libexec/glycin-loaders/2+/* ${OUTPUT_DIR}${INSTALL_PREFIX}/libexec/glycin-loaders/2+/.
     mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/share/glycin-loaders/2+/conf.d
-    cp /usr/share/glycin-loaders/2+/conf.d/* ${OUTPUT_DIR}${INSTALL_PREFIX}/share/glycin-loaders/2+/conf.d/.
-    cp /usr/bin/bwrap ${OUTPUT_DIR}${INSTALL_PREFIX}/bin/.
+    cp /usr/share/glycin-loaders/2+/conf.d/* ${OUTPUT_DIR}${INSTALL_PREFIX}/share/glycin-loaders/2+/conf.d/.   
+    cat > ${OUTPUT_DIR}${INSTALL_PREFIX}/bin/bwrap <<'EOF'
+#!/bin/sh
+echo "No permissions to create a new namespace" >&2
+exit 1
+EOF
+    chmod +x ${OUTPUT_DIR}${INSTALL_PREFIX}/bin/bwrap
 
     ## GTK3 resources
     mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/share/glib-2.0

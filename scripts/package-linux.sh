@@ -28,7 +28,7 @@ preload_tools=(
     "bin/sby-gui"
 )
 
-for bindir in bin py2bin py3bin super_prove/bin share/verilator/bin lib/ivl; do
+for bindir in bin py2bin py3bin super_prove/bin share/verilator/bin lib/ivl libexec/glycin-loaders/2+; do
     for binfile in $(file $bindir/* | grep ELF | grep dynamically | grep interpreter | cut -f1 -d:); do
         rel_path=$(realpath --relative-to=$bindir .)
         for lib in $(lddtree -l $binfile | tail -n +2 | grep ^/ ); do
