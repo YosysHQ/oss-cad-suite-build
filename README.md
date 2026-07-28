@@ -9,7 +9,7 @@
 
 ## Important
 >[!WARNING]
->Base images for building various releases are update 2026-07-28, if you experience any new problem please create an issue
+>Base images for building various releases are updated 2026-07-28, if you experience any new problem please create an issue
 >Release before changes is [here](https://github.com/YosysHQ/oss-cad-suite-build/releases/tag/2026-07-27) in case you need fast solution.
 
 > [!IMPORTANT]  
