@@ -270,26 +270,30 @@ RUN cd /opt \
   && cp /opt/local/lib/pkgconfig/gtk-mac-integration-gtk3.pc /opt/local/lib/pkgconfig/gtk-mac-integration.pc
 
 # Install just g-ir-compiler, not using apt since it adds lots more
-#RUN wget http://archive.ubuntu.com/ubuntu/pool/main/g/gobject-introspection/libgirepository-1.0-1_1.72.0-1_amd64.deb && \
-#    dpkg-deb -xv libgirepository-1.0-1_1.72.0-1_amd64.deb / && \
-#    rm -rf libgirepository-1.0-1_1.72.0-1_amd64.deb && \
-#    wget http://archive.ubuntu.com/ubuntu/pool/main/g/gobject-introspection/gobject-introspection_1.72.0-1_amd64.deb && \
-#    dpkg-deb -xv gobject-introspection_1.72.0-1_amd64.deb / && \
-#    rm -rf gobject-introspection_1.72.0-1_amd64.deb
-#
-#RUN cd /opt/local/share/gir-1.0 &&\
-#    for i in *.gir; do  \
-#        sed -i 's|/opt/local/lib/||g' $i ; \
-#        sed -i 's|./gdk-pixbuf/||g' $i ; \
-#    done && \
-#    for i in *.gir; do  \
-#        echo $i ; \ 
-#        filename="${i%.*}" ; \
-#        g-ir-compiler $i -o /opt/local/lib/girepository-1.0/$filename.typelib --includedir /opt/local/share/gir-1.0 ; \
-#    done
-#
-#COPY gschemas.compiled /opt/local/share/glib-2.0/schemas/
-#
+RUN cd /tmp && \
+    wget http://archive.ubuntu.com/ubuntu/pool/main/g/gobject-introspection/libgirepository-1.0-1_1.86.0-6build1_amd64.deb && \
+    dpkg-deb -xv libgirepository-1.0-1_1.86.0-6build1_amd64.deb / && \
+    rm -rf libgirepository-1.0-1_1.86.0-6build1_amd64.deb && \
+    wget http://archive.ubuntu.com/ubuntu/pool/main/g/gobject-introspection/gobject-introspection_1.86.0-6build1_amd64.deb && \
+    dpkg-deb -xv gobject-introspection_1.86.0-6build1_amd64.deb / && \
+    rm -rf gobject-introspection_1.86.0-6build1_amd64.deb && \
+    wget http://archive.ubuntu.com/ubuntu/pool/main/g/gobject-introspection/gobject-introspection-bin_1.86.0-6build1_amd64.deb && \
+    dpkg-deb -xv gobject-introspection-bin_1.86.0-6build1_amd64.deb / && \
+    rm -rf gobject-introspection-bin_1.86.0-6build1_amd64.deb 
+
+RUN cd /opt/local/share/gir-1.0 &&\
+    for i in *.gir; do  \
+        sed -i 's|/opt/local/lib/||g' $i ; \
+        sed -i 's|./gdk-pixbuf/||g' $i ; \
+    done && \
+    for i in *.gir; do  \
+        echo $i ; \ 
+        filename="${i%.*}" ; \
+        g-ir-compiler $i -o /opt/local/lib/girepository-1.0/$filename.typelib --includedir /opt/local/share/gir-1.0 ; \
+    done
+
+COPY gschemas.compiled /opt/local/share/glib-2.0/schemas/
+
 COPY mpfr-4.2.2_0.darwin_21.x86_64.tbz2 /tmp/.
 RUN cd / \
   && echo "Unpack mpfr-4.2.2_0.darwin_21.x86_64.tbz2" \

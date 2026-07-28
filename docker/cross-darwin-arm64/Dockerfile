@@ -252,7 +252,7 @@ RUN cd /opt \
   && ln -s /opt/local /usr/local/osxcross/target/macports/pkgs/opt \
   && cp /opt/local/lib/pkgconfig/gtk-mac-integration-gtk3.pc /opt/local/lib/pkgconfig/gtk-mac-integration.pc
 
-#
+
 # Install just g-ir-compiler, not using apt since it adds lots more
 RUN cd /tmp && \
     wget http://archive.ubuntu.com/ubuntu/pool/main/g/gobject-introspection/libgirepository-1.0-1_1.86.0-6build1_amd64.deb && \
