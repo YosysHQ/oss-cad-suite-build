@@ -13,11 +13,11 @@ jobs:
 
     steps:
       - name: Get latest sby sources
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: YosysHQ/sby
       - name: Setup test environment
-        uses: YosysHQ/setup-oss-cad-suite@v3
+        uses: YosysHQ/setup-oss-cad-suite@v4
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           python-override: true
