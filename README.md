@@ -7,6 +7,18 @@
 [![linux-arm64](https://github.com/YosysHQ/oss-cad-suite-build/actions/workflows/linux-arm64.yml/badge.svg)](https://github.com/YosysHQ/oss-cad-suite-build/releases/latest)
 [![darwin-arm64](https://github.com/YosysHQ/oss-cad-suite-build/actions/workflows/darwin-arm64.yml/badge.svg)](https://github.com/YosysHQ/oss-cad-suite-build/releases/latest)
 
+## Important
+>[!WARNING]
+>Base images for building various releases are update 2026-07-28, if you experience any new problem please create an issue
+>Release before changes is [here](https://github.com/YosysHQ/oss-cad-suite-build/releases/tag/2026-07-27) in case you need fast solution.
+
+> [!IMPORTANT]  
+> Since Apple is done with support of Intel based machines, we will stop delivering **darwin-x64** soon.
+
+> [!TIP]
+> For best experience on Windows use WSL and linux-x64 version on it.
+> Follow instructions [here](https://learn.microsoft.com/en-us/windows/wsl/install) on how to setup WSL.
+
 ## Introduction
 
 OSS CAD Suite is a binary software distribution for a number of [open source software](https://en.wikipedia.org/wiki/Open-source_software) used in digital logic design. 
