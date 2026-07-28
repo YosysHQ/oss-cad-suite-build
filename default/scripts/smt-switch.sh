@@ -2,6 +2,7 @@ cd smt-switch
 sed -i -re 's,target_link_libraries\(smt-switch-btor smt-switch\),target_link_libraries\(smt-switch-btor smt-switch\)\ntarget_link_libraries(smt-switch-btor \"\$\{BTOR_HOME\}/deps/lingeling/build/liblgl.a\"),g' btor/CMakeLists.txt
 sed -i -re 's,cmake \"\$root_dir\" \$cmake_opts,cmake \"\$root_dir\" \$cmake_opts -DCMAKE_TOOLCHAIN_FILE=\$\{CMAKE_TOOLCHAIN_FILE\},g' configure.sh
 sed -i 's,add_subdirectory(tests),#add_subdirectory(tests),g' CMakeLists.txt 
+sed -i '1i#include <cstdint>' include/ops.h
 if [ ${ARCH_BASE} == 'windows' ]; then
     sed -i 's,#include <string>,#include <string>\n#include <cstdint>,g' include/ops.h
     patch -p1 < ${PATCHES_DIR}/smt-switch-win32.diff
@@ -14,8 +15,12 @@ if [ ${ARCH_BASE} == 'windows' ]; then
 fi
 if [ ${ARCH_BASE} == 'darwin' ]; then
     sed -i -re 's,linux,l1nux,g' scripts/repack-static-lib.sh 
-    sed -i -re 's,darwin,linux,g' scripts/repack-static-lib.sh 
-    sed -i -re 's,libtool,x86_64-apple-darwin23.5-libtool,g' scripts/repack-static-lib.sh 
+    sed -i -re 's,darwin,linux,g' scripts/repack-static-lib.sh
+if [ ${ARCH} == 'darwin-arm64' ]; then 
+    sed -i -re 's,libtool,arm64-apple-darwin25.5-libtool,g' scripts/repack-static-lib.sh 
+else
+    sed -i -re 's,libtool,x86_64-apple-darwin25.5-libtool,g' scripts/repack-static-lib.sh 
+fi
 fi
 ./configure.sh --cvc5 --cvc5-home=${BUILD_DIR}/cvc5/dev --btor-home=${BUILD_DIR}/boolector/dev --prefix=${INSTALL_PREFIX} --static --smtlib-reader
 cd build

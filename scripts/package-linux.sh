@@ -28,11 +28,11 @@ preload_tools=(
     "bin/sby-gui"
 )
 
-for bindir in bin py2bin py3bin super_prove/bin share/verilator/bin lib/ivl; do
+for bindir in bin py2bin py3bin super_prove/bin share/verilator/bin lib/ivl libexec/glycin-loaders/2+; do
     for binfile in $(file $bindir/* | grep ELF | grep dynamically | grep interpreter | cut -f1 -d:); do
         rel_path=$(realpath --relative-to=$bindir .)
         for lib in $(lddtree -l $binfile | tail -n +2 | grep ^/ ); do
-            cp -i "${lib}" lib/
+            cp -nL "$lib" lib/
         done
         mv $binfile libexec
         is_using_fonts=false
@@ -108,14 +108,16 @@ EOT
 exec "\$release_topdir_abs"/libexec/$(basename $binfile) "\$@"
 EOT
         fi
-        if [ ! -z "$(lddtree -l libexec/$(basename $binfile) | grep Qt5)" ]; then
+        if [ ! -z "$(lddtree -l libexec/$(basename $binfile) | grep Qt6)" ]; then
             is_using_fonts=true
             cat >> $binfile << EOT
 export LIBGL_DRIVERS_PATH="\$release_topdir_abs/lib/dri"
-export QT_PLUGIN_PATH="\$release_topdir_abs/lib/qt5/plugins"
+export QT_PLUGIN_PATH="\$release_topdir_abs/lib/qt6/plugins"
 export QT_LOGGING_RULES="*=false"
 unset QT_QPA_PLATFORMTHEME
 unset QT_STYLE_OVERRIDE
+unset WAYLAND_DISPLAY
+export QT_QPA_PLATFORM=xcb
 export XDG_DATA_DIRS="\$release_topdir_abs"/share
 export XDG_CONFIG_DIRS="\$release_topdir_abs"
 export XDG_CONFIG_HOME=\$HOME/.config/yosyshq
@@ -151,6 +153,7 @@ export LC_ALL="C"
 export GDK_PIXBUF_MODULE_FILE="\$XDG_CACHE_HOME/loaders.cache"
 mkdir -p \$XDG_CONFIG_HOME \$XDG_CACHE_HOME \$XDG_DATA_HOME
 "\$release_topdir_abs"/lib/$ldlinuxname --inhibit-cache --inhibit-rpath "" --library-path "\$release_topdir_abs"/lib "\$release_topdir_abs"/libexec/gdk-pixbuf-query-loaders --update-cache
+mkdir -p "\$XDG_DATA_HOME/glycin-loaders/2+/conf.d"; for f in "\$release_topdir_abs"/share/glycin-loaders/2+/conf.d/*.conf; do sed "s|/usr|\$release_topdir_abs|g" "\$f" >| "\$XDG_DATA_HOME/glycin-loaders/2+/conf.d/\$(basename "\$f")"; done
 EOT
         fi
 
@@ -236,6 +239,7 @@ mkdir -p \$XDG_CONFIG_HOME \$XDG_CACHE_HOME \$XDG_DATA_HOME
 "\$release_topdir_abs"/lib/$ldlinuxname --inhibit-cache --inhibit-rpath "" --library-path "\$release_topdir_abs"/lib "\$release_topdir_abs"/libexec/gdk-pixbuf-query-loaders --update-cache
 export LC_ALL="C"
 export GI_TYPELIB_PATH="\$release_topdir_abs/lib/girepository-1.0"
+mkdir -p "\$XDG_DATA_HOME/glycin-loaders/2+/conf.d"; for f in "\$release_topdir_abs"/share/glycin-loaders/2+/conf.d/*.conf; do sed "s|/usr|\$release_topdir_abs|g" "\$f" >| "\$XDG_DATA_HOME/glycin-loaders/2+/conf.d/\$(basename "\$f")"; done
 EOT
         fi
         if $is_using_fonts; then
@@ -260,7 +264,7 @@ done
 for libdir in lib; do
     for libfile in $(find $libdir -type f | xargs file | grep ELF | grep dynamically | cut -f1 -d:); do
         for lib in $(lddtree -l $libfile | tail -n +2 | grep ^/ ); do
-            cp -i "${lib}" lib/
+            cp -nL "${lib}" lib/
         done
     done
 done
@@ -303,5 +307,7 @@ EOT
     sed -i "s,/yosyshq,\${release_topdir_abs},g" bin/iverilog-vpi
     chmod +x bin/iverilog-vpi
 fi
+
+sed -i 's|/usr/share/fontconfig/conf\.avail|../etc/fonts/conf.avail\o000\o000\o000\o000\o000\o000\o000\o000\o000|g' lib/libfontconfig.so.1
 
 chmod -R u=rwX,go=rX *

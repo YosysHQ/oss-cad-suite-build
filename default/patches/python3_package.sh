@@ -33,20 +33,6 @@ function python3_package_install {
     fi
 }
 
-function python3_package_install_numpy {
-    install_cmd="setup.py install --prefix=${OUTPUT_DIR}${INSTALL_PREFIX} $1"
-    if [ ${ARCH} == 'linux-arm64' ]; then
-        _PYTHON_HOST_PLATFORM=linux-aarch64 _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__linux_aarch64-linux-gnu ${PYTHON3_NATIVE} ${install_cmd}
-    elif [ ${ARCH} == 'linux-x64' ]; then
-        _PYTHON_HOST_PLATFORM=linux-x64 _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__linux_x86_64-linux-gnu ${PYTHON3_NATIVE} ${install_cmd}
-    elif [ ${ARCH} == 'windows-x64' ]; then
-        _PYTHON_HOST_PLATFORM=mingw-x64 _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__win32_ ${PYTHON3_NATIVE} setup.py build --cpu-dispatch="max -avx512f -avx512cd -avx512_knl -avx512_knm -avx512_skx -avx512_clx -avx512_cnl -avx512_icl" install --prefix=${OUTPUT_DIR}${INSTALL_PREFIX} $1
-    elif [ ${ARCH} == 'darwin-x64' ]; then        
-        _PYTHON_HOST_PLATFORM=darwin-x64 _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__darwin_darwin ${PYTHON3_NATIVE} ${install_cmd}
-    elif [ ${ARCH} == 'darwin-arm64' ]; then        
-        _PYTHON_HOST_PLATFORM=darwin-aarch64 _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata__darwin_darwin ${PYTHON3_NATIVE} ${install_cmd}
-    fi
-}
 function python3_package_develop {
     install_cmd="setup.py develop --prefix=${OUTPUT_DIR}${INSTALL_PREFIX} $1"
     if [ ${ARCH} == 'linux-arm64' ]; then

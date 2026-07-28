@@ -7,7 +7,9 @@ cd PyGObject-3.46.0
 python3_package_install
 python3_package_pth "xdot"
 mv ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/python3.11/site-packages/bin ${OUTPUT_DIR}${INSTALL_PREFIX}
-if [ ${ARCH_BASE} == 'linux' ]; then
+if [ ${ARCH} == 'linux-arm64' ]; then
+	cp -r /usr/lib/aarch64-linux-gnu/girepository-1.0 ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/.      
+elif [ ${ARCH} == 'linux-x64' ]; then
 	cp -r /usr/lib/x86_64-linux-gnu/girepository-1.0 ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/.
 elif [ ${ARCH_BASE} == 'darwin' ]; then
 	cp -r /opt/local/lib/girepository-1.0 ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/.

@@ -1,7 +1,6 @@
-FROM yosyshq/cross-linux-x64:2.0 AS builder
+FROM yosyshq/cross-base:4.0 AS builder
 
 RUN cd /tmp \
-    && RUSTUP_HOME=/opt/rust/rustup CARGO_HOME=/opt/rust/cargo rustup update \
     && cargo install --git https://github.com/indygreg/apple-platform-rs --branch main --bin rcodesign apple-codesign
 RUN cd /tmp \
     && git clone https://github.com/mmicko/macdylibbundler \
@@ -9,7 +8,12 @@ RUN cd /tmp \
     && sed -i "s,CXXFLAGS=-O2 -std=c++11,CXXFLAGS=-O2 -std=c++11 -static-libstdc++ -static-libgcc,g" Makefile \
     && make 
 
-FROM yosyshq/cross-base:2.0
+FROM yosyshq/cross-base:4.0
+
+COPY --from=builder /tmp/macdylibbundler/dylibbundler /usr/local/bin/dylibbundler
+COPY --from=builder /opt/rust/cargo/bin/rcodesign /usr/local/bin/rcodesign
+RUN chmod +x /usr/local/bin/dylibbundler
+RUN chmod +x /usr/local/bin/rcodesign
 
 RUN set -e -x ;\
     apt -y update ;\
@@ -31,12 +35,12 @@ RUN set -e -x ;\
 # Taken from https://github.com/joseluisq/rust-linux-darwin-builder
 
 # Mac OS X SDK version
-ARG OSX_SDK_VERSION=12.3
-ARG OSX_SDK_SUM=3abd261ceb483c44295a6623fdffe5d44fc4ac2c872526576ec5ab5ad0f6e26c
+ARG OSX_SDK_VERSION=26.5
+ARG OSX_SDK_SUM=c573b2fa59601ce016595074f401ec99f82bbf571c053b935f2a52fa3332d60b
 ARG OSX_VERSION_MIN=11.0
 
 # OS X Cross
-ARG OSX_CROSS_COMMIT=ff8d100f3f026b4ffbe4ce96d8aac4ce06f1278b
+ARG OSX_CROSS_COMMIT=c412eacb56d81072d4d2eaf7251a2de9d9a28f7f
 
 # Install OS X Cross
 # A Mac OS X cross toolchain for Linux, FreeBSD, OpenBSD and Android
@@ -53,18 +57,17 @@ RUN set -eux \
     && echo "Building osxcross with ${OSX_SDK_VERSION}..." \
     && cd /usr/local/osxcross \
     && curl -Lo "./tarballs/MacOSX${OSX_SDK_VERSION}.sdk.tar.xz" \
-        "https://github.com/joseluisq/macosx-sdks/releases/download/${OSX_SDK_VERSION}/MacOSX${OSX_SDK_VERSION}.sdk.tar.xz" \
+        "https://github.com/mmicko/macos-resources/releases/download/v4/MacOSX${OSX_SDK_VERSION}.sdk.tar.xz" \
     && echo "${OSX_SDK_SUM}  ./tarballs/MacOSX${OSX_SDK_VERSION}.sdk.tar.xz" \
         | sha256sum -c - \
     && env UNATTENDED=yes OSX_VERSION_MIN=${OSX_VERSION_MIN} ./build.sh \
-    && rm -rf *~ taballs *.tar.xz \
+    && find /usr/local/osxcross -mindepth 1 -maxdepth 1 ! -name target -exec rm -rf {} + \
     && rm -rf /tmp/* \
     && true
 
+ENV CROSS_NAME=x86_64-apple-darwin25.5
 
-ENV CROSS_NAME x86_64-apple-darwin21.4
-
-ENV CROSS_PREFIX /opt/${CROSS_NAME}
+ENV CROSS_PREFIX=/opt/${CROSS_NAME}
 
 ENV AS=/usr/local/osxcross/target/bin/${CROSS_NAME}-as \
     AR=/usr/local/osxcross/target/bin/${CROSS_NAME}-ar \
@@ -72,35 +75,43 @@ ENV AS=/usr/local/osxcross/target/bin/${CROSS_NAME}-as \
     CXX=/usr/local/osxcross/target/bin/${CROSS_NAME}-clang++ \
     LD=/usr/local/osxcross/target/bin/${CROSS_NAME}-ld \ 
     RANLIB=/usr/local/osxcross/target/bin/${CROSS_NAME}-ranlib \
-    STRIP=/usr/local/osxcross/target/bin/${CROSS_NAME}-strip
+    STRIP=/usr/local/osxcross/target/bin/${CROSS_NAME}-strip \
+    PKG_CONFIG_PATH=/opt/local/lib/pkgconfig \
+    PATH=/usr/local/osxcross/target/bin:$PATH
 
-ENV PATH /usr/local/osxcross/target/bin:$PATH
+RUN cp /usr/local/osxcross/target/bin/${CROSS_NAME}-otool /usr/local/osxcross/target/bin/otool \
+  && cp /usr/local/osxcross/target/bin/${CROSS_NAME}-install_name_tool /usr/local/osxcross/target/bin/install_name_tool \
+  && cp /usr/local/osxcross/target/bin/${CROSS_NAME}-ar /usr/local/osxcross/target/bin/ar \
+  && cp /usr/local/osxcross/target/bin/${CROSS_NAME}-ranlib /usr/local/osxcross/target/bin/ranlib
 
-RUN rustup target add x86_64-apple-darwin && \
+COPY uname /usr/local/osxcross/target/bin/
+RUN chmod +x /usr/local/osxcross/target/bin/uname
+
+RUN rustup target add --toolchain stable x86_64-apple-darwin && \
+    rustup target add --toolchain nightly x86_64-apple-darwin && \
     mkdir -p /.cargo && \
     echo "[target.x86_64-apple-darwin]" > /.cargo/config && \
-    echo "linker = \"x86_64-apple-darwin21.4-clang\"" >> /.cargo/config && \
-    echo "ar = \"x86_64-apple-darwin21.4-ar\"" >> /.cargo/config
-
+    echo "linker = \"x86_64-apple-darwin25.5-clang\"" >> /.cargo/config && \
+    echo "ar = \"x86_64-apple-darwin25.5-ar\"" >> /.cargo/config
 
 COPY Toolchain.cmake ${CROSS_PREFIX}/
 
-ENV MACOSX_DEPLOYMENT_TARGET=12.0
+ENV MACOSX_DEPLOYMENT_TARGET=13.0
 
-ENV CMAKE_TOOLCHAIN_FILE ${CROSS_PREFIX}/Toolchain.cmake
+ENV CMAKE_TOOLCHAIN_FILE=${CROSS_PREFIX}/Toolchain.cmake
 
 ENV OSXCROSS_PKG_CONFIG_USE_NATIVE_VARIABLES=1
 
 ENV OSXCROSS_MP_INC=1 
 
-ENV PKG_CONFIG_PATH /opt/local/lib/pkgconfig
-
 RUN cd /opt \
-  && wget https://github.com/mmicko/macos-resources/releases/download/v3/Qt5.15.3-x86_64.tar.gz \
-  && tar xfz Qt5.15.3-x86_64.tar.gz \
-  && rm Qt5.15.3-x86_64.tar.gz \
-  && rm -rf /opt/Qt5.15.3/bin \
-  && ln -s /usr/lib/qt5/bin /opt/Qt5.15.3/bin \
+  && wget https://github.com/mmicko/macos-resources/releases/download/v4/Qt6.10.2-x86_64.tar.gz \
+  && tar xfz Qt6.10.2-x86_64.tar.gz \
+  && rm Qt6.10.2-x86_64.tar.gz \
+  && rm -rf /opt/Qt6.10.2/bin \
+  && rm -rf /opt/Qt6.10.2/libexec \
+  && ln -s /usr/lib/qt6/bin /opt/Qt6.10.2/bin \
+  && ln -s /usr/lib/qt6/libexec /opt/Qt6.10.2/libexec \
   && cd /tmp \
   && wget https://github.com/mmicko/macos-resources/releases/download/v3/macports-darwin-x86_64.tar \
   && tar xf macports-darwin-x86_64.tar \
@@ -258,26 +269,17 @@ RUN cd /opt \
   && ln -s /opt/local /usr/local/osxcross/target/macports/pkgs/opt \
   && cp /opt/local/lib/pkgconfig/gtk-mac-integration-gtk3.pc /opt/local/lib/pkgconfig/gtk-mac-integration.pc
 
-COPY --from=builder /tmp/macdylibbundler/dylibbundler /usr/local/bin/dylibbundler
-COPY --from=builder /root/.cargo/bin/rcodesign /usr/local/bin/rcodesign
-RUN chmod +x /usr/local/bin/dylibbundler
-RUN chmod +x /usr/local/bin/rcodesign
-
-RUN cp /usr/local/osxcross/target/bin/${CROSS_NAME}-otool /usr/local/osxcross/target/bin/otool \
-  && cp /usr/local/osxcross/target/bin/${CROSS_NAME}-install_name_tool /usr/local/osxcross/target/bin/install_name_tool \
-  && cp /usr/local/osxcross/target/bin/${CROSS_NAME}-ar /usr/local/osxcross/target/bin/ar \
-  && cp /usr/local/osxcross/target/bin/${CROSS_NAME}-ranlib /usr/local/osxcross/target/bin/ranlib
-
-COPY uname /usr/local/osxcross/target/bin/
-RUN chmod +x /usr/local/osxcross/target/bin/uname
-
 # Install just g-ir-compiler, not using apt since it adds lots more
-RUN wget http://archive.ubuntu.com/ubuntu/pool/main/g/gobject-introspection/libgirepository-1.0-1_1.72.0-1_amd64.deb && \
-    dpkg-deb -xv libgirepository-1.0-1_1.72.0-1_amd64.deb / && \
-    rm -rf libgirepository-1.0-1_1.72.0-1_amd64.deb && \
-    wget http://archive.ubuntu.com/ubuntu/pool/main/g/gobject-introspection/gobject-introspection_1.72.0-1_amd64.deb && \
-    dpkg-deb -xv gobject-introspection_1.72.0-1_amd64.deb / && \
-    rm -rf gobject-introspection_1.72.0-1_amd64.deb
+RUN cd /tmp && \
+    wget http://archive.ubuntu.com/ubuntu/pool/main/g/gobject-introspection/libgirepository-1.0-1_1.86.0-6build1_amd64.deb && \
+    dpkg-deb -xv libgirepository-1.0-1_1.86.0-6build1_amd64.deb / && \
+    rm -rf libgirepository-1.0-1_1.86.0-6build1_amd64.deb && \
+    wget http://archive.ubuntu.com/ubuntu/pool/main/g/gobject-introspection/gobject-introspection_1.86.0-6build1_amd64.deb && \
+    dpkg-deb -xv gobject-introspection_1.86.0-6build1_amd64.deb / && \
+    rm -rf gobject-introspection_1.86.0-6build1_amd64.deb && \
+    wget http://archive.ubuntu.com/ubuntu/pool/main/g/gobject-introspection/gobject-introspection-bin_1.86.0-6build1_amd64.deb && \
+    dpkg-deb -xv gobject-introspection-bin_1.86.0-6build1_amd64.deb / && \
+    rm -rf gobject-introspection-bin_1.86.0-6build1_amd64.deb 
 
 RUN cd /opt/local/share/gir-1.0 &&\
     for i in *.gir; do  \
@@ -291,3 +293,12 @@ RUN cd /opt/local/share/gir-1.0 &&\
     done
 
 COPY gschemas.compiled /opt/local/share/glib-2.0/schemas/
+
+COPY mpfr-4.2.2_0.darwin_21.x86_64.tbz2 /tmp/.
+RUN cd / \
+  && echo "Unpack mpfr-4.2.2_0.darwin_21.x86_64.tbz2" \
+  && tar xfj /tmp/mpfr-4.2.2_0.darwin_21.x86_64.tbz2 \
+  && rm -rf /tmp/*
+
+ENV CMAKE_POLICY_VERSION_MINIMUM=3.5
+ENV PIP_BREAK_SYSTEM_PACKAGES=1

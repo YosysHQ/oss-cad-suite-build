@@ -316,7 +316,7 @@ def cleanBuild(arch, full):
 async def run_process(command, cwd, env):
 	# based on https://stackoverflow.com/questions/45664626/use-pythons-pty-to-create-a-live-console
 	process = await asyncio.create_subprocess_exec(*command, cwd=cwd, env=env,
-			stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE, bufsize=0)
+			stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE, bufsize=0, limit=1024 * 1024)
 	# Schedule reading from stdout and stderr as asynchronous tasks.
 	stdout_f = asyncio.ensure_future(process.stdout.readline())
 	stderr_f = asyncio.ensure_future(process.stderr.readline())
@@ -393,7 +393,7 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, nproc, pack_source
 		env['SHARED_EXT'] = '.dll'
 	if (arch == 'darwin-x64') or (arch == 'darwin-arm64'):
 		env['SHARED_EXT'] = '.dylib'
-	env['LC_ALL'] = 'C'
+	env['LC_ALL'] = 'C.UTF-8'
 	env['INSTALL_PREFIX'] = prefix
 	if (target.branding):
 		env['BRANDING'] = str(target.branding)
@@ -431,7 +431,7 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, nproc, pack_source
 		else:
 			params += ['-e', '{}={}'.format(i, j)]
 	params += [
-		'yosyshq/cross-'+ arch + ':2.3',
+		'yosyshq/cross-'+ arch + ':4.0',
 		'bash', scriptfile.name
 	]
 	return run_live(params, cwd=build_dir)

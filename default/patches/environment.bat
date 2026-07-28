@@ -8,7 +8,7 @@
 
 @set PATH=%YOSYSHQ_ROOT%bin;%YOSYSHQ_ROOT%lib;%PATH%
 @set PYTHON_EXECUTABLE=%YOSYSHQ_ROOT%lib\python3.exe
-@set QT_PLUGIN_PATH=%YOSYSHQ_ROOT%lib\qt5\plugins
+@set QT_PLUGIN_PATH=%YOSYSHQ_ROOT%lib\qt6\plugins
 @set QT_LOGGING_RULES=*=false
 
 @set GTK_EXE_PREFIX=%YOSYSHQ_ROOT%

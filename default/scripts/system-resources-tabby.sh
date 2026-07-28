@@ -1,5 +1,5 @@
 mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/bin
-mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/qt5/plugins
+mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/qt6/plugins
 cp ${PATCHES_DIR}/tabbyadm ${OUTPUT_DIR}${INSTALL_PREFIX}/bin/.
 
 if [ ${ARCH_BASE} == 'linux' ]; then
@@ -11,25 +11,42 @@ if [ ${ARCH_BASE} == 'linux' ]; then
     cp -r /etc/fonts/.   ${OUTPUT_DIR}${INSTALL_PREFIX}/etc/fonts
     rm ${OUTPUT_DIR}${INSTALL_PREFIX}/etc/fonts/fonts.conf
     cp ${PATCHES_DIR}/fonts.conf.template ${OUTPUT_DIR}${INSTALL_PREFIX}/etc/fonts/.
+    rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/etc/fonts/conf.d
+    mkdir ${OUTPUT_DIR}${INSTALL_PREFIX}/etc/fonts/conf.d
+    for f in "${OUTPUT_DIR}${INSTALL_PREFIX}"/etc/fonts/conf.avail/*.conf; do
+        ln -sf "../conf.avail/$(basename "$f")" \
+            "${OUTPUT_DIR}${INSTALL_PREFIX}/etc/fonts/conf.d/$(basename "$f")"
+    done
     cp ${PATCHES_DIR}/cacert.pem ${OUTPUT_DIR}${INSTALL_PREFIX}/etc/.
 
     mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/lib
     cp -r /usr/share/tcltk/tcl8.6/. ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/tcl8.6
     cp -r /usr/share/tcltk/tk8.6/. ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/tk8.6
 
-    cp -rv /usr/lib/${CROSS_NAME}/qt5/plugins/* ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/qt5/plugins/.
+    cp -rv /usr/lib/${CROSS_NAME}/qt6/plugins/* ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/qt6/plugins/.
 
     mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/libexec
     cp -v `pkg-config --variable=gdk_pixbuf_binarydir gdk-pixbuf-2.0`/../gdk-pixbuf-query-loaders ${OUTPUT_DIR}${INSTALL_PREFIX}/libexec/.
     mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/gdk-pixbuf-2.0
     cp -r `pkg-config --variable=gdk_pixbuf_binarydir gdk-pixbuf-2.0`/loaders ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/gdk-pixbuf-2.0/.
+    mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/libexec/glycin-loaders/2+
+    cp /usr/libexec/glycin-loaders/2+/* ${OUTPUT_DIR}${INSTALL_PREFIX}/libexec/glycin-loaders/2+/.
+    mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/share/glycin-loaders/2+/conf.d
+    cp /usr/share/glycin-loaders/2+/conf.d/* ${OUTPUT_DIR}${INSTALL_PREFIX}/share/glycin-loaders/2+/conf.d/.   
+    cat > ${OUTPUT_DIR}${INSTALL_PREFIX}/bin/bwrap <<'EOF'
+#!/bin/sh
+echo "No permissions to create a new namespace" >&2
+exit 1
+EOF
+    chmod +x ${OUTPUT_DIR}${INSTALL_PREFIX}/bin/bwrap
 
-    # GTK3 resources
+    ## GTK3 resources
     mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/share/glib-2.0
     mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/share/mime
     mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/share/icons
     cp -rv /usr/share/glib-2.0/schemas ${OUTPUT_DIR}${INSTALL_PREFIX}/share/glib-2.0/.
     cp -v /usr/share/mime/magic ${OUTPUT_DIR}${INSTALL_PREFIX}/share/mime/.
+    cp -v /usr/share/mime/mime.cache ${OUTPUT_DIR}${INSTALL_PREFIX}/share/mime/.
     cp -rv /usr/share/icons/Adwaita ${OUTPUT_DIR}${INSTALL_PREFIX}/share/icons/.
     rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/share/icons/Adwaita/256x256
     rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/share/icons/Adwaita/512x512
@@ -46,8 +63,8 @@ if [ ${ARCH_BASE} == 'darwin' ]; then
     cp ${PATCHES_DIR}/cacert.pem ${OUTPUT_DIR}${INSTALL_PREFIX}/etc/.
 
     mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/Frameworks
-    cp -r /opt/Qt5.15.3/lib/*.framework ${OUTPUT_DIR}${INSTALL_PREFIX}/Frameworks/.
-    cp -rv /opt/Qt5.15.3/plugins/* ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/qt5/plugins/.
+    cp -r /opt/Qt6.10.2/lib/*.framework ${OUTPUT_DIR}${INSTALL_PREFIX}/Frameworks/.
+    cp -rv /opt/Qt6.10.2/plugins/* ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/qt6/plugins/.
     find  ${OUTPUT_DIR}${INSTALL_PREFIX}/Frameworks -type d -name Headers -prune -exec rm -rf {} +
     find  ${OUTPUT_DIR}${INSTALL_PREFIX}/Frameworks -type l -name Headers -prune -exec rm -rf {} +
 
@@ -102,7 +119,7 @@ if [ ${ARCH_BASE} == 'windows' ]; then
     rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/tcl8.6/tclConfig.sh
     rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/tk8.6/tkConfig.sh
 
-    cp -rv /usr/x86_64-w64-mingw32/sys-root/mingw/lib/qt5/plugins/* ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/qt5/plugins/.
+    cp -rv /usr/x86_64-w64-mingw32/sys-root/mingw/lib/qt6/plugins/* ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/qt6/plugins/.
 
 	mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/lib
     cp -rf /usr/x86_64-w64-mingw32/sys-root/mingw/lib/gdk-pixbuf-2.0 ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/.

@@ -1,5 +1,6 @@
 cd python2
 patch -p1 < ${PATCHES_DIR}/python27.diff
+sed -i 's/^typedef enum {false, true} bool;$/\/\/&/' Include/asdl.h
 if [ ${ARCH} == 'darwin-x64' ]; then
     export CFLAGS="-I/opt/local/include"
     export LDFLAGS="-L/opt/local/lib"

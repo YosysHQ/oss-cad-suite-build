@@ -1,13 +1,17 @@
-FROM yosyshq/cross-base:2.0
+FROM yosyshq/cross-base:4.0
 
-ENV CROSS_NAME x86_64-linux-gnu
+ENV CROSS_NAME=x86_64-linux-gnu
 
-ENV CROSS_PREFIX /opt/${CROSS_NAME}
+ENV CROSS_PREFIX=/opt/${CROSS_NAME}
 
 RUN set -e -x ;\
     apt -y update ;\
     apt -y upgrade ;\
     apt -y install \
+        lsb-release \
+        wget \
+        software-properties-common \
+        gnupg \
         gcc \
         g++ \
         clang \
@@ -23,21 +27,27 @@ RUN set -e -x ;\
         libftdi1-dev \
         libgmp-dev \
         libgtk-3-dev \
+        libjudy-dev \
+        libgirepository1.0-dev \
+        libjson-glib-dev \
+        desktop-file-utils \
         liblzma-dev \
         libreadline-dev \
         libsqlite3-dev \
         libssl-dev \
         tcl-dev \
         tk-dev \
-        qtbase5-dev \
+        qt6-base-dev \
         libbison-dev \
         libhidapi-dev \
         libcurl4-openssl-dev \
         libbz2-dev \
         libltdl-dev \
+        libmpfr-dev \
         libedit-dev; \
     apt -y autoremove ;\
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/* ;\
+    ln -s /lib64/ld-linux-x86-64.so.2 /lib64/ld-lsb-x86-64.so.3
 
 ENV AS=/usr/bin/${CROSS_NAME}-as \
     AR=/usr/bin/${CROSS_NAME}-ar \
@@ -47,11 +57,5 @@ ENV AS=/usr/bin/${CROSS_NAME}-as \
     LD=/usr/bin/${CROSS_NAME}-ld \
     STRIP=/usr/bin/${CROSS_NAME}-strip
 
-RUN wget http://archive.ubuntu.com/ubuntu/pool/main/g/gobject-introspection/libgirepository1.0-dev_1.72.0-1_amd64.deb && \
-    dpkg-deb -xv libgirepository1.0-dev_1.72.0-1_amd64.deb / && \
-    rm -rf libgirepository1.0-dev_1.72.0-1_amd64.deb && \
-    wget http://archive.ubuntu.com/ubuntu/pool/main/g/gobject-introspection/gir1.2-glib-2.0_1.72.0-1_amd64.deb && \
-    dpkg-deb -xv gir1.2-glib-2.0_1.72.0-1_amd64.deb / && \
-    rm -rf gir1.2-glib-2.0_1.72.0-1_amd64.deb
-
-RUN ln -s /lib64/ld-linux-x86-64.so.2 /lib64/ld-lsb-x86-64.so.3
+ENV CMAKE_POLICY_VERSION_MINIMUM=3.5
+ENV PIP_BREAK_SYSTEM_PACKAGES=1

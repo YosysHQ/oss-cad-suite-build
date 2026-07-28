@@ -2,6 +2,7 @@ mv ${BUILD_DIR}/picosat/dev/* ${BUILD_DIR}/picosat
 cd aiger
 $CC -O3 -DNDEBUG -c aiger.c
 cd ../lingeling
+sed -i 's/-Wall/-Wall -Wno-incompatible-pointer-types/g' configure.sh
 ./configure.sh
 make
 cd ../aiger

@@ -1,4 +1,4 @@
-FROM ubuntu:22.04
+FROM ubuntu:26.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -15,6 +15,8 @@ RUN set -e -x ;\
         git \
         pkg-config \
         python3 \
+        python3-pip \
+        pandoc \
         adwaita-icon-theme-full \
         cmake \
         wget \
@@ -22,19 +24,36 @@ RUN set -e -x ;\
         autoconf \
         curl \
         pax-utils \
-        qt5-qmake \
-        qtbase5-dev-tools \
+        qmake6 \
+        qt6-base-dev-tools \
         libtool \
         help2man \
         llvm \
+        cmake \
+        meson \
+        ninja-build \
         default-jre-headless; \
     apt -y autoremove ;\
     rm -rf /var/lib/apt/lists/*
 
-ENV RUSTUP_HOME /opt/rust/rustup
+ENV RUSTUP_HOME=/opt/rust/rustup \
+	CARGO_HOME=/opt/rust/cargo \
+	PATH=/opt/rust/cargo/bin:${PATH}
 
-ENV PATH ${PATH}:/opt/rust/cargo/bin
+RUN set -eux; \
+	curl -sSf https://sh.rustup.rs | bash -s -- \
+		--default-toolchain stable \
+		--profile default \
+		--no-modify-path \
+		-y; \
+	rustup toolchain install nightly; \
+    chmod -R a+rwX /opt/rust/rustup /opt/rust/cargo; \
+    printf '%s\n' \
+    '#!/bin/sh' \
+    'echo "macdeployqt not available in this Qt installation"' \
+    'exit 1' \
+    > /usr/lib/qt6/bin/macdeployqt && \
+    chmod +x /usr/lib/qt6/bin/macdeployqt
 
-RUN curl https://sh.rustup.rs -sSf | RUSTUP_HOME=/opt/rust/rustup CARGO_HOME=/opt/rust/cargo bash -s -- --default-toolchain stable --profile default --no-modify-path -y
 
 WORKDIR /work
