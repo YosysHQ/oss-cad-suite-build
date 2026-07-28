@@ -73,11 +73,6 @@ Contact us at contact@yosyshq.com to arrange a free evaluation license.
  * [ecpdap](https://github.com/adamgreig/ecpdap) program ECP5 FPGAs and attached SPI flash using CMSIS-DAP probes in JTAG mode
  * [fujprog](https://github.com/kost/fujprog) ULX2S / ULX3S JTAG programmer
  * [openocd](http://openocd.org/) Open On-Chip Debugger
- * [icesprog](https://github.com/wuxx/icesugar/tree/master/tools/src) iCESugar FPGA board programmer
- * [iceprogduino](https://github.com/OLIMEX/iCE40HX1K-EVB/tree/master/programmer/iceprogduino) Olinuxino based programmer for iCE40HX1K-EVB
- * [TinyFPGA](https://github.com/tinyfpga/TinyFPGA-Bootloader) USB Bootloader
- * [TinyFPGA-B](https://github.com/tinyfpga/TinyFPGA-B-Series) TinyFPGA B2 Board programmer
- * [iceFUN](https://github.com/pitrz/icefunprog) iceFUN Programmer
  
 ### Simulation/Testing
  * [GTK Wave](https://github.com/gtkwave/gtkwave) fully featured GTK+ based wave viewer
@@ -89,7 +84,7 @@ Contact us at contact@yosyshq.com to arrange a free evaluation license.
 ### Support libraries
  * [Python 3](https://github.com/python/cpython) language interpreter is provided in all supported platforms.
  * [Python 2](https://github.com/python/cpython) language interpreter is provided in Linux platforms in form of library only.
- * [Ubuntu 22.04](https://ubuntu.com/) distribution development packages are used and shared libraries used are provided in package.
+ * [Ubuntu 26.04](https://ubuntu.com/) distribution development packages are used and shared libraries used are provided in package.
  * [macports](https://www.macports.org/) distribution system for macOS is used to obtain all libraries used, and they are provided in package.
  * [MinGW](https://sourceforge.net/projects/mingw) Minimalist GNU for Windows library packages from Fedora 39 are used in compilation and provided in package.
  
@@ -148,7 +143,7 @@ python3 litex_setup.py install
 
 ### linux-x64
 Any personal Linux based computer should just work; no additional packages need to be installed on the system to make OSS CAD Suite work.
-Distributed libraries are based on Ubuntu 20.04, but everything is packaged in such a way so it can be used on any Linux distribution.
+Distributed libraries are based on Ubuntu 26.04, but everything is packaged in such a way so it can be used on any Linux distribution.
 
 ### darwin-x64
 Any macOS 12.00 or later with Intel CPU should use this distribution package.
