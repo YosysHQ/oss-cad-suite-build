@@ -10,12 +10,17 @@ RUN dnf install -y  mingw64-gcc \
                     mingw64-tk \
                     mingw64-xz \
                     mingw64-gtk3 \
+                    mingw64-gtk4 \
+                    mingw64-json-glib \
                     mingw64-qt6-qtbase \
                     mingw64-eigen3 \
                     mingw64-dlfcn \
                     mingw64-hidapi \
                     mingw64-bzip2 \
                     mingw64-curl \
+                    mingw64-libgnurx \
+                    desktop-file-utils \
+                    glib2-devel \
                     git \
                     cmake \
                     autoconf \

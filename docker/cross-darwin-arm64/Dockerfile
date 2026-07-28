@@ -152,10 +152,14 @@ RUN cd /opt \
   && cp -rf /tmp/gmp/gmp-6.3.0_0.darwin_25.arm64/* / \
   && echo "Install gobject-introspection/gobject-introspection-1.86.0_1.darwin_25.arm64" \
   && cp -rf /tmp/gobject-introspection/gobject-introspection-1.86.0_1.darwin_25.arm64/* / \
+  && echo "Install graphene/graphene-1.10.8_2.darwin_25.arm64" \
+  && cp -rf /tmp/graphene/graphene-1.10.8_2.darwin_25.arm64/* / \ 
   && echo "Install graphite2/graphite2-1.3.14_0.darwin_25.arm64" \
   && cp -rf /tmp/graphite2/graphite2-1.3.14_0.darwin_25.arm64/* / \
   && echo "Install gtk3/gtk3-3.24.52_1+quartz.darwin_25.arm64" \
   && cp -rf /tmp/gtk3/gtk3-3.24.52_1+quartz.darwin_25.arm64/* / \
+  && echo "Install gtk4/gtk4-4.22.4_0+quartz.darwin_25.arm64" \
+  && cp -rf /tmp/gtk4/gtk4-4.22.4_0+quartz.darwin_25.arm64/* / \
   && echo "Install gtk-osx-application-common-gtk3/gtk-osx-application-common-gtk3-3.0.2_1.darwin_25.arm64" \
   && cp -rf /tmp/gtk-osx-application-common-gtk3/gtk-osx-application-common-gtk3-3.0.2_1.darwin_25.arm64/* / \
   && echo "Install gtk-osx-application-gtk3/gtk-osx-application-gtk3-3.0.2_1.darwin_25.arm64" \
@@ -166,6 +170,8 @@ RUN cd /opt \
   && cp -rf /tmp/hidapi/hidapi-0.15.0_0.darwin_25.arm64/* / \
   && echo "Install icu/icu-78.3_1.darwin_25.arm64" \
   && cp -rf /tmp/icu/icu-78.3_1.darwin_25.arm64/* / \
+  && echo "Install json-glib/json-glib-1.10.8_0.darwin_25.arm64" \
+  && cp -rf /tmp/json-glib/json-glib-1.10.8_0.darwin_25.arm64/* / \
   && echo "Install lerc/lerc-4.1.0_0.darwin_25.arm64" \
   && cp -rf /tmp/lerc/lerc-4.1.0_0.darwin_25.arm64/* / \
   && echo "Install libdeflate/libdeflate-1.25_0.darwin_25.arm64" \
@@ -263,7 +269,13 @@ RUN cd /tmp && \
     rm -rf gobject-introspection_1.86.0-6build1_amd64.deb && \
     wget http://archive.ubuntu.com/ubuntu/pool/main/g/gobject-introspection/gobject-introspection-bin_1.86.0-6build1_amd64.deb && \
     dpkg-deb -xv gobject-introspection-bin_1.86.0-6build1_amd64.deb / && \
-    rm -rf gobject-introspection-bin_1.86.0-6build1_amd64.deb 
+    rm -rf gobject-introspection-bin_1.86.0-6build1_amd64.deb && \
+    wget http://archive.ubuntu.com/ubuntu/pool/main/g/glib2.0/libgio-2.0-dev-bin_2.88.0-1_amd64.deb && \
+    dpkg-deb -xv libgio-2.0-dev-bin_2.88.0-1_amd64.deb / && \
+    rm -rf libgio-2.0-dev-bin_2.88.0-1_amd64.deb && \
+    wget http://archive.ubuntu.com/ubuntu/pool/main/d/desktop-file-utils/desktop-file-utils_0.28-1build1_amd64.deb && \
+    dpkg-deb -xv desktop-file-utils_0.28-1build1_amd64.deb / && \
+    rm -rf desktop-file-utils_0.28-1build1_amd64.deb     
 
 RUN cd /opt/local/share/gir-1.0 &&\
     for i in *.gir; do  \

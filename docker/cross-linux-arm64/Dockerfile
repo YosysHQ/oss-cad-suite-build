@@ -30,6 +30,7 @@ RUN set -e -x ;\
         libftdi1-dev:arm64 \
         libgmp-dev:arm64 \
         libgtk-3-dev:arm64 \
+        libgtk-4-dev:arm64 \
         libjudy-dev:arm64 \
         libgirepository1.0-dev:arm64 \
         libjson-glib-dev:arm64 \

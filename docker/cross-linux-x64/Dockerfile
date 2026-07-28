@@ -27,6 +27,7 @@ RUN set -e -x ;\
         libftdi1-dev \
         libgmp-dev \
         libgtk-3-dev \
+        libgtk-4-dev \
         libjudy-dev \
         libgirepository1.0-dev \
         libjson-glib-dev \
