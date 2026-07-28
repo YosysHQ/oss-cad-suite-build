@@ -37,7 +37,6 @@ Target(
         'gtkwave',
         'verilator',
         'iverilog',
-        'python-programmers',
         'utils',
         'pyhdl',
         'cocotb',
