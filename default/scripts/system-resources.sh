@@ -70,7 +70,7 @@ if [ ${ARCH} == 'linux-x64' ]; then
 fi
 if [ ${ARCH} == 'linux-arm64' ]; then
     cp /usr/lib/${CROSS_NAME}/dri/libdril_dri.so ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/dri/.
-    cp /usr/lib/${CROSS_NAME}/dri/libgallium-26.0.3-1ubuntu1.so ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/.
+    cp /usr/lib/${CROSS_NAME}/libgallium-26.0.3-1ubuntu1.so ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/.
     pushd ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/dri
     ln -s libdril_dri.so apple_dri.so
     ln -s libdril_dri.so armada-drm_dri.so
