@@ -86,7 +86,7 @@ Contact us at contact@yosyshq.com to arrange a free evaluation license.
  * [Python 2](https://github.com/python/cpython) language interpreter is provided in Linux platforms in form of library only.
  * [Ubuntu 26.04](https://ubuntu.com/) distribution development packages are used and shared libraries used are provided in package.
  * [macports](https://www.macports.org/) distribution system for macOS is used to obtain all libraries used, and they are provided in package.
- * [MinGW](https://sourceforge.net/projects/mingw) Minimalist GNU for Windows library packages from Fedora 39 are used in compilation and provided in package.
+ * [MinGW](https://sourceforge.net/projects/mingw) Minimalist GNU for Windows library packages from Fedora 43 are used in compilation and provided in package.
  
 ## Installation
 
