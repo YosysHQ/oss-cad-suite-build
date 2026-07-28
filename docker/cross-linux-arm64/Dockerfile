@@ -71,12 +71,17 @@ RUN rustup target add --toolchain stable aarch64-unknown-linux-gnu && \
     echo "[target.aarch64-unknown-linux-gnu]" > /.cargo/config && \
     echo "linker = \"aarch64-linux-gnu-gcc\"" >> /.cargo/config
 
-#RUN wget http://ports.ubuntu.com/pool/main/g/gobject-introspection/libgirepository1.0-dev_1.72.0-1_arm64.deb && \
-#    dpkg-deb -xv libgirepository1.0-dev_1.72.0-1_arm64.deb / && \
-#    rm -rf libgirepository1.0-dev_1.72.0-1_arm64.deb && \
-#    wget http://ports.ubuntu.com/pool/main/g/gobject-introspection/gir1.2-glib-2.0_1.72.0-1_arm64.deb && \
-#    dpkg-deb -xv gir1.2-glib-2.0_1.72.0-1_arm64.deb / && \
-#    rm -rf gir1.2-glib-2.0_1.72.0-1_arm64.deb
+# Install just g-ir-compiler, not using apt since it adds lots more
+RUN cd /tmp && \
+    wget http://archive.ubuntu.com/ubuntu/pool/main/g/gobject-introspection/libgirepository-1.0-1_1.86.0-6build1_amd64.deb && \
+    dpkg-deb -xv libgirepository-1.0-1_1.86.0-6build1_amd64.deb / && \
+    rm -rf libgirepository-1.0-1_1.86.0-6build1_amd64.deb && \
+    wget http://archive.ubuntu.com/ubuntu/pool/main/g/gobject-introspection/gobject-introspection_1.86.0-6build1_amd64.deb && \
+    dpkg-deb -xv gobject-introspection_1.86.0-6build1_amd64.deb / && \
+    rm -rf gobject-introspection_1.86.0-6build1_amd64.deb && \
+    wget http://archive.ubuntu.com/ubuntu/pool/main/g/gobject-introspection/gobject-introspection-bin_1.86.0-6build1_amd64.deb && \
+    dpkg-deb -xv gobject-introspection-bin_1.86.0-6build1_amd64.deb / && \
+    rm -rf gobject-introspection-bin_1.86.0-6build1_amd64.deb 
 
 ENV CMAKE_POLICY_VERSION_MINIMUM=3.5
 ENV PIP_BREAK_SYSTEM_PACKAGES=1
