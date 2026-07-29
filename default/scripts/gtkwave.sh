@@ -42,3 +42,13 @@ ninja -C builddir -j${NPROC}
 DESTDIR=${OUTPUT_DIR} ninja -C builddir install
 rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/pkgconfig
 rm -rf ${OUTPUT_DIR}${INSTALL_PREFIX}/include
+if [ ${ARCH_BASE} == 'darwin' ]; then
+    install_name_tool -id ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libfst.1.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libfst.1.dylib
+    install_name_tool -id ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libgtkwave.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/libgtkwave.dylib
+    find "${OUTPUT_DIR}${INSTALL_PREFIX}" -type f -exec sh -c '
+    for file; do
+        install_name_tool -change "'"${INSTALL_PREFIX}"'/lib/libfst.1.dylib" "'"${OUTPUT_DIR}${INSTALL_PREFIX}"'/lib/libfst.1.dylib" "$file" 2>/dev/null || true
+        install_name_tool -change "'"${INSTALL_PREFIX}"'/lib/libgtkwave.dylib" "'"${OUTPUT_DIR}${INSTALL_PREFIX}"'/lib/libgtkwave.dylib" "$file" 2>/dev/null || true
+    done
+    ' sh {} +
+fi 

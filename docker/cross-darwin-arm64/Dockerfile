@@ -202,6 +202,8 @@ RUN cd /opt \
   && cp -rf /tmp/libunistring/libunistring-1.4.2_0.darwin_25.arm64/* / \
   && echo "Install libusb/libusb-1.0.30_0.darwin_25.arm64" \
   && cp -rf /tmp/libusb/libusb-1.0.30_0.darwin_25.arm64/* / \
+  && echo "Install lzo2/lzo2-2.10_0.darwin_25.arm64" \
+  && cp -rf /tmp/lzo2/lzo2-2.10_0.darwin_25.arm64/* / \
   && echo "Install mpfr/mpfr-4.2.2_0.darwin_25.arm64" \
   && cp -rf /tmp/mpfr/mpfr-4.2.2_0.darwin_25.arm64/* / \
   && echo "Install ncurses/ncurses-6.6_0.darwin_25.arm64" \
