@@ -7,15 +7,16 @@ if [ ${ARCH_BASE} == 'linux' ]; then
     cp -rL /usr/lib/${CROSS_NAME}/libGLX_*.so.0 ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/.
     mkdir -p ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/dri
 if [ ${ARCH} == 'linux-x64' ]; then
+    GALLIUM_LIB=$(basename "$(find /usr/lib/${CROSS_NAME} -maxdepth 1 -name 'libgallium-*.so' -print -quit)")
     cp /usr/lib/${CROSS_NAME}/dri/libdril_dri.so ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/dri/.
-    cp /usr/lib/${CROSS_NAME}/libgallium-26.0.3-1ubuntu1.so ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/.
+    cp /usr/lib/${CROSS_NAME}/${GALLIUM_LIB} ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/.
     pushd ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/dri
     ln -sf libdril_dri.so apple_dri.so
     ln -sf libdril_dri.so armada-drm_dri.so
     ln -sf libdril_dri.so asahi_dri.so
     ln -sf libdril_dri.so crocus_dri.so
     ln -sf libdril_dri.so d3d12_dri.so
-    ln -sf ../libgallium-26.0.3-1ubuntu1.so d3d12_drv_video.so
+    ln -sf ../${GALLIUM_LIB} d3d12_drv_video.so
     ln -sf libdril_dri.so exynos_dri.so
     ln -sf libdril_dri.so gm12u320_dri.so
     ln -sf libdril_dri.so hdlcd_dri.so
@@ -40,14 +41,14 @@ if [ ${ARCH} == 'linux-x64' ]; then
     ln -sf libdril_dri.so mi0283qt_dri.so
     ln -sf libdril_dri.so mxsfb-drm_dri.so
     ln -sf libdril_dri.so nouveau_dri.so
-    ln -sf ../libgallium-26.0.3-1ubuntu1.so nouveau_drv_video.so
+    ln -sf ../${GALLIUM_LIB} nouveau_drv_video.so
     ln -sf libdril_dri.so panel-mipi-dbi_dri.so
     ln -sf libdril_dri.so pl111_dri.so
     ln -sf libdril_dri.so r300_dri.so
     ln -sf libdril_dri.so r600_dri.so
-    ln -sf ../libgallium-26.0.3-1ubuntu1.so r600_drv_video.so
+    ln -sf ../${GALLIUM_LIB} r600_drv_video.so
     ln -sf libdril_dri.so radeonsi_dri.so
-    ln -sf ../libgallium-26.0.3-1ubuntu1.so radeonsi_drv_video.so
+    ln -sf ../${GALLIUM_LIB} radeonsi_drv_video.so
     ln -sf libdril_dri.so rcar-du_dri.so
     ln -sf libdril_dri.so repaper_dri.so
     ln -sf libdril_dri.so rockchip_dri.so
@@ -61,7 +62,7 @@ if [ ${ARCH} == 'linux-x64' ]; then
     ln -sf libdril_dri.so swrast_dri.so
     ln -sf libdril_dri.so udl_dri.so
     ln -sf libdril_dri.so virtio_gpu_dri.so
-    ln -sf ../libgallium-26.0.3-1ubuntu1.so virtio_gpu_drv_video.so
+    ln -sf ../${GALLIUM_LIB} virtio_gpu_drv_video.so
     ln -sf libdril_dri.so vkms_dri.so
     ln -sf libdril_dri.so vmwgfx_dri.so
     ln -sf libdril_dri.so zink_dri.so
@@ -69,14 +70,15 @@ if [ ${ARCH} == 'linux-x64' ]; then
     popd
 fi
 if [ ${ARCH} == 'linux-arm64' ]; then
+    GALLIUM_LIB=$(basename "$(find /usr/lib/${CROSS_NAME} -maxdepth 1 -name 'libgallium-*.so' -print -quit)")
     cp /usr/lib/${CROSS_NAME}/dri/libdril_dri.so ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/dri/.
-    cp /usr/lib/${CROSS_NAME}/libgallium-26.0.3-1ubuntu1.so ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/.
+    cp /usr/lib/${CROSS_NAME}/${GALLIUM_LIB} ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/.
     pushd ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/dri
     ln -s libdril_dri.so apple_dri.so
     ln -s libdril_dri.so armada-drm_dri.so
     ln -s libdril_dri.so asahi_dri.so
     ln -s libdril_dri.so d3d12_dri.so
-    ln -s ../libgallium-26.0.3-1ubuntu1.so d3d12_drv_video.so
+    ln -s ../${GALLIUM_LIB} d3d12_drv_video.so
     ln -s libdril_dri.so etnaviv_dri.so
     ln -s libdril_dri.so exynos_dri.so
     ln -s libdril_dri.so gm12u320_dri.so
@@ -104,16 +106,16 @@ if [ ${ARCH} == 'linux-arm64' ]; then
     ln -s libdril_dri.so msm_dri.so
     ln -s libdril_dri.so mxsfb-drm_dri.so
     ln -s libdril_dri.so nouveau_dri.so
-    ln -s ../libgallium-26.0.3-1ubuntu1.so nouveau_drv_video.so
+    ln -s ../${GALLIUM_LIB} nouveau_drv_video.so
     ln -s libdril_dri.so panel-mipi-dbi_dri.so
     ln -s libdril_dri.so panfrost_dri.so
     ln -s libdril_dri.so panthor_dri.so
     ln -s libdril_dri.so pl111_dri.so
     ln -s libdril_dri.so r300_dri.so
     ln -s libdril_dri.so r600_dri.so
-    ln -s ../libgallium-26.0.3-1ubuntu1.so r600_drv_video.so
+    ln -s ../${GALLIUM_LIB} r600_drv_video.so
     ln -s libdril_dri.so radeonsi_dri.so
-    ln -s ../libgallium-26.0.3-1ubuntu1.so radeonsi_drv_video.so
+    ln -s ../${GALLIUM_LIB} radeonsi_drv_video.so
     ln -s libdril_dri.so rcar-du_dri.so
     ln -s libdril_dri.so repaper_dri.so
     ln -s libdril_dri.so rockchip_dri.so
@@ -130,7 +132,7 @@ if [ ${ARCH} == 'linux-arm64' ]; then
     ln -s libdril_dri.so v3d_dri.so
     ln -s libdril_dri.so vc4_dri.so
     ln -s libdril_dri.so virtio_gpu_dri.so
-    ln -s ../libgallium-26.0.3-1ubuntu1.so virtio_gpu_drv_video.so
+    ln -s ../${GALLIUM_LIB} virtio_gpu_drv_video.so
     ln -s libdril_dri.so vkms_dri.so
     ln -s libdril_dri.so vmwgfx_dri.so
     ln -s libdril_dri.so zink_dri.so
