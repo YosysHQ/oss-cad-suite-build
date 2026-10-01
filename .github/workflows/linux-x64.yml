@@ -1750,6 +1750,37 @@ jobs:
           tag: bucket-linux-x64
           artifacts: "linux-x64-iverilog.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
+  linux-x64-nvc:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v7
+      - name: Cache sources
+        uses: actions/cache@v5
+        with:
+          key: cache-sources-nvc
+          path: _sources
+      - name: Download previous build
+        run: |
+          URL="https://github.com/${{ github.repository }}/releases/download/bucket-linux-x64/linux-x64-nvc.tgz"
+          if wget --spider "${URL}" 2>/dev/null; then
+              wget -qO- "${URL}" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+          else
+              echo "Previous version not found in bucket"
+          fi
+      - name: Build
+        run: ./builder.py build --arch=linux-x64 --target=nvc --rules=default --single --tar
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('linux-x64-nvc.tgz') != ''
+        with:
+          allowUpdates: True
+          prerelease: True
+          omitBody: True
+          omitBodyDuringUpdate: True
+          omitNameDuringUpdate: True
+          tag: bucket-linux-x64
+          artifacts: "linux-x64-nvc.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-utils:
     runs-on: ubuntu-latest
     continue-on-error: true
@@ -1948,7 +1979,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-default:
     runs-on: ubuntu-latest
-    needs: [ linux-x64-aiger, linux-x64-apicula, linux-x64-avy, linux-x64-bitwuzla, linux-x64-boolector, linux-x64-cocotb, linux-x64-cvc4, linux-x64-cvc5, linux-x64-eqy, linux-x64-formal, linux-x64-ghdl, linux-x64-ghdl-yosys-plugin, linux-x64-graphviz, linux-x64-gtkwave, linux-x64-icestorm, linux-x64-imctk, linux-x64-iverilog, linux-x64-nextpnr-ecp5, linux-x64-nextpnr-generic, linux-x64-nextpnr-himbaechel, linux-x64-nextpnr-ice40, linux-x64-nextpnr-machxo2, linux-x64-nextpnr-nexus, linux-x64-openfpgaloader, linux-x64-pono, linux-x64-prjoxide, linux-x64-prjpeppercorn, linux-x64-prjtrellis, linux-x64-pyhdl, linux-x64-python2, linux-x64-python3, linux-x64-ric3, linux-x64-suprove, linux-x64-surfer, linux-x64-system-resources, linux-x64-utils, linux-x64-verilator, linux-x64-xdot, linux-x64-yices, linux-x64-yosys, linux-x64-yosys-slang-plugin, linux-x64-z3 ]
+    needs: [ linux-x64-aiger, linux-x64-apicula, linux-x64-avy, linux-x64-bitwuzla, linux-x64-boolector, linux-x64-cocotb, linux-x64-cvc4, linux-x64-cvc5, linux-x64-eqy, linux-x64-formal, linux-x64-ghdl, linux-x64-ghdl-yosys-plugin, linux-x64-graphviz, linux-x64-gtkwave, linux-x64-icestorm, linux-x64-imctk, linux-x64-iverilog, linux-x64-nextpnr-ecp5, linux-x64-nextpnr-generic, linux-x64-nextpnr-himbaechel, linux-x64-nextpnr-ice40, linux-x64-nextpnr-machxo2, linux-x64-nextpnr-nexus, linux-x64-nvc, linux-x64-openfpgaloader, linux-x64-pono, linux-x64-prjoxide, linux-x64-prjpeppercorn, linux-x64-prjtrellis, linux-x64-pyhdl, linux-x64-python2, linux-x64-python3, linux-x64-ric3, linux-x64-suprove, linux-x64-surfer, linux-x64-system-resources, linux-x64-utils, linux-x64-verilator, linux-x64-xdot, linux-x64-yices, linux-x64-yosys, linux-x64-yosys-slang-plugin, linux-x64-z3 ]
     steps:
       - name: Get current date
         id: date
@@ -2000,6 +2031,8 @@ jobs:
         run: wget -qO- "https://github.com/${{ github.repository }}/releases/download/bucket-linux-x64/linux-x64-nextpnr-machxo2.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-nextpnr-nexus
         run: wget -qO- "https://github.com/${{ github.repository }}/releases/download/bucket-linux-x64/linux-x64-nextpnr-nexus.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
+      - name: Download linux-x64-nvc
+        run: wget -qO- "https://github.com/${{ github.repository }}/releases/download/bucket-linux-x64/linux-x64-nvc.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-openfpgaloader
         run: wget -qO- "https://github.com/${{ github.repository }}/releases/download/bucket-linux-x64/linux-x64-openfpgaloader.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Download linux-x64-pono
