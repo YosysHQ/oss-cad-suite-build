@@ -1,5 +1,5 @@
 cd verilator
-if [ ${ARCH_BASE} == 'darwin' ]; then
+if [[ ${ARCH_BASE} == 'darwin' || ${ARCH_BASE} == 'windows' ]]; then
     # revert https://github.com/verilator/verilator/pull/8422
     # revert https://github.com/verilator/verilator/pull/8412
     git revert --no-commit c4957ef206b792ff421b0e7e41a39a8603356c6f
