@@ -1,3 +1,4 @@
+from genericpath import exists
 import os
 import sys
 import click
@@ -688,8 +689,11 @@ def buildCode(build_target, build_arch, nproc, force, dry, pack_sources, single,
 
 						f.write("\nSoftware is under following license :\n")
 						f.write('=' * 80 + '\n')
-						with open(os.path.join(build_dir, src.name, filename), 'r') as lf:
-							f.write(lf.read())
+						if (os.path.exists(os.path.join(build_dir, src.name, filename), 'r')):
+							with open(os.path.join(build_dir, src.name, filename), 'r') as lf:
+								f.write(lf.read())
+						else:
+							print("Not found {}",os.path.join(build_dir, src.name, filename))
 						f.write('\n' + '=' * 80 + '\n')
 
 				if target.name == src.name:

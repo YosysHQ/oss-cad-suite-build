@@ -1,4 +1,11 @@
 cd verilator
+if [ ${ARCH_BASE} == 'darwin' ]; then
+    # revert https://github.com/verilator/verilator/pull/8422
+    # revert https://github.com/verilator/verilator/pull/8412
+    git revert --no-commit c4957ef206b792ff421b0e7e41a39a8603356c6f
+    git revert --no-commit 8fbfc82cc2a0c95a7fd10fa3051ecad235cdaa66
+fi
+
 # for cross compile
 sed -i 's,AC_RUN_IFELSE,AC_LINK_IFELSE,g' configure.ac
 autoconf
