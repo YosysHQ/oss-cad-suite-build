@@ -125,8 +125,6 @@ jobs:
           else
               echo "Previous version not found in bucket"
           fi
-      - name: Download linux-x64-abc
-        run: wget -qO- "https://github.com/${{ github.repository }}/releases/download/bucket-linux-x64/linux-x64-abc.tgz" --retry-connrefused --read-timeout=20 --timeout=15 --retry-on-http-error=404 | tar xvfz -
       - name: Build
         run: ./builder.py build --arch=linux-arm64 --target=yosys --rules=default --single --tar
       - uses: ncipollo/release-action@v1
