@@ -50,7 +50,7 @@ SourceLocation(
 
 Target(
 	name = 'formal',
-	sources = [ 'mau', 'mcy', 'scy', 'sby', 'sby-gui', 'yosys' ],
+	sources = [ 'mau', 'mcy', 'scy', 'sby', 'sby-gui' ],
 	dependencies = [ 'python3', 'python3-native' ],
 	resources = [ 'python3' ],
 	patches = [ 'python3_package.sh' ],
