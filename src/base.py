@@ -75,7 +75,7 @@ def get_size(path: str) -> int:
     return sum(p.stat().st_size for p in Path(path).rglob('*'))
 
 class SourceLocation:
-	def __init__(self, name, vcs, location, revision, license_url = None, license_file = None, license_build_only = False, no_submodules = False):
+	def __init__(self, name, vcs, location, revision, license_url = None, license_file = None, license_build_only = False, no_submodules = False, sublicenses = dict()):
 		self.name = name
 		self.location = location
 		self.vcs = vcs
@@ -84,6 +84,7 @@ class SourceLocation:
 		self.license_url = license_url
 		self.license_file = license_file
 		self.license_build_only = license_build_only
+		self.sublicenses = sublicenses
 		self.no_submodules = no_submodules
 		sources[name] = self
 
@@ -622,6 +623,22 @@ def buildCode(build_target, build_arch, nproc, force, dry, pack_sources, single,
 
 		for s in target.sources:
 			src = sources[s]
+
+#			if len(src.sublicenses)>0:
+#				log_step("Generating license file for {}...".format(src.name))
+#				license_dir = os.path.join(output_dir + prefix, "license")
+#				os.makedirs(license_dir, exist_ok = True)
+#				for name, filename in src.sublicenses.items():
+#					license_file = os.path.join(license_dir, "LICENSE." + name)
+#					with open(license_file, 'w') as f:
+#						f.write("YosysHQ uses '{}' to build package(s) in its distribution bundle.\n".format(name))
+#
+#						f.write("\nSoftware is under following license :\n")
+#						f.write('=' * 80 + '\n')
+#						with open(os.path.join(build_dir, src.name, filename), 'r') as lf:
+#							f.write(lf.read())
+#						f.write('\n' + '=' * 80 + '\n')
+
 			if src.license_file is not None or src.license_url is not None:
 				log_step("Generating license file for {}...".format(src.name))
 				license_dir = os.path.join(output_dir + prefix, "license")
@@ -639,11 +656,13 @@ def buildCode(build_target, build_arch, nproc, force, dry, pack_sources, single,
 							if (targets[dep].license_build_only):
 								build_deps += 1
 
-						if (build_deps> 0):
+						if (build_deps> 0) or len(src.sublicenses) > 0:
 							f.write("\nThis package is built using packages: ")
 							for dep in target.dependencies:
 								if (targets[dep].license_build_only):
 									f.write("'{}' ".format(dep))
+							for name, _ in src.sublicenses.items():
+								f.write("'{}' ".format(name))
 							f.write("\n")
 
 					f.write("\nBuild is based on folowing sources:\n")
@@ -663,6 +682,16 @@ def buildCode(build_target, build_arch, nproc, force, dry, pack_sources, single,
 						with open(os.path.join(build_dir, src.name, src.license_file), 'r') as lf:
 							f.write(lf.read())
 					f.write('\n' + '=' * 80 + '\n')
+
+					for name, filename in src.sublicenses.items():
+						f.write("\nYosysHQ uses '{}' to build '{}'.\n".format(name, src.name))
+
+						f.write("\nSoftware is under following license :\n")
+						f.write('=' * 80 + '\n')
+						with open(os.path.join(build_dir, src.name, filename), 'r') as lf:
+							f.write(lf.read())
+						f.write('\n' + '=' * 80 + '\n')
+
 				if target.name == src.name:
 					for dep in target.dependencies:
 						dep_license_dir = os.path.join(build_dir, dep + prefix, "license")

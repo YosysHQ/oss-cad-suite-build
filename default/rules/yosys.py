@@ -6,6 +6,23 @@ SourceLocation(
 	location = 'https://github.com/YosysHQ/yosys',
 	revision = 'origin/main',
 	license_file = 'COPYING',
+	sublicenses = {
+		"abc": "abc/copyright.txt",
+        "bigint": "libs/bigint/COPYING.txt",
+		"boost_regex": "libs/boost_regex/readme.txt",
+		"cxxopts": "libs/cxxopts/LICENSE",
+        "dlfcn-win32": "libs/dlfcn-win32/COPYING.txt",
+        "flex": "libs/flex/COPYING.txt",
+		"fmt": "libs/fmt/LICENSE",
+        "libfst": "libs/fst/LICENSE.txt",
+        "json11": "libs/json11/LICENSE.txt",
+		"minisat": "libs/minisat/LICENSE",
+        "sha1": "libs/sha1/COPYING.txt",
+		"slang": "libs/slang/LICENSE",
+		"symfpu": "libs/symfpu/LICENSE-BSD",
+		"tomlplusplus": "libs/tomlplusplus/LICENSE",
+		"sv-elab": "frontends/slang/lib/LICENSE",
+	}
 )
 
 SourceLocation(
@@ -16,14 +33,6 @@ SourceLocation(
 	license_file = 'LICENSE',
 )
 
-SourceLocation(
-	name = 'slang',
-	vcs = 'git',
-	location = 'https://github.com/MikePopoloski/slang',
-	revision = 'origin/master',
-	license_file = 'LICENSE',
-	license_build_only = True,
-)
 
 SourceLocation(
 	name = 'yosys-slang-plugin',
@@ -31,6 +40,10 @@ SourceLocation(
 	location = 'https://github.com/povik/yosys-slang',
 	revision = 'origin/master',
 	license_file = 'LICENSE',
+	sublicenses = {
+		"fmt": "third_party/fmt/LICENSE",
+		"slang": "third_party/slang/LICENSE",
+	}
 )
 
 SourceLocation(
@@ -41,27 +54,10 @@ SourceLocation(
 	license_file = 'LICENSE',
 )
 
-SourceLocation(
-	name = 'abc',
-	vcs = 'git',
-	location = 'https://github.com/YosysHQ/abc',
-	revision = 'origin/yosys-experimental',
-	license_file = 'copyright.txt',
-	license_build_only = True,
-)
-
-Target(
-	name = 'abc',
-	sources = [ 'abc'],
-	build_native = True, # using this for license only
-	license_build_only = True,
-)
-
 Target(
 	name = 'yosys',
 	sources = [ 'yosys'],
 	resources = [ 'xdot', 'graphviz' ],
-	dependencies = [ 'abc' ],
 	critical = True,
 )
 
@@ -70,13 +66,6 @@ Target(
 	sources = [ 'ghdl-yosys-plugin' ],
 	dependencies = [ 'ghdl', 'yosys' ],
 	arch = [ 'linux-x64', 'darwin-arm64' ],
-)
-
-Target(
-	name = 'slang',
-	sources = [ 'slang'],
-	build_native = True, # using this for license only
-	license_build_only = True,
 )
 
 Target(
