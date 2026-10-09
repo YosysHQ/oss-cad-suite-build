@@ -689,7 +689,7 @@ def buildCode(build_target, build_arch, nproc, force, dry, pack_sources, single,
 
 						f.write("\nSoftware is under following license :\n")
 						f.write('=' * 80 + '\n')
-						if (os.path.exists(os.path.join(build_dir, src.name, filename), 'r')):
+						if (os.path.exists(os.path.join(build_dir, src.name, filename))):
 							with open(os.path.join(build_dir, src.name, filename), 'r') as lf:
 								f.write(lf.read())
 						else:
