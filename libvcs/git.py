@@ -259,6 +259,7 @@ class GitRepo(BaseRepo):
             return None
 
     def checkout(self, revision):
+        self.run(['fetch'])
         self.run(['reset', '--hard', revision])
         if not self.no_submodules:
             self.run(['submodule', 'update'])
