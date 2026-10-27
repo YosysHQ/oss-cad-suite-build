@@ -36,10 +36,13 @@ configure_darwin_ghdl_libs() {
     install_name_tool -change "@rpath/$(basename "${libgcc}")" "@executable_path/../lib/$(basename "${libgcc}")" "${libghdl}"
     install_name_tool -change "@rpath/$(basename "${libgcc}")" "@executable_path/../lib/$(basename "${libgcc}")" "${libgnat}"
 
+    llvm-install-name-tool -delete_all_rpaths "${lib_dir}"/../bin/ghdl
+
     rcodesign sign "${libghdl}"
     rcodesign sign "${libghdlvpi}"
     rcodesign sign "${libgnat}"
     rcodesign sign "${libgcc}"
+    rcodesign sign "${lib_dir}"/../bin/ghdl
 }
 
 sed -i 's,ghdl1-llvm,../bin/ghdl1-llvm,g' configure
