@@ -12,11 +12,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - name: Cache sources
-        uses: actions/cache/restore@v5
-        with:
-          key: cache-sources-yosys
-          path: _sources
       - name: Download previous build
         run: |
           URL="https://github.com/${{ github.repository }}/releases/download/bucket-windows-x64/windows-x64-yosys.tgz"
