@@ -5,6 +5,7 @@ SourceLocation(
 	vcs = 'git',
 	location = 'https://github.com/YosysHQ/yosys',
 	revision = 'origin/main',
+	cache_sources = False,
 	license_file = 'COPYING',
 	sublicenses = {
 		"abc": "abc/copyright.txt",

@@ -76,7 +76,7 @@ def get_size(path: str) -> int:
     return sum(p.stat().st_size for p in Path(path).rglob('*'))
 
 class SourceLocation:
-	def __init__(self, name, vcs, location, revision, license_url = None, license_file = None, license_build_only = False, no_submodules = False, sublicenses = dict()):
+	def __init__(self, name, vcs, location, revision, license_url = None, license_file = None, license_build_only = False, no_submodules = False, sublicenses = dict(), cache_sources = True):
 		self.name = name
 		self.location = location
 		self.vcs = vcs
@@ -87,6 +87,7 @@ class SourceLocation:
 		self.license_build_only = license_build_only
 		self.sublicenses = sublicenses
 		self.no_submodules = no_submodules
+		self.cache_sources = cache_sources
 		sources[name] = self
 
 class Target:
@@ -791,11 +792,13 @@ def generateYaml(target, build_arch, write_to_file, rules):
 			yaml_content +="        run: echo \"date=$(date +'%Y-%m-%d')\" >> $GITHUB_OUTPUT\n"
 		yaml_content +="      - uses: actions/checkout@v7\n"
 		if not target.top_package:
-			yaml_content +="      - name: Cache sources\n"
-			yaml_content +="        uses: actions/cache{}@v5\n".format("" if arch=="linux-x64" else "/restore")
-			yaml_content +="        with:\n"
-			yaml_content +="          key: cache-sources-{}".format(target.name) + "\n"
-			yaml_content +="          path: _sources\n"
+			cache_sources = all(sources[s].cache_sources for s in target.sources)
+			if cache_sources:
+				yaml_content +="      - name: Cache sources\n"
+				yaml_content +="        uses: actions/cache{}@v5\n".format("" if arch=="linux-x64" else "/restore")
+				yaml_content +="        with:\n"
+				yaml_content +="          key: cache-sources-{}".format(target.name) + "\n"
+				yaml_content +="          path: _sources\n"
 			yaml_content +="      - name: Download previous build\n"
 			yaml_content +="        run: |\n"
 			yaml_content +="          URL=\"{}-{}/{}-{}.tgz\"\n".format(BUCKET_URL, arch, arch, target.name)
