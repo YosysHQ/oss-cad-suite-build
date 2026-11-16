@@ -294,3 +294,4 @@ COPY gschemas.compiled /opt/local/share/glib-2.0/schemas/
 
 ENV CMAKE_POLICY_VERSION_MINIMUM=3.5
 ENV PIP_BREAK_SYSTEM_PACKAGES=1
+RUN cp /opt/local/lib/pkgconfig/tcl8.pc /opt/local/lib/pkgconfig/tcl.pc
