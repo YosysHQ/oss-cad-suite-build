@@ -196,12 +196,16 @@ RUN cd /opt \
   && cp -rf /tmp/libpng/libpng-1.6.58_0.darwin_25.arm64/* / \
   && echo "Install libpsl/libpsl-0.22.0-20260624_0.darwin_25.arm64" \
   && cp -rf /tmp/libpsl/libpsl-0.22.0-20260624_0.darwin_25.arm64/* / \
+  && echo "Install librsvg/librsvg-2.58.5_1.darwin_25.arm64" \
+  && cp -rf /tmp/librsvg/librsvg-2.58.5_1.darwin_25.arm64/* / \
   && echo "Install libtool/libtool-2.5.4_0.darwin_25.arm64" \
   && cp -rf /tmp/libtool/libtool-2.5.4_0.darwin_25.arm64/* / \
   && echo "Install libunistring/libunistring-1.4.2_0.darwin_25.arm64" \
   && cp -rf /tmp/libunistring/libunistring-1.4.2_0.darwin_25.arm64/* / \
   && echo "Install libusb/libusb-1.0.30_0.darwin_25.arm64" \
   && cp -rf /tmp/libusb/libusb-1.0.30_0.darwin_25.arm64/* / \
+  && echo "Install libxml2/libxml2-2.15.3_0.darwin_25.arm64" \
+  && cp -rf /tmp/libxml2/libxml2-2.15.3_0.darwin_25.arm64/* / \
   && echo "Install lzo2/lzo2-2.10_0.darwin_25.arm64" \
   && cp -rf /tmp/lzo2/lzo2-2.10_0.darwin_25.arm64/* / \
   && echo "Install mpfr/mpfr-4.2.2_0.darwin_25.arm64" \
