@@ -75,6 +75,11 @@ export PYTHONEXECUTABLE="\$release_topdir_abs/bin/tabbypy3"
 export PYTHONHOME="\$release_topdir_abs"
 EOT
         fi
+        if [ "$(basename $binfile)" == "nvc" ]; then
+            cat >> $binfile << EOT
+export NVC_LIBPATH="\$release_topdir_abs/lib/nvc"
+EOT
+        fi
         if [ ! -z "$(strings libexec/$(basename $binfile) | grep ghdl)" ]; then
             cat >> $binfile << EOT
 export GHDL_PREFIX="\$release_topdir_abs/lib/ghdl"

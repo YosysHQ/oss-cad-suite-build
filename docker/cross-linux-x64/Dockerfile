@@ -45,7 +45,13 @@ RUN set -e -x ;\
         libbz2-dev \
         libltdl-dev \
         libmpfr-dev \
-        libedit-dev; \
+        libedit-dev \
+        automake \
+        check \
+        llvm-dev \
+        zlib1g-dev \
+        libdw-dev \
+        libzstd-dev; \
     apt -y autoremove ;\
     rm -rf /var/lib/apt/lists/* ;\
     ln -s /lib64/ld-linux-x86-64.so.2 /lib64/ld-lsb-x86-64.so.3
