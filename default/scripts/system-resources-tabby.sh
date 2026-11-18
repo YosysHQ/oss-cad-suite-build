@@ -80,6 +80,22 @@ if [ ${ARCH_BASE} == 'darwin' ]; then
     chmod 644 ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/gdk-pixbuf-2.0/loaders/*
     dylibbundler -of -b -x ${OUTPUT_DIR}${INSTALL_PREFIX}/libexec/gdk-pixbuf-query-loaders -p @executable_path/../lib -d ${OUTPUT_DIR}${INSTALL_PREFIX}/lib
 
+    # SVG loader, needed to show the Adwaita icons (e.g. in the gtkwave toolbar).
+    # The MacPorts librsvg files have no room in their headers for the longer
+    # @executable_path/../lib paths, so we use the shorter @loader_path ones.
+    if [ ${ARCH} == 'darwin-arm64' ]; then
+        cp /opt/local/lib/librsvg-2.2.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/.
+        dylibbundler -of -b -x ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/librsvg-2.2.dylib -p @loader_path -d ${OUTPUT_DIR}${INSTALL_PREFIX}/lib
+        install_name_tool -id @loader_path/librsvg-2.2.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/librsvg-2.2.dylib
+        rcodesign sign ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/librsvg-2.2.dylib
+
+        svg_loader=${OUTPUT_DIR}${INSTALL_PREFIX}/lib/gdk-pixbuf-2.0/loaders/libpixbufloader-svg.so
+        for lib in $(otool -L $svg_loader | grep /opt/local/lib/ | awk '{print $1}'); do
+            install_name_tool -change $lib @loader_path/../../$(basename $lib) $svg_loader
+        done
+        rcodesign sign $svg_loader
+    fi
+
     # GTK3 resources
     cp /opt/local/lib/libgtk-3.0.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/.
     cp /opt/local/lib/libgdk-3.0.dylib ${OUTPUT_DIR}${INSTALL_PREFIX}/lib/.

@@ -232,6 +232,10 @@ done
 
 for binfile in $(find lib -type f | xargs file | grep Mach-O | grep bundle | cut -f1 -d:); do
     echo $binfile
+    # Already done in system-resources, see the comment there.
+    if [[ $binfile == *libpixbufloader-svg.so ]]; then
+        continue
+    fi
     dylibbundler -of -b -x $binfile -p @executable_path/../lib -d ${OUTPUT_DIR}${INSTALL_PREFIX}/lib
 done
 for binfile in $(find share -type f | xargs file | grep Mach-O | grep shared | cut -f1 -d:); do
